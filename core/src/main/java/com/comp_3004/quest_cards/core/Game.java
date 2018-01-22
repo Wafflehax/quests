@@ -15,6 +15,13 @@ public class Game implements ApplicationListener {
 	public void create () {
 		texture = new Texture(Gdx.files.internal("bg-castle.jpg"));
 		batch = new SpriteBatch();
+		
+		MainGameLoop loop;
+		
+		AdventureDeck advDeck = new AdventureDeck();
+		StoryDeck storyDeck = new StoryDeck();
+		advDeck.printDeck();
+		storyDeck.printDeck();
 	}
 
 	@Override
@@ -28,6 +35,7 @@ public class Game implements ApplicationListener {
 		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 
 		batch.begin();
+		
 
 		//Draw stuff
 
