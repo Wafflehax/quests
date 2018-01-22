@@ -16,7 +16,7 @@ public class Game implements ApplicationListener {
 		texture = new Texture(Gdx.files.internal("bg-castle.jpg"));
 		batch = new SpriteBatch();
 		
-		MainGameLoop loop;
+		MainGameLogic gamelogic;
 		
 		AdventureDeck advDeck = new AdventureDeck();
 		StoryDeck storyDeck = new StoryDeck();
