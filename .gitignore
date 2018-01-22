@@ -1,6 +1,13 @@
 #IntelliJ IDE files
 .idea*
 
+#Eclipse IDE files
+.classpath
+.project
+.settings/
+**.gitignore
+android/libs/
+
 # Compiled class file
 **.class
 
