@@ -15,6 +15,10 @@ public class AdventureDeck extends Deck {
 		initTests();
 	}
 	
+	protected Adventure drawCard() {
+		return deck.pop();
+	}
+	
 	private void initFoes() {
 		for(int i=0; i<8; i++) {
 			Foe thieves = new Foe("Thieves", 5);

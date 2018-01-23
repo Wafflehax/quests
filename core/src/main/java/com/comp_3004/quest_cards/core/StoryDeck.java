@@ -13,6 +13,10 @@ public class StoryDeck extends Deck {
 		initQuests();
 	}
 	
+	protected Story drawCard() {
+		return deck.pop();
+	}
+	
 	private void initTournaments() {
 		Tournament camelot = new Tournament("Tournament at Camelot", 3);
 		this.deck.add(camelot);

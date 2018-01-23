@@ -2,7 +2,7 @@ package com.comp_3004.quest_cards.core;
 
 import java.util.Stack;
 
-public class MainGameLoop{
+public class MainGameLogic{
 	
 	private AdventureDeck advDeck;
 	private StoryDeck storyDeck;
@@ -17,7 +17,7 @@ public class MainGameLoop{
 	
 	
 	// constructor
-	public MainGameLoop() {	}
+	public MainGameLogic() {	}
 	
 	public void startGame(int numPlayers) {
 		this.numPlayers = numPlayers;
