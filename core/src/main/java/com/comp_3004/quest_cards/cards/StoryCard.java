@@ -2,7 +2,7 @@ package com.comp_3004.quest_cards.cards;
 
 public abstract class StoryCard extends Card {
 
-	protected void printCard() {
+	public void printCard() {
 		System.out.printf("%-40s", this.name);
 		System.out.printf("%s\n", this.getClass().getSimpleName());
 	}
