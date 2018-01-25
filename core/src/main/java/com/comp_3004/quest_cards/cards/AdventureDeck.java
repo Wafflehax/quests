@@ -142,5 +142,14 @@ public class AdventureDeck extends Deck {
 		System.out.printf("Number of cards: %s\n", this.deck.size());
 	}
 	
+	public void printDiscard() {
+		System.out.printf("Adventure Discard:\n");
+		System.out.printf("%-15s%-15s%s\n", "Name", "Battle Points", "Type");
+		System.out.printf("==================================\n");
+		for(AdventureCard a : this.discard) {
+			a.printCard();
+		}
+		System.out.printf("Number of cards: %s\n", this.discard.size());
+	}
 
 }

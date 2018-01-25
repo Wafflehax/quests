@@ -4,10 +4,12 @@ import java.util.Stack;
 
 public class StoryDeck extends Deck {
 	private Stack<StoryCard> deck;
+	private Stack<StoryCard> discard;
 	
 	//constructor
 	public StoryDeck() {
 		this.deck = new Stack<StoryCard>();
+		this.discard = new Stack<StoryCard>();
 		initTournaments();
 		initEvents();
 		initQuests();
@@ -15,6 +17,11 @@ public class StoryDeck extends Deck {
 	
 	protected StoryCard drawCard() {
 		return deck.pop();
+	}
+	
+	//moves card to decks discard pile
+	protected void discardCard(StoryCard c) {
+		discard.push(c);
 	}
 
 	
@@ -83,6 +90,18 @@ public class StoryDeck extends Deck {
 			s.printCard();
 		}
 		System.out.printf("Number of cards: %s\n", this.deck.size());
+	}
+
+	
+	protected void printDiscard() {
+		System.out.printf("Story Discard:\n");
+		System.out.printf("%-40s%s\n", "Name", "Type");
+		System.out.printf("==================================\n");
+		for(StoryCard s : this.discard) {
+			s.printCard();
+		}
+		System.out.printf("Number of cards: %s\n", this.discard.size());
+		
 	}
 
 }

@@ -18,8 +18,9 @@ public class QuestsOfTheRoundTable implements ApplicationListener {
 		texture = new Texture(Gdx.files.internal("bg-castle.jpg"));
 		batch = new SpriteBatch();
 		
-		Game gamelogic;
+		Game game;
 		
+		//some initial card/deck testing
 		AdventureDeck advDeck = new AdventureDeck();
 		StoryDeck storyDeck = new StoryDeck();
 		advDeck.printDeck();
