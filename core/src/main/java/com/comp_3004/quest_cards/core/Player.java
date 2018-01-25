@@ -1,15 +1,18 @@
 package com.comp_3004.quest_cards.core;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+
+import com.comp_3004.quest_cards.core.AdventureCard.State;
 
 public class Player{
 	
 	private String name;
+	private enum Rank { SQUIRE, KNIGHT, CHAMPION_KNIGHT, KNIGHT_OF_THE_ROUND_TABLE };
+	private Rank rank;
+	private int shields;
 	
-	private final int NOT_FOUND = -1;
-	
-	protected ArrayList<Card> playerHandCards;
-	protected ArrayList<Card> playerActiveCards;
+	protected LinkedList<AdventureCard> playerHandCards;
+	protected LinkedList<AdventureCard> playerActiveCards;
 	
 	protected boolean participateQuest;
 	protected boolean participateTournament;
@@ -17,6 +20,10 @@ public class Player{
 	// constructor
 	public Player(String name) {
 		this.name = name;
+		this.rank = Rank.SQUIRE;
+		this.shields = 0;
+		this.playerHandCards = new LinkedList<AdventureCard>();
+		this.playerActiveCards = new LinkedList<AdventureCard>();
 	}
 	
 	// getters/setters
@@ -24,44 +31,49 @@ public class Player{
 		return name;
 	}
 
-	public boolean addToHand(Card c) {
+	public boolean drawCard(AdventureDeck d) {
 		// can't have more than 12 cards
+		//TODO: allow player to play cards if player is already at hand limit
 		if(playerHandCards.size() >= 12) {
 			return false;
 		}
 		else {
-			playerHandCards.add(c);
+			//call drawCard from adventure deck
+			AdventureCard card = d.drawCard();
+			playerHandCards.add(card);
+			card.owner = this;
+			card.state = State.HAND;
 			return true;
 		}
 	}
 	
-	public void addActiveCard(Card c) {
+	public boolean playCard(AdventureCard c) {
 		// can only add cards to table from your hand
-		if(findCardIndex(c, playerHandCards) != NOT_FOUND) {
+		if(playerHandCards.contains(c)) {
 			playerActiveCards.add(c);
-			removeHandCard(c);
+			playerHandCards.remove(c);
+			c.state = State.PLAY;
+			return true;
 		}
+		//TODO: conditions where player cannot play card
+		return false;
 	}
 	
-	public void removeHandCard(Card c) {
-		int index = findCardIndex(c, playerHandCards);
-		if(index >= 0)
-			playerHandCards.remove(index);
-	}
-	
-	public void removeActiveCard(Card c) {
-		int index = findCardIndex(c, playerActiveCards);
-		if(index >= 0)
-			playerHandCards.remove(index);
-	}
-	
-	private int findCardIndex(Card c, ArrayList<Card> deck) {
-		for(int i = 0; i < deck.size(); i++) {
-			if(c == deck.get(i)) {
-				return i;
+	public boolean discardCard(AdventureCard c, AdventureDeck d) {
+		// can only discard cards from table or from your hand
+		if(c.owner == this && (c.state == State.PLAY || c.state == State.HAND)) {
+			if(playerActiveCards.contains(c)){
+				playerActiveCards.remove(c);
 			}
+			else if(playerHandCards.contains(c)) {
+				playerHandCards.remove(c);
+			}
+			d.discardCard(c);
+			c.state = State.DISCARD;
+			c.owner = null;
 		}
-		return NOT_FOUND;
+		return false;
 	}
+
 	
 }
