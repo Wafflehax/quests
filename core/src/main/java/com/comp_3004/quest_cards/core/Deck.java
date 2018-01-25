@@ -5,6 +5,11 @@ import java.util.Stack;
 public abstract class Deck {
 	
 	protected Stack<Card> deck;
+	protected Stack<Card> discard;
+	
+	protected void discardCard(Story card) {
+		discard.push(card);
+	};
 	abstract protected void printDeck();
 
 }

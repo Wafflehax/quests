@@ -4,10 +4,12 @@ import java.util.Stack;
 
 public class AdventureDeck extends Deck {
 	private Stack<Adventure> deck;
+	private Stack<Adventure> discard;
 
 	//constructor
 	public AdventureDeck() {
 		this.deck = new Stack<Adventure>();
+		this.discard = new Stack<Adventure>();
 		initFoes();
 		initWeapons();
 		initAllies();
