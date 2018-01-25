@@ -1,10 +1,10 @@
 package com.comp_3004.quest_cards.core;
 
-public class Weapon extends Adventure {
+public class WeaponCard extends AdventureCard {
 	private int battlePoints;
 	
 	//constructor
-	public Weapon(String n, int b) {
+	public WeaponCard(String n, int b) {
 		this.name = n;
 		this.battlePoints = b;
 	}

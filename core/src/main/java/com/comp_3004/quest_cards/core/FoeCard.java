@@ -1,15 +1,15 @@
 package com.comp_3004.quest_cards.core;
 
-public class Foe extends Adventure {
+public class FoeCard extends AdventureCard {
 	private int battlePoints;
 	private int altBattlePoints;
 	
 	//constructor
-	public Foe(String n, int b) {
+	public FoeCard(String n, int b) {
 		this.name = n;
 		this.battlePoints = b;
 	}
-	public Foe(String n, int b1, int b2) {
+	public FoeCard(String n, int b1, int b2) {
 		super();
 		this.name = n;
 		this.battlePoints = b1;

@@ -13,9 +13,16 @@ public class StoryDeck extends Deck {
 		initQuests();
 	}
 	
+<<<<<<< HEAD
+	protected Story drawCard() {
+		return deck.pop();
+	}
+=======
 	protected StoryCard drawCard() {
 		return deck.pop();
 	}
+
+>>>>>>> card-deckImplementation
 	
 	private void initTournaments() {
 		TournamentCard camelot = new TournamentCard("Tournament at Camelot", 3);
