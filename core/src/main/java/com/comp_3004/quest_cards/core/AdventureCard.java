@@ -12,5 +12,11 @@ public abstract class AdventureCard extends Card {
 		this.owner = null;
 		this.state = State.DECK;
 	}
+	
+	//get set methods
+		public void setOwner(Player p) { this.owner = p; }
+		public Player getOwner() { return this.owner; }
+		public void setState(State s) {this.state = s; }
+		public State getState() { return this.state; }
 }
 

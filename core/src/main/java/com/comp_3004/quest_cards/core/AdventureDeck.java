@@ -21,6 +21,10 @@ public class AdventureDeck extends Deck {
 		return deck.pop();
 	}
 	
+	protected void discardCard(AdventureCard c) {
+		discard.push(c);
+	}
+	
 	private void initFoes() {
 		for(int i=0; i<8; i++) {
 			FoeCard thieves = new FoeCard("Thieves", 5);
