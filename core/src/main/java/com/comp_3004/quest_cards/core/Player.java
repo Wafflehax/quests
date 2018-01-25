@@ -5,18 +5,25 @@ import java.util.ArrayList;
 public class Player{
 	
 	private String name;
+	private enum Rank { SQUIRE, KNIGHT, CHAMPION_KNIGHT, KNIGHT_OF_THE_ROUND_TABLE };
+	private Rank rank;
+	private int shields;
 	
 	private final int NOT_FOUND = -1;
 	
-	protected ArrayList<Card> playerHandCards;
-	protected ArrayList<Card> playerActiveCards;
+	protected ArrayList<AdventureCard> playerHandCards;
+	protected ArrayList<AdventureCard> playerActiveCards;
 	
 	protected boolean participateQuest;
 	protected boolean participateTournament;
 	
 	// constructor
-	public Player(String name) {
+	public Player(String name, Rank r) {
 		this.name = name;
+		this.rank = r;
+		this.shields = 0;
+		this.playerHandCards = new ArrayList<AdventureCard>();
+		this.playerActiveCards = new ArrayList<AdventureCard>();
 	}
 	
 	// getters/setters
