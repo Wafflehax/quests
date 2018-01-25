@@ -1,4 +1,4 @@
-package com.comp_3004.quest_cards.core;
+package com.comp_3004.quest_cards.cards;
 
 import java.util.Stack;
 //welcome to the start of the new card-deck implementation development branch!!!

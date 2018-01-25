@@ -1,4 +1,4 @@
-package com.comp_3004.quest_cards.core;
+package com.comp_3004.quest_cards.cards;
 
 public class QuestCard extends StoryCard {
 

@@ -2,6 +2,8 @@ package com.comp_3004.quest_cards.core;
 
 import java.util.ArrayList;
 
+import com.comp_3004.quest_cards.cards.Card;
+
 public class Player{
 	
 	private String name;
