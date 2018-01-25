@@ -1,10 +1,10 @@
 package com.comp_3004.quest_cards.core;
 
-public class Amour extends Adventure {
+public class AmourCard extends AdventureCard {
 	private int battlePoints;
 	
 	//constructor
-	public Amour() {
+	public AmourCard() {
 		this.name = "Amour";
 		this.battlePoints = 10;
 	}

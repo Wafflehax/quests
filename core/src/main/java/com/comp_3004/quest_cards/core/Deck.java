@@ -7,7 +7,7 @@ public abstract class Deck {
 	protected Stack<Card> deck;
 	protected Stack<Card> discard;
 	
-	protected void discardCard(Story card) {
+	protected void discardCard(StoryCard card) {
 		discard.push(card);
 	};
 	abstract protected void printDeck();

@@ -1,15 +1,14 @@
 package com.comp_3004.quest_cards.core;
 
-public abstract class Adventure extends Card {
+public abstract class AdventureCard extends Card {
 	protected Player owner;	//player that currently owns the card (in hand/in play)
-	State state;
-	//create enum to represent state
+	State state;				//where the card is currently located
 	protected enum State {
 		HAND, PLAY, DECK, DISCARD
 	}
 	
 	//constructor
-	public Adventure() {
+	public AdventureCard() {
 		this.owner = null;
 		this.state = State.DECK;
 	}

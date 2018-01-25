@@ -1,9 +1,9 @@
 package com.comp_3004.quest_cards.core;
 
-public class Tournament extends Story {
+public class TournamentCard extends StoryCard {
 	private int bonusShields;
 
-	public Tournament(String n, int b) {
+	public TournamentCard(String n, int b) {
 		this.name = n;
 		this.bonusShields = b;
 	}
