@@ -7,6 +7,8 @@
 .settings/
 **.gitignore
 android/libs/
+.metadata/
+.recommenders/
 
 # Compiled class file
 **.class
