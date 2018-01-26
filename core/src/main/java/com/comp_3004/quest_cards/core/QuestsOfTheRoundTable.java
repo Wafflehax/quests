@@ -27,7 +27,7 @@ public class QuestsOfTheRoundTable implements ApplicationListener {
 		
 		Controller cont = new Controller();
 		// comment out for tournament implementation
-		cont.onCreate();
+		//cont.onCreate();
 		
 	}
 
