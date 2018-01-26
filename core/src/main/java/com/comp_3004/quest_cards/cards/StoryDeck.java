@@ -1,5 +1,6 @@
 package com.comp_3004.quest_cards.cards;
 
+import java.util.Collections;
 import java.util.Stack;
 
 public class StoryDeck extends Deck {
@@ -13,6 +14,14 @@ public class StoryDeck extends Deck {
 		initTournaments();
 		initEvents();
 		initQuests();
+	}
+	
+	public void shuffleDeck() {
+		Collections.shuffle(deck);
+	}
+	
+	public void shuffleDiscard() {
+		Collections.shuffle(discard);
 	}
 	
 	protected StoryCard drawCard() {

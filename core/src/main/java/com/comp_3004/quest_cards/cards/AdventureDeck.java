@@ -1,5 +1,6 @@
 package com.comp_3004.quest_cards.cards;
 
+import java.util.Collections;
 import java.util.Stack;
 
 public class AdventureDeck extends Deck {
@@ -15,6 +16,14 @@ public class AdventureDeck extends Deck {
 		initAllies();
 		initAmour();
 		initTests();
+	}
+	
+	public void shuffleDeck() {
+		Collections.shuffle(deck);
+	}
+	
+	public void shuffleDiscard() {
+		Collections.shuffle(discard);
 	}
 	
 	public AdventureCard drawCard() {
