@@ -85,13 +85,9 @@ public class Game{
 		System.out.println("Player: " + currentPlyr.getName() + " has drawn :");
 		currStory.printCard();
 		determineParticipants();
-		
-		
 	}
 	
 	private void determineParticipants() {
-		
-		// copying Players to not edit positions
 		for(int i = 0; i < numPlayers && runGameLoop; i++) {
 			state = states.ASKINGPARTICIPATION;
 			lock.sleepGame();

@@ -26,7 +26,8 @@ public class QuestsOfTheRoundTable implements ApplicationListener {
 		storyDeck.printDeck();
 		
 		Controller cont = new Controller();
-		cont.onCreate();
+		// comment out for tournament implementation
+		//cont.onCreate();
 		
 	}
 

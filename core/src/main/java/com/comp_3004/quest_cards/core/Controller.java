@@ -46,10 +46,9 @@ public class Controller{
 			if(model.state == states.ASKINGPARTICIPATION) {
 				System.out.println("Would " + model.getcurrentTurn().getName() + " like to play ");
 				model.currStory.printCard();
-				System.out.print("?");
+				System.out.println("?");
 				model.state = states.WAITING;
 			}
-			
 			
 			
 			try {
