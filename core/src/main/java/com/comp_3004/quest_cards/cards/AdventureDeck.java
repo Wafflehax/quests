@@ -17,7 +17,7 @@ public class AdventureDeck extends Deck {
 		initTests();
 	}
 	
-	protected AdventureCard drawCard() {
+	public AdventureCard drawCard() {
 		return deck.pop();
 	}
 	

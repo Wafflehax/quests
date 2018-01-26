@@ -18,7 +18,7 @@ public class StoryDeck extends Deck {
 	protected StoryCard drawCard() {
 		return deck.pop();
 	}
-	
+
 	//moves card to decks discard pile
 	protected void discardCard(StoryCard c) {
 		discard.push(c);

@@ -9,6 +9,10 @@
 android/libs/
 .metadata/
 .recommenders/
+<<<<<<< HEAD
+=======
+
+>>>>>>> development
 # Compiled class file
 **.class
 
