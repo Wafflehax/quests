@@ -3,9 +3,9 @@ package com.comp_3004.quest_cards.cards;
 import com.comp_3004.quest_cards.core.Player;
 
 public abstract class AdventureCard extends Card {
-	public Player owner;	//player that currently owns the card (in hand/in play)
+	protected Player owner;	//player that currently owns the card (in hand/in play)
 	State state;				//where the card is currently located
-	protected enum State {
+	public enum State {
 		HAND, PLAY, DECK, DISCARD
 	}
 	

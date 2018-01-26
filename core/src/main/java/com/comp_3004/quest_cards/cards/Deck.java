@@ -8,15 +8,15 @@ public abstract class Deck {
 	protected Stack<Card> deck;
 	protected Stack<Card> discard;
 	
-	protected void discardCard(Card c) {		//puts card in decks discard pile
+	public void discardCard(Card c) {		//puts card in decks discard pile
 		discard.push(c);
 	}
 	
-	protected void shuffle() {
+	public void shuffle() {
 		Collections.shuffle(deck);
 	}
 	
-	protected void shuffleDiscardIntoDeck() {
+	public void shuffleDiscardIntoDeck() {
 		while(discard.empty() != true) {
 			deck.push(discard.pop());
 		}

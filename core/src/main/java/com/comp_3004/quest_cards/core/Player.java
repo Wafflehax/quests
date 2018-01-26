@@ -1,10 +1,8 @@
 package com.comp_3004.quest_cards.core;
 
 import java.util.LinkedList;
-
-import com.comp_3004.quest_cards.cards.AdventureCard;
-import com.comp_3004.quest_cards.cards.AdventureDeck;
-import com.comp_3004.quest_cards.cards.Card;
+import com.comp_3004.quest_cards.cards.*;
+import com.comp_3004.quest_cards.cards.AdventureCard.State;
 
 public class Player{
 	
@@ -32,7 +30,7 @@ public class Player{
 	public String getName() {
 		return name;
 	}
-	/*
+	
 	public boolean drawCard(AdventureDeck d) {
 		
 		// can't have more than 12 cards
@@ -44,8 +42,8 @@ public class Player{
 			//call drawCard from adventure deck
 			AdventureCard card = d.drawCard();
 			playerHandCards.add(card);
-			card.owner = this;
-			card.state = State.HAND;
+			card.setOwner(this);
+			card.setState(State.HAND);
 			return true;
 		}
 	}
@@ -55,7 +53,7 @@ public class Player{
 		if(playerHandCards.contains(c)) {
 			playerActiveCards.add(c);
 			playerHandCards.remove(c);
-			c.state = State.PLAY;
+			c.setState(State.PLAY);
 			return true;
 		}
 		//TODO: conditions where player cannot play card
@@ -64,7 +62,7 @@ public class Player{
 	
 	public boolean discardCard(AdventureCard c, AdventureDeck d) {
 		// can only discard cards from table or from your hand
-		if(c.owner == this && (c.state == State.PLAY || c.state == State.HAND)) {
+		if(c.getOwner() == this && (c.getState() == State.PLAY || c.getState() == State.HAND)) {
 			if(playerActiveCards.contains(c)){
 				playerActiveCards.remove(c);
 			}
@@ -72,12 +70,12 @@ public class Player{
 				playerHandCards.remove(c);
 			}
 			d.discardCard(c);
-			c.state = State.DISCARD;
-			c.owner = null;
+			c.setState(State.DISCARD);
+			c.setOwner(null);
 		}
 		return false;
 	}
-		*/
+		
 	
 		 
 	
