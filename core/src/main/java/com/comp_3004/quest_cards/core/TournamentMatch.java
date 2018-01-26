@@ -5,12 +5,15 @@ import java.util.Scanner;
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.TournamentCard;
+import com.comp_3004.quest_cards.core.Game.states;
 
 public class TournamentMatch{
 	
 	private AdventureDeck advDeck;
 	private int numPlayers;
 	private Players players;
+	private volatile ThreadLock lock;
+	protected states state;
 	
 	private TournamentCard tourCard;
 	private int roundNumber = 1;  // game starts at first round can go up to 3(double tie)
@@ -21,26 +24,7 @@ public class TournamentMatch{
 		this.players = logic.players;
 		this.numPlayers = logic.numPlayers;
 		this.players = logic.players;
-	}
-	
-	protected void play(TournamentCard tcard) {
-		tourCard = tcard;
-		Player currentPlyr = players.current();
-		System.out.println("Player: " + currentPlyr.getName() + " has drawn :");
-		tourCard.printCard();
-		//determineParticipants();
-		
-		while(runningTour) {
-			
-			
-			
-			
-		}
-		
-		//hot seat through participating players let them pick cards
-		
-		
-	}
-	
-	
+		this.lock = logic.lock;
+		this.state = logic.state;
+	}	
 }

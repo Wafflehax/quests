@@ -14,7 +14,7 @@ public class Player{
 	protected ArrayList<Card> playerActiveCards;
 	
 	protected boolean participateQuest;
-	protected boolean participateTournament;
+	protected volatile boolean participateTournament;
 	
 	// constructor
 	public Player(String name) {

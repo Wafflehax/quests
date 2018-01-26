@@ -12,19 +12,22 @@ public class QuestsOfTheRoundTable implements ApplicationListener {
 	Texture texture;
 	SpriteBatch batch;
 	float elapsed;
+	Thread gameThr;
 
 	@Override
 	public void create () {
 		texture = new Texture(Gdx.files.internal("bg-castle.jpg"));
 		batch = new SpriteBatch();
 		
-		Game game;
-		
 		//some initial card/deck testing
 		AdventureDeck advDeck = new AdventureDeck();
 		StoryDeck storyDeck = new StoryDeck();
 		advDeck.printDeck();
 		storyDeck.printDeck();
+		
+		Controller cont = new Controller();
+		cont.onCreate();
+		
 	}
 
 	@Override
