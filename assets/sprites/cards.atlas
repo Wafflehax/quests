@@ -1,0 +1,314 @@
+
+cards.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+A_King_Arthur
+  rotate: false
+  xy: 1570, 1512
+  size: 216, 300
+  orig: 216, 300
+  offset: 0, 0
+  index: -1
+A_King_Pellinore
+  rotate: false
+  xy: 229, 908
+  size: 223, 300
+  orig: 223, 300
+  offset: 0, 0
+  index: -1
+A_Merlin
+  rotate: false
+  xy: 880, 2
+  size: 214, 300
+  orig: 214, 300
+  offset: 0, 0
+  index: -1
+A_Queen_Guinevere
+  rotate: false
+  xy: 677, 908
+  size: 219, 300
+  orig: 219, 300
+  offset: 0, 0
+  index: -1
+A_Queen_Iseult
+  rotate: false
+  xy: 680, 1210
+  size: 220, 300
+  orig: 220, 300
+  offset: 0, 0
+  index: -1
+A_Sir_Galahad
+  rotate: false
+  xy: 450, 606
+  size: 219, 300
+  orig: 219, 300
+  offset: 0, 0
+  index: -1
+A_Sir_Gawain
+  rotate: false
+  xy: 2, 908
+  size: 225, 300
+  orig: 225, 300
+  offset: 0, 0
+  index: -1
+A_Sir_Lancelot
+  rotate: false
+  xy: 909, 1512
+  size: 219, 300
+  orig: 219, 300
+  offset: 0, 0
+  index: -1
+A_Sir_Percival
+  rotate: false
+  xy: 685, 1512
+  size: 222, 300
+  orig: 222, 300
+  offset: 0, 0
+  index: -1
+A_Sir_Tristan
+  rotate: false
+  xy: 1342, 1210
+  size: 217, 300
+  orig: 217, 300
+  offset: 0, 0
+  index: -1
+Amour
+  rotate: false
+  xy: 2, 606
+  size: 223, 300
+  orig: 223, 300
+  offset: 0, 0
+  index: -1
+E_Chivalrous_Deed
+  rotate: false
+  xy: 1788, 1512
+  size: 214, 300
+  orig: 214, 300
+  offset: 0, 0
+  index: -1
+E_Court_Called_Camelot
+  rotate: false
+  xy: 671, 606
+  size: 218, 300
+  orig: 218, 300
+  offset: 0, 0
+  index: -1
+E_King's_Call_to_Arms
+  rotate: false
+  xy: 1123, 1210
+  size: 217, 300
+  orig: 217, 300
+  offset: 0, 0
+  index: -1
+E_King's_Recognition
+  rotate: false
+  xy: 898, 908
+  size: 218, 300
+  orig: 218, 300
+  offset: 0, 0
+  index: -1
+E_Plague
+  rotate: false
+  xy: 226, 304
+  size: 219, 300
+  orig: 219, 300
+  offset: 0, 0
+  index: -1
+E_Pox
+  rotate: false
+  xy: 667, 304
+  size: 217, 300
+  orig: 217, 300
+  offset: 0, 0
+  index: -1
+E_Prosperity_Throughout_the_Realm
+  rotate: false
+  xy: 886, 304
+  size: 216, 300
+  orig: 216, 300
+  offset: 0, 0
+  index: -1
+E_Queen's_Favor
+  rotate: false
+  xy: 891, 606
+  size: 217, 300
+  orig: 217, 300
+  offset: 0, 0
+  index: -1
+F_Black_Knight
+  rotate: false
+  xy: 902, 1210
+  size: 219, 300
+  orig: 219, 300
+  offset: 0, 0
+  index: -1
+F_Boar
+  rotate: false
+  xy: 459, 1512
+  size: 224, 300
+  orig: 224, 300
+  offset: 0, 0
+  index: -1
+F_Dragon
+  rotate: false
+  xy: 1351, 1512
+  size: 217, 300
+  orig: 217, 300
+  offset: 0, 0
+  index: -1
+F_Evil_Knight
+  rotate: false
+  xy: 223, 2
+  size: 218, 300
+  orig: 218, 300
+  offset: 0, 0
+  index: -1
+F_Giant
+  rotate: false
+  xy: 1130, 1512
+  size: 219, 300
+  orig: 219, 300
+  offset: 0, 0
+  index: -1
+F_Green_Knight
+  rotate: false
+  xy: 1561, 1210
+  size: 215, 300
+  orig: 215, 300
+  offset: 0, 0
+  index: -1
+F_Mordred
+  rotate: false
+  xy: 443, 2
+  size: 217, 300
+  orig: 217, 300
+  offset: 0, 0
+  index: -1
+F_Robber_Knight
+  rotate: false
+  xy: 2, 1512
+  size: 227, 300
+  orig: 227, 300
+  offset: 0, 0
+  index: -1
+F_Saxon_Knight
+  rotate: false
+  xy: 447, 304
+  size: 218, 300
+  orig: 218, 300
+  offset: 0, 0
+  index: -1
+F_Saxons
+  rotate: false
+  xy: 231, 1512
+  size: 226, 300
+  orig: 226, 300
+  offset: 0, 0
+  index: -1
+F_Thieves
+  rotate: false
+  xy: 2, 1210
+  size: 226, 300
+  orig: 226, 300
+  offset: 0, 0
+  index: -1
+R_Champion_Knight
+  rotate: false
+  xy: 456, 1210
+  size: 222, 300
+  orig: 222, 300
+  offset: 0, 0
+  index: -1
+R_Knight
+  rotate: false
+  xy: 227, 606
+  size: 221, 300
+  orig: 221, 300
+  offset: 0, 0
+  index: -1
+R_Squire
+  rotate: false
+  xy: 2, 304
+  size: 222, 300
+  orig: 222, 300
+  offset: 0, 0
+  index: -1
+T_Test_of_Morgan_Le_Fey
+  rotate: false
+  xy: 2, 2
+  size: 219, 300
+  orig: 219, 300
+  offset: 0, 0
+  index: -1
+T_Test_of_Temptation
+  rotate: false
+  xy: 1337, 908
+  size: 215, 300
+  orig: 215, 300
+  offset: 0, 0
+  index: -1
+T_Test_of_Valor
+  rotate: false
+  xy: 1328, 606
+  size: 213, 300
+  orig: 213, 300
+  offset: 0, 0
+  index: -1
+T_Test_of_the_Questing_Beast
+  rotate: false
+  xy: 1110, 606
+  size: 216, 300
+  orig: 216, 300
+  offset: 0, 0
+  index: -1
+W_Battle-ax
+  rotate: false
+  xy: 1778, 1210
+  size: 212, 300
+  orig: 212, 300
+  offset: 0, 0
+  index: -1
+W_Dagger
+  rotate: false
+  xy: 1554, 908
+  size: 212, 300
+  orig: 212, 300
+  offset: 0, 0
+  index: -1
+W_Excalibur
+  rotate: false
+  xy: 454, 908
+  size: 221, 300
+  orig: 221, 300
+  offset: 0, 0
+  index: -1
+W_Horse
+  rotate: false
+  xy: 1118, 908
+  size: 217, 300
+  orig: 217, 300
+  offset: 0, 0
+  index: -1
+W_Lance
+  rotate: false
+  xy: 230, 1210
+  size: 224, 300
+  orig: 224, 300
+  offset: 0, 0
+  index: -1
+W_Sword
+  rotate: false
+  xy: 662, 2
+  size: 216, 300
+  orig: 216, 300
+  offset: 0, 0
+  index: -1
+out
+  rotate: false
+  xy: 1104, 304
+  size: 214, 300
+  orig: 214, 300
+  offset: 0, 0
+  index: -1
