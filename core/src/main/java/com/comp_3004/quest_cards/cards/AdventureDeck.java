@@ -32,7 +32,12 @@ public class AdventureDeck extends Deck {
 	}
 	
 	public AdventureCard drawCard() {
-		return deck.pop();
+		if(deck.empty()) {
+			shuffleDiscardIntoDeck();
+			return deck.pop();
+		}
+		else
+			return deck.pop();
 	}
 	
 	public void discardCard(AdventureCard c) {
@@ -40,8 +45,10 @@ public class AdventureDeck extends Deck {
 	}
 	
 	//getters/setters
-		public boolean deckEmpty() { return deck.empty(); }
-		public boolean discardEmpty() { return discard.empty(); }
+		public boolean deckEmpty() { return this.deck.empty(); }
+		public boolean discardEmpty() { return this.discard.empty(); }
+		public Stack<AdventureCard> getDeck() { return this.deck; }
+		public Stack<AdventureCard> getDiscard() { return this.discard; }
 	
 	private void initFoes() {
 		for(int i=0; i<8; i++) {
