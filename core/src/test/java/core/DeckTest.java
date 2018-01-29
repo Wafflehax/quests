@@ -57,5 +57,30 @@ public class DeckTest extends TestCase{
 		StoryDeck d = new StoryDeck();
 		assertEquals(d.getDeck().peek(), d.drawCard());
 	}
+	
+	public void testShuffleDiscardIntoDeck() {
+		StoryDeck d = new StoryDeck();
+		
+		//place entire deck into discard
+		while (!d.deckEmpty()) {
+			d.discardCard(d.drawCard());
+		}
+		assertEquals(28,d.getDiscard().size());
+		
+		//draw, triggering shuffle discard into deck
+		boolean cardDrawn = (d.drawCard() != null);
+		assert(cardDrawn);
+		assertEquals(0,d.getDiscard().size());
+		assertEquals(27,d.getDeck().size());
+	}
+	
+	public void testStoryDiscard() {
+		StoryDeck d = new StoryDeck();
+		String card1 = d.getDeck().peek().getName();
+		d.discardCard(d.drawCard());
+		String card2 = d.getDiscard().peek().getName();
+		assertEquals(card1, card2);
+	}
+	
 
 }
