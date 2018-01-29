@@ -20,9 +20,11 @@ public class QuestsOfTheRoundTable implements ApplicationListener {
 		batch = new SpriteBatch();
 		
 		//some initial card/deck testing
-		AdventureDeck advDeck = new AdventureDeck();
+		//AdventureDeck advDeck = new AdventureDeck();
 		StoryDeck storyDeck = new StoryDeck();
-		advDeck.printDeck();
+		//advDeck.printDeck();
+		storyDeck.printDeck();
+		storyDeck.shuffle();
 		storyDeck.printDeck();
 		
 		Controller cont = new Controller();

@@ -18,13 +18,13 @@ public class AdventureDeck extends Deck {
 		initTests();
 	}
 	
-	public void shuffleDeck() {
+	public void shuffle() {
 		Collections.shuffle(deck);
 	}
 	
-	public void shuffleDiscard() {
+	/*public void shuffleDiscard() {
 		Collections.shuffle(discard);
-	}
+	}*/
 	
 	public AdventureCard drawCard() {
 		return deck.pop();

@@ -16,13 +16,13 @@ public class StoryDeck extends Deck {
 		initQuests();
 	}
 	
-	public void shuffleDeck() {
+	public void shuffle() {
 		Collections.shuffle(deck);
 	}
 	
-	public void shuffleDiscard() {
+	/*public void shuffleDiscard() {
 		Collections.shuffle(discard);
-	}
+	}*/
 	
 	protected StoryCard drawCard() {
 		return deck.pop();

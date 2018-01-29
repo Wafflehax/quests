@@ -12,19 +12,17 @@ public abstract class Deck {
 		discard.push(c);
 	}
 	
-	public void shuffle() {
-		Collections.shuffle(deck);
-	}
 	
+	/*
 	public void shuffleDiscardIntoDeck() {
 		while(discard.empty() != true) {
 			deck.push(discard.pop());
 		}
 		this.shuffle();
-	}
+	}*/
 	
 	//abstract methods
 	abstract protected void printDeck();			//prints the cards currently in the deck
 	abstract protected void printDiscard();		//prints the cards currently in the discard pile
-
+	abstract protected void shuffle();				//shuffles cards in the deck
 }
