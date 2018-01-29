@@ -18,21 +18,30 @@ public class AdventureDeck extends Deck {
 		initTests();
 	}
 	
+	
+	//methods
 	public void shuffle() {
 		Collections.shuffle(deck);
 	}
 	
-	/*public void shuffleDiscard() {
-		Collections.shuffle(discard);
-	}*/
+	public void shuffleDiscardIntoDeck() {
+		while(discard.empty() != true) {
+			deck.push(discard.pop());
+		}
+		shuffle();
+	}
 	
 	public AdventureCard drawCard() {
 		return deck.pop();
 	}
 	
-	protected void discardCard(AdventureCard c) {
+	public void discardCard(AdventureCard c) {
 		discard.push(c);
 	}
+	
+	//getters/setters
+		public boolean deckEmpty() { return deck.empty(); }
+		public boolean discardEmpty() { return discard.empty(); }
 	
 	private void initFoes() {
 		for(int i=0; i<8; i++) {

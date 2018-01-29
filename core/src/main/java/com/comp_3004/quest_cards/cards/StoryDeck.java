@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.Stack;
 
 public class StoryDeck extends Deck {
+	
+	//attributes
 	private Stack<StoryCard> deck;
 	private Stack<StoryCard> discard;
 	
@@ -16,24 +18,48 @@ public class StoryDeck extends Deck {
 		initQuests();
 	}
 	
+	//methods
 	public void shuffle() {
 		Collections.shuffle(deck);
 	}
-	
-	/*public void shuffleDiscard() {
-		Collections.shuffle(discard);
-	}*/
-	
-	protected StoryCard drawCard() {
+	public void shuffleDiscardIntoDeck() {
+		while(discard.empty() != true) {
+			deck.push(discard.pop());
+		}
+		shuffle();
+	}
+	public StoryCard drawCard() {
 		return deck.pop();
 	}
-
 	//moves card to decks discard pile
-	protected void discardCard(StoryCard c) {
+	public void discardCard(StoryCard c) {
 		discard.push(c);
 	}
-
+	public void printDeck() {
+		System.out.printf("Story Deck:\n");
+		System.out.printf("%-40s%s\n", "Name", "Type");
+		System.out.printf("==================================\n");
+		for(StoryCard s : deck) {
+			s.printCard();
+		}
+		System.out.printf("Number of cards: %s\n", deck.size());
+	}
+	public void printDiscard() {
+		System.out.printf("Story Discard:\n");
+		System.out.printf("%-40s%s\n", "Name", "Type");
+		System.out.printf("==================================\n");
+		for(StoryCard s : discard) {
+			s.printCard();
+		}
+		System.out.printf("Number of cards: %s\n", discard.size());
+		
+	}
 	
+	//getters/setters
+	public boolean deckEmpty() { return deck.empty(); }
+	public boolean discardEmpty() { return discard.empty(); }
+	
+	//constructor init methods
 	private void initTournaments() {
 		TournamentCard camelot = new TournamentCard("Tournament at Camelot", 3);
 		this.deck.add(camelot);
@@ -89,28 +115,6 @@ public class StoryDeck extends Deck {
 			QuestCard saxonInvaders = new QuestCard("Repel the Saxon Invaders");
 			this.deck.add(saxonInvaders);
 		}
-	}
-	
-	public void printDeck() {
-		System.out.printf("Story Deck:\n");
-		System.out.printf("%-40s%s\n", "Name", "Type");
-		System.out.printf("==================================\n");
-		for(StoryCard s : this.deck) {
-			s.printCard();
-		}
-		System.out.printf("Number of cards: %s\n", this.deck.size());
-	}
-
-	
-	protected void printDiscard() {
-		System.out.printf("Story Discard:\n");
-		System.out.printf("%-40s%s\n", "Name", "Type");
-		System.out.printf("==================================\n");
-		for(StoryCard s : this.discard) {
-			s.printCard();
-		}
-		System.out.printf("Number of cards: %s\n", this.discard.size());
-		
 	}
 
 }

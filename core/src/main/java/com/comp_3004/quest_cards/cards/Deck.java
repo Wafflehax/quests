@@ -1,28 +1,23 @@
 package com.comp_3004.quest_cards.cards;
 
-import java.util.Collections;
 import java.util.Stack;
-//welcome to the start of the new card-deck implementation development branch!!!
+
 public abstract class Deck {
 	
-	protected Stack<Card> deck;
-	protected Stack<Card> discard;
+	//attributes
+	protected Stack<Card> deck;							//deck of cards
+	protected Stack<Card> discard;						//discard pile
 	
-	public void discardCard(Card c) {		//puts card in decks discard pile
+	//methods (overridden in child classes)
+	public void discardCard(Card c) {					//puts card in decks discard pile
 		discard.push(c);
 	}
 	
-	
-	/*
-	public void shuffleDiscardIntoDeck() {
-		while(discard.empty() != true) {
-			deck.push(discard.pop());
-		}
-		this.shuffle();
-	}*/
-	
 	//abstract methods
-	abstract protected void printDeck();			//prints the cards currently in the deck
-	abstract protected void printDiscard();		//prints the cards currently in the discard pile
-	abstract protected void shuffle();				//shuffles cards in the deck
+	abstract protected void printDeck();					//prints the cards currently in the deck
+	abstract protected void printDiscard();				//prints the cards currently in the discard pile
+	abstract protected void shuffle();					//shuffles cards in the deck
+	abstract protected void shuffleDiscardIntoDeck();		//shuffles discard pile into deck
+	abstract public boolean deckEmpty();
+	abstract public boolean discardEmpty();
 }

@@ -20,12 +20,48 @@ public class QuestsOfTheRoundTable implements ApplicationListener {
 		batch = new SpriteBatch();
 		
 		//some initial card/deck testing
-		//AdventureDeck advDeck = new AdventureDeck();
-		StoryDeck storyDeck = new StoryDeck();
+		/*
+		//adventure deck testing
+		AdventureDeck advDeck = new AdventureDeck();
 		//advDeck.printDeck();
+		//advDeck.shuffle();
+		//advDeck.printDeck();
+		
+		System.out.printf("Deck empty?: %s \n", advDeck.deckEmpty());
+		System.out.printf("Discard empty?: %s \n",advDeck.discardEmpty());
+		while (!advDeck.deckEmpty()) {
+			//System.out.print("Deck top card: ");
+			//storyDeck.deck.peek().printCard();	//need to make deck public to test
+			advDeck.discardCard(advDeck.drawCard());
+			//System.out.print("Discard top card: ");
+			//storyDeck.discard.peek().printCard();	//need to make discard public to test
+		}
+		advDeck.shuffleDiscardIntoDeck();
+		advDeck.printDeck();
+		advDeck.printDiscard();
+		*/
+		
+		
+		//story deck testing
+		/*
+		StoryDeck storyDeck = new StoryDeck();
+		//storyDeck.printDeck();
+		//storyDeck.shuffle();
+		//storyDeck.printDeck();
+		System.out.printf("Deck empty?: %s \n", storyDeck.deckEmpty());
+		System.out.printf("Discard empty?: %s \n",storyDeck.discardEmpty());
+		while (!storyDeck.deckEmpty()) {
+			//System.out.print("Deck top card: ");
+			//storyDeck.deck.peek().printCard();	//need to make deck public to test
+			storyDeck.discardCard(storyDeck.drawCard());
+			//System.out.print("Discard top card: ");
+			//storyDeck.discard.peek().printCard();	//need to make discard public to test
+		}
+		storyDeck.shuffleDiscardIntoDeck();
 		storyDeck.printDeck();
-		storyDeck.shuffle();
-		storyDeck.printDeck();
+		storyDeck.printDiscard();
+		*/
+		
 		
 		Controller cont = new Controller();
 		// comment out for tournament implementation
