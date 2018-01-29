@@ -1,18 +1,22 @@
-package com.comp_3004.quest_cards.core;
+package com.comp_3004.quest_cards.cards;
 
-public class Weapon extends Adventure {
+public class AmourCard extends AdventureCard {
 	private int battlePoints;
 	
 	//constructor
-	public Weapon(String n, int b) {
-		this.name = n;
-		this.battlePoints = b;
+	public AmourCard() {
+		this.name = "Amour";
+		this.battlePoints = 10;
 	}
 	
 	public void printCard() {
 		System.out.printf("%-15s", this.name);
 		System.out.printf("%-15s", this.battlePoints);
 		System.out.printf("%s\n", this.getClass().getSimpleName());
+	}
+	
+	public int getBattlePts() {
+		return battlePoints;
 	}
 
 }

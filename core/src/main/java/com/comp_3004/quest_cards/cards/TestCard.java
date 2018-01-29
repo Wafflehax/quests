@@ -1,9 +1,9 @@
-package com.comp_3004.quest_cards.core;
+package com.comp_3004.quest_cards.cards;
 
-public class Test extends Adventure {
+public class TestCard extends AdventureCard {
 	
 	//constructor
-	public Test(String n) {
+	public TestCard(String n) {
 		this.name = n;
 	}
 

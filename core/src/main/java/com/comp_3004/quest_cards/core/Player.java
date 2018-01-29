@@ -1,67 +1,119 @@
 package com.comp_3004.quest_cards.core;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+
+import org.apache.log4j.Logger;
+
+import com.comp_3004.quest_cards.cards.*;
+import com.comp_3004.quest_cards.cards.AdventureCard.State;
 
 public class Player{
-	
+	static Logger log = Logger.getLogger(Player.class); //log4j logger
 	private String name;
+	private enum Rank { SQUIRE, KNIGHT, CHAMPION_KNIGHT, KNIGHT_OF_THE_ROUND_TABLE };
+	private Rank rank;
+	private int shields;
 	
-	private final int NOT_FOUND = -1;
-	
-	protected ArrayList<Card> playerHandCards;
-	protected ArrayList<Card> playerActiveCards;
+	protected LinkedList<AdventureCard> playerHandCards;
+	protected LinkedList<AdventureCard> playerActiveCards;
 	
 	protected boolean participateQuest;
-	protected boolean participateTournament;
+	protected volatile boolean participateTournament;
 	
 	// constructor
 	public Player(String name) {
 		this.name = name;
+		this.rank = Rank.SQUIRE;
+		this.shields = 0;
+		this.playerHandCards = new LinkedList<AdventureCard>();
+		this.playerActiveCards = new LinkedList<AdventureCard>();
 	}
 	
 	// getters/setters
 	public String getName() {
 		return name;
 	}
-
-	public boolean addToHand(Card c) {
+	
+	public boolean drawCard(AdventureDeck d) {
+		
 		// can't have more than 12 cards
+		//TODO: allow player to play cards if player is already at hand limit
 		if(playerHandCards.size() >= 12) {
 			return false;
 		}
 		else {
-			playerHandCards.add(c);
+			//call drawCard from adventure deck
+			AdventureCard card = d.drawCard();
+			playerHandCards.add(card);
+			card.setOwner(this);
+			card.setState(State.HAND);
 			return true;
 		}
 	}
 	
-	public void addActiveCard(Card c) {
+	protected AdventureCard getHandCard(int pos) {
+		return playerHandCards.get(pos);
+	}
+	
+	// used for tournaments beginning everyone has to draw a card.
+	public void forceDrawAdventure(AdventureDeck d) {
+		//call drawCard from adventure deck
+		AdventureCard card = d.drawCard();
+		playerHandCards.add(card);
+		card.setOwner(this);
+		card.setState(State.HAND);		
+		log.info("Forced player:" + name + " to draw card from adventure deck");
+	}
+	
+	public boolean tooManyHandCards() {
+		return (playerHandCards.size() > 12);
+	}
+	
+	protected boolean exists(String cardName) {
+		for(int i = 0; i < playerActiveCards.size(); i++) {
+			if(playerActiveCards.get(i).getName().equalsIgnoreCase(cardName))
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean playCard(AdventureCard c) {
 		// can only add cards to table from your hand
-		if(findCardIndex(c, playerHandCards) != NOT_FOUND) {
+		if(playerHandCards.contains(c)) {
 			playerActiveCards.add(c);
-			removeHandCard(c);
+			playerHandCards.remove(c);
+			c.setState(State.PLAY);
+			log.info("played card " + c.getName());
+			return true;
 		}
+		//TODO: conditions where player cannot play card
+		log.info("Failed you do now have this card " + c.getName());
+		return false;
 	}
 	
-	public void removeHandCard(Card c) {
-		int index = findCardIndex(c, playerHandCards);
-		if(index >= 0)
-			playerHandCards.remove(index);
-	}
-	
-	public void removeActiveCard(Card c) {
-		int index = findCardIndex(c, playerActiveCards);
-		if(index >= 0)
-			playerHandCards.remove(index);
-	}
-	
-	private int findCardIndex(Card c, ArrayList<Card> deck) {
-		for(int i = 0; i < deck.size(); i++) {
-			if(c == deck.get(i)) {
-				return i;
+	public boolean discardCard(AdventureCard c, AdventureDeck d) {
+		// can only discard cards from table or from your hand
+		if(c.getOwner() == this && (c.getState() == State.PLAY || c.getState() == State.HAND)) {
+			if(playerActiveCards.contains(c)){
+				playerActiveCards.remove(c);
 			}
+			else if(playerHandCards.contains(c)) {
+				playerHandCards.remove(c);
+			}
+			d.discardCard(c);
+			c.setState(State.DISCARD);
+			c.setOwner(null);
 		}
-		return NOT_FOUND;
+		return false;
 	}
-	
+		
+	public int getRankBattlePts() {
+		if(rank == Rank.SQUIRE)
+			return 5;
+		else if(rank == Rank.KNIGHT)
+			return 10;
+		else if(rank == Rank.CHAMPION_KNIGHT || rank == Rank.KNIGHT_OF_THE_ROUND_TABLE)
+			return 20;
+		return 0;
+	}
 }
