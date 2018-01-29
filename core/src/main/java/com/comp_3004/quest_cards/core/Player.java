@@ -10,7 +10,7 @@ import com.comp_3004.quest_cards.cards.AdventureCard.State;
 public class Player{
 	static Logger log = Logger.getLogger(Player.class); //log4j logger
 	private String name;
-	private enum Rank { SQUIRE, KNIGHT, CHAMPION_KNIGHT, KNIGHT_OF_THE_ROUND_TABLE };
+	public enum Rank { SQUIRE, KNIGHT, CHAMPION_KNIGHT, KNIGHT_OF_THE_ROUND_TABLE };
 	private Rank rank;
 	private int shields;
 	
@@ -30,9 +30,11 @@ public class Player{
 	}
 	
 	// getters/setters
-	public String getName() {
-		return name;
-	}
+	public String getName() { return this.name; }
+	public Rank getRank() { return this.rank; }
+	public int getShields() { return this.shields; }
+	public LinkedList<AdventureCard> getHand() { return this.playerHandCards; }
+	public LinkedList<AdventureCard> getActive() { return this.playerActiveCards; }
 	
 	public boolean drawCard(AdventureDeck d) {
 		
@@ -123,13 +125,15 @@ public class Player{
 			rank = Rank.KNIGHT;
 			shields -= 5;
 		}
-		else if(shields >= 7 && rank == Rank.KNIGHT) {
+		if(shields >= 7 && rank == Rank.KNIGHT) {
 			rank = Rank.CHAMPION_KNIGHT;
 			shields -= 7;
 		}
-		else if(shields >= 10 && rank == Rank.CHAMPION_KNIGHT) {
+		if(shields >= 10 && rank == Rank.CHAMPION_KNIGHT) {
 			rank = Rank.KNIGHT_OF_THE_ROUND_TABLE;
 			//triggers winning condition
 		}
+		
+		
 	}
 }

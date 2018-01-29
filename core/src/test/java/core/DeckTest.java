@@ -10,9 +10,9 @@ import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.StoryCard;
 import com.comp_3004.quest_cards.cards.StoryDeck;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
-public class DeckTest extends TestCase{
+public class DeckTest extends TestCase {
 
 	//Story Deck Tests
 	public void testStorySize() {
