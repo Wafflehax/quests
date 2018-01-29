@@ -48,9 +48,9 @@ public class Game{
 	public void startGame(int numPlayers) {
 		this.numPlayers = numPlayers;
 		advDeck = new AdventureDeck();
-		advDeck.shuffleDeck();
+		advDeck.shuffle();
 		storyDeck = new StoryDeck();
-		storyDeck.shuffleDeck();
+		storyDeck.shuffle();
 		initPlayersStart();
 		runGameLoop = true;
 		LogicLoopTourTesting();
