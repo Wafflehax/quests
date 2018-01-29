@@ -56,8 +56,10 @@ public class StoryDeck extends Deck {
 	}
 	
 	//getters/setters
-	public boolean deckEmpty() { return deck.empty(); }
-	public boolean discardEmpty() { return discard.empty(); }
+	public boolean deckEmpty() { return this.deck.empty(); }
+	public boolean discardEmpty() { return this.discard.empty(); }
+	public Stack<StoryCard> getDeck() { return this.deck; }
+	public Stack<StoryCard> getDiscard() { return this.discard; }
 	
 	//constructor init methods
 	private void initTournaments() {

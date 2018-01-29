@@ -5,8 +5,8 @@ import java.util.Stack;
 public abstract class Deck {
 	
 	//attributes
-	protected Stack<Card> deck;							//deck of cards
-	protected Stack<Card> discard;						//discard pile
+	protected Stack<Card> deck;							//deck of cards, overridden in child classes
+	protected Stack<Card> discard;						//discard pile, overridden in child classes
 	
 	//methods (overridden in child classes)
 	public void discardCard(Card c) {					//puts card in decks discard pile
