@@ -116,4 +116,20 @@ public class Player{
 			return 20;
 		return 0;
 	}
+	
+	public void addShields(int sh) {
+		shields += sh;
+		if(shields >= 5 && rank == Rank.SQUIRE) {
+			rank = Rank.KNIGHT;
+			shields -= 5;
+		}
+		else if(shields >= 7 && rank == Rank.KNIGHT) {
+			rank = Rank.CHAMPION_KNIGHT;
+			shields -= 7;
+		}
+		else if(shields >= 10 && rank == Rank.CHAMPION_KNIGHT) {
+			rank = Rank.KNIGHT_OF_THE_ROUND_TABLE;
+			//triggers winning condition
+		}
+	}
 }
