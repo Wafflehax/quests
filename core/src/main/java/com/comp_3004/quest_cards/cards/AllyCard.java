@@ -16,5 +16,9 @@ public class AllyCard extends AdventureCard {
 		System.out.printf("%-15s", this.battlePoints + "/" + this.bids);
 		System.out.printf("%s\n", this.getClass().getSimpleName());
 	}
+	
+	public int getBattlePts() {
+		return battlePoints;
+	}
 
 }

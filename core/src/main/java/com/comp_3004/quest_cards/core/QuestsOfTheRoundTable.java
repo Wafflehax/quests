@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.StoryDeck;
+
+import org.apache.log4j.Logger;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 
@@ -13,6 +16,7 @@ public class QuestsOfTheRoundTable implements ApplicationListener {
 	SpriteBatch batch;
 	float elapsed;
 	Thread gameThr;
+	public static Logger log = Logger.getLogger(QuestsOfTheRoundTable.class); //log4j logger
 
 	@Override
 	public void create () {
@@ -64,8 +68,8 @@ public class QuestsOfTheRoundTable implements ApplicationListener {
 		
 		
 		Controller cont = new Controller();
-		// comment out for tournament implementation
-		//cont.onCreate();
+		// uncomment for tournament implementation
+		cont.onCreate();
 		
 	}
 

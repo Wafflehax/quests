@@ -1,7 +1,7 @@
 package com.comp_3004.quest_cards.core;
 
 public class ThreadLock{
-	protected Object lock;
+	private Object lock;
 	
 	public ThreadLock(Object lock) {
 		this.lock = lock;

@@ -7,4 +7,8 @@ public abstract class StoryCard extends Card {
 		System.out.printf("%-40s", this.name);
 		System.out.printf("%s\n", this.getClass().getSimpleName());
 	}
+	
+	public String getType() {
+		return this.getClass().getSimpleName();
+	}
 }

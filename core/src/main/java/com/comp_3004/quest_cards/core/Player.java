@@ -1,11 +1,14 @@
 package com.comp_3004.quest_cards.core;
 
 import java.util.LinkedList;
+
+import org.apache.log4j.Logger;
+
 import com.comp_3004.quest_cards.cards.*;
 import com.comp_3004.quest_cards.cards.AdventureCard.State;
 
 public class Player{
-	
+	static Logger log = Logger.getLogger(Player.class); //log4j logger
 	private String name;
 	private enum Rank { SQUIRE, KNIGHT, CHAMPION_KNIGHT, KNIGHT_OF_THE_ROUND_TABLE };
 	private Rank rank;
@@ -48,15 +51,43 @@ public class Player{
 		}
 	}
 	
+	protected AdventureCard getHandCard(int pos) {
+		return playerHandCards.get(pos);
+	}
+	
+	// used for tournaments beginning everyone has to draw a card.
+	public void forceDrawAdventure(AdventureDeck d) {
+		//call drawCard from adventure deck
+		AdventureCard card = d.drawCard();
+		playerHandCards.add(card);
+		card.setOwner(this);
+		card.setState(State.HAND);		
+		log.info("Forced player:" + name + " to draw card from adventure deck");
+	}
+	
+	public boolean tooManyHandCards() {
+		return (playerHandCards.size() > 12);
+	}
+	
+	protected boolean exists(String cardName) {
+		for(int i = 0; i < playerActiveCards.size(); i++) {
+			if(playerActiveCards.get(i).getName().equalsIgnoreCase(cardName))
+				return true;
+		}
+		return false;
+	}
+	
 	public boolean playCard(AdventureCard c) {
 		// can only add cards to table from your hand
 		if(playerHandCards.contains(c)) {
 			playerActiveCards.add(c);
 			playerHandCards.remove(c);
 			c.setState(State.PLAY);
+			log.info("played card " + c.getName());
 			return true;
 		}
 		//TODO: conditions where player cannot play card
+		log.info("Failed you do now have this card " + c.getName());
 		return false;
 	}
 	
@@ -76,7 +107,13 @@ public class Player{
 		return false;
 	}
 		
-	
-		 
-	
+	public int getRankBattlePts() {
+		if(rank == Rank.SQUIRE)
+			return 5;
+		else if(rank == Rank.KNIGHT)
+			return 10;
+		else if(rank == Rank.CHAMPION_KNIGHT || rank == Rank.KNIGHT_OF_THE_ROUND_TABLE)
+			return 20;
+		return 0;
+	}
 }
