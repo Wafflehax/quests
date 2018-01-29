@@ -30,7 +30,7 @@ public class AdventureDeck extends Deck {
 		return deck.pop();
 	}
 	
-	protected void discardCard(AdventureCard c) {
+	public void discardCard(AdventureCard c) {
 		discard.push(c);
 	}
 	

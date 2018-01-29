@@ -14,5 +14,9 @@ public class AmourCard extends AdventureCard {
 		System.out.printf("%-15s", this.battlePoints);
 		System.out.printf("%s\n", this.getClass().getSimpleName());
 	}
+	
+	public int getBattlePts() {
+		return battlePoints;
+	}
 
 }
