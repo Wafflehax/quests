@@ -22,14 +22,19 @@ public class StoryDeck extends Deck {
 	public void shuffle() {
 		Collections.shuffle(deck);
 	}
-	public void shuffleDiscardIntoDeck() {
+	protected void shuffleDiscardIntoDeck() {
 		while(discard.empty() != true) {
 			deck.push(discard.pop());
 		}
 		shuffle();
 	}
 	public StoryCard drawCard() {
-		return deck.pop();
+		if(deck.empty()) {
+			shuffleDiscardIntoDeck();
+			return deck.pop();
+		}
+		else
+			return deck.pop();
 	}
 	//moves card to decks discard pile
 	public void discardCard(StoryCard c) {
