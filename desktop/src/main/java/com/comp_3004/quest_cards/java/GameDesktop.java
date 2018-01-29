@@ -8,6 +8,7 @@ import com.comp_3004.quest_cards.core.Game;
 public class GameDesktop {
 	public static void main (String[] args) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.forceExit=true;
 		new LwjglApplication(new Game(), config);
 	}
 }
