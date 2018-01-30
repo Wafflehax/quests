@@ -1,6 +1,7 @@
 {
-  "Code": ["gathered player participation in tournament","Handle entering players to draw from adventure deck players with too many cards must discard to hold 12", "Turn sequence(tournament)"],
+  "Code": ["F6.a gathered player participation in tournament","F6.b Handle entering players to draw from adventure deck players with too many cards must discard to hold 12","basic text implementation of tournaments"],
   "Research": ["view controller design pattern"],
-  "Next week":["Find out winner and apply battle points to winner","Junit test cases for all work","Tournaments (tie)", "Tournaments (double tie)"],
+  "Next week":["F6.a","F6.b","F6.c Find out winner and apply battle points to winner","Junit test cases for all work","F23 Tournaments (tie)", "F24 Tournaments (double tie)"],
+  "Features":["none complete this week need testing"],
   "Hours Spent":["10"]
 } 
