@@ -1,0 +1,20 @@
+{
+  "T1": [ "Test size of adventure deck", "F3", "2018-01-29" ],
+  "T2": [ "Test card composition of adventure deck", "F3", "2018-01-29" ],
+  "T3": [ "Test drawing from adventure deck", "F3", "2018-01-29" ],
+  "T4": [ "Test discarding to adventure deck's discard pile", "F3", "2018-01-29" ],
+  "T5": [ "Test shuffling discard pile into adventure deck when deck empty", "F3", "2018-01-29" ],
+  "T6": [ "Test size of story deck", "F4", "2018-01-29" ],
+  "T7": [ "Test card composition of story deck", "F4", "2018-01-29" ],
+  "T8": [ "Test drawing from story deck", "F4", "2018-01-29" ],
+  "T9": [ "Test discarding to story deck's discard pile", "F4", "2018-01-29" ],
+  "T10": [ "Test shuffling discard pile into story deck when deck empty", "F4", "2018-01-29" ],
+  "T11": [ "Test player initialization", "F5", "2018-01-29" ],
+  "T12": [ "Test player drawing card", "F5", "2018-01-29" ],
+  "T13": [ "Test player drawing card over hand limit", "F5", "2018-01-29" ],
+  "T14": [ "Test player playing a card", "F5", "2018-01-29" ],
+  "T15": [ "Test player discarding a card from hand", "F5", "2018-01-29" ],
+  "T16": [ "Test player discarding a card from play", "F5", "2018-01-29" ],
+  "T17": [ "Test player attempting illegal discard", "F5", "2018-01-29" ],
+  "T18": [ "Test player adding shields", "F5", "2018-01-29" ]
+}
