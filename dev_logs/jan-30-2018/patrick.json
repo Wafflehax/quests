@@ -1,4 +1,6 @@
 {
-  "Code": ["something"],
-  "Research": ["Tried to do something else"]
-}
+  "Code": ["gathered player participation in tournament","Handle entering players to draw from adventure deck players with too many cards must discard to hold 12", "Turn sequence(tournament)"],
+  "Research": ["view controller design pattern"],
+  "Next week":["Find out winner and apply battle points to winner","Junit test cases for all work","Tournaments (tie)", "Tournaments (double tie)"],
+  "Hours Spent":["10"]
+} 
