@@ -1,4 +1,20 @@
 {
-  "Code": ["something"],
-  "Research": ["Tried to do something else"]
+  "Completed": [
+    "deck: initialization",
+    "deck: shuffling",
+    "deck: draw card",
+    "deck: shuffle discard into deck",
+    "deck: discard",
+    "player: initialization",
+    "player: draw card",
+    "player: draw card over hand limit",
+    "player: discard from hand",
+    "player: discard from play",
+    "player: add shields"
+  ],
+  "NextWeek": [
+    "Events",
+    "Implementing MVC"
+  ],
+  "Hours": "13"
 }

@@ -49,20 +49,73 @@ Feature ID & Test description & Commit date\\
 \section{Individual contributions}
 
 \subsection*{Frerik Drumm}
+\subsubsection*{Completed}
+\begin{itemize}
+\item deck: initialization
 
-%frerik%
+\item deck: shuffling
 
+\item deck: draw card
+
+\item deck: shuffle discard into deck
+
+\item deck: discard
+
+\item player: initialization
+
+\item player: draw card
+
+\item player: draw card over hand limit
+
+\item player: discard from hand
+
+\item player: discard from play
+
+\item player: add shields
+
+\end{itemize}
+\subsubsection*{NextWeek}
+\begin{itemize}
+\item Events
+
+\item Implementing MVC
+
+\end{itemize}
+\subsubsection*{Hours}
+\begin{itemize}
+\end{itemize}
 \subsection*{Joe Dugan}
+\subsubsection*{Code}
+\begin{itemize}
+\item something
 
-%joe%
+\end{itemize}
+\subsubsection*{Research}
+\begin{itemize}
+\item Tried to do something else
 
+\end{itemize}
 \subsection*{Kevin Diez-Ocampo}
+\subsubsection*{Code}
+\begin{itemize}
+\item something
 
-%kevin%
+\end{itemize}
+\subsubsection*{Research}
+\begin{itemize}
+\item Tried to do something else
 
+\end{itemize}
 \subsection*{Patrick Dzieman}
+\subsubsection*{Code}
+\begin{itemize}
+\item something
 
-%patrick%
+\end{itemize}
+\subsubsection*{Research}
+\begin{itemize}
+\item Tried to do something else
+
 \end{itemize}
 
 \end{document}
