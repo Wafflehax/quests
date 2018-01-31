@@ -24,6 +24,11 @@ public class Players{
 		this.players = p.players;
 	}
 	
+	// getter/setter
+	protected boolean isEmpty() {		return players.isEmpty();		}
+	public int size() { return players.size(); }
+	
+	
 	// moves to next position and returns it
 	private int nextIndex() {
 		if(position == endPos)
@@ -37,12 +42,9 @@ public class Players{
 		return players.get(nextIndex());
 	}
 	
-	protected Player current() {
+	public Player current() {
 		return players.get(position);
 	}
-	
-	protected boolean isEmpty() {		return players.isEmpty();		}
-	protected int size() { return players.size(); }
 	
 	protected Players getTournamentParticipants() {
 		//TODO: TESTING FUNCTIONALITY

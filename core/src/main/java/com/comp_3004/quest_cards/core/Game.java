@@ -14,6 +14,8 @@ import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 
+import utils.IntPair;
+
 
 public class Game{
 	
@@ -22,7 +24,7 @@ public class Game{
 	
 	public static enum gamestates{ WAITING, ASKING_PARTICIPATION, PLAYER_TURN, START,
 		DISCARD_HAND_CARD }; // used for communicating with view
-	private static enum cardModes { PLAY, DISCARD, NONE}; // determine when card was pressed what action it was. ex.going to discard, or activating(playing),none(nothing)
+	public static enum cardModes { PLAY, DISCARD, NONE}; // determine when card was pressed what action it was. ex.going to discard, or activating(playing),none(nothing)
 	protected String message; //displaying messg on view, ex. battle points of everyone at end of tour
 	
 	protected AdventureDeck advDeck;
@@ -40,6 +42,9 @@ public class Game{
 	
 	//getters setters
 	protected Player getcurrentTurn() { return players.current();}
+	public void setStory(StoryCard c) { currStory = c; }
+	public Players getPlayers() { return players; }
+	public cardModes getCardMode() { return cardMode; }
 	
 	// constructor
 	public Game() {	}
@@ -52,31 +57,24 @@ public class Game{
 		storyDeck.shuffle();
 		initPlayersStart();
 		runGameLoop = true;
-		LogicLoopTourTesting();
+		MainGameLoop();
 	}
 	
-	private void MainGameLoop() {}
-
-	// separate loop from main to test just tournaments
-	private void LogicLoopTourTesting() {
+	private void MainGameLoop() {
 		while(runGameLoop) {
-			//all four tournament types
-			TournamentCard camelot = new TournamentCard("Tournament at Camelot", 3);
-			TournamentCard orkney = new TournamentCard("Tournament at Orkney", 2);
-			TournamentCard tintagel = new TournamentCard("Tournament at Tintagel", 1);
-			TournamentCard york = new TournamentCard("Tournament at York", 0);
-			currStory = york;
-			
 			if(currStory instanceof TournamentCard) {
 				playTournament();
 			}
-			//add other story cards
-			else {}		
 			runGameLoop = false; // just testing 1 tour currently
 		}
+	}
+	
+	// separate loop from main to test just tournaments
+	private void LogicLoopTourTesting() {
+		
 	}	
 	
-	protected void cardPressed(int pos) {
+	public void cardPressed(int pos) {
 		if(pos < 0 || pos > players.current().playerHandCards.size()-1) {
 			log.debug("invalid card, does not match hand");
 		}else {
@@ -99,14 +97,12 @@ public class Game{
 		Players mainTurns = players;
 		System.out.println("-----------------\nPlayer: " + players.current().getName() + " has drawn :" 
 				+ " "+ currStory.getType() + " => " + currStory.getName());
-		//determineParticipants();
-		players.players.get(0).participateTournament = true;
-		players.players.get(3).participateTournament = true;
+		determineParticipants();
 		players = players.getTournamentParticipants();
 		if(players.isEmpty() || players.size() == 1) {
 			log.info("Tournament not held not enough participants: " + players.size());
 		}else {
-			log.info("Tournament starting");
+			log.info("Tournament starting");//player plays their cards face down			
 			for(int i = 0; i < players.size(); i++, players.next()) {
 				state = gamestates.PLAYER_TURN;
 				cardMode = cardModes.PLAY;
@@ -114,39 +110,47 @@ public class Game{
 				cardMode = cardModes.NONE;
 			}
 			log.info("Turning over cards and calculating battle points");
-			//for now will display results from here
-			String out = "";
-			Stack<Integer> bPts = new Stack<Integer>();
-			Stack<Integer> bPtsPlayerPos = new Stack<Integer>();
-			for(int i = 0; i < players.size(); players.next(), i++) {
-				int battlePts = players.current().getRankBattlePts();
-				for(int w = 0; w < players.current().playerActiveCards.size(); w++) {
-					out += "Player : " + players.current().getName() + " has rank:"
-							+ players.current().getRankBattlePts() + " ";
-					AdventureCard c = players.current().playerActiveCards.get(w);
-					if(c instanceof WeaponCard) {
-						 WeaponCard weapon = (WeaponCard)c; battlePts += weapon.getBattlePts();
-						 out += weapon.getName() + " : "  + weapon.getBattlePts() + " ";
-					}else if(c instanceof AllyCard) {
-						 AllyCard ally = (AllyCard)c; battlePts += ally.getBattlePts();
-						 out += ally.getName() + " : "  + ally.getBattlePts() + " ";
-					}else if(c instanceof AmourCard) {
-						AmourCard amour = (AmourCard)c; battlePts += amour.getBattlePts();
-						out += amour.getName() + " : " + amour.getBattlePts() + " ";
-					}
-				}
-				out += " \ntotal : " + battlePts;
-				log.info(out);
-				bPts.add(battlePts); bPtsPlayerPos.add(i);
-				//get winner or tie
-			}
+			determineWin();
 			
 		}
-		players = mainTurns; //return to position of main game before tournament
+		players = mainTurns; //return to position of main game before tournament, and go to next player
+		players.next();
 	}
 	
+	private Stack<IntPair> determineWin() {
+		Stack<IntPair> p = new Stack<IntPair>();
+		//for now will display results from here
+		String out = "";
+		for(int i = 0; i < players.size(); players.next(), i++) {
+			int battlePts = players.current().getRankBattlePts();
+			for(int w = 0; w < players.current().playerActiveCards.size(); w++) {
+				out += "Player : " + players.current().getName() + " has rank:"	+ players.current().getRankBattlePts() + " ";
+				AdventureCard c = players.current().playerActiveCards.get(w);
+				if(c instanceof WeaponCard) {
+					 WeaponCard weapon = (WeaponCard)c; battlePts += weapon.getBattlePts();
+					 out += weapon.getName() + " : "  + weapon.getBattlePts() + " ";
+				}else if(c instanceof AllyCard) {
+					 AllyCard ally = (AllyCard)c; battlePts += ally.getBattlePts();
+					 out += ally.getName() + " : "  + ally.getBattlePts() + " ";
+				}else if(c instanceof AmourCard) {
+					AmourCard amour = (AmourCard)c; battlePts += amour.getBattlePts();
+					out += amour.getName() + " : " + amour.getBattlePts() + " ";
+				}
+			}
+			out += " \ntotal : " + battlePts;
+			log.info(out);
+			IntPair calcedPoints = new IntPair(battlePts, i); // <pts, pos>
+			p.add(calcedPoints);
+			//get winner or tie
+			
+
+		}
+		return p;
+	}
+	
+	
 	private void playCard(AdventureCard c) {
-		//TODO: TOURNAMENT:can't have two of same weapons, or more than one amour
+		//TOURNAMENT:can't have two of same weapons, or more than one amour
 		if(currStory instanceof TournamentCard) {
 			if(c instanceof WeaponCard || c instanceof AmourCard) {
 				if(!players.current().exists(c.getName()))
@@ -155,7 +159,7 @@ public class Game{
 			else if(c instanceof AllyCard)
 					players.current().playCard(c);
 			else
-				log.info("Did not play Ally,Weapon,Amour card: invalid");	
+				log.info("Did not play Ally, Weapon,Amour card: invalid");	
 		}
 		else
 			log.info("Did not play card: invalid");	
@@ -167,23 +171,12 @@ public class Game{
 	
 	private void determineParticipants() {
 		cardMode = cardModes.NONE;
-		for(int i = 0; i < numPlayers && runGameLoop; i++) {
+		for(int i = 0; i < numPlayers && runGameLoop; i++, players.next()) {
 			state = gamestates.ASKING_PARTICIPATION;
 			lock.sleepGame();
-			if(players.current().participateTournament) {
-				players.current().forceDrawAdventure(advDeck);
-				while(players.current().tooManyHandCards()) {
-					cardMode = cardModes.DISCARD;
-					state = gamestates.DISCARD_HAND_CARD;
-					log.info(players.current().getName() + " Too many cards in hand.\n");
-					lock.sleepGame();
-				}
-				log.info(players.current().getName() + " has Correct number of cards now.\n");
-				cardMode = cardModes.NONE;
-			}
-			players.next();
+			if(players.current().participateTournament)
+				discardCardIfTooMany();
 		}
-		System.out.println("Done gathering participation data");
 		cardMode = cardModes.NONE; // disable buttons
 	}
 
@@ -199,9 +192,25 @@ public class Game{
 		players = new Players(0, numPlayers-1, plyrs);
 	}
 	
-	protected void setTournamentParticupation(boolean particp) {
+	public void setTournamentParticupation(boolean particp) {
 		players.current().participateTournament = particp;
-		cardMode = cardModes.NONE;
+		cardMode = cardModes.NONE; //disable card click from doing anything
+		if(particp)
+			players.current().forceDrawAdventure(advDeck); //force draw for player
 		lock.wake();
 	}
+	
+	//Checks current players hand,if too many disposes card and loops till player acceptable amount
+	public void discardCardIfTooMany() {
+		while(players.current().tooManyHandCards()) {
+			cardMode = cardModes.DISCARD;
+			state = gamestates.DISCARD_HAND_CARD;
+			log.info(players.current().getName() + " Too many cards in hand.\n");
+			lock.sleepGame();
+		}
+		cardMode = cardModes.NONE; 
+		log.info(players.current().getName() + " has Correct number of cards now.\n");
+	}
+	
+	public void done() { lock.wake(); }
 }

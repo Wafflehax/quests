@@ -6,6 +6,7 @@ import java.util.Scanner;
 import org.apache.log4j.Logger;
 
 import com.comp_3004.quest_cards.cards.AdventureCard;
+import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.core.Game.gamestates;
 
 
@@ -22,6 +23,8 @@ public class Controller{
 			public void run() {
 				
 				model = new Game();
+				TournamentCard york = new TournamentCard("Tournament at York", 0);
+				model.setStory(york);
 				model.startGame(4);
 			}
 		});
@@ -121,8 +124,8 @@ public class Controller{
 	public void pressedHand12() {
 		model.cardPressed(12);
 	}
-	public void doneTurn() {
-		model.lock.wake();
+	public void done() {
+		model.done();
 	}
 	
 	
@@ -183,7 +186,7 @@ public class Controller{
 				run = false; model.runGameLoop = false;
 			}
 			else if(action.equalsIgnoreCase("done")) {
-				doneTurn();
+				done();
 			}
 			else if(action.equalsIgnoreCase("print")) {
 				printHand();
