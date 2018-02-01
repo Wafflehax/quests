@@ -46,16 +46,16 @@ public class GameModel{
 		advDeck.shuffle();
 		storyDeck = new StoryDeck();
 		storyDeck.shuffle();
-		initPlayersStart();
+		initPlayersStart(numPlayers);
 		
 		//testing
 		//Player 0 draws a tournament card
-		TournamentCard york = new TournamentCard("Tournament at York", 0);
-		tour = new Tournament(players, advDeck, york, state, lock, log);
-		tour.runTournament();
+		//TournamentCard york = new TournamentCard("Tournament at York", 0);
+		//tour = new Tournament(players, advDeck, york, state, lock, log);
+		//tour.runTournament();
 	}
 	
-	private void initPlayersStart() {
+	private void initPlayersStart(int numPlayers) {
 		//TODO: Add players choosing their own name
 		ArrayList<Player> plyrs = new ArrayList<Player>(numPlayers);
 		for(int i = 0; i < numPlayers; i++) {

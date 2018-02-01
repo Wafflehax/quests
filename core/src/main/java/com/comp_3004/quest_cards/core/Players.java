@@ -25,6 +25,12 @@ public class Players{
 	}
 	
 	public int getNumPlayers() { return this.players.size(); }
+	public ArrayList<Player> getPlayers() { return this.players; }
+	
+	public void addPlayer(String name) {
+		Player p = new Player(name);
+		players.add(p);
+	}
 	
 	// moves to next position and returns it
 	private int nextIndex() {
