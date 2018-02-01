@@ -10,64 +10,47 @@ import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.AllyCard;
 import com.comp_3004.quest_cards.cards.AmourCard;
 import com.comp_3004.quest_cards.cards.StoryCard;
-import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
+import com.comp_3004.quest_cards.core.GameModel.gamestates;
 
-
-public class Game{
-	
-	static Logger log = Logger.getLogger(Game.class); //log4j logger
-	public static final byte MAX_HAND_SIZE = 12;
-	
-	public static enum gamestates{ WAITING, ASKING_PARTICIPATION, PLAYER_TURN, START,
-		DISCARD_HAND_CARD }; // used for communicating with view
+public class Tournament {
 	private static enum cardModes { PLAY, DISCARD, NONE}; // determine when card was pressed what action it was. ex.going to discard, or activating(playing),none(nothing)
-	protected String message; //displaying messg on view, ex. battle points of everyone at end of tour
-	
-	protected AdventureDeck advDeck;
-	protected StoryDeck storyDeck;
-	
-	private int numPlayers;
-	protected boolean runGameLoop;
+	protected cardModes cardMode;
+	private AdventureDeck advDeck;
 	private volatile Players players;
-	private volatile Object lockObj = new Object(); // lock for current thread
-	protected volatile ThreadLock lock = new ThreadLock(lockObj);
-	protected gamestates state = gamestates.START;
-	protected cardModes cardMode = cardModes.NONE; //what to do when card pressed
+	private boolean runGameLoop = true;
+	gamestates state = gamestates.START;
+	ThreadLock lock;
+	Logger log;
+	private TournamentCard currTour;
+
+	public Tournament(Players p, AdventureDeck a, TournamentCard c, gamestates s, ThreadLock lk, Logger lg) {
+		this.players = p;
+		this.advDeck = a;
+		this.currTour = c;
+		this.cardMode = cardModes.NONE; //what to do when card pressed
+		this.state = s;
+		this.lock = lk;
+		this.log = lg;
+	}
 	
-	protected StoryCard currStory;
-	
-	//getters setters
-	protected Player getcurrentTurn() { return players.current();}
-	
-	// constructor
-	public Game() {	}
-	
-	public void startGame(int numPlayers) {
-		this.numPlayers = numPlayers;
-		advDeck = new AdventureDeck();
-		advDeck.shuffle();
-		storyDeck = new StoryDeck();
-		storyDeck.shuffle();
-		initPlayersStart();
-		runGameLoop = true;
+	public void runTournament() {
 		LogicLoopTourTesting();
 	}
 	
-	private void MainGameLoop() {}
 
 	// separate loop from main to test just tournaments
 	private void LogicLoopTourTesting() {
 		while(runGameLoop) {
 			//all four tournament types
-			TournamentCard camelot = new TournamentCard("Tournament at Camelot", 3);
-			TournamentCard orkney = new TournamentCard("Tournament at Orkney", 2);
-			TournamentCard tintagel = new TournamentCard("Tournament at Tintagel", 1);
-			TournamentCard york = new TournamentCard("Tournament at York", 0);
-			currStory = york;
+			//TournamentCard camelot = new TournamentCard("Tournament at Camelot", 3);
+			//TournamentCard orkney = new TournamentCard("Tournament at Orkney", 2);
+			//TournamentCard tintagel = new TournamentCard("Tournament at Tintagel", 1);
+			//TournamentCard york = new TournamentCard("Tournament at York", 0);
+			//currTour = york;
 			
-			if(currStory instanceof TournamentCard) {
+			if(currTour instanceof TournamentCard) {
 				playTournament();
 			}
 			//add other story cards
@@ -83,7 +66,7 @@ public class Game{
 			AdventureCard c = players.current().getHandCard(pos);
 			if(cardMode == cardModes.DISCARD) {
 				log.debug("Press mode: DISCARD");
-				discardCard(c);
+				players.current().discardCard(c, advDeck);
 			}else if(cardMode == cardModes.PLAY) {
 				playCard(c);
 				log.debug("Press mode: PLAY");
@@ -98,7 +81,7 @@ public class Game{
 	private void playTournament() {
 		Players mainTurns = players;
 		System.out.println("-----------------\nPlayer: " + players.current().getName() + " has drawn :" 
-				+ " "+ currStory.getType() + " => " + currStory.getName());
+				+ " "+ currTour.getType() + " => " + currTour.getName());
 		//determineParticipants();
 		players.players.get(0).participateTournament = true;
 		players.players.get(3).participateTournament = true;
@@ -147,7 +130,7 @@ public class Game{
 	
 	private void playCard(AdventureCard c) {
 		//TODO: TOURNAMENT:can't have two of same weapons, or more than one amour
-		if(currStory instanceof TournamentCard) {
+		if(currTour instanceof TournamentCard) {
 			if(c instanceof WeaponCard || c instanceof AmourCard) {
 				if(!players.current().exists(c.getName()))
 					players.current().playCard(c);
@@ -161,13 +144,9 @@ public class Game{
 			log.info("Did not play card: invalid");	
 	}
 	
-	private void discardCard(AdventureCard c) {
-		players.current().discardCard(c, advDeck);
-	}
-	
 	private void determineParticipants() {
 		cardMode = cardModes.NONE;
-		for(int i = 0; i < numPlayers && runGameLoop; i++) {
+		for(int i = 0; i < players.getNumPlayers() && runGameLoop; i++) {
 			state = gamestates.ASKING_PARTICIPATION;
 			lock.sleepGame();
 			if(players.current().participateTournament) {
@@ -186,22 +165,15 @@ public class Game{
 		System.out.println("Done gathering participation data");
 		cardMode = cardModes.NONE; // disable buttons
 	}
-
-	private void initPlayersStart() {
-		//TODO: Add players choosing their own name
-		ArrayList<Player> plyrs = new ArrayList<Player>(numPlayers);
-		for(int i = 0; i < numPlayers; i++) {
-			Player newPlayer = new Player("Player " + i);
-			for(int q = 0; q < MAX_HAND_SIZE; q++)
-				newPlayer.drawCard(advDeck);
-			plyrs.add(newPlayer);
-		}
-		players = new Players(0, numPlayers-1, plyrs);
-	}
 	
 	protected void setTournamentParticupation(boolean particp) {
 		players.current().participateTournament = particp;
 		cardMode = cardModes.NONE;
 		lock.wake();
 	}
+	
+	public TournamentCard getCurrentTour() { return this.currTour; }
+	public void setRunGameLoop(boolean b) { this.runGameLoop = b; }
+	public boolean getRunGameLoop() { return this.runGameLoop; }
+
 }

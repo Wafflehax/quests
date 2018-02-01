@@ -24,6 +24,8 @@ public class Players{
 		this.players = p.players;
 	}
 	
+	public int getNumPlayers() { return this.players.size(); }
+	
 	// moves to next position and returns it
 	private int nextIndex() {
 		if(position == endPos)
@@ -56,5 +58,6 @@ public class Players{
 		// can return with no participants 
 		return partic;
 	}
+	
 	
 }
