@@ -1,5 +1,7 @@
 package com.comp_3004.quest_cards.core;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -20,8 +22,26 @@ public class GameController{
 		System.out.println("Game controller Ctor");
 		this.model = m;
 		this.view = v;
+		
+		//... Add listeners to the view.
+        view.addSomeListener(new SomeListener());
 	}
 	
+	
+	//Listener Template
+	class SomeListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            String userInput = "";
+            try {
+                //userInput = view.getUserInput();
+               // model.doSomethingWith(userInput);
+               // view.doSomethingToUpdateView(m.model.getSomeValue());
+                
+            } catch (NumberFormatException nfex) {
+                //view.showError("Bad input: '" + userInput + "'");
+            }
+        }
+	}
 	
 	//user requests
 	public void startGame(int numPlayers) {
