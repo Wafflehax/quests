@@ -1,0 +1,55 @@
+[
+  {
+    "id": "Kevin",
+    "file": "kevin.json",
+    "options":{
+      "display": "individual_contribution",
+      "section_type":"subsection"
+    }
+  },
+
+  {
+    "id": "Frerik",
+    "file":"frerik.json",
+    "options":{
+      "display": "individual_contribution",
+      "section_type":"subsection"
+    }
+  },
+
+  {
+    "id":"Joe",
+    "file": "joe.json",
+    "options":{
+      "display": "individual_contribution",
+      "section_type":"subsection"
+    }
+  },
+
+  {
+    "id":"Patrick",
+    "file":"patrick.json",
+    "options":{
+      "display": "individual_contribution",
+      "section_type":"subsection"
+    }
+  },
+
+  {
+    "id":"Features",
+    "file":"featureTable.json",
+    "options": {
+      "display":"table",
+      "section_type":"section"
+    }
+  },
+
+  {
+    "id":"Tests",
+    "file":"testsTable.json",
+    "options": {
+      "display":"table",
+      "section_type":"section"
+    }
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "numbered_sections":false,
+  "default_section":{
+    "title":"Title",
+    "section_type":"section"
+  },
+  "template_reg_exp": "%(.+)%"
+}
