@@ -6,7 +6,9 @@ import org.apache.log4j.Logger;
 
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.StoryDeck;
-import com.comp_3004.quest_cards.cards.TournamentCard;
+import com.comp_3004.quest_cards.cards.TournamentCard;	//used for testing
+import com.comp_3004.quest_cards.cards.EventCard;			//used for testing
+import com.comp_3004.quest_cards.cards.StoryCard;
 
 
 public class GameModel{
@@ -23,6 +25,7 @@ public class GameModel{
 	protected StoryDeck storyDeck;
 	
 	private Tournament tour;
+	private Event event;
 	
 	private int numPlayers;
 	private volatile Players players;
@@ -48,11 +51,29 @@ public class GameModel{
 		storyDeck.shuffle();
 		initPlayersStart(numPlayers);
 		
-		//testing
+		//Event testing
+		StoryDeck events = new StoryDeck("Events");
+		events.shuffle();
+		int cardsInDeck = events.getDeck().size();
+		for(int i=0; i<4; i++)
+			players.getPlayers().get(0).addShields(4);
+		for(int i=0; i<cardsInDeck; i++) {
+			System.out.printf("%s's Turn...  ", players.current().getName());
+			StoryCard cardDrawn = events.drawCard();
+			event = new Event(cardDrawn, players);
+			event.runEvent();
+			
+			//end turn
+			System.out.printf("%s's turn over\n", players.current().getName());
+			players.next();
+		}
+		
+		//Tournament testing
 		//Player 0 draws a tournament card
 		//TournamentCard york = new TournamentCard("Tournament at York", 0);
 		//tour = new Tournament(players, advDeck, york, state, lock, log);
 		//tour.runTournament();
+
 	}
 	
 	private void initPlayersStart(int numPlayers) {
