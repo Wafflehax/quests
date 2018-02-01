@@ -136,7 +136,12 @@ public class Player{
 			rank = Rank.KNIGHT_OF_THE_ROUND_TABLE;
 			//triggers winning condition
 		}
-		
-		
+	}
+	
+	public void loseShields(int sh) {
+		if(shields < sh)
+			shields = 0;
+		else
+			shields -= sh;
 	}
 }
