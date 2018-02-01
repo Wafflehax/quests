@@ -1,30 +1,71 @@
 package com.comp_3004.quest_cards.core;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
 import com.comp_3004.quest_cards.cards.AdventureCard;
+<<<<<<< HEAD:core/src/main/java/com/comp_3004/quest_cards/core/Controller.java
 import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.core.Game.gamestates;
+=======
+import com.comp_3004.quest_cards.core.GameModel.gamestates;
+>>>>>>> MVC:core/src/main/java/com/comp_3004/quest_cards/core/GameController.java
 
 
 
-public class Controller{
-	static Logger log = Logger.getLogger(Controller.class); //log4j logger
-
-	Game model;
+public class GameController{
+	GameModel model;
+	GameView view;
 	Thread modelthr;
+	static Logger log = Logger.getLogger(GameController.class); //log4j logger
+	
+	public GameController(GameModel m, GameView v) {
+		System.out.println("Game controller Ctor");
+		this.model = m;
+		this.view = v;
+		
+		//... Add listeners to the view.
+        view.addSomeListener(new SomeListener());
+	}
+	
+	
+	//Listener Template
+	class SomeListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            String userInput = "";
+            try {
+                //userInput = view.getUserInput();
+               // model.doSomethingWith(userInput);
+               // view.doSomethingToUpdateView(m.model.getSomeValue());
+                
+            } catch (NumberFormatException nfex) {
+                //view.showError("Bad input: '" + userInput + "'");
+            }
+        }
+	}
+	
+	//user requests
+	public void startGame(int numPlayers) {
+		model.startGame(numPlayers);
+	}
+	
 	public void onCreate() {
 	
 		modelthr = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				
+<<<<<<< HEAD:core/src/main/java/com/comp_3004/quest_cards/core/Controller.java
 				model = new Game();
 				TournamentCard york = new TournamentCard("Tournament at York", 0);
 				model.setStory(york);
+=======
+				//model = new GameModel();
+>>>>>>> MVC:core/src/main/java/com/comp_3004/quest_cards/core/GameController.java
 				model.startGame(4);
 			}
 		});
@@ -51,11 +92,11 @@ public class Controller{
 	
 	public void  fakeViewRender() {
 		boolean run = true;
-		while(run && model.runGameLoop) {
+		while(run && model.getTournament().getRunGameLoop()) {
 			
 			if(model.state == gamestates.ASKING_PARTICIPATION) {
 				System.out.println("Would " + model.getcurrentTurn().getName() + " like to play "
-						+ " " + model.currStory.getName() + "?\n");
+						+ " " + model.getTournament().getCurrentTour().getName() + "?\n");
 				model.state = gamestates.WAITING;
 			}else if(model.state == gamestates.PLAYER_TURN) {
 				log.info("Player : " + model.getcurrentTurn().getName() + "Pick your cards which will be face down and press done\n");
@@ -77,55 +118,62 @@ public class Controller{
 	
 	
 	public void participateYes() {
-		model.setTournamentParticupation(true);
+		model.getTournament().setTournamentParticupation(true);
 	}
 	
 	public void participateNo() {
-		model.setTournamentParticupation(false);
+		model.getTournament().setTournamentParticupation(false);
 	}
+	
 	
 	// For now assuming button numbers correspond to card in player.playerHandCards
 	public void pressedHand0() {
-		model.cardPressed(0);
+		model.getTournament().cardPressed(0);
 	}
 	public void pressedHand1() {
-		model.cardPressed(1);
+		model.getTournament().cardPressed(1);
 	}
 	public void pressedHand2() {
-		model.cardPressed(2);
+		model.getTournament().cardPressed(2);
 	}
 	public void pressedHand3() {
-		model.cardPressed(3);
+		model.getTournament().cardPressed(3);
 	}
 	public void pressedHand4() {
-		model.cardPressed(4);
+		model.getTournament().cardPressed(4);
 	}
 	public void pressedHand5() {
-		model.cardPressed(5);
+		model.getTournament().cardPressed(5);
 	}
 	public void pressedHand6() {
-		model.cardPressed(6);
+		model.getTournament().cardPressed(6);
 	}
 	public void pressedHand7() {
-		model.cardPressed(7);
+		model.getTournament().cardPressed(7);
 	}
 	public void pressedHand8() {
-		model.cardPressed(8);
+		model.getTournament().cardPressed(8);
 	}
 	public void pressedHand9() {
-		model.cardPressed(9);
+		model.getTournament().cardPressed(9);
 	}
 	public void pressedHand10() {
-		model.cardPressed(10);
+		model.getTournament().cardPressed(10);
 	}
 	public void pressedHand11() {
-		model.cardPressed(11);
+		model.getTournament().cardPressed(11);
 	}
 	public void pressedHand12() {
-		model.cardPressed(12);
+		model.getTournament().cardPressed(12);
 	}
+<<<<<<< HEAD:core/src/main/java/com/comp_3004/quest_cards/core/Controller.java
 	public void done() {
 		model.done();
+=======
+	
+	public void doneTurn() {
+		model.lock.wake();
+>>>>>>> MVC:core/src/main/java/com/comp_3004/quest_cards/core/GameController.java
 	}
 	
 	
@@ -183,7 +231,7 @@ public class Controller{
 				participateNo();log.info("Participation: No");
 			}
 			else if(action.equals("exit")) {
-				run = false; model.runGameLoop = false;
+				run = false; model.getTournament().setRunGameLoop(false);
 			}
 			else if(action.equalsIgnoreCase("done")) {
 				done();

@@ -69,6 +69,15 @@ public class QuestCards implements ApplicationListener {
         gameScreens = new HashMap<String, Table>();
         gameScreens.put("mainGame", new GameScreen(this));
         stage.addActor(gameScreens.get("mainGame"));
+        
+        //Create game MVC
+        GameModel model = new GameModel();
+        GameView view = new GameView(model);
+        GameController controller = new GameController(model, view);
+        
+        //testing
+        //in reality, this method would be triggered from an ActionListener in view when user clicks "New Game"
+        controller.startGame(4);
     }
 
     @Override

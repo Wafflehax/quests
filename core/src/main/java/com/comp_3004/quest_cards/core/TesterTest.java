@@ -6,7 +6,7 @@ public class TesterTest extends TestCase {
 
     public void case1Tourstest() {
 
-        Controller controller = new Controller();
+        //GameController gameController = new GameController();
         //controller.onCreate();
 
         assertEquals(true, true);

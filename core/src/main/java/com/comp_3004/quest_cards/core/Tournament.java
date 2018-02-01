@@ -10,10 +10,11 @@ import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.AllyCard;
 import com.comp_3004.quest_cards.cards.AmourCard;
 import com.comp_3004.quest_cards.cards.StoryCard;
-import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
+import com.comp_3004.quest_cards.core.GameModel.gamestates;
 
+<<<<<<< HEAD:core/src/main/java/com/comp_3004/quest_cards/core/Game.java
 import utils.IntPair;
 
 
@@ -63,6 +64,45 @@ public class Game{
 	private void MainGameLoop() {
 		while(runGameLoop) {
 			if(currStory instanceof TournamentCard) {
+=======
+public class Tournament {
+	private static enum cardModes { PLAY, DISCARD, NONE}; // determine when card was pressed what action it was. ex.going to discard, or activating(playing),none(nothing)
+	protected cardModes cardMode;
+	private AdventureDeck advDeck;
+	private volatile Players players;
+	private boolean runGameLoop = true;
+	gamestates state = gamestates.START;
+	ThreadLock lock;
+	Logger log;
+	private TournamentCard currTour;
+
+	public Tournament(Players p, AdventureDeck a, TournamentCard c, gamestates s, ThreadLock lk, Logger lg) {
+		this.players = p;
+		this.advDeck = a;
+		this.currTour = c;
+		this.cardMode = cardModes.NONE; //what to do when card pressed
+		this.state = s;
+		this.lock = lk;
+		this.log = lg;
+	}
+	
+	public void runTournament() {
+		LogicLoopTourTesting();
+	}
+	
+
+	// separate loop from main to test just tournaments
+	private void LogicLoopTourTesting() {
+		while(runGameLoop) {
+			//all four tournament types
+			//TournamentCard camelot = new TournamentCard("Tournament at Camelot", 3);
+			//TournamentCard orkney = new TournamentCard("Tournament at Orkney", 2);
+			//TournamentCard tintagel = new TournamentCard("Tournament at Tintagel", 1);
+			//TournamentCard york = new TournamentCard("Tournament at York", 0);
+			//currTour = york;
+			
+			if(currTour instanceof TournamentCard) {
+>>>>>>> MVC:core/src/main/java/com/comp_3004/quest_cards/core/Tournament.java
 				playTournament();
 			}
 			runGameLoop = false; // just testing 1 tour currently
@@ -81,7 +121,7 @@ public class Game{
 			AdventureCard c = players.current().getHandCard(pos);
 			if(cardMode == cardModes.DISCARD) {
 				log.debug("Press mode: DISCARD");
-				discardCard(c);
+				players.current().discardCard(c, advDeck);
 			}else if(cardMode == cardModes.PLAY) {
 				playCard(c);
 				log.debug("Press mode: PLAY");
@@ -96,8 +136,15 @@ public class Game{
 	private void playTournament() {
 		Players mainTurns = players;
 		System.out.println("-----------------\nPlayer: " + players.current().getName() + " has drawn :" 
+<<<<<<< HEAD:core/src/main/java/com/comp_3004/quest_cards/core/Game.java
 				+ " "+ currStory.getType() + " => " + currStory.getName());
 		determineParticipants();
+=======
+				+ " "+ currTour.getType() + " => " + currTour.getName());
+		//determineParticipants();
+		players.players.get(0).participateTournament = true;
+		players.players.get(3).participateTournament = true;
+>>>>>>> MVC:core/src/main/java/com/comp_3004/quest_cards/core/Tournament.java
 		players = players.getTournamentParticipants();
 		if(players.isEmpty() || players.size() == 1) {
 			log.info("Tournament not held not enough participants: " + players.size());
@@ -150,8 +197,13 @@ public class Game{
 	
 	
 	private void playCard(AdventureCard c) {
+<<<<<<< HEAD:core/src/main/java/com/comp_3004/quest_cards/core/Game.java
 		//TOURNAMENT:can't have two of same weapons, or more than one amour
 		if(currStory instanceof TournamentCard) {
+=======
+		//TODO: TOURNAMENT:can't have two of same weapons, or more than one amour
+		if(currTour instanceof TournamentCard) {
+>>>>>>> MVC:core/src/main/java/com/comp_3004/quest_cards/core/Tournament.java
 			if(c instanceof WeaponCard || c instanceof AmourCard) {
 				if(!players.current().exists(c.getName()))
 					players.current().playCard(c);
@@ -165,31 +217,19 @@ public class Game{
 			log.info("Did not play card: invalid");	
 	}
 	
-	private void discardCard(AdventureCard c) {
-		players.current().discardCard(c, advDeck);
-	}
-	
 	private void determineParticipants() {
 		cardMode = cardModes.NONE;
+<<<<<<< HEAD:core/src/main/java/com/comp_3004/quest_cards/core/Game.java
 		for(int i = 0; i < numPlayers && runGameLoop; i++, players.next()) {
+=======
+		for(int i = 0; i < players.getNumPlayers() && runGameLoop; i++) {
+>>>>>>> MVC:core/src/main/java/com/comp_3004/quest_cards/core/Tournament.java
 			state = gamestates.ASKING_PARTICIPATION;
 			lock.sleepGame();
 			if(players.current().participateTournament)
 				discardCardIfTooMany();
 		}
 		cardMode = cardModes.NONE; // disable buttons
-	}
-
-	private void initPlayersStart() {
-		//TODO: Add players choosing their own name
-		ArrayList<Player> plyrs = new ArrayList<Player>(numPlayers);
-		for(int i = 0; i < numPlayers; i++) {
-			Player newPlayer = new Player("Player " + i);
-			for(int q = 0; q < MAX_HAND_SIZE; q++)
-				newPlayer.drawCard(advDeck);
-			plyrs.add(newPlayer);
-		}
-		players = new Players(0, numPlayers-1, plyrs);
 	}
 	
 	public void setTournamentParticupation(boolean particp) {
@@ -200,6 +240,7 @@ public class Game{
 		lock.wake();
 	}
 	
+<<<<<<< HEAD:core/src/main/java/com/comp_3004/quest_cards/core/Game.java
 	//Checks current players hand,if too many disposes card and loops till player acceptable amount
 	public void discardCardIfTooMany() {
 		while(players.current().tooManyHandCards()) {
@@ -214,3 +255,10 @@ public class Game{
 	
 	public void done() { lock.wake(); }
 }
+=======
+	public TournamentCard getCurrentTour() { return this.currTour; }
+	public void setRunGameLoop(boolean b) { this.runGameLoop = b; }
+	public boolean getRunGameLoop() { return this.runGameLoop; }
+
+}
+>>>>>>> MVC:core/src/main/java/com/comp_3004/quest_cards/core/Tournament.java
