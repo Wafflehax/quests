@@ -8,12 +8,8 @@ import java.util.Scanner;
 import org.apache.log4j.Logger;
 
 import com.comp_3004.quest_cards.cards.AdventureCard;
-<<<<<<< HEAD:core/src/main/java/com/comp_3004/quest_cards/core/Controller.java
 import com.comp_3004.quest_cards.cards.TournamentCard;
-import com.comp_3004.quest_cards.core.Game.gamestates;
-=======
 import com.comp_3004.quest_cards.core.GameModel.gamestates;
->>>>>>> MVC:core/src/main/java/com/comp_3004/quest_cards/core/GameController.java
 
 
 
@@ -58,14 +54,7 @@ public class GameController{
 		modelthr = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				
-<<<<<<< HEAD:core/src/main/java/com/comp_3004/quest_cards/core/Controller.java
-				model = new Game();
-				TournamentCard york = new TournamentCard("Tournament at York", 0);
-				model.setStory(york);
-=======
 				//model = new GameModel();
->>>>>>> MVC:core/src/main/java/com/comp_3004/quest_cards/core/GameController.java
 				model.startGame(4);
 			}
 		});
@@ -166,14 +155,8 @@ public class GameController{
 	public void pressedHand12() {
 		model.getTournament().cardPressed(12);
 	}
-<<<<<<< HEAD:core/src/main/java/com/comp_3004/quest_cards/core/Controller.java
-	public void done() {
-		model.done();
-=======
-	
 	public void doneTurn() {
 		model.lock.wake();
->>>>>>> MVC:core/src/main/java/com/comp_3004/quest_cards/core/GameController.java
 	}
 	
 	
@@ -234,7 +217,7 @@ public class GameController{
 				run = false; model.getTournament().setRunGameLoop(false);
 			}
 			else if(action.equalsIgnoreCase("done")) {
-				done();
+				doneTurn();
 			}
 			else if(action.equalsIgnoreCase("print")) {
 				printHand();

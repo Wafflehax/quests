@@ -23,13 +23,10 @@ public class Players{
 		this.endPos = p.endPos;
 		this.players = p.players;
 	}
-	
-<<<<<<< HEAD
+
 	// getter/setter
 	protected boolean isEmpty() {		return players.isEmpty();		}
 	public int size() { return players.size(); }
-	
-=======
 	public int getNumPlayers() { return this.players.size(); }
 	public ArrayList<Player> getPlayers() { return this.players; }
 	
@@ -37,7 +34,6 @@ public class Players{
 		Player p = new Player(name);
 		players.add(p);
 	}
->>>>>>> MVC
 	
 	// moves to next position and returns it
 	private int nextIndex() {

@@ -13,58 +13,8 @@ import com.comp_3004.quest_cards.cards.StoryCard;
 import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.core.GameModel.gamestates;
-
-<<<<<<< HEAD:core/src/main/java/com/comp_3004/quest_cards/core/Game.java
 import utils.IntPair;
 
-
-public class Game{
-	
-	static Logger log = Logger.getLogger(Game.class); //log4j logger
-	public static final byte MAX_HAND_SIZE = 12;
-	
-	public static enum gamestates{ WAITING, ASKING_PARTICIPATION, PLAYER_TURN, START,
-		DISCARD_HAND_CARD }; // used for communicating with view
-	public static enum cardModes { PLAY, DISCARD, NONE}; // determine when card was pressed what action it was. ex.going to discard, or activating(playing),none(nothing)
-	protected String message; //displaying messg on view, ex. battle points of everyone at end of tour
-	
-	protected AdventureDeck advDeck;
-	protected StoryDeck storyDeck;
-	
-	private int numPlayers;
-	protected boolean runGameLoop;
-	private volatile Players players;
-	private volatile Object lockObj = new Object(); // lock for current thread
-	protected volatile ThreadLock lock = new ThreadLock(lockObj);
-	protected gamestates state = gamestates.START;
-	protected cardModes cardMode = cardModes.NONE; //what to do when card pressed
-	
-	protected StoryCard currStory;
-	
-	//getters setters
-	protected Player getcurrentTurn() { return players.current();}
-	public void setStory(StoryCard c) { currStory = c; }
-	public Players getPlayers() { return players; }
-	public cardModes getCardMode() { return cardMode; }
-	
-	// constructor
-	public Game() {	}
-	
-	public void startGame(int numPlayers) {
-		this.numPlayers = numPlayers;
-		advDeck = new AdventureDeck();
-		advDeck.shuffle();
-		storyDeck = new StoryDeck();
-		storyDeck.shuffle();
-		initPlayersStart();
-		runGameLoop = true;
-		MainGameLoop();
-	}
-	
-	private void MainGameLoop() {
-		while(runGameLoop) {
-			if(currStory instanceof TournamentCard) {
-=======
 public class Tournament {
 	private static enum cardModes { PLAY, DISCARD, NONE}; // determine when card was pressed what action it was. ex.going to discard, or activating(playing),none(nothing)
 	protected cardModes cardMode;
@@ -102,17 +52,11 @@ public class Tournament {
 			//currTour = york;
 			
 			if(currTour instanceof TournamentCard) {
->>>>>>> MVC:core/src/main/java/com/comp_3004/quest_cards/core/Tournament.java
 				playTournament();
 			}
 			runGameLoop = false; // just testing 1 tour currently
 		}
 	}
-	
-	// separate loop from main to test just tournaments
-	private void LogicLoopTourTesting() {
-		
-	}	
 	
 	public void cardPressed(int pos) {
 		if(pos < 0 || pos > players.current().playerHandCards.size()-1) {
@@ -136,15 +80,10 @@ public class Tournament {
 	private void playTournament() {
 		Players mainTurns = players;
 		System.out.println("-----------------\nPlayer: " + players.current().getName() + " has drawn :" 
-<<<<<<< HEAD:core/src/main/java/com/comp_3004/quest_cards/core/Game.java
-				+ " "+ currStory.getType() + " => " + currStory.getName());
-		determineParticipants();
-=======
 				+ " "+ currTour.getType() + " => " + currTour.getName());
 		//determineParticipants();
 		players.players.get(0).participateTournament = true;
 		players.players.get(3).participateTournament = true;
->>>>>>> MVC:core/src/main/java/com/comp_3004/quest_cards/core/Tournament.java
 		players = players.getTournamentParticipants();
 		if(players.isEmpty() || players.size() == 1) {
 			log.info("Tournament not held not enough participants: " + players.size());
@@ -197,13 +136,8 @@ public class Tournament {
 	
 	
 	private void playCard(AdventureCard c) {
-<<<<<<< HEAD:core/src/main/java/com/comp_3004/quest_cards/core/Game.java
-		//TOURNAMENT:can't have two of same weapons, or more than one amour
-		if(currStory instanceof TournamentCard) {
-=======
 		//TODO: TOURNAMENT:can't have two of same weapons, or more than one amour
 		if(currTour instanceof TournamentCard) {
->>>>>>> MVC:core/src/main/java/com/comp_3004/quest_cards/core/Tournament.java
 			if(c instanceof WeaponCard || c instanceof AmourCard) {
 				if(!players.current().exists(c.getName()))
 					players.current().playCard(c);
@@ -219,11 +153,7 @@ public class Tournament {
 	
 	private void determineParticipants() {
 		cardMode = cardModes.NONE;
-<<<<<<< HEAD:core/src/main/java/com/comp_3004/quest_cards/core/Game.java
-		for(int i = 0; i < numPlayers && runGameLoop; i++, players.next()) {
-=======
 		for(int i = 0; i < players.getNumPlayers() && runGameLoop; i++) {
->>>>>>> MVC:core/src/main/java/com/comp_3004/quest_cards/core/Tournament.java
 			state = gamestates.ASKING_PARTICIPATION;
 			lock.sleepGame();
 			if(players.current().participateTournament)
@@ -240,7 +170,6 @@ public class Tournament {
 		lock.wake();
 	}
 	
-<<<<<<< HEAD:core/src/main/java/com/comp_3004/quest_cards/core/Game.java
 	//Checks current players hand,if too many disposes card and loops till player acceptable amount
 	public void discardCardIfTooMany() {
 		while(players.current().tooManyHandCards()) {
@@ -254,11 +183,9 @@ public class Tournament {
 	}
 	
 	public void done() { lock.wake(); }
-}
-=======
+	
 	public TournamentCard getCurrentTour() { return this.currTour; }
 	public void setRunGameLoop(boolean b) { this.runGameLoop = b; }
 	public boolean getRunGameLoop() { return this.runGameLoop; }
 
 }
->>>>>>> MVC:core/src/main/java/com/comp_3004/quest_cards/core/Tournament.java
