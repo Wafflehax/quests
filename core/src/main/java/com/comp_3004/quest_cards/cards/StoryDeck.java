@@ -17,6 +17,17 @@ public class StoryDeck extends Deck {
 		initEvents();
 		initQuests();
 	}
+	public StoryDeck(String cardType) {
+		this.deck = new Stack<StoryCard>();
+		this.discard = new Stack<StoryCard>();
+		
+		if(cardType == "Tournaments")
+			initTournaments();
+		else if(cardType == "Events")
+			initEvents();
+		else if(cardType == "Quests")
+			initQuests();
+	}
 	
 	//methods
 	public void shuffle() {
@@ -93,7 +104,7 @@ public class StoryDeck extends Deck {
 		this.deck.add(plague);
 		EventCard chivalrousDeed = new EventCard("Chivalrous Deed");
 		this.deck.add(chivalrousDeed);
-		EventCard prosperity = new EventCard("Prosperity Throughout the Realm");
+		EventCard prosperity = new EventCard("Prosperity Throughout the Realms");
 		this.deck.add(prosperity);
 		EventCard callToArms = new EventCard("King's Call to Arms");
 		this.deck.add(callToArms);
