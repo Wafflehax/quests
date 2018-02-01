@@ -33,9 +33,12 @@ public class Player{
 	public String getName() { return this.name; }
 	public Rank getRank() { return this.rank; }
 	public int getShields() { return this.shields; }
+	public boolean participantInTournament() { return participateTournament; }
+	public int numberOfHandCards() { return playerHandCards.size(); }
+	public int numberOfActiveCards() { return playerActiveCards.size(); }
 	public LinkedList<AdventureCard> getHand() { return this.playerHandCards; }
 	public LinkedList<AdventureCard> getActive() { return this.playerActiveCards; }
-	
+
 	public boolean drawCard(AdventureDeck d) {
 		
 		// can't have more than 12 cards
