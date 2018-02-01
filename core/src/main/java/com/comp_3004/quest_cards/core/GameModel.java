@@ -56,7 +56,7 @@ public class GameModel{
 		events.shuffle();
 		int cardsInDeck = events.getDeck().size();
 		for(int i=0; i<4; i++)
-			players.getPlayers().get(0).addShields(4);
+			players.getPlayerAtIndex(i).addShields(4);
 		for(int i=0; i<cardsInDeck; i++) {
 			System.out.printf("%s's Turn...  ", players.current().getName());
 			StoryCard cardDrawn = events.drawCard();

@@ -29,6 +29,7 @@ public class Players{
 	public int size() { return players.size(); }
 	public int getNumPlayers() { return this.players.size(); }
 	public ArrayList<Player> getPlayers() { return this.players; }
+	public Player getPlayerAtIndex(int i) { return players.get(i); }
 	
 	public void addPlayer(String name) {
 		Player p = new Player(name);
