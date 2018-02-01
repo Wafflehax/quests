@@ -53,14 +53,16 @@ public class GameModel{
 		
 		//Event testing
 		StoryDeck events = new StoryDeck("Events");
+		AdventureDeck adv = new AdventureDeck();
 		events.shuffle();
+		adv.shuffle();
 		int cardsInDeck = events.getDeck().size();
 		for(int i=0; i<4; i++)
 			players.getPlayerAtIndex(i).addShields(4);
 		for(int i=0; i<cardsInDeck; i++) {
 			System.out.printf("%s's Turn...  ", players.current().getName());
 			StoryCard cardDrawn = events.drawCard();
-			event = new Event(cardDrawn, players);
+			event = new Event(cardDrawn, players, adv);
 			event.runEvent();
 			
 			//end turn
@@ -81,7 +83,8 @@ public class GameModel{
 		ArrayList<Player> plyrs = new ArrayList<Player>(numPlayers);
 		for(int i = 0; i < numPlayers; i++) {
 			Player newPlayer = new Player("Player " + i);
-			for(int q = 0; q < MAX_HAND_SIZE; q++)
+			//for(int q = 0; q < MAX_HAND_SIZE; q++)
+			for(int q = 0; q < MAX_HAND_SIZE-6; q++)	//testing drawing in events
 				newPlayer.drawCard(advDeck);
 			plyrs.add(newPlayer);
 		}

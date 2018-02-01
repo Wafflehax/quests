@@ -1,15 +1,18 @@
 package com.comp_3004.quest_cards.core;
 
+import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.StoryCard;
 
 public class Event {
 	
 	private StoryCard evnt;
 	private Players players;
+	private AdventureDeck advDeck;
 
-	public Event(StoryCard e, Players p) {
+	public Event(StoryCard e, Players p, AdventureDeck d) {
 		this.evnt = e;
 		this.players = p;
+		this.advDeck = d;
 	}
 	
 	
@@ -53,6 +56,14 @@ public class Event {
 		}
 		else if(evnt.getName() ==  "Prosperity Throughout the Realms") {
 			System.out.printf("Running event %s\n", evnt.getName());
+			for(int i=0; i<players.size(); i++) {
+				System.out.printf("%s\n ============\n", players.current().getName());
+				players.current().printHand();
+				players.current().drawCard(advDeck);
+				players.current().drawCard(advDeck);
+				players.current().printHand();
+				players.next();
+			}
 			
 		}
 	}

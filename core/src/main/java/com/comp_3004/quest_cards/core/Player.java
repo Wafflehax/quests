@@ -144,4 +144,14 @@ public class Player{
 		else
 			shields -= sh;
 	}
+	
+	public void printHand() {
+		System.out.printf("Hand:\n");
+		System.out.printf("%-15s%-15s%s\n", "Name", "Battle Points", "Type");
+		System.out.printf("==================================\n");
+		for(AdventureCard a : this.playerHandCards) {
+			a.printCard();
+		}
+		System.out.printf("Number of cards: %s\n", this.playerHandCards.size());
+	}
 }

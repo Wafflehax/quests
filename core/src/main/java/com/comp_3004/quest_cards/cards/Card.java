@@ -5,6 +5,6 @@ public abstract class Card {
 
 
 	public String getName() { return this.name; }
-	abstract protected void printCard();
+	abstract public void printCard();
 
 }
