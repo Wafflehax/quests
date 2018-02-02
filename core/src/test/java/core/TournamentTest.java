@@ -1,10 +1,9 @@
 package core;
 
 import com.comp_3004.quest_cards.cards.TournamentCard;
-import com.comp_3004.quest_cards.core.Game;
-import com.comp_3004.quest_cards.core.Game.cardModes;
 import com.comp_3004.quest_cards.core.Player;
 import com.comp_3004.quest_cards.core.Players;
+import com.comp_3004.quest_cards.core.Tournament;
 
 import junit.framework.TestCase;
 
@@ -16,7 +15,7 @@ public class TournamentTest extends TestCase{
 		//testing players setting their participation, setTournamentParticupation
 		TournamentCard york = new TournamentCard("Tournament at York", 0);
 		final int numPlayers = 4;
-		final Game game = new Game();
+		final Tournament game = new Game();
 		game.setStory(york);
 		Thread g = new Thread(new Runnable() {
 			@Override
