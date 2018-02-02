@@ -18,30 +18,32 @@ public class GameModel{
 	
 	protected AdventureDeck advDeck;
 	protected StoryDeck storyDeck;
-	private GameMatch match; //calling quests and tours matches
+	protected volatile GameMatch match; //calling quests and tours matches
 	private int numPlayers;
-	private volatile Players players;
+	private volatile Players players = new Players(0, numPlayers, new ArrayList<Player>());
 	private volatile Object lockObj = new Object(); // lock for current thread
 	protected volatile ThreadLock lock = new ThreadLock(lockObj);
-	public static enum cardModes { PLAY, DISCARD, NONE}; // determine when card was pressed what action it was. ex.going to discard, or activating(playing),none(nothing)
-	protected cardModes cardMode = cardModes.NONE;
+	public static enum cardModes { PLAY, DISCARD, NONE }; // determine when card was pressed what action it was. ex.going to discard, or activating(playing),none(nothing)
 	
 	//getters setters
-	protected Player getcurrentTurn() { return players.current();}
+	public Players getPlayers() { return players; }
+	public Player getcurrentTurn() { return players.current();}
+	public cardModes getCardMode() { 
+		if(match == null)
+			return cardModes.NONE; //no match no playing cards
+		return match.getcardMode(); 
+	}
 	
 	// constructor
 	public GameModel() {
-		System.out.println("Game model Ctor");
-	}
-	
-	public void startGame(int numPlayers) {
-		
 		advDeck = new AdventureDeck();
 		advDeck.shuffle();
 		storyDeck = new StoryDeck();
 		storyDeck.shuffle();
-		initPlayersStart(numPlayers);
-		
+		System.out.println("Game model Ctor");
+	}
+	
+	public void startGame() {
 		//testing
 		//Player 0 draws a tournament card
 		TournamentCard york = new TournamentCard("Tournament at York", 0);
@@ -49,27 +51,40 @@ public class GameModel{
 		match.run();
 	}
 	
+	public void addPlayer(Player p) {
+		players.addPlayer(p);
+	}
+	
 	public void cardPressed(int pos) {
 		if(pos < 0 || pos > players.current().playerHandCards.size()-1) {
 			log.info("invalid card, does not match hand");
 		}else {
 			AdventureCard c = players.current().getHandCard(pos);
-			if(cardMode == cardModes.DISCARD) {
+			if(getCardMode() == cardModes.DISCARD) {
 				log.info("Press mode: DISCARD");
-				players.current().discardCard(c, advDeck);
-			}else if(cardMode == cardModes.PLAY) {
+				players.current().discardCard(c, advDeck); 
+			}else if(getCardMode() == cardModes.PLAY) {
 				match.playCard(c);
-				log.debug("Press mode: PLAY");
-			}else if(cardMode == cardModes.NONE) {
-				log.debug("Press mode: NONE");
+				log.info("Press mode: PLAY");
+			}else if(getCardMode() == cardModes.NONE) {
+				log.info("Press mode: NONE");
 			}else {
-				log.debug("UNKNOWN Press mode");
+				log.info("UNKNOWN Press mode");
 			}	
 		}
 	}
 	
+	public boolean setParticipation(boolean b) {
+		if(match == null)
+			return false;
+		else {
+			match.setParticipation(b);
+			return true;
+		}
+	}
 	
-	private void initPlayersStart(int numPlayers) {
+	public void initPlayersStart(int numPlayers) {
+		this.numPlayers = numPlayers;
 		//TODO: Add players choosing their own name
 		ArrayList<Player> plyrs = new ArrayList<Player>(numPlayers);
 		for(int i = 0; i < numPlayers; i++) {
@@ -78,6 +93,11 @@ public class GameModel{
 				newPlayer.drawCard(advDeck);
 			plyrs.add(newPlayer);
 		}
-		players = new Players(0, numPlayers-1, plyrs);
+		players = new Players(0, numPlayers, plyrs);
 	}
+	
+	public void done() {
+		lock.wake();
+	}
+	
 }

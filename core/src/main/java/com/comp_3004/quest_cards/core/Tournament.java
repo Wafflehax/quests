@@ -11,6 +11,7 @@ import com.comp_3004.quest_cards.cards.AllyCard;
 import com.comp_3004.quest_cards.cards.AmourCard;
 import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
+import com.comp_3004.quest_cards.core.GameModel.cardModes;
 import com.comp_3004.quest_cards.core.match.GameMatch;
 
 import utils.IntPair;
@@ -21,8 +22,6 @@ public class Tournament extends GameMatch {
 	private boolean runGameLoop = true;
 	ThreadLock lock;
 	Logger log;
-	private static enum cardModes { PLAY, DISCARD, NONE}; // determine when card was pressed what action it was. ex.going to discard, or activating(playing),none(nothing)
-	protected cardModes cardMode;
 	private TournamentCard currTour;
 
 	public Tournament(Players p, AdventureDeck a, TournamentCard c, ThreadLock lk, Logger lg) {
@@ -33,6 +32,20 @@ public class Tournament extends GameMatch {
 		this.lock = lk;
 		this.log = lg;
 	}	
+	
+	public TournamentCard getCurrentTour() { return this.currTour; }
+	public void setRunGameLoop(boolean b) { this.runGameLoop = b; }
+	public boolean getRunGameLoop() { return this.runGameLoop; }
+	public void setParticipation(boolean b) {
+		players.current().participateTournament = b;
+		cardMode = cardModes.NONE; //disable card click from doing anything
+		if(b)
+			players.current().forceDrawAdventure(advDeck); //force draw for player
+		lock.wake();
+	}
+	
+	public void setTournamentParticupation(boolean particp) {
+	}
 	
 	public void run() {
 		Players mainTurns = players;
@@ -82,8 +95,6 @@ public class Tournament extends GameMatch {
 			IntPair calcedPoints = new IntPair(battlePts, i); // <pts, pos>
 			p.add(calcedPoints);
 			//get winner or tie
-			
-
 		}
 		return p;
 	}
@@ -91,7 +102,7 @@ public class Tournament extends GameMatch {
 	
 	public void playCard(AdventureCard c) {
 		//TODO: TOURNAMENT:can't have two of same weapons, or more than one amour
-		if(currTour instanceof TournamentCard) {
+		if(currTour instanceof TournamentCard && cardMode == cardModes.PLAY) {
 			if(c instanceof WeaponCard || c instanceof AmourCard) {
 				if(!players.current().exists(c.getName()))
 					players.current().playCard(c);
@@ -107,21 +118,15 @@ public class Tournament extends GameMatch {
 	
 	private void determineParticipants() {
 		cardMode = cardModes.NONE;
-		for(int i = 0; i < players.getNumPlayers() && runGameLoop; i++) {
+		for(int i = 0; i < players.getNumPlayers() && runGameLoop; i++, players.next()) {
 			//state = gamestates.ASKING_PARTICIPATION;
+			log.info("Player=> " + players.current().getName() + "Participate?");
 			lock.sleepGame();
+			log.info("WOKe from getting participation");
 			if(players.current().participateTournament)
 				discardCardIfTooMany();
 		}
 		cardMode = cardModes.NONE; // disable buttons
-	}
-	
-	public void setTournamentParticupation(boolean particp) {
-		players.current().participateTournament = particp;
-		cardMode = cardModes.NONE; //disable card click from doing anything
-		if(particp)
-			players.current().forceDrawAdventure(advDeck); //force draw for player
-		lock.wake();
 	}
 	
 	//Checks current players hand,if too many disposes card and loops till player acceptable amount
@@ -137,9 +142,5 @@ public class Tournament extends GameMatch {
 	}
 	
 	public void done() { lock.wake(); }
-	
-	public TournamentCard getCurrentTour() { return this.currTour; }
-	public void setRunGameLoop(boolean b) { this.runGameLoop = b; }
-	public boolean getRunGameLoop() { return this.runGameLoop; }
 
 }
