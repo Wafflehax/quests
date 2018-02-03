@@ -1,5 +1,6 @@
 package com.comp_3004.quest_cards.core;
 
+import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -24,68 +25,48 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 * GameStateManager to increase efficiency and readability.
 * */
 
-public class Game implements ApplicationListener {
-	private MainMenuScreen mainScreen;
-	private MainGameScreen gameScreen;
-	private boolean forceExit = false;
+public class Game extends ApplicationAdapter {
+	public static final int WIDTH = 1920;
+	public static final int HEIGHT = 1080;
 
+	private SpriteBatch batch;
+	private Texture img;
+	private GameStateManager gsm;
 
+	public static final String TITLE = "Quests of the Round Table";
 	
 	@Override 
-	public void create () {mainScreen = new MainMenuScreen();
-	gameScreen = new MainGameScreen();
-	mainScreen.create();
+	public void create () {
+		batch = new SpriteBatch();
+		gsm = new GameStateManager();
+		Gdx.gl.glClearColor(1,0,0,1);
+		gsm.push(new MenuState(gsm));
 
 	}
-	
-	@Override
-	public void resize (int width, int height) {
-		mainScreen.resize(width,height);
-	}
+
 
 	@Override
 	public void render () {
-		mainScreen.render();
-		if (mainScreen.getExitStatus())
-			Gdx.app.exit();
-		if (mainScreen.getGameStatus())
-			{gameScreen.create();
-				mainScreen.setGameStatus(false);
-				mainScreen.dispose();
-			}
-		if(gameScreen.active)
-		{gameScreen.render();}
-	}
-
-	@Override
-	public void dispose() {
-		//mainScreen.dispose();
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		gsm.update(Gdx.graphics.getDeltaTime());
+		gsm.render(batch);
 	}
 	
 	
 
 	@Override
 	public void pause() {
-		mainScreen.pause();
-		
+		//TODO
 	}
 
 	@Override
 	public void resume() {
-		mainScreen.resume();
+		//TODO
 		
 	}
 
 
-	//Extra Methods
-	public boolean getExitStatus(){return forceExit;}
 
-	public void setExitStatus(boolean status){forceExit=status;}
-	
-	public static void main(String[] args) {
-        System.out.println("Test"); // Display the string.
-       
-    }
 	
 	
 }

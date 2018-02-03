@@ -9,6 +9,9 @@ public class GameDesktop {
 	public static void main (String[] args) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.forceExit=true;
+		config.width = Game.WIDTH;
+		config.height = Game.HEIGHT;
+		config.title = Game.TITLE;
 		new LwjglApplication(new Game(), config);
 	}
 }
