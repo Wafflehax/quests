@@ -6,8 +6,14 @@ import java.util.Stack;
 
 import javax.naming.spi.DirStateFactory.Result;
 
+import org.apache.log4j.Logger;
+
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.comp_3004.quest_cards.cards.AdventureCard;
+import com.comp_3004.quest_cards.cards.AllyCard;
+import com.comp_3004.quest_cards.cards.AmourCard;
+import com.comp_3004.quest_cards.cards.FoeCard;
 import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.core.GameModel;
@@ -17,9 +23,10 @@ import com.comp_3004.quest_cards.core.Tournament;
 import com.comp_3004.quest_cards.core.GameModel.cardModes;
 
 import junit.framework.TestCase;
+import utils.IntPlayerPair;
 
 public class TournamentTest extends TestCase{
-	/*
+	
 	public void testTournament1() {
 		//testing players setting their participation, setTournamentParticupation
 		int numPlayers = 4;
@@ -60,7 +67,7 @@ public class TournamentTest extends TestCase{
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-			game.startGame();
+			game.startGameTournamentTest();
 			}
 		});
 		thread.start();
@@ -78,7 +85,7 @@ public class TournamentTest extends TestCase{
 		assertEquals(false, player.tooManyHandCards()); //discarded correct number now
 		game.done(); //done turn	
 	}
-	*/ 
+	 
 	public void testTournament3() {
 		// testing playCard() Playing a Weapon Card during turn, check was added correctly to right player
 		int time = 100;
@@ -98,7 +105,7 @@ public class TournamentTest extends TestCase{
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-			game.startGame();
+			game.startGameTournamentTest();
 			}
 		});
 		thread.start();
@@ -125,6 +132,145 @@ public class TournamentTest extends TestCase{
 		LinkedList<AdventureCard> cards2 = curr.getActive();
 		boolean r = (AdventureCard)cards2.get(0) == excalibur;
 		assertEquals(true, r);		
+	}
+	
+	public void testTournament4() {
+		// testing playCard() Playing a card you do not own during your turn, check was not added to hand
+		int time = 100;
+		//Test Tournament joiners having too many cards, testing discardCardIfTooMany()
+		int numPlayers = 3;
+		final GameModel game = new GameModel();
+		game.initPlayersStart(numPlayers);
+		
+		Player p3 = new Player("Player 3");
+		LinkedList<AdventureCard> cards = new LinkedList<AdventureCard>();
+		p3.participateTour(true);
+		FoeCard saxons = new FoeCard("Saxons", 10, 20);
+		WeaponCard excalibur = new WeaponCard("Excalibur", 30);
+		
+		cards.add(saxons);
+		p3.setHand(cards);
+		game.addPlayer(p3);
+		
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+			game.startGameTournamentTest();
+			}
+		});
+		thread.start();
+		
+		sleep(time);
+		game.setParticipation(false); // p0 no
+		sleep(time);
+		game.setParticipation(false);//p1 no
+		sleep(time);
+		game.setParticipation(true);  //p2 yes  player has to many cards by 1 //game blocked until discarded
+		sleep(time);
+		game.cardPressed(0);
+		game.done(); //done turn
+		sleep(time);
+		game.setParticipation(true);  //p3 yes good hand <=12
+		sleep(time);
+		//now player2's turn
+		game.cardPressed(0);
+		game.done();
+		sleep(time);
+		Player curr = game.getMatch().getPlayers().current();
+		game.getMatch().playCard(excalibur);
+		sleep(time);
+		LinkedList<AdventureCard> cards2 = curr.getActive();
+		assertEquals(0, cards2.size());	
+	}
+	
+	public void testTournament5() {
+		//Testing calculation of battle points of a player no special abilities (dependent cards), Weapons,Ally,Amour
+		TournamentCard york = new TournamentCard("Tournament at York", 0);
+	    Logger log = Logger.getLogger(TournamentTest.class); //log4j logger
+		Tournament t = new Tournament(new Players(0, 0, null), null, york, null, log);
+		//tested weapons and rank squire
+		Player p0 = new Player("Player 0"); // rank is SQUIRE = 5 bp
+		LinkedList<AdventureCard> cards = new LinkedList<AdventureCard>();
+		cards.add(new WeaponCard("Horse", 10));
+		cards.add(new WeaponCard("Sword", 10));
+		cards.add(new WeaponCard("Excalibur", 30));
+		cards.add(new WeaponCard("Lance", 20));
+		cards.add(new WeaponCard("Dagger", 5));
+		cards.add(new WeaponCard("Battle-Ax", 15)); //90 bp all cards + rank pts
+		p0.setActiveHand(cards);
+		assertEquals(95, t.calcBattlePoints(p0));
+		//tested weapons and rank knight
+		p0 = new Player("Player 0");
+		p0.addShields(6); //Rank is knight bp = 10
+		p0.setActiveHand(cards); // 10 + 90
+		int Result = t.calcBattlePoints(p0);
+		assertEquals(100,  Result);
+		//:TODO test Queen Iseult and Sir Tristian, both have special abilities when in play
+		//test ally cards
+				
+		p0 = new Player("Player 0");
+		p0.addShields(6); //Rank is knight bp = 10
+		cards.add(new AllyCard("Merlin", 0, 0)); // 0 bp
+		cards.add(new AllyCard("King Pellinore", 10, 0)); //bp 10
+		cards.add(new AllyCard("Queen Guinevere", 0, 3)); // 0 bp
+		cards.add(new AmourCard()); // +10 bp
+		p0.setActiveHand(cards); // 10 + 90 +10(ally)+ 10(amour) = 120
+		int result2 = t.calcBattlePoints(p0);
+		assertEquals(120,  result2);
+	}
+	
+	public void testTournament6() {
+		//test determinewin() one winner, tied(first time stage = tie), tie again(stage = double_tie), right players won, tied
+		TournamentCard york = new TournamentCard("Tournament at York", 0);
+	    Logger log = Logger.getLogger(TournamentTest.class); //log4j logger
+		Tournament t = new Tournament(new Players(0, 0, null), null, york, null, log);
+		
+		LinkedList<AdventureCard> cards = new LinkedList<AdventureCard>();
+		cards.add(new WeaponCard("Horse", 10));
+		cards.add(new WeaponCard("Sword", 10));
+		Player p0 = new Player("Player 0"); // rank is SQUIRE = 5 bp 
+		Player p1 = new Player("Player 1"); // rank is SQUIRE = 5 bp
+		Player p2 = new Player("Player 2"); // rank is SQUIRE = 5 bp
+		Player p3 = new Player("Player 3"); // rank is SQUIRE = 5 bp
+		p0.participateTour(true);
+		p1.participateTour(true);
+		p2.participateTour(true);
+		p3.participateTour(true);
+		ArrayList<Player> pList = new ArrayList<Player>();
+		pList.add(p0); pList.add(p1); pList.add(p2); pList.add(p3);
+		Players players = new Players(0, pList.size(), pList);
+		
+		Players result = t.determineWin(players);
+		assertEquals(result.size(), 4);
+		assertEquals(true,result.getPlayers().contains(p0));
+		assertEquals(true,result.getPlayers().contains(p1));
+		assertEquals(true,result.getPlayers().contains(p2));
+		assertEquals(true,result.getPlayers().contains(p3));
+		
+		assertEquals(t.getStage(), Tournament.T_TIE);
+		
+		Players result2 = t.determineWin(players);
+		assertEquals(result2.size(), 4);
+		assertEquals(true,result2.getPlayers().contains(p0));
+		assertEquals(true,result2.getPlayers().contains(p1));
+		assertEquals(true,result2.getPlayers().contains(p2));
+		assertEquals(true,result2.getPlayers().contains(p3));
+		assertEquals(t.getStage(), Tournament.T_DOUBLE_TIE);
+		
+		
+		//testing single winner
+		Tournament t2 = new Tournament(new Players(0, 0, null), null, york, null, log);
+		Player p00 = new Player("Player 00"); // rank is SQUIRE = 5 bp 
+		Player p01 = new Player("Player 01"); // rank is SQUIRE = 5 bp
+		Player p02 = new Player("Player 02"); // rank is SQUIRE = 5 bp
+		Player p03 = new Player("Player 03"); // rank is SQUIRE = 5 bp
+		p00.setActiveHand(cards); //more battle points than anyone else
+		ArrayList<Player> pList2 = new ArrayList<Player>();
+		pList2.add(p00); pList2.add(p01); pList2.add(p02); pList2.add(p03);
+		Players pl = new Players(0, pList2.size(), pList2);
+		Players result3 = t2.determineWin(pl);
+		assertEquals(result3.size(), 1);
+		assertEquals(true, result3.getPlayers().contains(p00));
 	}
 	
 	public void sleep(int milisecs) {

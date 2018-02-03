@@ -12,9 +12,9 @@ import com.comp_3004.quest_cards.cards.AmourCard;
 import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.core.GameModel.cardModes;
-import com.comp_3004.quest_cards.core.match.GameMatch;
 
-import utils.IntPair;
+import utils.IntPlayerPair;
+import utils.utils;
 
 public class Tournament extends GameMatch {
 	private AdventureDeck advDeck;
@@ -23,7 +23,11 @@ public class Tournament extends GameMatch {
 	ThreadLock lock;
 	Logger log;
 	private TournamentCard currTour;
-
+	public static final int T_NO_TIE = 0;
+	public static int T_TIE = 1;
+	public static int T_DOUBLE_TIE = 2;
+	private int stage = T_NO_TIE;
+	
 	public Tournament(Players p, AdventureDeck a, TournamentCard c, ThreadLock lk, Logger lg) {
 		this.players = p;
 		this.advDeck = a;
@@ -33,6 +37,8 @@ public class Tournament extends GameMatch {
 		this.log = lg;
 	}	
 	
+	//getters / setters
+	public Players getPlayers() { return players; }
 	public TournamentCard getCurrentTour() { return this.currTour; }
 	public void setRunGameLoop(boolean b) { this.runGameLoop = b; }
 	public boolean getRunGameLoop() { return this.runGameLoop; }
@@ -43,6 +49,7 @@ public class Tournament extends GameMatch {
 			players.current().forceDrawAdventure(advDeck); //force draw for player
 		lock.wake();
 	}
+	public int getStage() {	return stage; }
 	
 	public void setTournamentParticupation(boolean particp) {
 	}
@@ -56,55 +63,87 @@ public class Tournament extends GameMatch {
 		if(players.isEmpty() || players.size() == 1) {
 			log.info("Tournament not held not enough participants: " + players.size());
 		}else {
-			log.info("Tournament starting");//player plays their cards face down			
-			for(int i = 0; i < players.size(); i++, players.next()) {
+			log.info("Tournament starting , # players: " + players.size());//player plays their cards face down			
+			for(int i = 0; i < players.size(); i++) {
 				//state = gamestates.PLAYER_TURN;
 				cardMode = cardModes.PLAY;
+				log.info("Player => " + players.current().getName() + " Its your turn play your hand");
 				lock.sleepGame();
+				log.info("Turn done");
+				players.next();
 				cardMode = cardModes.NONE;
 			}
 			log.info("Turning over cards and calculating battle points");
-			determineWin();
+			//Players winners = determineWin(players);
+			//get stage decide if another game
+			lock.sleepGame(); 
+			
 		}
 		players = mainTurns; //return to position of main game before tournament, and go to next player
 		players.next();
 	}
 	
-	private Stack<IntPair> determineWin() {
-		Stack<IntPair> p = new Stack<IntPair>();
-		//for now will display results from here
+	//Assumes input players are participating
+	public Players determineWin(Players p) {
+		Stack<IntPlayerPair> pairs = new Stack<IntPlayerPair>();
+		Players result;
 		String out = "";
-		for(int i = 0; i < players.size(); players.next(), i++) {
-			int battlePts = players.current().getRankBattlePts();
-			for(int w = 0; w < players.current().playerActiveCards.size(); w++) {
-				out += "Player : " + players.current().getName() + " has rank:"	+ players.current().getRankBattlePts() + " ";
-				AdventureCard c = players.current().playerActiveCards.get(w);
-				if(c instanceof WeaponCard) {
-					 WeaponCard weapon = (WeaponCard)c; battlePts += weapon.getBattlePts();
-					 out += weapon.getName() + " : "  + weapon.getBattlePts() + " ";
-				}else if(c instanceof AllyCard) {
-					 AllyCard ally = (AllyCard)c; battlePts += ally.getBattlePts();
-					 out += ally.getName() + " : "  + ally.getBattlePts() + " ";
-				}else if(c instanceof AmourCard) {
-					AmourCard amour = (AmourCard)c; battlePts += amour.getBattlePts();
-					out += amour.getName() + " : " + amour.getBattlePts() + " ";
-				}
-			}
-			out += " \ntotal : " + battlePts;
-			log.info(out);
-			IntPair calcedPoints = new IntPair(battlePts, i); // <pts, pos>
-			p.add(calcedPoints);
-			//get winner or tie
+		for(int i = 0; i < p.size(); p.next(), i++) {
+			int battlePts = calcBattlePoints(p.current());
+			IntPlayerPair calcedPoints = new IntPlayerPair(battlePts, p.players.get(i)); // <pts, player>
+			pairs.add(calcedPoints);
 		}
-		return p;
+		pairs = utils.getMaxIntPairs(pairs);
+		if(p.size() == 1) { // single winner
+			Player win = players.players.get(0);
+			log.info("Player => " + win.getName() + " won " + pairs.get(0).value + " battlepoints");
+			ArrayList<Player> list = new ArrayList<Player>();
+			list.add(pairs.get(0).player);
+			result = new Players(0, 1, list);
+		}
+		else {
+			stage++;
+			ArrayList<Player> list = new ArrayList<Player>();
+			int sizeP = 0;
+			for(int i = 0; i < pairs.size(); i++) {
+				list.add(pairs.get(i).player);
+				sizeP++;
+			}
+			result = new Players(0, sizeP, list);
+			log.info("Tie, not coded yet");
+		}
+		return result; // return winner, tied players
+		
 	}
 	
+	
+	public int calcBattlePoints(Player p) {
+		int bp = p.getRankBattlePts();
+		String out = "";
+		out += "Player : " + p.getName() + " has rank: "	+ p.getRankBattlePts() + " battlepoints\n";
+		for(int w = 0; w < p.playerActiveCards.size(); w++) {
+			AdventureCard c = p.playerActiveCards.get(w);
+			if(c instanceof WeaponCard) {
+				 WeaponCard weapon = (WeaponCard)c; bp += weapon.getBattlePts();
+				 out += weapon.getName() + " : "  + weapon.getBattlePts() + " ";
+			}else if(c instanceof AllyCard) {
+				 AllyCard ally = (AllyCard)c; bp += ally.getBattlePts();
+				 out += ally.getName() + " : "  + ally.getBattlePts() + " ";
+			}else if(c instanceof AmourCard) {
+				AmourCard amour = (AmourCard)c; bp += amour.getBattlePts();
+				out += amour.getName() + " : " + amour.getBattlePts() + " ";
+			}
+		}
+		out += " ==>total : " + bp;
+		log.info(out);
+		return bp;
+	}
 	
 	public void playCard(AdventureCard c) {
 		//TODO: TOURNAMENT:can't have two of same weapons, or more than one amour
 		if(currTour instanceof TournamentCard && cardMode == cardModes.PLAY) {
 			if(c instanceof WeaponCard || c instanceof AmourCard) {
-				if(!players.current().exists(c.getName()))
+				if(!players.current().existsActive(c.getName()))
 					players.current().playCard(c);
 			}
 			else if(c instanceof AllyCard)

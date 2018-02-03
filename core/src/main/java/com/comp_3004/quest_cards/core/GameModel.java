@@ -8,7 +8,6 @@ import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.cards.TournamentCard;
-import com.comp_3004.quest_cards.core.match.GameMatch;
 
 
 public class GameModel{
@@ -27,12 +26,14 @@ public class GameModel{
 	
 	//getters setters
 	public Players getPlayers() { return players; }
+	public void setPlayers(Players p) { players = p; }
 	public Player getcurrentTurn() { return players.current();}
 	public cardModes getCardMode() { 
 		if(match == null)
 			return cardModes.NONE; //no match no playing cards
 		return match.getcardMode(); 
 	}
+	public GameMatch getMatch() { return match; }
 	
 	// constructor
 	public GameModel() {
@@ -59,18 +60,22 @@ public class GameModel{
 		if(pos < 0 || pos > players.current().playerHandCards.size()-1) {
 			log.info("invalid card, does not match hand");
 		}else {
-			AdventureCard c = players.current().getHandCard(pos);
-			if(getCardMode() == cardModes.DISCARD) {
-				log.info("Press mode: DISCARD");
-				players.current().discardCard(c, advDeck); 
-			}else if(getCardMode() == cardModes.PLAY) {
-				match.playCard(c);
-				log.info("Press mode: PLAY");
-			}else if(getCardMode() == cardModes.NONE) {
-				log.info("Press mode: NONE");
+			if(match == null) {
+				log.info("Pressed card on null match error");
 			}else {
-				log.info("UNKNOWN Press mode");
-			}	
+				AdventureCard c = match.getPlayers().current().getHandCard(pos);
+				if(getCardMode() == cardModes.DISCARD) {
+					log.info("Press mode: DISCARD");
+					players.current().discardCard(c, advDeck); 
+				}else if(getCardMode() == cardModes.PLAY) {
+					match.playCard(c);
+					log.info("Press mode: PLAY");
+				}else if(getCardMode() == cardModes.NONE) {
+					log.info("Press mode: NONE");
+				}else {
+					log.info("UNKNOWN Press mode");
+				}	
+			}
 		}
 	}
 	
@@ -98,6 +103,17 @@ public class GameModel{
 	
 	public void done() {
 		lock.wake();
+	}
+	
+	
+	//          Tester functions 
+	//Used for simulating a tournament for testing
+	public void startGameTournamentTest() {
+		//testing
+		//Player 0 draws a tournament card
+		TournamentCard york = new TournamentCard("Tournament at York", 0);
+		match = new Tournament(players, advDeck, york, lock, log);
+		match.run();
 	}
 	
 }

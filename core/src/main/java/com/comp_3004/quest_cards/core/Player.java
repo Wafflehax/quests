@@ -40,6 +40,8 @@ public class Player{
 	public int numberOfActiveCards() { return playerActiveCards.size(); }
 	public LinkedList<AdventureCard> getHand() { return this.playerHandCards; }
 	public LinkedList<AdventureCard> getActive() { return this.playerActiveCards; }
+	public void setHand(LinkedList<AdventureCard> c) { playerHandCards = c; }         //used in Tournament testing
+	public void setActiveHand(LinkedList<AdventureCard> c) { playerActiveCards = c; } //used in Tournament testing
 
 	public boolean drawCard(AdventureDeck d) {
 		
@@ -76,7 +78,7 @@ public class Player{
 		return (playerHandCards.size() > 12);
 	}
 	
-	protected boolean exists(String cardName) {
+	protected boolean existsActive(String cardName) {
 		for(int i = 0; i < playerActiveCards.size(); i++) {
 			if(playerActiveCards.get(i).getName().equalsIgnoreCase(cardName))
 				return true;
