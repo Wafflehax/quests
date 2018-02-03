@@ -1,108 +1,70 @@
 package core;
 
-import com.comp_3004.quest_cards.cards.TournamentCard;
-import com.comp_3004.quest_cards.core.Game;
-import com.comp_3004.quest_cards.core.Game.cardModes;
-import com.comp_3004.quest_cards.core.Player;
-import com.comp_3004.quest_cards.core.Players;
-
-import junit.framework.TestCase;
 
 public class TournamentTest extends TestCase{
-	
-	private final int stime = 50; // this could cause tests to fail if too small
-	
 	public void testTournament1() {
 		//testing players setting their participation, setTournamentParticupation
-		TournamentCard york = new TournamentCard("Tournament at York", 0);
-		final int numPlayers = 4;
-		final Game game = new Game();
-		game.setStory(york);
-		Thread g = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				game.startGame(numPlayers);
-			}
-		});
-		g.start();
-		sleep(stime); // waiting for game to init players
-		Players players = game.getPlayers();
-		assertEquals(numPlayers, players.size()); //checking right amount of players
-		//set all players to participate
-		for(int i = 0; i < numPlayers; i++) {
-			Player p0 = players.current();
-			game.setTournamentParticupation(true);
-			assertEquals(true, p0.participantInTournament());
-		}
-		//set all players to not participate
-		for(int i = 0; i < numPlayers; i++) {
-			Player p0 = players.current();
-			game.setTournamentParticupation(false);
-			assertEquals(false, p0.participantInTournament());
-		}
-	}
-	
-	public void testTournament2(){
-		// test each player starts with 12 cards, none active
-		//new game of four players
-		TournamentCard york = new TournamentCard("Tournament at York", 0);
-		final int numPlayers = 4;
-		final Game game = new Game();
-		game.setStory(york);
-		Thread g = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				game.startGame(numPlayers);
-			}
-		});
-		g.start();
-		sleep(stime); // waiting for game to init players
-		Players players = game.getPlayers();
-		for(int i = 0; i < numPlayers; i++) {
-			assertEquals(12, players.current().numberOfHandCards());
-			assertEquals(0, players.current().numberOfActiveCards());
-		}
-	}
-	
-	public void testTournament3() {
-		//Test having too many cards joining tournament, and discarding a card to have valid hand
-		TournamentCard york = new TournamentCard("Tournament at York", 0);
-		final int numPlayers = 4;
-		final Game game = new Game();
-		game.setStory(york);
-		Thread g = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				game.startGame(numPlayers);
-			}
-		});
-		g.start();
-		sleep(stime); // waiting for game to init players);
+		int numPlayers = 4;
+		GameModel game = new GameModel();
+		Stack<Player> stack = new Stack<Player>();
+		Player p0 = new Player("P0");
+		Player p1 = new Player("P1");
+		Player p2 = new Player("P2");
+		Player p3 = new Player("P3");
+		stack.add(p0);stack.add(p1);stack.add(p2);stack.add(p3);
+		game.addPlayer(p0);
+		game.addPlayer(p1);
+		game.addPlayer(p2);
+		game.addPlayer(p3);
 		Players players = game.getPlayers();
 		
-		Player p0 = players.current();
-		game.setTournamentParticupation(true); //if true, auto draws card and adds to player hand
-		assertEquals(true, p0.tooManyHandCards());
-		sleep(stime); //wait for gameThr to wake and check toomany cards and setmode to discard
-		boolean mode = game.getCardMode() == cardModes.DISCARD;
-		assertEquals(true, mode); // check in discard mode
-		game.cardPressed(0); //emulating pressing card in first position
-		assertEquals(false, p0.tooManyHandCards());
-		game.done(); //finish action
-	}
-	
-	public void testTournament4() {
-		//test Find out winner and apply battle point
-		assertEquals(true, true);
+		for(int i = 0; i < numPlayers-1; i++, players.next()) {
+			Player current = game.getcurrentTurn();
+			current.participateTour(true);
+			boolean result = current.participantInTournament() && stack.get(i) == current;
+			assertEquals(true, result);
+			
+			current.participateTour(false);
+			result = current.participantInTournament();
+			assertEquals(true, stack.get(i) == current);
+			assertEquals(false, result);
+		}
 	}
 	
 	
+	public void testTournament2() {
+		int time = 100;
+		//Test Tournament joiners having too many cards, testing discardCardIfTooMany()
+		int numPlayers = 4;
+		final GameModel game = new GameModel();
+		game.initPlayersStart(numPlayers);
+		
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+			game.startGame();
+			}
+		});
+		thread.start();
+		
+		sleep(time);
+		game.setParticipation(false); // p0 no
+		sleep(time);
+		game.setParticipation(false);//p1 no
+		sleep(time);
+		Player player = game.getPlayers().current();
+		game.setParticipation(true);  //p2 yes  player has to many cards by 1 //game blocked until discarded
+		assertEquals(true, player.tooManyHandCards());
+		sleep(time);
+		game.cardPressed(0);
+		assertEquals(false, player.tooManyHandCards()); //discarded correct number now
+		game.done(); //done turn	
+	}
 	public void sleep(int milisecs) {
 		try {
 			Thread.sleep(milisecs); // sleeping to wait for game initialization
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-	}
-	
+	}	
 }

@@ -16,6 +16,7 @@ public class Player{
 	
 	protected LinkedList<AdventureCard> playerHandCards;
 	protected LinkedList<AdventureCard> playerActiveCards;
+
 	
 	protected boolean participateQuest;
 	protected volatile boolean participateTournament;
@@ -34,6 +35,7 @@ public class Player{
 	public Rank getRank() { return this.rank; }
 	public int getShields() { return this.shields; }
 	public boolean participantInTournament() { return participateTournament; }
+	public void participateTour(boolean b) { participateTournament = b; }
 	public int numberOfHandCards() { return playerHandCards.size(); }
 	public int numberOfActiveCards() { return playerActiveCards.size(); }
 	public LinkedList<AdventureCard> getHand() { return this.playerHandCards; }
@@ -136,7 +138,12 @@ public class Player{
 			rank = Rank.KNIGHT_OF_THE_ROUND_TABLE;
 			//triggers winning condition
 		}
-		
-		
+	}
+	
+	public void loseShields(int sh) {
+		if(shields < sh)
+			shields = 0;
+		else
+			shields -= sh;
 	}
 }

@@ -1,0 +1,103 @@
+package com.comp_3004.quest_cards.core;
+
+import java.util.ArrayList;
+
+import org.apache.log4j.Logger;
+
+import com.comp_3004.quest_cards.cards.AdventureCard;
+import com.comp_3004.quest_cards.cards.AdventureDeck;
+import com.comp_3004.quest_cards.cards.StoryDeck;
+import com.comp_3004.quest_cards.cards.TournamentCard;
+import com.comp_3004.quest_cards.core.match.GameMatch;
+
+
+public class GameModel{
+	
+	static Logger log = Logger.getLogger(GameModel.class); //log4j logger
+	public static final byte MAX_HAND_SIZE = 12;
+	
+	protected AdventureDeck advDeck;
+	protected StoryDeck storyDeck;
+	protected volatile GameMatch match; //calling quests and tours matches
+	private int numPlayers;
+	private volatile Players players = new Players(0, numPlayers, new ArrayList<Player>());
+	private volatile Object lockObj = new Object(); // lock for current thread
+	protected volatile ThreadLock lock = new ThreadLock(lockObj);
+	public static enum cardModes { PLAY, DISCARD, NONE }; // determine when card was pressed what action it was. ex.going to discard, or activating(playing),none(nothing)
+	
+	//getters setters
+	public Players getPlayers() { return players; }
+	public Player getcurrentTurn() { return players.current();}
+	public cardModes getCardMode() { 
+		if(match == null)
+			return cardModes.NONE; //no match no playing cards
+		return match.getcardMode(); 
+	}
+	
+	// constructor
+	public GameModel() {
+		advDeck = new AdventureDeck();
+		advDeck.shuffle();
+		storyDeck = new StoryDeck();
+		storyDeck.shuffle();
+		System.out.println("Game model Ctor");
+	}
+	
+	public void startGame() {
+		//testing
+		//Player 0 draws a tournament card
+		TournamentCard york = new TournamentCard("Tournament at York", 0);
+		match = new Tournament(players, advDeck, york, lock, log);
+		match.run();
+	}
+	
+	public void addPlayer(Player p) {
+		players.addPlayer(p);
+	}
+	
+	public void cardPressed(int pos) {
+		if(pos < 0 || pos > players.current().playerHandCards.size()-1) {
+			log.info("invalid card, does not match hand");
+		}else {
+			AdventureCard c = players.current().getHandCard(pos);
+			if(getCardMode() == cardModes.DISCARD) {
+				log.info("Press mode: DISCARD");
+				players.current().discardCard(c, advDeck); 
+			}else if(getCardMode() == cardModes.PLAY) {
+				match.playCard(c);
+				log.info("Press mode: PLAY");
+			}else if(getCardMode() == cardModes.NONE) {
+				log.info("Press mode: NONE");
+			}else {
+				log.info("UNKNOWN Press mode");
+			}	
+		}
+	}
+	
+	public boolean setParticipation(boolean b) {
+		if(match == null)
+			return false;
+		else {
+			match.setParticipation(b);
+			return true;
+		}
+	}
+	
+	public void initPlayersStart(int numPlayers) {
+		this.numPlayers = numPlayers;
+		//TODO: Add players choosing their own name
+		ArrayList<Player> plyrs = new ArrayList<Player>(numPlayers);
+		for(int i = 0; i < numPlayers; i++) {
+			Player newPlayer = new Player("Player " + i);
+			for(int q = 0; q < MAX_HAND_SIZE; q++)
+				newPlayer.drawCard(advDeck);
+			plyrs.add(newPlayer);
+		}
+		players = new Players(0, numPlayers, plyrs);
+	}
+	
+	public void done() {
+		lock.wake();
+	}
+	
+}

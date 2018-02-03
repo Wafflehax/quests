@@ -8,37 +8,47 @@ public class Players{
 	
 	protected ArrayList<Player> players; //protected for testing
 	private int position;
-	private int endPos;
+	private int size;
 	
 	// class stores int position from 0 to endPos. Once end Position reached loops to start
 	// and players
 	
-	public Players(int position, int endPos, ArrayList<Player> players){
+	public Players(int position, int size, ArrayList<Player> players){
 		this.players = players;
 		this.position = position;
-		this.endPos = endPos;
+		this.size = size-1;
 	}
 	public Players(Players p) {
 		this.position = p.position;
-		this.endPos = p.endPos;
+		this.size = p.size;
 		this.players = p.players;
 	}
-	
+
 	// getter/setter
 	protected boolean isEmpty() {		return players.isEmpty();		}
 	public int size() { return players.size(); }
+	public int getNumPlayers() { return this.players.size(); }
+	public ArrayList<Player> getPlayers() { return this.players; }
 	
+	public void addPlayer(String name) {
+		Player p = new Player(name);
+		players.add(p);
+	}
+	
+	public void addPlayer(Player p) {
+		this.players.add(p);
+	}
 	
 	// moves to next position and returns it
 	private int nextIndex() {
-		if(position == endPos)
+		if(position == size)
 			position = 0;
 		else
 			position++;
 		return position;
 	}
 	
-	protected Player next() {
+	public Player next() {
 		return players.get(nextIndex());
 	}
 	
@@ -58,5 +68,6 @@ public class Players{
 		// can return with no participants 
 		return partic;
 	}
+	
 	
 }

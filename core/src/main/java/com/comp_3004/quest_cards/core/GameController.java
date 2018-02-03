@@ -1,5 +1,7 @@
 package com.comp_3004.quest_cards.core;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -7,25 +9,53 @@ import org.apache.log4j.Logger;
 
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.TournamentCard;
-import com.comp_3004.quest_cards.core.Game.gamestates;
 
 
 
-public class Controller{
-	static Logger log = Logger.getLogger(Controller.class); //log4j logger
-
-	Game model;
+public class GameController{
+	GameModel model;
+	GameView view;
 	Thread modelthr;
+	static Logger log = Logger.getLogger(GameController.class); //log4j logger
+	
+	public GameController(GameModel m, GameView v) {
+		System.out.println("Game controller Ctor");
+		this.model = m;
+		this.view = v;
+		
+		//... Add listeners to the view.
+        view.addSomeListener(new SomeListener());
+	}
+	
+	
+	//Listener Template
+	class SomeListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            String userInput = "";
+            try {
+                //userInput = view.getUserInput();
+               // model.doSomethingWith(userInput);
+               // view.doSomethingToUpdateView(m.model.getSomeValue());
+                
+            } catch (NumberFormatException nfex) {
+                //view.showError("Bad input: '" + userInput + "'");
+            }
+        }
+	}
+	
+	//user requests
+	public void startGame(int numPlayers) {
+		model.initPlayersStart(numPlayers);
+		model.startGame();
+	}
+	
 	public void onCreate() {
 	
 		modelthr = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				
-				model = new Game();
-				TournamentCard york = new TournamentCard("Tournament at York", 0);
-				model.setStory(york);
-				model.startGame(4);
+				//model = new GameModel();
+				model.startGame();
 			}
 		});
 		modelthr.start();
@@ -44,18 +74,18 @@ public class Controller{
 		});
 		ui.start();
 		
-		fakeViewRender();
+	//	fakeViewRender();
 		
 		
 	}
+	/*
 	
 	public void  fakeViewRender() {
 		boolean run = true;
-		while(run && model.runGameLoop) {
-			
+		while(run && model..getRunGameLoop()) {
 			if(model.state == gamestates.ASKING_PARTICIPATION) {
 				System.out.println("Would " + model.getcurrentTurn().getName() + " like to play "
-						+ " " + model.currStory.getName() + "?\n");
+						+ " " + model..getCurrentTour().getName() + "?\n");
 				model.state = gamestates.WAITING;
 			}else if(model.state == gamestates.PLAYER_TURN) {
 				log.info("Player : " + model.getcurrentTurn().getName() + "Pick your cards which will be face down and press done\n");
@@ -65,24 +95,21 @@ public class Controller{
 				model.state = gamestates.WAITING;
 				log.info("Please enter a card to discard then press done");
 			}
-			
-			
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	
+	}  */
 	public void participateYes() {
-		model.setTournamentParticupation(true);
+		model.setParticipation(false);
 	}
 	
 	public void participateNo() {
-		model.setTournamentParticupation(false);
+		model.setParticipation(false);
 	}
+	
 	
 	// For now assuming button numbers correspond to card in player.playerHandCards
 	public void pressedHand0() {
@@ -124,8 +151,8 @@ public class Controller{
 	public void pressedHand12() {
 		model.cardPressed(12);
 	}
-	public void done() {
-		model.done();
+	public void doneTurn() {
+		model.lock.wake();
 	}
 	
 	
@@ -182,11 +209,8 @@ public class Controller{
 			else if(action.equalsIgnoreCase("no") || action.equalsIgnoreCase("n")) {
 				participateNo();log.info("Participation: No");
 			}
-			else if(action.equals("exit")) {
-				run = false; model.runGameLoop = false;
-			}
 			else if(action.equalsIgnoreCase("done")) {
-				done();
+				doneTurn();
 			}
 			else if(action.equalsIgnoreCase("print")) {
 				printHand();
