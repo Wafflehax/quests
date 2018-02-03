@@ -1,19 +1,18 @@
-
 backgrounds.png
-size: 2048,2048
+size: 1920, 1418
 format: RGBA8888
-filter: Nearest,Nearest
+filter: Linear,Linear
 repeat: none
 game-board
   rotate: false
-  xy: 2, 342
-  size: 1944, 1104
-  orig: 1944, 1104
+  xy: 0, 0
+  size: 1920, 1080
+  orig: 1920, 1080
   offset: 0, 0
   index: -1
 player-area
   rotate: false
-  xy: 2, 2
+  xy: 0, 1080
   size: 1900, 338
   orig: 1900, 338
   offset: 0, 0
