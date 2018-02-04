@@ -1,51 +1,89 @@
 package com.comp_3004.quest_cards.gui;
 
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.comp_3004.quest_cards.core.QuestCards;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GameScreen extends Group implements Disposable {
 
   //Parent
 
   private AssetManager manager;
+  private Map<String, Class> dependencies;
+  private PlayerView playerView;
 
   //Assets
 
-  private TextureAtlas cardsAtlas;
-  private TextureAtlas bgAtlas;// Backgrounds atlas
+  private List<Loadable> loadableActors;
 
   public GameScreen() {
-    setBounds(0,0, Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
-    //Load assets. These need to be unloaded at end of screen life cycle
+    loadableActors = new ArrayList<Loadable>();
+    manager = QuestCards.getAssetManager();
 
-    AssetManager manager = QuestCards.getAssetManager();
-    manager.load("sprites/cards.atlas", TextureAtlas.class);
-    manager.load("sprites/backgrounds.atlas", TextureAtlas.class);
-    manager.finishLoading();
+    //Register dependencies
 
-    cardsAtlas = manager.get("sprites/cards.atlas", TextureAtlas.class);
-    bgAtlas = manager.get("sprites/backgrounds.atlas", TextureAtlas.class);
+    dependencies = new LinkedHashMap<String, Class>();
+    dependencies.put(Config.Assets.BACKGROUND_ATLAS, TextureAtlas.class);
+    dependencies.put(Config.Assets.SPRITE_ATLAS, TextureAtlas.class);
 
-    //Set up
+    //Init builders
 
-    Image background = new Image(bgAtlas.findRegion("game-board"));
-    background.setBounds(0,0, Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
-    setSize(Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
-    addActor(background);
-    //This code needs to go to children classes
+    PlayerView.Builder playerViewBuilder = new PlayerView.Builder(manager);
+    loadableActors.add(playerViewBuilder);
 
-    addActor(PlayerView.debugPlayerHand(manager));
+    //Load assets
+
+    loadAssets(QuestCards.getAssetManager());
+
+    //Set up background
+
+    setBounds(0, 0, Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
+    TextureAtlas bgAtlas = manager.get("sprites/backgrounds.atlas", TextureAtlas.class);
+    initBackground(bgAtlas);
+
+    //Instantiate children & add to group
+
+    playerView = playerViewBuilder.build();
+    addActor(playerView);
   }
 
+  private void initBackground(TextureAtlas atlas){
+
+    Image background = new Image(atlas.findRegion("game-board"));
+    background.setBounds(0, 0, Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
+    setSize(Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
+    addActor(background);
+  }
+
+  private void loadAssets(AssetManager manager){
+
+    //Load own dependecies
+
+    for(Map.Entry<String, Class> dependecy : dependencies.entrySet()){
+      manager.load(dependecy.getKey(), dependecy.getValue());
+    }
+
+    //Load children dependecies
+
+    for(Loadable loadable : loadableActors){
+      loadable.load();
+    }
+
+    manager.finishLoading();
+  }
+
+  @Override
   public void dispose() {
-    manager.unload("sprites/gameSprites.atlas");
-    manager.unload("sprites/backgrounds.atlas");
+    for(Loadable loadable : loadableActors){
+      loadable.dispose();
+    }
   }
 }

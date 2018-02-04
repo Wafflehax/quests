@@ -13,17 +13,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.comp_3004.quest_cards.gui.Config;
 import com.comp_3004.quest_cards.gui.GameScreen;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class QuestCards implements ApplicationListener {
-
-  //"World" coordinates
-
-  public static final int VIRTUAL_WIDTH = 1920;
-  public static final int VIRTUAL_HEIGHT = 1080;
 
   //Assets
 
@@ -66,9 +62,9 @@ public class QuestCards implements ApplicationListener {
     //Stage & camera set up
 
     camera = new OrthographicCamera();
-    viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
+    viewport = new FitViewport(Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT, camera);
     stage.setViewport(viewport);
-    camera.position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
+    camera.position.set(Config.VIRTUAL_WIDTH / 2, Config.VIRTUAL_HEIGHT / 2, 0);
     camera.update();
 
     //Init game screen & set as current screen
@@ -78,13 +74,13 @@ public class QuestCards implements ApplicationListener {
     stage.addActor(gameScreens.get("mainGame"));
 
     //Create game MVC
-    GameModel model = new GameModel();
-    GameView view = new GameView(model);
-    GameController controller = new GameController(model, view);
+    //GameModel model = new GameModel();
+    //GameView view = new GameView(model);
+    //GameController controller = new GameController(model, view);
 
     //testing
     //in reality, this method would be triggered from an ActionListener in view when user clicks "New Game"
-    controller.startGame(4);
+    //controller.startGame(4);
   }
 
   @Override
