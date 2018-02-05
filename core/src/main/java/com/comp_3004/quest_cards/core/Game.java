@@ -2,6 +2,7 @@ package com.comp_3004.quest_cards.core;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -21,15 +22,17 @@ public class Game extends ApplicationAdapter {
 
 	private SpriteBatch batch;
 	private GameStateManager gsm;
+	private Music menuMusic;
 
 	public static final String TITLE = "Quests of the Round Table";
-
-	public void toMenu(){gsm.push(new MenuState(gsm));}
 
 	@Override 
 	public void create () {
 		batch = new SpriteBatch();
 		gsm = new GameStateManager();
+		menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/MainMenu.mp3"));
+		menuMusic.setVolume(0.5f);                 // sets the volume to half the maximum volume
+		menuMusic.setLooping(true);                // will repeat playback until music.stop() is called
 
         try {
             Thread.sleep(1000);
@@ -62,8 +65,12 @@ public class Game extends ApplicationAdapter {
 		
 	}
 
-
-
+	public void toMenu(){gsm.set(new MenuState(gsm));
+		menuMusic.play();
+	}
+	public void toPlay(){gsm.set(new PlayState(gsm));
+	menuMusic.dispose();}
+	public void toRules(){gsm.set(new RulesState(gsm));}
 	
 	
 }

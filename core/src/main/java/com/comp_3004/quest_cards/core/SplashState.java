@@ -26,6 +26,7 @@ public class SplashState extends State {
         Tween.to(splash,SpriteAccessor.Alpha, 4).target(1).repeatYoyo(1,2).setCallback(new TweenCallback() {
             @Override
             public void onEvent(int type, BaseTween<?> source) {
+                dispose();
                 ((Game)Gdx.app.getApplicationListener()).toMenu();
             }
         }).start(tweenManager);
