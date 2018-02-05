@@ -1,5 +1,6 @@
 package com.comp_3004.quest_cards.core;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
@@ -10,7 +11,30 @@ import com.comp_3004.quest_cards.cards.AdventureCard.State;
 public class Player{
 	static Logger log = Logger.getLogger(Player.class); //log4j logger
 	private String name;
-	public enum Rank { SQUIRE, KNIGHT, CHAMPION_KNIGHT, KNIGHT_OF_THE_ROUND_TABLE };
+	public enum Rank implements Comparable<Rank>{ 
+		SQUIRE(0), KNIGHT(1), CHAMPION_KNIGHT(2), KNIGHT_OF_THE_ROUND_TABLE(3) ;
+		
+		private int index;
+		Rank(int i) {
+			this.index = i;
+		}
+		
+		public int getIndex() { return this.index; }
+	}
+	class RankComparator implements Comparator<Rank> {
+
+		  @Override
+		  public int compare(final Rank o1, final Rank o2) {
+		      int returnValue = 0;
+		      if (o1.getIndex() > o2.getIndex()) {
+		          returnValue = 1;
+		      } else if (o1.getIndex() < o2.getIndex()) {
+		          returnValue = -1;
+		      }
+		      return returnValue;
+		  }
+	}
+
 	private Rank rank;
 	private int shields;
 	

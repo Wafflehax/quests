@@ -1,5 +1,7 @@
 package com.comp_3004.quest_cards.core;
 
+import java.util.ArrayList;
+
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.StoryCard;
 
@@ -20,14 +22,47 @@ public class Event {
 		//can't use switch bc project is on javaSE-1.6, change to switch if we ever switch versions
 		if(evnt.getName() ==  "Chivalrous Deed") {
 			System.out.printf("Running event %s\n", evnt.getName());
+			for(int i=0; i<players.getNumPlayers(); i++) {
+				System.out.printf("%s's Rank: %s\n", players.getPlayerAtIndex(i).getName(), players.getPlayerAtIndex(i).getRank());
+				System.out.printf("%s's shields: %s\n", players.getPlayerAtIndex(i).getName(), players.getPlayerAtIndex(i).getShields());
+			}
+			ArrayList<Player> lowestRank = new ArrayList<Player>();
+			lowestRank.add(0, players.getPlayerAtIndex(0));
+			for(int i=1; i<players.getNumPlayers(); i++) {
+				if(lowestRank.get(0).getRank().compareTo(players.getPlayerAtIndex(i).getRank()) == 1) {
+					lowestRank.clear();
+					lowestRank.add(0, players.getPlayerAtIndex(i));
+				}
+				else if(lowestRank.get(0).getRank().compareTo(players.getPlayerAtIndex(i).getRank()) == 0) {
+					lowestRank.add(lowestRank.size(), players.getPlayerAtIndex(i));
+				}
+			}
+			
+			ArrayList <Player> lowestShields = new ArrayList<Player>();
+			lowestShields.add(0, lowestRank.get(0));
+			for(int i=1; i<lowestRank.size(); i++) {
+				if(players.getPlayerAtIndex(i).getShields() < lowestShields.get(0).getShields()) {
+					lowestShields.clear();
+					lowestShields.add(0, players.getPlayerAtIndex(i));
+				}
+				else if(players.getPlayerAtIndex(i).getShields() == lowestShields.get(0).getShields()) {
+					lowestShields.add(lowestShields.size(), lowestRank.get(i));
+				}
+			}
+			for(Player p : lowestShields)
+				p.addShields(3);
+			for(int i=0; i<players.getNumPlayers(); i++) {
+				System.out.printf("%s's updated Rank: %s\n", players.getPlayerAtIndex(i).getName(), players.getPlayerAtIndex(i).getRank());
+				System.out.printf("%s's updated shields: %s\n", players.getPlayerAtIndex(i).getName(), players.getPlayerAtIndex(i).getShields());
+			}
 			
 		}
 		else if(evnt.getName() ==  "Pox") {
 			System.out.printf("Running event %s\n", evnt.getName());
-			for(int i=0; i<players.size(); i++) {
+			for(int i=0; i<players.getNumPlayers(); i++) {
 				if (players.getPlayers().get(i) != players.current()) {
 					System.out.printf("%s's shields: %s\n", players.getPlayerAtIndex(i).getName(), players.getPlayerAtIndex(i).getShields());
-					players.getPlayers().get(i).loseShields(1);
+					players.getPlayerAtIndex(i).loseShields(1);
 					System.out.printf("%s's updted shields: %s\n", players.getPlayerAtIndex(i).getName(), players.getPlayerAtIndex(i).getShields());
 				}
 			}
@@ -56,13 +91,12 @@ public class Event {
 		}
 		else if(evnt.getName() ==  "Prosperity Throughout the Realms") {
 			System.out.printf("Running event %s\n", evnt.getName());
-			for(int i=0; i<players.size(); i++) {
+			for(int i=0; i<players.getNumPlayers(); i++) {
 				System.out.printf("%s\n ============\n", players.current().getName());
-				players.current().printHand();
-				players.current().drawCard(advDeck);
-				players.current().drawCard(advDeck);
-				players.current().printHand();
-				players.next();
+				players.getPlayerAtIndex(i).printHand();
+				players.getPlayerAtIndex(i).drawCard(advDeck);
+				players.getPlayerAtIndex(i).drawCard(advDeck);
+				players.getPlayerAtIndex(i).printHand();
 			}
 			
 		}

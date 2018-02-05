@@ -79,6 +79,7 @@ public class QuestCards implements ApplicationListener {
     
     GameModel model = new GameModel();   
     GameController gameController = new GameController(model);
+    model.eventTest();
   }
 
   @Override

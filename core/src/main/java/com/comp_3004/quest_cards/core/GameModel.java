@@ -22,7 +22,7 @@ public class GameModel{
 	private StoryDeck storyDeck;
 	protected volatile GameMatch match; //calling quests and tours matches
 	private int numPlayers;
-	private volatile Players players = new Players(0, numPlayers, new ArrayList<Player>());
+	private Players players = new Players(0, numPlayers, new ArrayList<Player>());
 	private volatile Object lockObj = new Object(); // lock for current thread
 	protected volatile ThreadLock lock = new ThreadLock(lockObj);
 	public static enum cardModes { PLAY, DISCARD, NONE }; // determine when card was pressed what action it was. ex.going to discard, or activating(playing),none(nothing)
@@ -49,6 +49,7 @@ public class GameModel{
 		advDeck.shuffle();
 		storyDeck = new StoryDeck();
 		storyDeck.shuffle();
+		initPlayersStart(4);
 		System.out.println("Game model Ctor");
 	}
 	
@@ -142,6 +143,29 @@ public class GameModel{
 		TournamentCard york = new TournamentCard("Tournament at York", 0);
 		match = new Tournament(players, advDeck, york, lock, log);
 		match.run();
+	}
+	
+	//Event testing
+	public void eventTest() {
+		StoryDeck events = new StoryDeck("Events");
+		AdventureDeck adv = new AdventureDeck();
+		events.shuffle();
+		adv.shuffle();
+		int cardsInDeck = events.getDeck().size();
+		for(int i=0; i<4; i++) {
+			getPlayerAtIndex(i).addShields(4);
+			System.out.println(getPlayerAtIndex(i).getShields());
+		}
+		for(int i=0; i<cardsInDeck; i++) {
+			System.out.printf("%s's Turn...  ", players.current().getName());
+			StoryCard cardDrawn = events.drawCard();
+			event = new Event(cardDrawn, players, adv);
+			event.runEvent();
+			
+			//end turn
+			System.out.printf("%s's turn over\n", players.current().getName());
+			players.next();
+		}
 	}
 	
 }
