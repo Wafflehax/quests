@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.cards.TournamentCard;	//used for testing
@@ -16,69 +17,106 @@ public class GameModel{
 	static Logger log = Logger.getLogger(GameModel.class); //log4j logger
 	public static final byte MAX_HAND_SIZE = 12;
 	
-	public static enum gamestates{ WAITING, ASKING_PARTICIPATION, PLAYER_TURN, START,
-		DISCARD_HAND_CARD }; // used for communicating with view
-	
-	protected String message; //displaying messg on view, ex. battle points of everyone at end of tour
-	
-	protected AdventureDeck advDeck;
-	protected StoryDeck storyDeck;
-	
-	private Tournament tour;
 	private Event event;
-	
+	private AdventureDeck advDeck;
+	private StoryDeck storyDeck;
+	protected volatile GameMatch match; //calling quests and tours matches
 	private int numPlayers;
-	private volatile Players players;
+	private volatile Players players = new Players(0, numPlayers, new ArrayList<Player>());
 	private volatile Object lockObj = new Object(); // lock for current thread
 	protected volatile ThreadLock lock = new ThreadLock(lockObj);
-	protected gamestates state = gamestates.START;
-	
-	
+	public static enum cardModes { PLAY, DISCARD, NONE }; // determine when card was pressed what action it was. ex.going to discard, or activating(playing),none(nothing)
 	
 	//getters setters
-	protected Player getcurrentTurn() { return players.current();}
+	public Players getPlayers() { return players; }
+	public void setPlayers(Players p) { players = p; }
+	public Player getPlayerAtIndex(int i) { return this.players.getPlayers().get(i); }
+	public int getNumPlayers() { return this.players.getNumPlayers(); }
+	public Player getcurrentTurn() { return players.current();}
+	public AdventureDeck getAdvDeck() { return this.advDeck; }
+	public StoryDeck getStoryDeck() { return this.storyDeck; }
+	public cardModes getCardMode() { 
+		if(match == null)
+			return cardModes.NONE; //no match no playing cards
+		return match.getcardMode(); 
+	}
+	public GameMatch getMatch() { return match; }
+
 	
 	// constructor
 	public GameModel() {
-		System.out.println("Game model Ctor");
-	}
-	
-	public void startGame(int numPlayers) {
-		
 		advDeck = new AdventureDeck();
 		advDeck.shuffle();
 		storyDeck = new StoryDeck();
 		storyDeck.shuffle();
-		initPlayersStart(numPlayers);
-		
-		//Event testing
-		StoryDeck events = new StoryDeck("Events");
-		AdventureDeck adv = new AdventureDeck();
-		events.shuffle();
-		adv.shuffle();
-		int cardsInDeck = events.getDeck().size();
-		for(int i=0; i<4; i++)
-			players.getPlayerAtIndex(i).addShields(4);
-		for(int i=0; i<cardsInDeck; i++) {
-			System.out.printf("%s's Turn...  ", players.current().getName());
-			StoryCard cardDrawn = events.drawCard();
-			event = new Event(cardDrawn, players, adv);
-			event.runEvent();
-			
-			//end turn
-			System.out.printf("%s's turn over\n", players.current().getName());
-			players.next();
-		}
-		
-		//Tournament testing
-		//Player 0 draws a tournament card
-		//TournamentCard york = new TournamentCard("Tournament at York", 0);
-		//tour = new Tournament(players, advDeck, york, state, lock, log);
-		//tour.runTournament();
-
+		System.out.println("Game model Ctor");
 	}
 	
-	private void initPlayersStart(int numPlayers) {
+	public void startGame() {
+		//testing
+		//Player 0 draws a tournament card
+		TournamentCard york = new TournamentCard("Tournament at York", 0);
+		match = new Tournament(players, advDeck, york, lock, log);
+		match.run();
+	}
+	
+	public void addPlayer(Player p) {
+		players.addPlayer(p);
+	}
+	
+	public void cardPressed(int pos) {
+			if(match == null) {
+				log.info("Pressed card on null match error");
+			}else {
+				if(pos < 0 || pos > match.getPlayers().current().playerHandCards.size()-1) {
+					log.info("invalid card, does not match hand");
+				}else {
+				AdventureCard c = match.getPlayers().current().getHandCard(pos);
+				if(getCardMode() == cardModes.DISCARD) {
+					log.info("Press mode: DISCARD");
+					players.current().discardCard(c, advDeck); 
+				}else if(getCardMode() == cardModes.PLAY) {
+					match.playCard(c);
+					log.info("Press mode: PLAY");
+				}else if(getCardMode() == cardModes.NONE) {
+					log.info("Press mode: NONE");
+				}else {
+					log.info("UNKNOWN Press mode");
+				}	
+			}
+		}
+	}
+	
+	// playCard, discardCard to replace cardPressed(int pos)
+	public boolean playCard(Player p, AdventureCard c) {
+		if(match == null) {
+			log.info("Attempted to play a card on a null match(no game). Allow this in future?");
+			return false;
+		}else {
+			match.playCard(c);	//TODO: pass the player that played the card into the method
+			return true;			//TODO: have the match.playCard return a boolean (success or fail)
+		}
+	}
+	
+	public void discardCard(AdventureCard c) {
+		if(match == null) {
+			log.info("Attempted to discard card on null game(no game). Allow this in future?");
+		}else {
+			match.discardCard(c);
+		}
+	}
+	
+	public boolean setParticipation(boolean b) {
+		if(match == null)
+			return false;
+		else {
+			match.setParticipation(b);
+			return true;
+		}
+	}
+	
+	public void initPlayersStart(int numPlayers) {
+		this.numPlayers = numPlayers;
 		//TODO: Add players choosing their own name
 		ArrayList<Player> plyrs = new ArrayList<Player>(numPlayers);
 		for(int i = 0; i < numPlayers; i++) {
@@ -88,8 +126,22 @@ public class GameModel{
 				newPlayer.drawCard(advDeck);
 			plyrs.add(newPlayer);
 		}
-		players = new Players(0, numPlayers-1, plyrs);
+		players = new Players(0, numPlayers, plyrs);
 	}
 	
-	public Tournament getTournament() { return this.tour; }
+	public void done() {
+		lock.wake();
+	}
+	
+	
+	//          Tester functions 
+	//Used for simulating a tournament for testing
+	public void startGameTournamentTest() {
+		//testing
+		//Player 0 draws a tournament card
+		TournamentCard york = new TournamentCard("Tournament at York", 0);
+		match = new Tournament(players, advDeck, york, lock, log);
+		match.run();
+	}
+	
 }

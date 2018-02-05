@@ -18,6 +18,11 @@ public class AdventureDeck extends Deck {
 		initTests();
 	}
 	
+	//Used for player test
+	public AdventureDeck(Stack<AdventureCard> d) {
+		this.deck = d;
+		this.discard = new Stack<AdventureCard>();
+	}
 	
 	//methods
 	public void shuffle() {

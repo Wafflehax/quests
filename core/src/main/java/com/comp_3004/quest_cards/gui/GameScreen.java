@@ -1,27 +1,31 @@
-package com.comp_3004.quest_cards.core;
+package com.comp_3004.quest_cards.gui;
 
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
+import com.comp_3004.quest_cards.core.QuestCards;
 
-public class GameScreen extends Table implements Disposable {
+public class GameScreen extends Group implements Disposable {
 
   //Parent
 
-  private QuestCards parent;
+  private AssetManager manager;
 
   //Assets
 
   private TextureAtlas cardsAtlas;
   private TextureAtlas bgAtlas;// Backgrounds atlas
 
-  public GameScreen(QuestCards parent) {
-    this.parent = parent;
+  public GameScreen() {
+    setBounds(0,0, Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
     //Load assets. These need to be unloaded at end of screen life cycle
 
-    AssetManager manager = parent.getAssetManager();
+    AssetManager manager = QuestCards.getAssetManager();
     manager.load("sprites/cards.atlas", TextureAtlas.class);
     manager.load("sprites/backgrounds.atlas", TextureAtlas.class);
     manager.finishLoading();
@@ -29,20 +33,31 @@ public class GameScreen extends Table implements Disposable {
     cardsAtlas = manager.get("sprites/cards.atlas", TextureAtlas.class);
     bgAtlas = manager.get("sprites/backgrounds.atlas", TextureAtlas.class);
 
-    //Set background
+    //Set up
 
-    setBackground(new Image(bgAtlas.findRegion("game-board")).getDrawable());
-    setSize(getPrefWidth(), getPrefHeight());
-
+    Image background = new Image(bgAtlas.findRegion("game-board"));
+    background.setBounds(0,0, Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
+    setSize(Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
+    addActor(background);
     //This code needs to go to children classes
 
-    bottom().padBottom(10).add(PlayerCards.debugPlayerHand(manager));
+    addActor(PlayerView.debugPlayerHand(manager));
   }
 
-  @Override
   public void dispose() {
-    AssetManager manager = parent.getAssetManager();
     manager.unload("sprites/gameSprites.atlas");
     manager.unload("sprites/backgrounds.atlas");
   }
 }
+
+//setHero()
+//setShields()
+//setHandCards()
+//setActiveCards()
+//setAdvDeck()
+//setAdvDiscardPile()
+//setStoryDeck()
+//setStoryDiscardPile()
+//
+
+

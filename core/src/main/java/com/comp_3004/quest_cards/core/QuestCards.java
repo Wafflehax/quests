@@ -7,117 +7,114 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.comp_3004.quest_cards.gui.GameScreen;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class QuestCards implements ApplicationListener {
 
-    //"World" coordinates
+  //"World" coordinates
 
-    public static final int VIRTUAL_WIDTH = 1920;
-    public static final int VIRTUAL_HEIGHT = 1080;
+  public static final int VIRTUAL_WIDTH = 1920;
+  public static final int VIRTUAL_HEIGHT = 1080;
 
-    //Assets
+  //Assets
 
-    private AssetManager manager;
-    private SpriteBatch batch;
-    private Skin uiSkin;
-
-
-    //Stage
-
-    private Camera camera;
-    private Viewport viewport;
-    private Stage stage;
+  private AssetManager manager;
+  private SpriteBatch batch;
+  private Skin uiSkin;
 
 
-    //Game Screens
+  //Stage
 
-    private Map<String, Table> gameScreens;
+  private Camera camera;
+  private Viewport viewport;
+  private Stage stage;
 
-    @Override
-    public void create() {
 
-        //Init basic modules. These need to be disposed
+  //Game Screens
 
-        manager = new AssetManager();
-        batch = new SpriteBatch();
-        stage = new Stage();
+  private Map<String, Group> gameScreens;
 
-        //Load UI skin
+  public static AssetManager getAssetManager() {
 
-        manager.load("skins/uiskin.json", Skin.class);
-        manager.finishLoading();
-        uiSkin = manager.get("skins/uiskin.json", Skin.class);
+    return ((QuestCards) Gdx.app.getApplicationListener()).manager;
+  }
 
-        //Stage & camera set up
+  @Override
+  public void create() {
 
-        camera = new OrthographicCamera();
-        viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
-        stage.setViewport(viewport);
-        camera.position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
-        camera.update();
+    //Init basic modules. These need to be disposed
 
-        //Init game screen & set as current screen
+    manager = new AssetManager();
+    batch = new SpriteBatch();
+    stage = new Stage();
 
-        gameScreens = new HashMap<String, Table>();
-        gameScreens.put("mainGame", new GameScreen(this));
-        stage.addActor(gameScreens.get("mainGame"));
-        
-        //Create game MVC
-        GameModel model = new GameModel();
-        GameView view = new GameView(model);
-        GameController controller = new GameController(model, view);
-        
-        //testing
-        //in reality, this method would be triggered from an ActionListener in view when user clicks "New Game"
-        controller.startGame(4);
-    }
+    //Load UI skin
 
-    @Override
-    public void resize(int width, int height) {
-        viewport.update(width, height);
-    }
+    manager.load("skins/uiskin.json", Skin.class);
+    manager.finishLoading();
+    uiSkin = manager.get("skins/uiskin.json", Skin.class);
 
-    @Override
-    public void render() {
+    //Stage & camera set up
 
-        //Clear screen
+    camera = new OrthographicCamera();
+    viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
+    stage.setViewport(viewport);
+    camera.position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
+    camera.update();
 
-        Gdx.gl.glClearColor(0, 0, 0, 0);
-        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
+    //Init game screen & set as current screen
 
-        //Update actors
+    gameScreens = new HashMap<String, Group>();
+    gameScreens.put("mainGame", new GameScreen());
+    stage.addActor(gameScreens.get("mainGame"));
+    
+    GameModel model = new GameModel();   
+    GameController gameController = new GameController(model);
+  }
 
-        stage.act(Gdx.graphics.getDeltaTime());
+  @Override
+  public void resize(int width, int height) {
+    viewport.update(width, height);
+  }
 
-        //Draw
+  @Override
+  public void render() {
 
-        stage.draw();
-    }
+    //Clear screen
 
-    @Override
-    public void pause() {
-    }
+    Gdx.gl.glClearColor(0, 0, 0, 0);
+    Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 
-    @Override
-    public void resume() {
-    }
+    //Update actors
 
-    @Override
-    public void dispose() {
-        stage.dispose();
-        batch.dispose();
-        manager.dispose();
-    }
+    stage.act(Gdx.graphics.getDeltaTime());
 
-    public AssetManager getAssetManager() {
-        return manager;
-    }
+    //Draw
+
+    stage.draw();
+  }
+
+  @Override
+  public void pause() {
+  }
+
+  @Override
+  public void resume() {
+  }
+
+  @Override
+  public void dispose() {
+    stage.dispose();
+    batch.dispose();
+    manager.dispose();
+  }
 }

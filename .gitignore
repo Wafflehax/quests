@@ -12,6 +12,7 @@ android/libs/
 
 #Build dirs
 **/target/*
+out/*
 
 # Compiled class file
 **.class

@@ -16,6 +16,7 @@ public class Player{
 	
 	protected LinkedList<AdventureCard> playerHandCards;
 	protected LinkedList<AdventureCard> playerActiveCards;
+
 	
 	protected boolean participateQuest;
 	protected volatile boolean participateTournament;
@@ -34,10 +35,13 @@ public class Player{
 	public Rank getRank() { return this.rank; }
 	public int getShields() { return this.shields; }
 	public boolean participantInTournament() { return participateTournament; }
+	public void participateTour(boolean b) { participateTournament = b; }
 	public int numberOfHandCards() { return playerHandCards.size(); }
 	public int numberOfActiveCards() { return playerActiveCards.size(); }
 	public LinkedList<AdventureCard> getHand() { return this.playerHandCards; }
 	public LinkedList<AdventureCard> getActive() { return this.playerActiveCards; }
+	public void setHand(LinkedList<AdventureCard> c) { playerHandCards = c; }         //used in Tournament testing
+	public void setActiveHand(LinkedList<AdventureCard> c) { playerActiveCards = c; } //used in Tournament testing
 
 	public boolean drawCard(AdventureDeck d) {
 		
@@ -53,6 +57,22 @@ public class Player{
 			card.setOwner(this);
 			card.setState(State.HAND);
 			return true;
+		}
+	}
+	
+	public void discardWeaponsActive(AdventureDeck d) {
+		for(int i = 0; i < playerActiveCards.size(); i++) {
+			if(playerActiveCards.get(i) instanceof WeaponCard) {
+				discardCard(playerActiveCards.get(i), d);
+			}
+		}
+	}
+	
+	public void discardAmoursActive(AdventureDeck deck) {
+		for(int i = 0; i < playerActiveCards.size(); i++) {
+			if(playerActiveCards.get(i) instanceof AmourCard) {
+				discardCard(playerActiveCards.get(i), deck);
+			}
 		}
 	}
 	
@@ -74,7 +94,7 @@ public class Player{
 		return (playerHandCards.size() > 12);
 	}
 	
-	protected boolean exists(String cardName) {
+	protected boolean existsActive(String cardName) {
 		for(int i = 0; i < playerActiveCards.size(); i++) {
 			if(playerActiveCards.get(i).getName().equalsIgnoreCase(cardName))
 				return true;
@@ -90,10 +110,11 @@ public class Player{
 			c.setState(State.PLAY);
 			log.info("played card " + c.getName());
 			return true;
+		}else {
+			//TODO: conditions where player cannot play card
+			log.info("Failed you do now have this card " + c.getName());
+			return false; 
 		}
-		//TODO: conditions where player cannot play card
-		log.info("Failed you do now have this card " + c.getName());
-		return false;
 	}
 	
 	public boolean discardCard(AdventureCard c, AdventureDeck d) {
