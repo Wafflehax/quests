@@ -80,6 +80,28 @@ public class Event {
 		}
 		else if(evnt.getName() ==  "Queen's Favor") {
 			System.out.printf("Running event %s\n", evnt.getName());
+			for(int i=0; i<players.getNumPlayers(); i++)
+				System.out.printf("%s's Rank: %s\n", players.getPlayerAtIndex(i).getName(), players.getPlayerAtIndex(i).getRank());
+
+			ArrayList<Player> lowestRank = new ArrayList<Player>();
+			lowestRank.add(0, players.getPlayerAtIndex(0));
+			for(int i=1; i<players.getNumPlayers(); i++) {
+				if(lowestRank.get(0).getRank().compareTo(players.getPlayerAtIndex(i).getRank()) == 1) {
+					lowestRank.clear();
+					lowestRank.add(0, players.getPlayerAtIndex(i));
+				}
+				else if(lowestRank.get(0).getRank().compareTo(players.getPlayerAtIndex(i).getRank()) == 0) {
+					lowestRank.add(lowestRank.size(), players.getPlayerAtIndex(i));
+				}
+			}
+			for(Player p : lowestRank) {
+				System.out.printf("%s\n ============\n", p.getName());
+				p.printHand();
+				p.drawCard(advDeck);
+				p.drawCard(advDeck);
+				p.printHand();
+			}
+			
 			
 		}
 		else if(evnt.getName() ==  "Court Called to Camelot") {
