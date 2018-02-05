@@ -22,4 +22,14 @@ public class utils{
 			}else
 				return p;
 		}	
+		
+		
+		
+		public static void sleep(int milisecs) {
+			try {
+				Thread.sleep(milisecs); // sleeping to wait for game initialization
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}	
 }

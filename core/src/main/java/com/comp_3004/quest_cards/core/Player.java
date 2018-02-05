@@ -60,6 +60,22 @@ public class Player{
 		}
 	}
 	
+	public void discardWeaponsActive(AdventureDeck d) {
+		for(int i = 0; i < playerActiveCards.size(); i++) {
+			if(playerActiveCards.get(i) instanceof WeaponCard) {
+				discardCard(playerActiveCards.get(i), d);
+			}
+		}
+	}
+	
+	public void discardAmoursActive(AdventureDeck deck) {
+		for(int i = 0; i < playerActiveCards.size(); i++) {
+			if(playerActiveCards.get(i) instanceof AmourCard) {
+				discardCard(playerActiveCards.get(i), deck);
+			}
+		}
+	}
+	
 	protected AdventureCard getHandCard(int pos) {
 		return playerHandCards.get(pos);
 	}
@@ -94,10 +110,11 @@ public class Player{
 			c.setState(State.PLAY);
 			log.info("played card " + c.getName());
 			return true;
+		}else {
+			//TODO: conditions where player cannot play card
+			log.info("Failed you do now have this card " + c.getName());
+			return false; 
 		}
-		//TODO: conditions where player cannot play card
-		log.info("Failed you do now have this card " + c.getName());
-		return false;
 	}
 	
 	public boolean discardCard(AdventureCard c, AdventureDeck d) {

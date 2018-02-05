@@ -57,12 +57,12 @@ public class GameModel{
 	}
 	
 	public void cardPressed(int pos) {
-		if(pos < 0 || pos > players.current().playerHandCards.size()-1) {
-			log.info("invalid card, does not match hand");
-		}else {
 			if(match == null) {
 				log.info("Pressed card on null match error");
 			}else {
+				if(pos < 0 || pos > match.getPlayers().current().playerHandCards.size()-1) {
+					log.info("invalid card, does not match hand");
+				}else {
 				AdventureCard c = match.getPlayers().current().getHandCard(pos);
 				if(getCardMode() == cardModes.DISCARD) {
 					log.info("Press mode: DISCARD");
@@ -76,6 +76,23 @@ public class GameModel{
 					log.info("UNKNOWN Press mode");
 				}	
 			}
+		}
+	}
+	
+	// playCard, discardCard to replace cardPressed(int pos)
+	public void playCard(AdventureCard c) {
+		if(match == null) {
+			log.info("Attempted to play a card on a null match(no game). Allow this in future?");
+		}else {
+			match.playCard(c);
+		}
+	}
+	
+	public void discardCard(AdventureCard c) {
+		if(match == null) {
+			log.info("Attempted to discard card on null game(no game). Allow this in future?");
+		}else {
+			match.discardCard(c);
 		}
 	}
 	

@@ -2,6 +2,8 @@ package com.comp_3004.quest_cards.core;
 
 import java.util.ArrayList;
 
+import com.comp_3004.quest_cards.cards.AdventureDeck;
+
 
 
 public class Players{
@@ -56,6 +58,18 @@ public class Players{
 	
 	public Player current() {
 		return players.get(position);
+	}
+	
+	public void discardAllWeapons(AdventureDeck d) {
+		for(int i = 0; i < players.size(); i++) {
+			players.get(i).discardWeaponsActive(d);
+		}
+	}
+	
+	public void discardAllAmour(AdventureDeck d) {
+		for(int i = 0; i < players.size(); i++) {
+			players.get(i).discardAmoursActive(d);
+		}
 	}
 	
 	public Players getTournamentParticipants() {

@@ -7,5 +7,9 @@ public class TournamentCard extends StoryCard {
 		this.name = n;
 		this.bonusShields = b;
 	}
+	
+	public int getBonusSh() {
+		return bonusShields;
+	}
 
 }

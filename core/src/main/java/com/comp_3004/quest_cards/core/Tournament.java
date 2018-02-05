@@ -59,7 +59,22 @@ public class Tournament extends GameMatch {
 		System.out.println("-----------------\nPlayer: " + players.current().getName() + " has drawn :" 
 				+ " "+ currTour.getType() + " => " + currTour.getName());
 		determineParticipants();
-		players = players.getTournamentParticipants();
+		Players tourjoiners = players.getTournamentParticipants();
+		players = tourjoiners;
+		int startingSize = players.size(); 
+		System.out.print("START SIZE" + startingSize +"\n");
+		while(playRound(startingSize)) {  }
+		
+		//remove amour after done.
+		tourjoiners.discardAllAmour(advDeck);
+		
+		players = mainTurns; //return to position of main game before tournament, and go to next player
+		players.next();
+	}
+	
+	public boolean playRound(int startingSize) {
+		//not tested 
+		boolean continu = false; //whether to play next round (tie)
 		if(players.isEmpty() || players.size() == 1) {
 			log.info("Tournament not held not enough participants: " + players.size());
 		}else {
@@ -74,13 +89,29 @@ public class Tournament extends GameMatch {
 				cardMode = cardModes.NONE;
 			}
 			log.info("Turning over cards and calculating battle points");
-			//Players winners = determineWin(players);
-			//get stage decide if another game
-			lock.sleepGame(); 
-			
+			players = determineWin(players); //weapons discarded
+			if(players.size() > 1) { //tie
+				if(stage == T_DOUBLE_TIE) {
+					log.info("Double Tie, everyone here gets shields and bonus");
+					for(int i = 0; i < players.size(); i++) {
+						int sh = startingSize + currTour.getBonusSh();
+						log.info("player ==> " + players.players.get(0) + " won, " + sh + " sheilds");	
+					}
+					return false;
+				}else if(stage == T_TIE) { //first tie
+					log.info("Tie, playing tie-breaking round next");	
+					return true;
+				}
+			}
+			else { //Single winner gets points plus bonus, notify controller
+				int numSh = startingSize + currTour.getBonusSh();
+				log.info("player ==> " + players.players.get(0).getName() + " won, " + numSh + " sheilds");
+				players.current().addShields(numSh);
+				
+				return false;
+			}
 		}
-		players = mainTurns; //return to position of main game before tournament, and go to next player
-		players.next();
+		return continu;
 	}
 	
 	//Assumes input players are participating
@@ -94,14 +125,14 @@ public class Tournament extends GameMatch {
 			pairs.add(calcedPoints);
 		}
 		pairs = utils.getMaxIntPairs(pairs);
-		if(p.size() == 1) { // single winner
-			Player win = players.players.get(0);
+		if(pairs.size() == 1) { // single winner
+			Player win = pairs.get(0).player;
 			log.info("Player => " + win.getName() + " won " + pairs.get(0).value + " battlepoints");
 			ArrayList<Player> list = new ArrayList<Player>();
 			list.add(pairs.get(0).player);
 			result = new Players(0, 1, list);
 		}
-		else {
+		else { //tie
 			stage++;
 			ArrayList<Player> list = new ArrayList<Player>();
 			int sizeP = 0;
@@ -110,10 +141,10 @@ public class Tournament extends GameMatch {
 				sizeP++;
 			}
 			result = new Players(0, sizeP, list);
-			log.info("Tie, not coded yet");
+			log.info("Tie");
 		}
+		p.discardAllWeapons(advDeck);
 		return result; // return winner, tied players
-		
 	}
 	
 	
@@ -153,6 +184,10 @@ public class Tournament extends GameMatch {
 		}
 		else
 			log.info("Did not play card: invalid");	
+	}
+	
+	public void discardCard(AdventureCard c) {
+		players.current().discardCard(c, advDeck);
 	}
 	
 	private void determineParticipants() {

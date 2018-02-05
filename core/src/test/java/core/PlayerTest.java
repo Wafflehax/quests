@@ -1,8 +1,16 @@
 package core;
 
+import java.util.LinkedList;
+import java.util.Stack;
+
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureCard.State;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
+import com.comp_3004.quest_cards.cards.AllyCard;
+import com.comp_3004.quest_cards.cards.AmourCard;
+import com.comp_3004.quest_cards.cards.Card;
+import com.comp_3004.quest_cards.cards.FoeCard;
+import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.core.Player;
 import com.comp_3004.quest_cards.core.Player.Rank;
 
@@ -121,4 +129,82 @@ public class PlayerTest extends TestCase{
 		assertEquals(Rank.KNIGHT_OF_THE_ROUND_TABLE, p.getRank());
 	}
 
+	public void testDiscardWeaponsActive() {
+	//test discardWeaponsActive
+			Player p0 = new Player("Player 0"); // rank is SQUIRE = 5 bp 
+			Stack<AdventureCard> p1c = new Stack<AdventureCard>();   //                   ,Sword,A(King Arthur),Amour,Horse,F(black knight)
+			
+			AdventureCard c0 = new WeaponCard("Sword", 10); 
+			AdventureCard c1 = new AllyCard("King Arthur", 10,2);
+			AdventureCard c2 =	new AmourCard();
+			AdventureCard c3 = new WeaponCard("Horse", 10);
+			AdventureCard c4 = new FoeCard("Black Knight", 25, 35);
+			
+			p1c.add(c0);
+			p1c.add(c1);
+			p1c.add(c2);
+			p1c.add(c3);
+			p1c.add(c4);
+			
+			AdventureDeck d = new AdventureDeck(p1c);
+			p0.drawCard(d);   //takes from front 
+			p0.drawCard(d);
+			p0.drawCard(d);
+			p0.drawCard(d);
+			p0.drawCard(d); // order =>Black Knight,Horse,Amour,King Aruthur,Sword
+			
+			p0.playCard(c0);
+			p0.playCard(c1);
+			p0.playCard(c2);
+			p0.playCard(c3);
+			p0.playCard(c4);
+			
+			p0.discardWeaponsActive(d);
+			
+			LinkedList<AdventureCard> leftover = p0.getActive();
+			assertEquals(3, leftover.size());
+			assertEquals(true, leftover.contains(c1));
+			assertEquals(true, leftover.contains(c2));
+			assertEquals(true, leftover.contains(c4));
+	}
+	
+	public void testDiscardAmourActive() {
+		//test discardWeaponsActive
+				Player p0 = new Player("Player 0"); // rank is SQUIRE = 5 bp 
+				Stack<AdventureCard> p1c = new Stack<AdventureCard>();   //                   ,Sword,A(King Arthur),Amour,Horse,F(black knight)
+				
+				AdventureCard c0 = new WeaponCard("Sword", 10); 
+				AdventureCard c1 = new AllyCard("King Arthur", 10,2);
+				AdventureCard c2 =	new AmourCard();
+				AdventureCard c3 = new WeaponCard("Horse", 10);
+				AdventureCard c4 = new FoeCard("Black Knight", 25, 35);
+				
+				p1c.add(c0);
+				p1c.add(c1);
+				p1c.add(c2);
+				p1c.add(c3);
+				p1c.add(c4);
+				
+				AdventureDeck d = new AdventureDeck(p1c);
+				p0.drawCard(d);   //takes from front 
+				p0.drawCard(d);
+				p0.drawCard(d);
+				p0.drawCard(d);
+				p0.drawCard(d); // order =>Black Knight,Horse,Amour,King Aruthur,Sword
+				
+				p0.playCard(c0);
+				p0.playCard(c1);
+				p0.playCard(c2);
+				p0.playCard(c3);
+				p0.playCard(c4);
+				
+				p0.discardAmoursActive(d);
+				
+				LinkedList<AdventureCard> leftover = p0.getActive();
+				assertEquals(4, leftover.size());
+				assertEquals(true, leftover.contains(c0));
+				assertEquals(true, leftover.contains(c1));
+				assertEquals(true, leftover.contains(c3));
+				assertEquals(true, leftover.contains(c4));
+		}
 }

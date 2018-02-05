@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AllyCard;
 import com.comp_3004.quest_cards.cards.AmourCard;
+import com.comp_3004.quest_cards.cards.Card;
 import com.comp_3004.quest_cards.cards.FoeCard;
 import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
@@ -24,6 +25,7 @@ import com.comp_3004.quest_cards.core.GameModel.cardModes;
 
 import junit.framework.TestCase;
 import utils.IntPlayerPair;
+import utils.utils;
 
 public class TournamentTest extends TestCase{
 	
@@ -56,7 +58,6 @@ public class TournamentTest extends TestCase{
 		}
 	}
 	
-	
 	public void testTournament2() {
 		int time = 100;
 		//Test Tournament joiners having too many cards, testing discardCardIfTooMany()
@@ -72,16 +73,18 @@ public class TournamentTest extends TestCase{
 		});
 		thread.start();
 		
-		sleep(time);
+		utils.sleep(time);
 		game.setParticipation(false); // p0 no
-		sleep(time);
+		utils.sleep(time);
 		game.setParticipation(false);//p1 no
-		sleep(time);
+		utils.sleep(time);
 		Player player = game.getPlayers().current();
 		game.setParticipation(true);  //p2 yes  player has to many cards by 1 //game blocked until discarded
 		assertEquals(true, player.tooManyHandCards());
-		sleep(time);
-		game.cardPressed(0);
+		utils.sleep(time);
+		//game.cardPressed(0);
+		game.discardCard(game.getMatch().getPlayers().current().getHand().get(0));
+		
 		assertEquals(false, player.tooManyHandCards()); //discarded correct number now
 		game.done(); //done turn	
 	}
@@ -110,25 +113,28 @@ public class TournamentTest extends TestCase{
 		});
 		thread.start();
 		
-		sleep(time);
+		utils.sleep(time);
 		game.setParticipation(false); // p0 no
-		sleep(time);
+		utils.sleep(time);
 		game.setParticipation(false);//p1 no
-		sleep(time);
+		utils.sleep(time);
 		game.setParticipation(true);  //p2 yes  player has to many cards by 1 //game blocked until discarded
-		sleep(time);
-		game.cardPressed(0);
+		utils.sleep(time);
+		//game.cardPressed(0);
+		game.discardCard(game.getMatch().getPlayers().current().getHand().get(0));
 		game.done(); //done turn
-		sleep(time);
+		utils.sleep(time);
 		game.setParticipation(true);  //p3 yes good hand <=12
-		sleep(time);
+		utils.sleep(time);
 		//now player2's turn
-		game.cardPressed(0);
+		//game.cardPressed(0);
+		game.discardCard(game.getMatch().getPlayers().current().getHand().get(0));
 		game.done();
-		sleep(time);
+		utils.sleep(time);
 		Player curr = game.getMatch().getPlayers().current();
-		game.cardPressed(0);
-		sleep(time);
+		//game.cardPressed(0);
+		game.playCard(game.getMatch().getPlayers().current().getHand().get(0));
+		utils.sleep(time);
 		LinkedList<AdventureCard> cards2 = curr.getActive();
 		boolean r = (AdventureCard)cards2.get(0) == excalibur;
 		assertEquals(true, r);		
@@ -160,25 +166,27 @@ public class TournamentTest extends TestCase{
 		});
 		thread.start();
 		
-		sleep(time);
+		utils.sleep(time);
 		game.setParticipation(false); // p0 no
-		sleep(time);
+		utils.sleep(time);
 		game.setParticipation(false);//p1 no
-		sleep(time);
+		utils.sleep(time);
 		game.setParticipation(true);  //p2 yes  player has to many cards by 1 //game blocked until discarded
-		sleep(time);
-		game.cardPressed(0);
+		utils.sleep(time);
+		//game.cardPressed(0);
+		game.discardCard(game.getMatch().getPlayers().current().getHand().get(0));
 		game.done(); //done turn
-		sleep(time);
+		utils.sleep(time);
 		game.setParticipation(true);  //p3 yes good hand <=12
-		sleep(time);
+		utils.sleep(time);
 		//now player2's turn
-		game.cardPressed(0);
+		//game.cardPressed(0);
+		game.discardCard(game.getMatch().getPlayers().current().getHand().get(0));
 		game.done();
-		sleep(time);
+		utils.sleep(time);
 		Player curr = game.getMatch().getPlayers().current();
 		game.getMatch().playCard(excalibur);
-		sleep(time);
+		utils.sleep(time);
 		LinkedList<AdventureCard> cards2 = curr.getActive();
 		assertEquals(0, cards2.size());	
 	}
@@ -272,12 +280,4 @@ public class TournamentTest extends TestCase{
 		assertEquals(result3.size(), 1);
 		assertEquals(true, result3.getPlayers().contains(p00));
 	}
-	
-	public void sleep(int milisecs) {
-		try {
-			Thread.sleep(milisecs); // sleeping to wait for game initialization
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}	
 }
