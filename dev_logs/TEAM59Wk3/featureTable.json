@@ -1,0 +1,216 @@
+[
+  {
+    "ID": "F1",
+    "Description": "Adventure cards",
+    "Status": "Completed",
+    "Date": "2018-01-22"
+  },
+  {
+    "ID": "F2",
+    "Description": "Story cards",
+    "Status": "Completed",
+    "Date": "2018-01-22"
+  },
+  {
+    "ID": "F3",
+    "Description": "Adventure deck",
+    "Status": "Completed",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "F4",
+    "Description": "Story deck",
+    "Status": "Completed",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "F5",
+    "Description": "Player",
+    "Status": "Completed",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "F6",
+    "Description": "Tournaments",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F7",
+    "Description": "UI(basic)",
+    "Status": "Planned",
+    "Date": ""
+  },
+  
+  {
+    "ID":"F7.1",
+    "Description": "Display human player adventure cards",
+    "Status":"finished",
+    "Date":"30-01-2018"
+  },
+
+  {
+    "ID":"F7.2",
+    "Description":"Display human player hero card",
+    "Status":"planned",
+    "Date":""
+  },
+
+
+  {
+    "ID":"F7.2.1",
+    "Description":"Display human player's number of shields",
+    "Status":"planned",
+    "Date":""
+  },
+
+
+  {
+    "ID":"F7.2.2",
+    "Description":"Display human player's active ally/weapon cards alongside hero",
+    "Status":"planned",
+    "Date":""
+  },
+
+  {
+    "ID":"F7.3",
+    "Description":"Display Adventure deck & adventure discard pile",
+    "Status":"planned",
+    "Date":""
+  },
+
+  {
+    "ID":"F7.4",
+    "Description":"Display Story deck & story discard pile",
+    "Status":"planned",
+    "Date":""
+  },
+
+  {
+    "ID": "F8",
+    "Description": "Game menu",
+    "Status": "Planned",
+    "Date": ""
+  },
+
+  {
+    "ID": "F9",
+    "Description": "Events",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F10",
+    "Description": "Winning Condition",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F11",
+    "Description": "Turn sequence",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F12",
+    "Description": "Hot seat play",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F13",
+    "Description": "Tournament ties",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F14",
+    "Description": "Tournament double ties",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F15",
+    "Description": "Sponsoring/setting up a Quest",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F16",
+    "Description": "Playing a Quest",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F17",
+    "Description": "Quest end/winning conditions",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F18",
+    "Description": "Allies with conditional battle points",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F19",
+    "Description": "Tests/bIDs",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F20",
+    "Description": "Allies with conditional bIDs",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F21",
+    "Description": "Event - Kings Recognition",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F22",
+    "Description": "Mordred's ability",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F23",
+    "Description": "Merlin's ability",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F24",
+    "Description": "AI",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F25",
+    "Description": "UI sound effects",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F26",
+    "Description": "UI animations",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F27",
+    "Description": "Save game",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F28",
+    "Description": "Resume game",
+    "Status": "Planned",
+    "Date": ""
+  }
+]
