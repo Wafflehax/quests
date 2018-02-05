@@ -1,7 +1,26 @@
 {
-  "Code": ["F6.a gathered player participation in tournament","F6.b Handle entering players to draw from adventure deck players with too many cards must discard to hold 12","basic text implementation of tournaments"],
-  "Research": ["view controller design pattern"],
-  "Next week":["F6.a","F6.b","F6.c Find out winner and apply battle points to winner","F23 Tournaments (tie)", "F24 Tournaments (double tie)"],
-  "Features":["none complete this week need testing"],
-  "Hours Spent":["10"]
-} 
+  "Code": [
+    "F3.a Adventure deck: initialization",
+    "F3.b Adventure deck: shuffling",
+    "F3.c Adventure deck: draw card",
+    "F3.d Adventure deck: shuffle discard pile into deck",
+    "F3.e Adventure deck: discard",
+    "F4.a Story deck: initialization",
+    "F4.b Story deck: shuffling",
+    "F4.c Story deck: draw card",
+    "F4.d Story deck: shuffle discard pile into deck",
+    "F4.e Story deck: discard",
+    "F5.a Player: initialization",
+    "F5.b Player: draw card",
+    "F5.c Player: draw card over hand limit",
+    "F5.d Player: discard from hand",
+    "F5.e Player: discard from play",
+    "F5.f Player: add shields"
+  ],
+  "Research": ["MVC Design Pattern"],
+  "NextWeek": [
+    "F9 Events",
+    "F7 Implementing MVC"
+  ],
+  "Hours": 13
+}
