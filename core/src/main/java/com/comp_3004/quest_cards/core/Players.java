@@ -28,7 +28,6 @@ public class Players{
 
 	// getter/setter
 	protected boolean isEmpty() {		return players.isEmpty();		}
-	public int size() { return players.size(); }
 	public int getNumPlayers() { return this.players.size(); }
 	public ArrayList<Player> getPlayers() { return this.players; }
 	

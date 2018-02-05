@@ -61,7 +61,7 @@ public class Tournament extends GameMatch {
 		determineParticipants();
 		Players tourjoiners = players.getTournamentParticipants();
 		players = tourjoiners;
-		int startingSize = players.size(); 
+		int startingSize = players.getNumPlayers(); 
 		System.out.print("START SIZE" + startingSize +"\n");
 		while(playRound(startingSize)) {  }
 		
@@ -75,11 +75,11 @@ public class Tournament extends GameMatch {
 	public boolean playRound(int startingSize) {
 		//not tested 
 		boolean continu = false; //whether to play next round (tie)
-		if(players.isEmpty() || players.size() == 1) {
-			log.info("Tournament not held not enough participants: " + players.size());
+		if(players.isEmpty() || players.getNumPlayers() == 1) {
+			log.info("Tournament not held not enough participants: " + players.getNumPlayers());
 		}else {
-			log.info("Tournament starting , # players: " + players.size());//player plays their cards face down			
-			for(int i = 0; i < players.size(); i++) {
+			log.info("Tournament starting , # players: " + players.getNumPlayers());//player plays their cards face down			
+			for(int i = 0; i < players.getNumPlayers(); i++) {
 				//state = gamestates.PLAYER_TURN;
 				cardMode = cardModes.PLAY;
 				log.info("Player => " + players.current().getName() + " Its your turn play your hand");
@@ -90,10 +90,10 @@ public class Tournament extends GameMatch {
 			}
 			log.info("Turning over cards and calculating battle points");
 			players = determineWin(players); //weapons discarded
-			if(players.size() > 1) { //tie
+			if(players.getNumPlayers() > 1) { //tie
 				if(stage == T_DOUBLE_TIE) {
 					log.info("Double Tie, everyone here gets shields and bonus");
-					for(int i = 0; i < players.size(); i++) {
+					for(int i = 0; i < players.getNumPlayers(); i++) {
 						int sh = startingSize + currTour.getBonusSh();
 						log.info("player ==> " + players.players.get(0) + " won, " + sh + " sheilds");	
 					}
@@ -119,7 +119,7 @@ public class Tournament extends GameMatch {
 		Stack<IntPlayerPair> pairs = new Stack<IntPlayerPair>();
 		Players result;
 		String out = "";
-		for(int i = 0; i < p.size(); p.next(), i++) {
+		for(int i = 0; i < p.getNumPlayers(); p.next(), i++) {
 			int battlePts = calcBattlePoints(p.current());
 			IntPlayerPair calcedPoints = new IntPlayerPair(battlePts, p.players.get(i)); // <pts, player>
 			pairs.add(calcedPoints);

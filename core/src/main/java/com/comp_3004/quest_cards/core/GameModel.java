@@ -15,8 +15,8 @@ public class GameModel{
 	static Logger log = Logger.getLogger(GameModel.class); //log4j logger
 	public static final byte MAX_HAND_SIZE = 12;
 	
-	protected AdventureDeck advDeck;
-	protected StoryDeck storyDeck;
+	private AdventureDeck advDeck;
+	private StoryDeck storyDeck;
 	protected volatile GameMatch match; //calling quests and tours matches
 	private int numPlayers;
 	private volatile Players players = new Players(0, numPlayers, new ArrayList<Player>());
@@ -27,13 +27,18 @@ public class GameModel{
 	//getters setters
 	public Players getPlayers() { return players; }
 	public void setPlayers(Players p) { players = p; }
+	public Player getPlayerAtIndex(int i) { return this.players.getPlayers().get(i); }
+	public int getNumPlayers() { return this.players.getNumPlayers(); }
 	public Player getcurrentTurn() { return players.current();}
+	public AdventureDeck getAdvDeck() { return this.advDeck; }
+	public StoryDeck getStoryDeck() { return this.storyDeck; }
 	public cardModes getCardMode() { 
 		if(match == null)
 			return cardModes.NONE; //no match no playing cards
 		return match.getcardMode(); 
 	}
 	public GameMatch getMatch() { return match; }
+
 	
 	// constructor
 	public GameModel() {
@@ -80,11 +85,13 @@ public class GameModel{
 	}
 	
 	// playCard, discardCard to replace cardPressed(int pos)
-	public void playCard(AdventureCard c) {
+	public boolean playCard(Player p, AdventureCard c) {
 		if(match == null) {
 			log.info("Attempted to play a card on a null match(no game). Allow this in future?");
+			return false;
 		}else {
-			match.playCard(c);
+			match.playCard(c);	//TODO: pass the player that played the card into the method
+			return true;			//TODO: have the match.playCard return a boolean (success or fail)
 		}
 	}
 	

@@ -133,7 +133,7 @@ public class TournamentTest extends TestCase{
 		utils.sleep(time);
 		Player curr = game.getMatch().getPlayers().current();
 		//game.cardPressed(0);
-		game.playCard(game.getMatch().getPlayers().current().getHand().get(0));
+		game.playCard(curr, game.getMatch().getPlayers().current().getHand().get(0));
 		utils.sleep(time);
 		LinkedList<AdventureCard> cards2 = curr.getActive();
 		boolean r = (AdventureCard)cards2.get(0) == excalibur;
@@ -249,7 +249,7 @@ public class TournamentTest extends TestCase{
 		Players players = new Players(0, pList.size(), pList);
 		
 		Players result = t.determineWin(players);
-		assertEquals(result.size(), 4);
+		assertEquals(result.getNumPlayers(), 4);
 		assertEquals(true,result.getPlayers().contains(p0));
 		assertEquals(true,result.getPlayers().contains(p1));
 		assertEquals(true,result.getPlayers().contains(p2));
@@ -258,7 +258,7 @@ public class TournamentTest extends TestCase{
 		assertEquals(t.getStage(), Tournament.T_TIE);
 		
 		Players result2 = t.determineWin(players);
-		assertEquals(result2.size(), 4);
+		assertEquals(result2.getNumPlayers(), 4);
 		assertEquals(true,result2.getPlayers().contains(p0));
 		assertEquals(true,result2.getPlayers().contains(p1));
 		assertEquals(true,result2.getPlayers().contains(p2));
@@ -277,7 +277,7 @@ public class TournamentTest extends TestCase{
 		pList2.add(p00); pList2.add(p01); pList2.add(p02); pList2.add(p03);
 		Players pl = new Players(0, pList2.size(), pList2);
 		Players result3 = t2.determineWin(pl);
-		assertEquals(result3.size(), 1);
+		assertEquals(result3.getNumPlayers(), 1);
 		assertEquals(true, result3.getPlayers().contains(p00));
 	}
 }

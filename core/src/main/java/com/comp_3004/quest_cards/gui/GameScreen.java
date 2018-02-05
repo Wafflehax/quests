@@ -49,3 +49,15 @@ public class GameScreen extends Group implements Disposable {
     manager.unload("sprites/backgrounds.atlas");
   }
 }
+
+//setHero()
+//setShields()
+//setHandCards()
+//setActiveCards()
+//setAdvDeck()
+//setAdvDiscardPile()
+//setStoryDeck()
+//setStoryDiscardPile()
+//
+
+
