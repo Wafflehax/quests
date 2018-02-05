@@ -10,5 +10,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: com.badlogicgames.gdx:gdx:1.2.0" level="project" />
+    <orderEntry type="library" name="Maven: antlr:antlr:2.7.2" level="project" />
+    <orderEntry type="library" name="tween-engine-api" level="project" />
+    <orderEntry type="library" name="tween-engine-api-sources" level="project" />
   </component>
 </module>

@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
 import java.awt.*;
 
@@ -12,14 +11,15 @@ import java.awt.*;
 public class MenuState extends State {
     private Texture background;
     private Texture play;
-
-
+    //private Sound music;
+    //private Sound click; //TODO
 
 
     public MenuState(GameStateManager gsm)
     {super(gsm);
     background = new Texture("bg-castle.jpg");
     play = new Texture("NewGame.png");
+    Gdx.app.log("MenuState(gsm)","MenuState constructor runs");
     }
 
 
