@@ -6,4 +6,5 @@ public interface Loadable extends Disposable{
 
   void load();
   void dispose();
+  boolean isLoaded();
 }

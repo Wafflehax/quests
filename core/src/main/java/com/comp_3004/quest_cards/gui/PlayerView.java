@@ -4,17 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+public class PlayerView extends Table {
 
-import static com.comp_3004.quest_cards.gui.Config.PlayerView.*;
-
-public class PlayerView extends Group{
-
-  private Map<String, Class> dependencies;
   private PlayerView instance;
   private DeckView playerAdventureCards;
   private CardView hero;
@@ -22,25 +16,28 @@ public class PlayerView extends Group{
   private Image background;
   private AssetManager manager;
 
-  private PlayerView(){
-    dependencies = new LinkedHashMap<String, Class>();
-    dependencies.put(Config.Assets.BACKGROUND_ATLAS, TextureAtlas.class);
-    dependencies.put(Config.Assets.SPRITE_ATLAS, TextureAtlas.class);
+  private PlayerView() {
   }
 
-  private void init(AssetManager manager){
+  private void init(AssetManager manager) {
+
+    //setBounds(Config.PlayerView.X, Config.PlayerView.Y, Config.PlayerView.WIDTH, Config.PlayerView.HEIGHT);
 
     this.manager = manager;
+    //setBounds(0, 0, getWidth(), getHeight());
+
+    System.out.printf("Player view width: %f\n", getWidth());
+    System.out.printf("Player view height: %f\n", getHeight());
+    System.out.printf("Player view z-index: %d\n", getZIndex());
+    System.out.printf("Player view X: %f\n", getX());
+    System.out.printf("Player view y: %f\n", getY());
+
     TextureAtlas backgrounds = manager.get(Config.Assets.BACKGROUND_ATLAS, TextureAtlas.class);
     TextureAtlas sprites = manager.get(Config.Assets.SPRITE_ATLAS, TextureAtlas.class);
 
-    //Init
-    setSize(WIDTH, HEIGHT);
-    setPosition(5,5);
-
     //Init background
 
-    initBackground(backgrounds);
+    setBackground(new Image(backgrounds.findRegion("player-area")).getDrawable());
 
     //Init widgets
 
@@ -49,35 +46,31 @@ public class PlayerView extends Group{
     debugCards();
   }
 
-  private void initBackground(TextureAtlas atlas){
-
-    background = new Image(atlas.findRegion("player-area"));
-    background.setBounds(getX(), getY(), getWidth(), getHeight());
-    addActor(background);
-  }
-
-  private void initAdventureDeck(){
+  private void initAdventureDeck() {
 
     DeckView.DisplayStrategy deckDisplay = new SpillingDeckStrategy(
-            ADVENTURE_CARDS_MIN_OVERLAP,
-            ADVENTURE_CARDS_MAX_OVERLAP);
+        Config.PlayerView.ADVENTURE_CARDS_MIN_OVERLAP,
+        Config.PlayerView.ADVENTURE_CARDS_MAX_OVERLAP);
 
     playerAdventureCards = new DeckView(deckDisplay);
-    playerAdventureCards.setSize(ADVENTURE_SPILLDECK_WIDTH, Config.CardView.CARD_HEIGHT);
-    playerAdventureCards.setPosition(getX() + PADDING_HORIZONTAL, getY() + getHeight() / 2 - Config.CardView.CARD_HEIGHT / 2);
-    playerAdventureCards.setColor(Color.GREEN);
+    playerAdventureCards.setBounds(
+        Config.PlayerView.PADDING_HORIZONTAL,
+        Config.PlayerView.PADDING_VERTICAL,
+        Config.PlayerView.ADVENTURE_SPILLDECK_WIDTH,
+        Config.CardView.CARD_HEIGHT);
+
     addActor(playerAdventureCards);
   }
 
-  private void initShields(TextureAtlas atlas){
+  private void initShields(TextureAtlas atlas) {
 
     shields = new Image(atlas.findRegion("shield"));
     shields.setSize(Config.PlayerView.SHIELD_WIDTH, Config.PlayerView.SHIELD_HEIGHT);
 
-    float x = getWidth()  - Config.PlayerView.PADDING_HORIZONTAL - shields.getWidth();
+    float x = getWidth() - Config.PlayerView.PADDING_HORIZONTAL - shields.getWidth();
     float y = getHeight() + Config.PlayerView.PADDING_VERTICAL;
 
-    shields.setPosition(x,y);
+    shields.setPosition(x, y);
 
     System.out.printf("Shields x: %f\n", x);
     System.out.printf("Shields y: %f\n", y);
@@ -86,7 +79,7 @@ public class PlayerView extends Group{
     addActor(shields);
   }
 
-  public PlayerView setHero(CardView hero){
+  public PlayerView setHero(CardView hero) {
 
     //Replace old hero
 
@@ -96,18 +89,18 @@ public class PlayerView extends Group{
     //Add to group
 
     addActor(hero);
-    hero.setPosition(getX() + getWidth() - hero.getWidth() - Config.PlayerView.PADDING_HORIZONTAL, getY() + Config.PlayerView.PADDING_VERTICAL);
+    hero.setPosition(getWidth() - hero.getWidth() - Config.PlayerView.PADDING_HORIZONTAL, Config.PlayerView.PADDING_VERTICAL);
     return this;
   }
 
-  public void debugCards(){
+  public void debugCards() {
 
     TextureAtlas atlas = manager.get(Config.Assets.SPRITE_ATLAS, TextureAtlas.class);
 
     CardView[] cards = new CardView[12];
 
-    for(int i = 0; i < cards.length; i++){
-      cards[i] =  new CardView(atlas.findRegion("A_King_Arthur"));
+    for (int i = 0; i < cards.length; i++) {
+      cards[i] = new CardView(atlas.findRegion("A_King_Arthur"));
     }
 
     setCards(cards);
@@ -119,47 +112,40 @@ public class PlayerView extends Group{
     return this;
   }
 
-  public static class Builder implements Loadable {
+  public static class Builder extends AbstractBuilder<PlayerView> {
 
-    private Loader loader;
-    private AssetManager manager;
     private boolean isBuilt = false;
     private static final PlayerView INSTANCE = new PlayerView();
 
-    public Builder(AssetManager manager){
-      this.manager = manager;
-      loader = new Loader(manager, INSTANCE.dependencies.entrySet());
+    public Builder(AssetManager manager) {
+      super(manager);
+      addDependency(Config.Assets.SPRITE_ATLAS, TextureAtlas.class);
+      addDependency(Config.Assets.BACKGROUND_ATLAS, TextureAtlas.class);
     }
 
-    public PlayerView build(){
+    public void setBounds(float x, float y, float width, float height) {
+      INSTANCE.setBounds(x, y, width, height);
+    }
 
-      if(!loader.isLoaded(manager)){
-        throw new RuntimeException("Required assets have not been loaded");
+    public PlayerView build() {
+
+      if (!isLoaded()) {
+        throw newResourceNotLoadedException();
       }
 
-      if(isBuilt){
+      if (isBuilt) {
         return INSTANCE;
       }
 
-      INSTANCE.init(manager);
+      INSTANCE.init(getAssetManager());
       isBuilt = true;
       return INSTANCE;
     }
-
-    @Override
-    public void load() {
-      loader.load(manager);
-    }
-
-    @Override
-    public void dispose() {
-      loader.unload(manager);
-    }
   }
 
-  public static class TestPlayerView{
+  public static class TestPlayerView {
 
-    public static boolean testBackgroundBounds(PlayerView playerView){
+    public static boolean testBackgroundBounds(PlayerView playerView) {
 
       System.out.printf("Background width: %f\n", playerView.background.getWidth());
       System.out.printf("Background height: %f\n", playerView.background.getHeight());
@@ -169,7 +155,7 @@ public class PlayerView extends Group{
       return false;
     }
 
-    public static boolean testSelfBounds(PlayerView playerView){
+    public static boolean testSelfBounds(PlayerView playerView) {
 
       System.out.printf("Player view width: %f\n", playerView.getWidth());
       System.out.printf("Player view height: %f\n", playerView.getHeight());
@@ -179,7 +165,7 @@ public class PlayerView extends Group{
       return false;
     }
 
-    public static boolean testDeckViewBounds(PlayerView playerView){
+    public static boolean testDeckViewBounds(PlayerView playerView) {
 
       System.out.printf("Adventure card area width: %f\n", playerView.playerAdventureCards.getWidth());
       System.out.printf("Adventure card area height: %f\n", playerView.playerAdventureCards.getHeight());
@@ -190,10 +176,9 @@ public class PlayerView extends Group{
       return false;
     }
 
-    public static boolean runTests(){
+    public static boolean runTests() {
 
       TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("sprites/backgrounds.atlas"));
-
 
 
       atlas.dispose();
