@@ -106,5 +106,47 @@
     "Description": "Test player adding shields",
     "Status": "F5",
     "Date": "2018-01-29"
+  },
+  {
+    "ID": "T19",
+    "Description": "Test Chivalrous Deed event",
+    "Status": "F9",
+    "Date": "2018-02-05"
+  },
+  {
+    "ID": "T20",
+    "Description": "Test Pox event",
+    "Status": "F9",
+    "Date": "2018-02-05"
+  },
+  {
+    "ID": "T20",
+    "Description": "Test Plague event",
+    "Status": "F9",
+    "Date": "2018-02-05"
+  },
+  {
+    "ID": "T21",
+    "Description": "Test Queens Favor event",
+    "Status": "F9",
+    "Date": "2018-02-05"
+  },
+  {
+    "ID": "T22",
+    "Description": "Test Court Called to Camelot event",
+    "Status": "F9",
+    "Date": "2018-02-05"
+  },
+  {
+    "ID": "T23",
+    "Description": "Test Prosperity throughout the realms event",
+    "Status": "F9",
+    "Date": "2018-02-05"
+  },
+  {
+    "ID": "T24",
+    "Description": "Test Player lose shields",
+    "Status": "F5",
+    "Date": "2018-02-05"
   }
 ]

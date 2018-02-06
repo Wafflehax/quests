@@ -128,6 +128,18 @@ public class PlayerTest extends TestCase{
 		assertEquals(10, p.getShields());
 		assertEquals(Rank.KNIGHT_OF_THE_ROUND_TABLE, p.getRank());
 	}
+	
+	public void testLoseShields() {
+		Player p = new Player("player1");
+		p.addShields(4);
+		assertEquals(4, p.getShields());
+		
+		p.loseShields(2);
+		assertEquals(2, p.getShields());
+		
+		p.loseShields(4);
+		assertEquals(0, p.getShields());
+	}
 
 	public void testDiscardWeaponsActive() {
 	//test discardWeaponsActive
