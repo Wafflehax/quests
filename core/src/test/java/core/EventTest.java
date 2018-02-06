@@ -10,7 +10,6 @@ import com.comp_3004.quest_cards.cards.StoryCard;
 import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.core.GameModel;
-import com.comp_3004.quest_cards.core.Player;
 import com.comp_3004.quest_cards.core.Player.Rank;
 
 import junit.framework.TestCase;
@@ -233,6 +232,31 @@ public class EventTest extends TestCase{
 		assertEquals(0, game.getPlayerAtIndex(0).getActive().size());
 		assertEquals(0, game.getPlayerAtIndex(1).getActive().size());
 		assertEquals(3, game.getAdvDeck().getDiscard().size());
+	}
+	
+	public void testProsperityThroughoutTheRealms() {
+		//set up story deck
+		Stack<StoryCard> sd= new Stack<StoryCard>();
+		EventCard prosperity = new EventCard("Prosperity Throughout the Realms");
+		sd.add(prosperity);
+		StoryDeck storyDeck = new StoryDeck(sd);
+		
+		//set up adventure deck
+		Stack<AdventureCard> ad= new Stack<AdventureCard>();
+		for(int i=0; i<8; i++) {
+			WeaponCard sword = new WeaponCard("Sword", 10);
+			ad.push(sword);
+		}
+		AdventureDeck advDeck = new AdventureDeck(ad);
+		
+		GameModel game;
+		
+		//test 1
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		
+		game.eventTest();
+		for(int i=0; i<4; i++)
+			assertEquals(2, game.getPlayerAtIndex(i).getHand().size());
 	}
 
 }
