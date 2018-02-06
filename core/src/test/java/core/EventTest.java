@@ -99,11 +99,41 @@ public class EventTest extends TestCase{
 		assertEquals(2, game.getPlayerAtIndex(0).getShields());
 		assertEquals(1, game.getPlayerAtIndex(1).getShields());
 		assertEquals(2, game.getPlayerAtIndex(2).getShields());
-		assertEquals(0, game.getPlayerAtIndex(3).getShields());
+		assertEquals(0, game.getPlayerAtIndex(3).getShields());	
+	}
+	
+	public void testPlague() {
+		//set up story deck
+		Stack<StoryCard> sd= new Stack<StoryCard>();
+		EventCard plague = new EventCard("Plague");
+		sd.add(plague);
+		StoryDeck storyDeck = new StoryDeck(sd);
 		
+		//set up adventure deck
+		Stack<AdventureCard> ad= new Stack<AdventureCard>();
+		AdventureDeck advDeck = new AdventureDeck(ad);
+		GameModel game;
 		
+		//test 1 - players unable to lose shields
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		game.getPlayerAtIndex(0).addShields(5);
 		
+		game.eventTest();
+		assertEquals(0, game.getPlayerAtIndex(0).getShields());
 		
+		//test 2 - edge case
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		game.getPlayerAtIndex(0).addShields(1);
+		
+		game.eventTest();
+		assertEquals(0, game.getPlayerAtIndex(0).getShields());
+		
+		//test 2 - normal case
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		game.getPlayerAtIndex(0).addShields(4);
+		
+		game.eventTest();
+		assertEquals(2, game.getPlayerAtIndex(0).getShields());
 	}
 	
 	public void testCourtCalledToCamelot() {
