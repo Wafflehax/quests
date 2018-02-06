@@ -1,26 +1,19 @@
 {
   "Code": [
-    "F3.a Adventure deck: initialization",
-    "F3.b Adventure deck: shuffling",
-    "F3.c Adventure deck: draw card",
-    "F3.d Adventure deck: shuffle discard pile into deck",
-    "F3.e Adventure deck: discard",
-    "F4.a Story deck: initialization",
-    "F4.b Story deck: shuffling",
-    "F4.c Story deck: draw card",
-    "F4.d Story deck: shuffle discard pile into deck",
-    "F4.e Story deck: discard",
-    "F5.a Player: initialization",
-    "F5.b Player: draw card",
-    "F5.c Player: draw card over hand limit",
-    "F5.d Player: discard from hand",
-    "F5.e Player: discard from play",
-    "F5.f Player: add shields"
+    "F9.a Events: Chivalrous Deed",
+    "F9.b Events: Pox",
+    "F9.c Events: Plauge",
+    "F9.d Events: Queens Favor",
+    "F9.e Events: Court Called to Camelot",
+    "F9.f Events: Prosperity Throughout the Realm",
+    "F5.a Player: lose shields",
+    "F10.a MVC: rough template"
   ],
-  "Research": ["MVC Design Pattern"],
+  "Research": ["MVC"],
   "NextWeek": [
-    "F9 Events",
-    "F7 Implementing MVC"
+    "F7 Finishing MVC - Model and Controller",
+    "F12 Turn sequence",
+    "F16 Event - Kings Call to Arms"
   ],
-  "Hours": 13
+  "Hours": 14
 }

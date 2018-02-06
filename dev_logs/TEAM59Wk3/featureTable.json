@@ -116,119 +116,131 @@
   {
     "ID": "F9",
     "Description": "Events",
-    "Status": "Planned",
-    "Date": ""
+    "Status": "Completed",
+    "Date": "2018-02-05"
   },
   {
     "ID": "F10",
-    "Description": "Winning Condition",
+    "Description": "MVC Pattern",
     "Status": "Planned",
     "Date": ""
   },
   {
     "ID": "F11",
-    "Description": "Turn sequence",
+    "Description": "Winning Condition",
     "Status": "Planned",
     "Date": ""
   },
   {
     "ID": "F12",
-    "Description": "Hot seat play",
+    "Description": "Turn sequence",
     "Status": "Planned",
     "Date": ""
   },
   {
     "ID": "F13",
-    "Description": "Tournament ties",
+    "Description": "Hot seat play",
     "Status": "Planned",
     "Date": ""
   },
   {
     "ID": "F14",
-    "Description": "Tournament double ties",
+    "Description": "Tournament ties",
     "Status": "Planned",
     "Date": ""
   },
   {
     "ID": "F15",
-    "Description": "Sponsoring/setting up a Quest",
+    "Description": "Tournament double ties",
     "Status": "Planned",
     "Date": ""
   },
   {
     "ID": "F16",
-    "Description": "Playing a Quest",
+    "Description": "Event - Kings Call to Arms",
     "Status": "Planned",
     "Date": ""
   },
   {
     "ID": "F17",
-    "Description": "Quest end/winning conditions",
-    "Status": "Planned",
-    "Date": ""
-  },
-  {
-    "ID": "F18",
-    "Description": "Allies with conditional battle points",
-    "Status": "Planned",
-    "Date": ""
-  },
-  {
-    "ID": "F19",
-    "Description": "Tests/bIDs",
-    "Status": "Planned",
-    "Date": ""
-  },
-  {
-    "ID": "F20",
-    "Description": "Allies with conditional bIDs",
-    "Status": "Planned",
-    "Date": ""
-  },
-  {
-    "ID": "F21",
     "Description": "Event - Kings Recognition",
     "Status": "Planned",
     "Date": ""
   },
   {
+    "ID": "F18",
+    "Description": "Sponsoring/setting up a Quest",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F19",
+    "Description": "Playing a Quest",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F20",
+    "Description": "Quest end/winning conditions",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F21",
+    "Description": "Allies with conditional battle points",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
     "ID": "F22",
-    "Description": "Mordred's ability",
+    "Description": "Tests/bIDs",
     "Status": "Planned",
     "Date": ""
   },
   {
     "ID": "F23",
-    "Description": "Merlin's ability",
+    "Description": "Allies with conditional bIDs",
     "Status": "Planned",
     "Date": ""
   },
   {
     "ID": "F24",
-    "Description": "AI",
+    "Description": "Mordred's ability",
     "Status": "Planned",
     "Date": ""
   },
   {
     "ID": "F25",
-    "Description": "UI sound effects",
+    "Description": "Merlin's ability",
     "Status": "Planned",
     "Date": ""
   },
   {
     "ID": "F26",
-    "Description": "UI animations",
+    "Description": "AI",
     "Status": "Planned",
     "Date": ""
   },
   {
     "ID": "F27",
-    "Description": "Save game",
+    "Description": "UI sound effects",
     "Status": "Planned",
     "Date": ""
   },
   {
     "ID": "F28",
+    "Description": "UI animations",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F29",
+    "Description": "Save game",
+    "Status": "Planned",
+    "Date": ""
+  },
+  {
+    "ID": "F30",
     "Description": "Resume game",
     "Status": "Planned",
     "Date": ""
