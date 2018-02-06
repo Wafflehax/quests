@@ -77,8 +77,8 @@ public class QuestCards implements ApplicationListener {
     gameScreens.put("mainGame", new GameScreen());
     stage.addActor(gameScreens.get("mainGame"));
     
-    GameModel model = new GameModel();   
-    GameController gameController = new GameController(model);
+    //GameModel model = new GameModel();   
+    GameController gameController = new GameController();
   }
 
   @Override

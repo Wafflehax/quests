@@ -23,38 +23,43 @@ public class GameController extends Actor{
 	Group view;
 	static Logger log = Logger.getLogger(GameController.class); //log4j logger
 	
-	public GameController(GameModel m) {
-		this.model = m;
+	public GameController() {
 		this.view = new GameScreen();
 		
 	}
 	
-	private Rank getRank(int i) { return model.getPlayerAtIndex(i).getRank();	}
-	private int getShields(int i) { return model.getPlayerAtIndex(i).getShields(); }
-	private LinkedList<AdventureCard> getHand(int i) { return model.getPlayerAtIndex(i).getHand(); }
-	private LinkedList<AdventureCard> getActive(int i) { return model.getPlayerAtIndex(i).getActive(); }
-	private Stack<AdventureCard> getAdvDeck() { return model.getAdvDeck().getDeck(); }
-	private Stack<AdventureCard> getAdvDiscard() { return model.getAdvDeck().getDiscard(); }
-	private Stack<StoryCard> getStoryDeck() { return model.getStoryDeck().getDeck(); }
-	private Stack<StoryCard> getStoryDiscard() { return model.getStoryDeck().getDiscard(); }
+	//send model data to the view
+	private Rank setViewRank(int i) { return model.getPlayerAtIndex(i).getRank();	}
+	private int setViewShields(int i) { return model.getPlayerAtIndex(i).getShields(); }
+	private LinkedList<AdventureCard> setViewHand(int i) { return model.getPlayerAtIndex(i).getHand(); }
+	private LinkedList<AdventureCard> setViewActive(int i) { return model.getPlayerAtIndex(i).getActive(); }
+	private Stack<AdventureCard> setViewAdvDeck() { return model.getAdvDeck().getDeck(); }
+	private Stack<AdventureCard> setViewAdvDiscard() { return model.getAdvDeck().getDiscard(); }
+	private Stack<StoryCard> setViewStoryDeck() { return model.getStoryDeck().getDeck(); }
+	private Stack<StoryCard> setViewStoryDiscard() { return model.getStoryDeck().getDiscard(); }
 	
+	//perform actions from view on model
+	public void startGame() {	//user presses new game on main menu
+		model = new GameModel();
+	}
+	public void playerPlaysAdventureCard(int i, AdventureCard card) {		//user drags card from hand to play
+		model.getPlayerAtIndex(i).playCard(card);
+	}
+	public void playerDiscardsAdventureCard(int i, AdventureCard card) {	//user drags card from hand or play to discard
+		model.getPlayerAtIndex(i).discardCard(card, model.getAdvDeck());
+	}
 	
 	public void draw(Batch batch, float parentAlpha) {
 		for(int i=0; i<model.getNumPlayers(); i++) {
-			getRank(i);
-			getShields(i);
-			getHand(i);
-			getActive(i);
+			setViewRank(i);
+			setViewShields(i);
+			setViewHand(i);
+			setViewActive(i);
 		}
-		getAdvDeck();
-		getAdvDiscard();
-		getStoryDeck();
-		getStoryDiscard();
-		
-		/*if(heroChanged)
-			setRank(); //pass in player(int) and rank
-		if(shieldsChanged)
-			setShields();*/
+		setViewAdvDeck();
+		setViewAdvDiscard();
+		setViewStoryDeck();
+		setViewStoryDiscard();
 		
 		view.draw(batch, parentAlpha);
 	}
