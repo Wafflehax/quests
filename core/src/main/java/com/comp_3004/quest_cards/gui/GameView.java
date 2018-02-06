@@ -14,10 +14,10 @@ public class GameView extends Table implements Disposable {
 
   //Widgets
 
-  private PlayerView playerView;
-  private Image storyDeck;
+  public PlayerView playerView;
+  public Image storyDeck;
 
-  private GameView() {
+  public GameView() {
 
     setLayoutEnabled(false);
     setBounds(0, 0, Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
@@ -114,15 +114,6 @@ public class GameView extends Table implements Disposable {
   }
 
   public static class TestGameView {
-
-    public static GameView debug(QuestCards parent) {
-
-      GameView gameView = new GameView();
-      gameView.parent = parent;
-      PlayerView gameScreen = PlayerView.PlayerViewTester.createTestableInstance(gameView);
-
-      return null;
-    }
 
   }
 }

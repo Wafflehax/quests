@@ -3,12 +3,15 @@ package com.comp_3004.quest_cards.gui;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.comp_3004.quest_cards.core.Player;
 
 public class PlayerView extends Table {
 
-  private DeckView playerAdventureCards;
-  private Image hero;
-  private Image shields;
+  //Todo: Make these private after unit testing
+
+  public DeckView playerAdventureCards;
+  public Image hero;
+  public Image shields;
 
   public PlayerView() {
 
@@ -123,36 +126,6 @@ public class PlayerView extends Table {
 
   public static class PlayerViewTester {
 
-    public static boolean testSelfBounds(PlayerView playerView) {
-
-      System.out.printf("Player view width: %f\n", playerView.getWidth());
-      System.out.printf("Player view height: %f\n", playerView.getHeight());
-      System.out.printf("Player view z-index: %d\n", playerView.getZIndex());
-      System.out.printf("Player view X: %f\n", playerView.getX());
-      System.out.printf("Player view y: %f\n", playerView.getY());
-      return false;
-    }
-
-    public static boolean testDeckViewBounds(PlayerView playerView) {
-
-      System.out.printf("Adventure card area width: %f\n", playerView.playerAdventureCards.getWidth());
-      System.out.printf("Adventure card area height: %f\n", playerView.playerAdventureCards.getHeight());
-      System.out.printf("Adventure card area z-index: %d\n", playerView.playerAdventureCards.getZIndex());
-      System.out.printf("Adventure card area X: %f\n", playerView.playerAdventureCards.getX());
-      System.out.printf("Adventure card area y: %f\n", playerView.playerAdventureCards.getY());
-
-      return false;
-    }
-
-    public static PlayerView createTestableInstance(GameView parent) {
-
-      PlayerView playerView = new PlayerView();
-
-      testSelfBounds(playerView);
-      testDeckViewBounds(playerView);
-
-      return playerView;
-    }
   }
 }
 
