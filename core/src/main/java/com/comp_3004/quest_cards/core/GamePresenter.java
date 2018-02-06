@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.StoryCard;
@@ -18,14 +19,15 @@ import com.comp_3004.quest_cards.gui.GameScreen;
 
 
 
-public class GameController extends Actor{
+public class GamePresenter extends Group{
 	GameModel model;
-	Group view;
-	static Logger log = Logger.getLogger(GameController.class); //log4j logger
+	GameScreen view;
+	static Logger log = Logger.getLogger(GamePresenter.class); //log4j logger
 	
-	public GameController() {
-		this.view = new GameScreen();
-		
+	public GamePresenter(GameScreen v, GameModel m) {
+		this.view = v;
+		addActor(view);
+		this.model = m;
 	}
 	
 	//send model data to the view

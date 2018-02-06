@@ -41,7 +41,7 @@ public class QuestCards implements ApplicationListener {
 
   //Game Screens
 
-  private Map<String, Group> gameScreens;
+  private Map<String, GameScreen> gameScreens;
 
   public static AssetManager getAssetManager() {
 
@@ -73,12 +73,13 @@ public class QuestCards implements ApplicationListener {
 
     //Init game screen & set as current screen
 
-    gameScreens = new HashMap<String, Group>();
+    gameScreens = new HashMap<String, GameScreen>();
     gameScreens.put("mainGame", new GameScreen());
-    stage.addActor(gameScreens.get("mainGame"));
     
-    //GameModel model = new GameModel();   
-    GameController gameController = new GameController();
+    
+    GameModel model = new GameModel();   
+    GamePresenter gamePresenter = new GamePresenter(gameScreens.get("mainGame"), model);
+    stage.addActor(gamePresenter);
   }
 
   @Override
