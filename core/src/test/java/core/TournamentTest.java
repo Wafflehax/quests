@@ -62,8 +62,9 @@ public class TournamentTest extends TestCase{
 		int time = 100;
 		//Test Tournament joiners having too many cards, testing discardCardIfTooMany()
 		int numPlayers = 4;
+		int numCards = 12;
 		final GameModel game = new GameModel();
-		game.initPlayersStart(numPlayers);
+		game.initPlayersStart(numPlayers, numCards);
 		
 		Thread thread = new Thread(new Runnable() {
 			@Override
@@ -94,8 +95,9 @@ public class TournamentTest extends TestCase{
 		int time = 100;
 		//Test Tournament joiners having too many cards, testing discardCardIfTooMany()
 		int numPlayers = 3;
+		int numCards = 12;
 		final GameModel game = new GameModel();
-		game.initPlayersStart(numPlayers);
+		game.initPlayersStart(numPlayers, numCards);
 		
 		Player p3 = new Player("Player 3");
 		LinkedList<AdventureCard> cards = new LinkedList<AdventureCard>();
@@ -145,8 +147,9 @@ public class TournamentTest extends TestCase{
 		int time = 100;
 		//Test Tournament joiners having too many cards, testing discardCardIfTooMany()
 		int numPlayers = 3;
+		int numCards = 12;
 		final GameModel game = new GameModel();
-		game.initPlayersStart(numPlayers);
+		game.initPlayersStart(numPlayers, numCards);
 		
 		Player p3 = new Player("Player 3");
 		LinkedList<AdventureCard> cards = new LinkedList<AdventureCard>();

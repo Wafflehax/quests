@@ -55,13 +55,11 @@ public class GameModel{
 	}
 	
 	//testing constructor
-	public GameModel(int n, AdventureDeck a, StoryDeck s) {
+	public GameModel(int n, int c, AdventureDeck a, StoryDeck s) {
 		this.numPlayers = n;
 		this.advDeck = a;
-		advDeck.shuffle();
 		this.storyDeck = s;
-		storyDeck.shuffle();
-		initPlayersStart(numPlayers, 6);
+		initPlayersStart(numPlayers, c);
 		System.out.println("Game model Ctor - Testing");
 	}
 	
@@ -158,32 +156,10 @@ public class GameModel{
 	
 	//Event testing
 	public void eventTest() {
-		StoryDeck events = new StoryDeck("Events");
-		AdventureDeck adv = new AdventureDeck();
-		events.shuffle();
-		adv.shuffle();
-		int cardsInDeck = events.getDeck().size();
-		for(int i=0; i<4; i++) {
-			getPlayerAtIndex(i).addShields(4);
-			ArrayList<AdventureCard> play = new ArrayList<AdventureCard>();
-			for(AdventureCard c : getPlayerAtIndex(i).getHand()) {
-				if (c instanceof AllyCard)
-					play.add(c);
-				
-			}
-			for(AdventureCard ally : play)
-				getPlayerAtIndex(i).playCard(ally);
-		}
-		for(int i=0; i<cardsInDeck; i++) {
-			System.out.printf("%s's Turn...  ", players.current().getName());
-			StoryCard cardDrawn = events.drawCard();
-			event = new Event(cardDrawn, players, adv);
+		
+			StoryCard cardDrawn = storyDeck.drawCard();
+			event = new Event(cardDrawn, players, advDeck);
 			event.runEvent();
-			
-			//end turn
-			System.out.printf("%s's turn over\n", players.current().getName());
-			players.next();
-		}
 	}
 	
 }
