@@ -51,7 +51,6 @@ public class GameModel{
 		storyDeck = new StoryDeck();
 		storyDeck.shuffle();
 		initPlayersStart(4, MAX_HAND_SIZE);
-		System.out.println("Game model Ctor");
 	}
 	
 	//testing constructor
@@ -59,8 +58,7 @@ public class GameModel{
 		this.numPlayers = n;
 		this.advDeck = a;
 		this.storyDeck = s;
-		initPlayersStart(numPlayers, c);
-		System.out.println("Game model Ctor - Testing");
+		initPlayersStart(numPlayers, c); //c is the number of cards the player will start with
 	}
 	
 	public void startGame() {
