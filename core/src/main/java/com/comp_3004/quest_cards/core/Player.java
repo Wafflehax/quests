@@ -199,4 +199,14 @@ public class Player{
 		}
 		System.out.printf("Number of cards: %s\n", this.playerHandCards.size());
 	}
+	
+	public void printActive() {
+		System.out.printf("Active:\n");
+		System.out.printf("%-15s%-15s%s\n", "Name", "Battle Points", "Type");
+		System.out.printf("==================================\n");
+		for(AdventureCard a : this.playerActiveCards) {
+			a.printCard();
+		}
+		System.out.printf("Number of cards: %s\n", this.playerActiveCards.size());
+	}
 }

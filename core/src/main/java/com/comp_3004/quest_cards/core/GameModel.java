@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
+import com.comp_3004.quest_cards.cards.AllyCard;
 import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.cards.TournamentCard;	//used for testing
 import com.comp_3004.quest_cards.cards.EventCard;			//used for testing
@@ -49,8 +50,19 @@ public class GameModel{
 		advDeck.shuffle();
 		storyDeck = new StoryDeck();
 		storyDeck.shuffle();
-		initPlayersStart(4);
+		initPlayersStart(4, MAX_HAND_SIZE);
 		System.out.println("Game model Ctor");
+	}
+	
+	//testing constructor
+	public GameModel(int n, AdventureDeck a, StoryDeck s) {
+		this.numPlayers = n;
+		this.advDeck = a;
+		advDeck.shuffle();
+		this.storyDeck = s;
+		storyDeck.shuffle();
+		initPlayersStart(numPlayers, 6);
+		System.out.println("Game model Ctor - Testing");
 	}
 	
 	public void startGame() {
@@ -116,14 +128,13 @@ public class GameModel{
 		}
 	}
 	
-	public void initPlayersStart(int numPlayers) {
+	public void initPlayersStart(int numPlayers, int numCards) {
 		this.numPlayers = numPlayers;
 		//TODO: Add players choosing their own name
 		ArrayList<Player> plyrs = new ArrayList<Player>(numPlayers);
 		for(int i = 0; i < numPlayers; i++) {
 			Player newPlayer = new Player("Player " + i);
-			//for(int q = 0; q < MAX_HAND_SIZE; q++)
-			for(int q = 0; q < MAX_HAND_SIZE-6; q++)	//testing drawing in events
+			for(int q = 0; q < numCards; q++)
 				newPlayer.drawCard(advDeck);
 			plyrs.add(newPlayer);
 		}
@@ -154,7 +165,14 @@ public class GameModel{
 		int cardsInDeck = events.getDeck().size();
 		for(int i=0; i<4; i++) {
 			getPlayerAtIndex(i).addShields(4);
-			System.out.println(getPlayerAtIndex(i).getShields());
+			ArrayList<AdventureCard> play = new ArrayList<AdventureCard>();
+			for(AdventureCard c : getPlayerAtIndex(i).getHand()) {
+				if (c instanceof AllyCard)
+					play.add(c);
+				
+			}
+			for(AdventureCard ally : play)
+				getPlayerAtIndex(i).playCard(ally);
 		}
 		for(int i=0; i<cardsInDeck; i++) {
 			System.out.printf("%s's Turn...  ", players.current().getName());

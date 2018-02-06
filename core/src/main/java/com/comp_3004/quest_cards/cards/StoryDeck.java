@@ -28,6 +28,11 @@ public class StoryDeck extends Deck {
 		else if(cardType == "Quests")
 			initQuests();
 	}
+	//Used for player test
+	public StoryDeck(Stack<StoryCard> d) {
+		this.deck = d;
+		this.discard = new Stack<StoryCard>();
+	}
 	
 	//methods
 	public void shuffle() {

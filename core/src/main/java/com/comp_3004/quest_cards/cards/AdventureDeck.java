@@ -18,7 +18,7 @@ public class AdventureDeck extends Deck {
 		initTests();
 	}
 	
-	//Used for player test
+	//Used for test
 	public AdventureDeck(Stack<AdventureCard> d) {
 		this.deck = d;
 		this.discard = new Stack<AdventureCard>();

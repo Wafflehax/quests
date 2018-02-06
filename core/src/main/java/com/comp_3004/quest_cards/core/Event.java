@@ -2,7 +2,9 @@ package com.comp_3004.quest_cards.core;
 
 import java.util.ArrayList;
 
+import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
+import com.comp_3004.quest_cards.cards.AllyCard;
 import com.comp_3004.quest_cards.cards.StoryCard;
 
 public class Event {
@@ -77,6 +79,7 @@ public class Event {
 		}
 		else if(evnt.getName() ==  "King's Recognition") {
 			System.out.printf("The event %s is not yet implemented\n", evnt.getName());
+			//TODO: implement this event later
 		}
 		else if(evnt.getName() ==  "Queen's Favor") {
 			System.out.printf("Running event %s\n", evnt.getName());
@@ -106,10 +109,25 @@ public class Event {
 		}
 		else if(evnt.getName() ==  "Court Called to Camelot") {
 			System.out.printf("Running event %s\n", evnt.getName());
+			for(Player p : players.getPlayers()) {
+				System.out.printf("%s\n ============\n", p.getName());
+				p.printActive();
+				ArrayList<AdventureCard> discard = new ArrayList<AdventureCard>();
+				for(AdventureCard card : p.getActive()) {
+					if(card instanceof AllyCard)
+						discard.add(card);
+				}
+				for(AdventureCard card : discard)
+					p.discardCard(card, advDeck);
+				p.printActive();
+					
+			}
+			
 			
 		}
 		else if(evnt.getName() ==  "King's Call to Arms") {
 			System.out.printf("The event %s is not yet implemented\n", evnt.getName());
+			//TODO: implement this event later
 		}
 		else if(evnt.getName() ==  "Prosperity Throughout the Realms") {
 			System.out.printf("Running event %s\n", evnt.getName());
