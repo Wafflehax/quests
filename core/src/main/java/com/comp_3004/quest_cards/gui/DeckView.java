@@ -12,8 +12,6 @@ public class DeckView extends Table {
 
   public DeckView(DisplayStrategy displayStrategy) {
     setLayoutEnabled(false);
-    TextureAtlas atlas = QuestCards.getAssetManager().get("sprites/cards.atlas", TextureAtlas.class);
-    setBackground(new Image(atlas.findRegion("green")).getDrawable());
     this.displayStrategy = displayStrategy;
   }
 

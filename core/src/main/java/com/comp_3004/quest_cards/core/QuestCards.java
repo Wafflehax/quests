@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.comp_3004.quest_cards.gui.Config;
-import com.comp_3004.quest_cards.gui.GameScreen;
+import com.comp_3004.quest_cards.gui.GameView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,7 +65,7 @@ public class QuestCards implements ApplicationListener {
     //Init game screen & set as current screen
 
     gameScreens = new HashMap<String, Group>();
-    gameScreens.put("mainGame", new GameScreen(manager));
+    gameScreens.put("mainGame", new GameView(this));
 
     //Switch screen
 
