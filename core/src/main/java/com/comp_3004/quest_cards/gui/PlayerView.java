@@ -1,8 +1,5 @@
 package com.comp_3004.quest_cards.gui;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -14,16 +11,13 @@ public class PlayerView extends Table {
   private CardView hero;
   private Image shields;
   private Image background;
-  private AssetManager manager;
+  private GameScreen parent;
 
-  private PlayerView() {
-  }
-
-  private void init(AssetManager manager) {
+  public PlayerView(GameScreen parent) {
 
     //setBounds(Config.PlayerView.X, Config.PlayerView.Y, Config.PlayerView.WIDTH, Config.PlayerView.HEIGHT);
 
-    this.manager = manager;
+    this.parent = parent;
     //setBounds(0, 0, getWidth(), getHeight());
 
     System.out.printf("Player view width: %f\n", getWidth());
@@ -32,8 +26,8 @@ public class PlayerView extends Table {
     System.out.printf("Player view X: %f\n", getX());
     System.out.printf("Player view y: %f\n", getY());
 
-    TextureAtlas backgrounds = manager.get(Config.Assets.BACKGROUND_ATLAS, TextureAtlas.class);
-    TextureAtlas sprites = manager.get(Config.Assets.SPRITE_ATLAS, TextureAtlas.class);
+    TextureAtlas backgrounds = parent.getBackgrounds();
+    TextureAtlas sprites = parent.getSprites();
 
     //Init background
 
@@ -43,7 +37,7 @@ public class PlayerView extends Table {
 
     initAdventureDeck();
     initShields(sprites);
-    debugCards();
+    debugCards(parent);
   }
 
   private void initAdventureDeck() {
@@ -93,10 +87,9 @@ public class PlayerView extends Table {
     return this;
   }
 
-  public void debugCards() {
+  public void debugCards(GameScreen parent) {
 
-    TextureAtlas atlas = manager.get(Config.Assets.SPRITE_ATLAS, TextureAtlas.class);
-
+    TextureAtlas atlas = parent.getSprites();
     CardView[] cards = new CardView[12];
 
     for (int i = 0; i < cards.length; i++) {
@@ -112,38 +105,7 @@ public class PlayerView extends Table {
     return this;
   }
 
-  public static class Builder extends AbstractBuilder<PlayerView> {
-
-    private boolean isBuilt = false;
-    private static final PlayerView INSTANCE = new PlayerView();
-
-    public Builder(AssetManager manager) {
-      super(manager);
-      addDependency(Config.Assets.SPRITE_ATLAS, TextureAtlas.class);
-      addDependency(Config.Assets.BACKGROUND_ATLAS, TextureAtlas.class);
-    }
-
-    public void setBounds(float x, float y, float width, float height) {
-      INSTANCE.setBounds(x, y, width, height);
-    }
-
-    public PlayerView build() {
-
-      if (!isLoaded()) {
-        throw newResourceNotLoadedException();
-      }
-
-      if (isBuilt) {
-        return INSTANCE;
-      }
-
-      INSTANCE.init(getAssetManager());
-      isBuilt = true;
-      return INSTANCE;
-    }
-  }
-
-  public static class TestPlayerView {
+  public static class PlayerViewTester {
 
     public static boolean testBackgroundBounds(PlayerView playerView) {
 
@@ -176,16 +138,16 @@ public class PlayerView extends Table {
       return false;
     }
 
-    public static boolean runTests() {
+    public static PlayerView Debug(GameScreen parent) {
 
-      TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("sprites/backgrounds.atlas"));
+      PlayerView playerView = new PlayerView(parent);
 
+      testSelfBounds(playerView);
+      testBackgroundBounds(playerView);
+      testDeckViewBounds(playerView);
 
-      atlas.dispose();
-
-      return false;
+      return playerView;
     }
-
   }
 }
 

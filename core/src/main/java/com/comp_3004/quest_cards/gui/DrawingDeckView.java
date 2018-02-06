@@ -12,10 +12,7 @@ public class DrawingDeckView extends Group {
   private Image discardPile;
   private Image drawingDeck;
 
-  private DrawingDeckView() {
-  }
-
-  private void init(AssetManager manager) {
+  public DrawingDeckView(AssetManager manager) {
     TextureAtlas atlas = manager.get(Config.Assets.SPRITE_ATLAS, TextureAtlas.class);
 
     //Init "drawing" deck, i.e., the deck where players will draw cards from
@@ -25,7 +22,6 @@ public class DrawingDeckView extends Group {
     addActor(drawingDeck);
 
     discardPile = new Image();
-
   }
 
   public void setDiscardPile(CardView card) {
@@ -36,24 +32,5 @@ public class DrawingDeckView extends Group {
         Config.CardView.CARD_WIDTH,
         Config.CardView.CARD_HEIGHT);
     addActor(discardPile);
-  }
-
-  static class Factory extends AbstractBuilder<DrawingDeckView> {
-
-    public Factory(AssetManager manager) {
-      super(manager);
-      addDependency(Config.Assets.SPRITE_ATLAS, TextureAtlas.class);
-    }
-
-    @Override
-    public DrawingDeckView build() {
-      if (!isLoaded()) {
-        throw newResourceNotLoadedException();
-      }
-
-      DrawingDeckView drawingDeckView = new DrawingDeckView();
-      drawingDeckView.init(getAssetManager());
-      return drawingDeckView;
-    }
   }
 }

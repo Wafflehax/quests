@@ -2,51 +2,36 @@ package com.comp_3004.quest_cards.gui;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
+import com.comp_3004.quest_cards.cards.QuestCard;
 import com.comp_3004.quest_cards.core.QuestCards;
-import sun.management.counter.perf.PerfLongArrayCounter;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 public class GameScreen extends Table implements Disposable {
 
-  //Assets & Dependencies
+  private final QuestCards parent;
 
-  private AssetManager manager;
-  private Map<String, Class> dependencies;
-  private List<Loadable> loadableActors;
 
   //Subsystems
 
   private PlayerView playerView;
   private DrawingDeckView storyDeck;
 
-  public GameScreen() {
-    loadableActors = new ArrayList<Loadable>();
-    manager = QuestCards.getAssetManager();
+  public GameScreen(QuestCards parent) {
 
-    //Register dependencies
+    this.parent = parent;
+  }
 
-    dependencies = new LinkedHashMap<String, Class>();
-    dependencies.put(Config.Assets.BACKGROUND_ATLAS, TextureAtlas.class);
-    dependencies.put(Config.Assets.SPRITE_ATLAS, TextureAtlas.class);
-
-    //Init builders
-
-    PlayerView.Builder playerViewBuilder = new PlayerView.Builder(manager);
-    loadableActors.add(playerViewBuilder);
-    DrawingDeckView.Factory deckFactory = new DrawingDeckView.Factory(manager);
-    loadableActors.add(deckFactory);
-
+  public void init() {
     //Load assets
 
-    loadAssets(QuestCards.getAssetManager());
+
+    AssetManager manager = parent.getAssetManager();
+
+    manager.load(Assets.GAME_BACKGROUNDS, TextureAtlas.class);
+    manager.load(Assets.GAME_SPRITES, TextureAtlas.class);
+    manager.finishLoading();
 
     //Set up background
 
@@ -58,18 +43,18 @@ public class GameScreen extends Table implements Disposable {
 
     //Init player view
 
-    playerViewBuilder.setBounds(
+    playerView = new PlayerView(this);
+    playerView.setBounds(
         getWidth() / 2 - Config.PlayerView.WIDTH / 2,
         Config.GameView.PADDDING_VERTICAL,
         Config.PlayerView.WIDTH,
         Config.PlayerView.HEIGHT);
 
-    playerView = playerViewBuilder.build();
     addActor(playerView);
 
     //Init story deck
 
-    storyDeck = deckFactory.build();
+    storyDeck = new DrawingDeckView(manager);
     storyDeck.setBounds(
         Config.GameView.PADDING_HORIZONTAL,
         getHeight() - Config.CardView.CARD_HEIGHT - Config.PlayerView.PADDING_VERTICAL,
@@ -83,27 +68,27 @@ public class GameScreen extends Table implements Disposable {
     addActor(storyDeck);
   }
 
-  private void loadAssets(AssetManager manager) {
-
-    //Load own dependencies
-
-    for (Map.Entry<String, Class> dependency : dependencies.entrySet()) {
-      manager.load(dependency.getKey(), dependency.getValue());
-    }
-
-    //Load children dependencies
-
-    for (Loadable loadable : loadableActors) {
-      loadable.load();
-    }
-
-    manager.finishLoading();
-  }
-
   @Override
   public void dispose() {
-    for (Loadable loadable : loadableActors) {
-      loadable.dispose();
+    manager.unload(Assets.GAME_SPRITES);
+    manager.unload(Assets.GAME_BACKGROUNDS);
+  }
+
+  public TextureAtlas getBackgrounds() {
+
+    return manager.get(Assets.GAME_BACKGROUNDS);
+  }
+
+  public TextureAtlas getSprites() {
+    return manager.get(Assets.GAME_SPRITES);
+  }
+
+  public static class TestGameView{
+
+    public static PlayerView debug(QuestCards parent){
+
+      GameScreen gameScreen = new GameScreen();
     }
+
   }
 }

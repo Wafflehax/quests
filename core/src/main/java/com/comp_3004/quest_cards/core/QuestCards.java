@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.comp_3004.quest_cards.gui.Config;
@@ -39,10 +38,6 @@ public class QuestCards implements ApplicationListener {
 
   private Map<String, Group> gameScreens;
 
-  public static AssetManager getAssetManager() {
-
-    return ((QuestCards) Gdx.app.getApplicationListener()).manager;
-  }
 
   @Override
   public void create() {
@@ -53,7 +48,7 @@ public class QuestCards implements ApplicationListener {
     batch = new SpriteBatch();
     stage = new Stage();
 
-    //Load UI skin
+    //Load UI skin: Todo: Make this useful. It does nothing at the moment
 
     manager.load("skins/uiskin.json", Skin.class);
     manager.finishLoading();
@@ -70,7 +65,10 @@ public class QuestCards implements ApplicationListener {
     //Init game screen & set as current screen
 
     gameScreens = new HashMap<String, Group>();
-    gameScreens.put("mainGame", new GameScreen());
+    gameScreens.put("mainGame", new GameScreen(manager));
+
+    //Switch screen
+
     stage.addActor(gameScreens.get("mainGame"));
 
     //Create game MVC
@@ -90,6 +88,10 @@ public class QuestCards implements ApplicationListener {
 
   @Override
   public void render() {
+
+    //
+
+    //controller.update()
 
     //Clear screen
 
@@ -118,5 +120,10 @@ public class QuestCards implements ApplicationListener {
     stage.dispose();
     batch.dispose();
     manager.dispose();
+  }
+
+  public AssetManager getAssetManager() {
+
+    return manager;
   }
 }
