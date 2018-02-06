@@ -29,7 +29,10 @@ public class GameController extends Actor{
 	}
 	
 	//send model data to the view
-	private Rank setViewRank(int i) { return model.getPlayerAtIndex(i).getRank();	}
+	private Rank setViewRank(int i) { 
+		return model.getPlayerAtIndex(i).getRank();
+		//GameScreen.methodUpdateRelvantInformation().
+	}
 	private int setViewShields(int i) { return model.getPlayerAtIndex(i).getShields(); }
 	private LinkedList<AdventureCard> setViewHand(int i) { return model.getPlayerAtIndex(i).getHand(); }
 	private LinkedList<AdventureCard> setViewActive(int i) { return model.getPlayerAtIndex(i).getActive(); }
@@ -45,7 +48,7 @@ public class GameController extends Actor{
 	public void playerPlaysAdventureCard(int i, AdventureCard card) {		//user drags card from hand to play
 		model.getPlayerAtIndex(i).playCard(card);
 	}
-	public void playerDiscardsAdventureCard(int i, AdventureCard card) {	//user drags card from hand or play to discard
+	public void playerDiscardsAdventureCard(int i, AdventureCard card) {	//user drags card from hand to discard
 		model.getPlayerAtIndex(i).discardCard(card, model.getAdvDeck());
 	}
 	
