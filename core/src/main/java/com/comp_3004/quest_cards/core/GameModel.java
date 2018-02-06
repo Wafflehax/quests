@@ -160,6 +160,7 @@ public class GameModel{
 			StoryCard cardDrawn = storyDeck.drawCard();
 			event = new Event(cardDrawn, players, advDeck);
 			event.runEvent();
+			storyDeck.discardCard(cardDrawn);
 	}
 	
 }

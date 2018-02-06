@@ -39,7 +39,6 @@ public class EventTest extends TestCase{
 		assertEquals(3, game.getPlayerAtIndex(3).getShields());
 		
 		//test 2 - 2 way rank tie, 2 way shields tie
-		sd.add(chivalrousDeed);
 		game = new GameModel(4, 0, advDeck, storyDeck);
 		game.getPlayerAtIndex(0).addShields(5);
 		game.getPlayerAtIndex(1).addShields(5);
@@ -51,7 +50,6 @@ public class EventTest extends TestCase{
 		assertEquals(3, game.getPlayerAtIndex(3).getShields());
 		
 		//test3 - 4 way rank tie, 1 player with lowest shields
-		sd.add(chivalrousDeed);
 		game = new GameModel(4, 0, advDeck, storyDeck);
 		game.getPlayerAtIndex(0).addShields(4);
 		game.getPlayerAtIndex(1).addShields(4);
@@ -64,6 +62,47 @@ public class EventTest extends TestCase{
 		assertEquals(4, game.getPlayerAtIndex(2).getShields());
 		assertEquals(0, game.getPlayerAtIndex(3).getShields());
 		assertEquals(Rank.KNIGHT, game.getPlayerAtIndex(3).getRank());
+		
+	}
+	
+	public void testPox() {
+		//set up story deck
+		Stack<StoryCard> sd= new Stack<StoryCard>();
+		EventCard pox = new EventCard("Pox");
+		sd.add(pox);
+		StoryDeck storyDeck = new StoryDeck(sd);
+		
+		//set up adventure deck
+		Stack<AdventureCard> ad= new Stack<AdventureCard>();
+		AdventureDeck advDeck = new AdventureDeck(ad);
+		GameModel game;
+		
+		//test 1 - players unable to lose shields
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		game.getPlayerAtIndex(1).addShields(0);
+		game.getPlayerAtIndex(2).addShields(5);
+		game.getPlayerAtIndex(3).addShields(12);
+		
+		game.eventTest();
+		assertEquals(0, game.getPlayerAtIndex(1).getShields());
+		assertEquals(0, game.getPlayerAtIndex(2).getShields());
+		assertEquals(0, game.getPlayerAtIndex(3).getShields());
+		
+		//test 2 - normal case
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		game.getPlayerAtIndex(0).addShields(2);
+		game.getPlayerAtIndex(1).addShields(2);
+		game.getPlayerAtIndex(2).addShields(3);
+		game.getPlayerAtIndex(3).addShields(13);
+		
+		game.eventTest();
+		assertEquals(2, game.getPlayerAtIndex(0).getShields());
+		assertEquals(1, game.getPlayerAtIndex(1).getShields());
+		assertEquals(2, game.getPlayerAtIndex(2).getShields());
+		assertEquals(0, game.getPlayerAtIndex(3).getShields());
+		
+		
+		
 		
 	}
 	
