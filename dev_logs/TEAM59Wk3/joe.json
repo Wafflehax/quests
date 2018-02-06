@@ -1,26 +1,13 @@
 {
   "Code": [
-    "F3.a Adventure deck: initialization",
-    "F3.b Adventure deck: shuffling",
-    "F3.c Adventure deck: draw card",
-    "F3.d Adventure deck: shuffle discard pile into deck",
-    "F3.e Adventure deck: discard",
-    "F4.a Story deck: initialization",
-    "F4.b Story deck: shuffling",
-    "F4.c Story deck: draw card",
-    "F4.d Story deck: shuffle discard pile into deck",
-    "F4.e Story deck: discard",
-    "F5.a Player: initialization",
-    "F5.b Player: draw card",
-    "F5.c Player: draw card over hand limit",
-    "F5.d Player: discard from hand",
-    "F5.e Player: discard from play",
-    "F5.f Player: add shields"
+    "F8.1 Fade-In SplashState, transition to MainMenu"
+    "F8.2 Transition from Splash, MainMenu can transition to a completed RulesState, can Exit the application via ExitButton, and can transition to a placeholder PlayState"
+    "F8.3 RulesState implemented to allow the player to examine the rules of the game, maintains asyncronous music support"
+ 
   ],
-  "Research": ["MVC Design Pattern"],
+  "Research": ["LibGDX Animations and State-Transitions"],
   "NextWeek": [
-    "F9 Events",
-    "F7 Implementing MVC"
+    "F7 Implementing MVC (once in PlayState)"
   ],
-  "Hours": 13
+  "Hours": 10
 }

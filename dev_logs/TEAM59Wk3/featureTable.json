@@ -93,6 +93,26 @@
     "Date": ""
   },
 
+{
+    "ID": "F8.1",
+    "Description": "Startup-Screen",
+    "Status": "Completed",
+    "Date": "2018-02-05"
+  },
+
+  {
+    "ID": "F8.2",
+    "Description": "Main Menu",
+    "Status": "Completed",
+    "Date": "2018-02-05"
+  },
+{
+    "ID": "F8.3",
+    "Description": "Rules Screen",
+    "Status": "Completed",
+    "Date": "2018-02-05"
+  },
+
   {
     "ID": "F9",
     "Description": "Events",
