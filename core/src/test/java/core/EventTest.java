@@ -136,6 +136,69 @@ public class EventTest extends TestCase{
 		assertEquals(2, game.getPlayerAtIndex(0).getShields());
 	}
 	
+	public void testQueensFavor() {
+		//set up story deck
+		Stack<StoryCard> sd= new Stack<StoryCard>();
+		EventCard queensFavor = new EventCard("Queen's Favor");
+		sd.add(queensFavor);
+		StoryDeck storyDeck = new StoryDeck(sd);
+		
+		//set up adventure deck
+		Stack<AdventureCard> ad= new Stack<AdventureCard>();
+		for(int i=0; i<8; i++) {
+			WeaponCard sword = new WeaponCard("Sword", 10);
+			ad.push(sword);
+		}
+		AdventureDeck advDeck = new AdventureDeck(ad);
+		
+		GameModel game;
+		
+		//test 1 - 4 way tie
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		game.getPlayerAtIndex(0).addShields(2);
+		game.getPlayerAtIndex(1).addShields(1);
+		game.getPlayerAtIndex(2).addShields(3);
+		game.getPlayerAtIndex(3).addShields(4);
+		
+		game.eventTest();
+		for(int i=0; i<4; i++)
+			assertEquals(2, game.getPlayerAtIndex(i).getHand().size());
+		
+		//test 2 - 2 way tie
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		for(int i=0; i<8; i++) {
+			WeaponCard sword = new WeaponCard("Sword", 10);
+			ad.push(sword);
+		}
+		game.getPlayerAtIndex(0).addShields(2);
+		game.getPlayerAtIndex(1).addShields(1);
+		game.getPlayerAtIndex(2).addShields(8);
+		game.getPlayerAtIndex(3).addShields(10);
+		
+		game.eventTest();
+		assertEquals(2, game.getPlayerAtIndex(0).getHand().size());
+		assertEquals(2, game.getPlayerAtIndex(1).getHand().size());
+		assertEquals(0, game.getPlayerAtIndex(2).getHand().size());
+		assertEquals(0, game.getPlayerAtIndex(3).getHand().size());
+		
+		//test 2 - normal case
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		for(int i=0; i<8; i++) {
+			WeaponCard sword = new WeaponCard("Sword", 10);
+			ad.push(sword);
+		}
+		game.getPlayerAtIndex(0).addShields(2);
+		game.getPlayerAtIndex(1).addShields(9);
+		game.getPlayerAtIndex(2).addShields(8);
+		game.getPlayerAtIndex(3).addShields(10);
+		
+		game.eventTest();
+		assertEquals(2, game.getPlayerAtIndex(0).getHand().size());
+		assertEquals(0, game.getPlayerAtIndex(1).getHand().size());
+		assertEquals(0, game.getPlayerAtIndex(2).getHand().size());
+		assertEquals(0, game.getPlayerAtIndex(3).getHand().size());
+	}
+	
 	public void testCourtCalledToCamelot() {
 		//set up story deck
 		Stack<StoryCard> sd= new Stack<StoryCard>();
