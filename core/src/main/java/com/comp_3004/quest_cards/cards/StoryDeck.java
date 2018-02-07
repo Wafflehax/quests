@@ -8,11 +8,13 @@ public class StoryDeck extends Deck {
 	//attributes
 	private Stack<StoryCard> deck;				//deck of cards
 	private Stack<StoryCard> discard;			//discard pile
+	private CardSpawner spawner;					//spawns cards
 	
 	//constructors
 	public StoryDeck() {							//default constructor
 		this.deck = new Stack<StoryCard>();
 		this.discard = new Stack<StoryCard>();
+		this.spawner = new CardSpawner();
 		initTournaments();
 		initEvents();
 		initQuests();
@@ -87,59 +89,37 @@ public class StoryDeck extends Deck {
 	
 	//constructor initialization methods
 	private void initTournaments() {
-		TournamentCard camelot = new TournamentCard("Tournament at Camelot", 3);
-		this.deck.add(camelot);
-		TournamentCard orkney = new TournamentCard("Tournament at Orkney", 2);
-		this.deck.add(orkney);
-		TournamentCard tintagel = new TournamentCard("Tournament at Tintagel", 1);
-		this.deck.add(tintagel);
-		TournamentCard york = new TournamentCard("Tournament at York", 0);
-		this.deck.add(york);
+		this.deck.add(spawner.spawnStoryCard("camelot"));
+		this.deck.add(spawner.spawnStoryCard("orkney"));
+		this.deck.add(spawner.spawnStoryCard("tintagel"));
+		this.deck.add(spawner.spawnStoryCard("york"));
 	}
 	
 	private void initEvents() {
 		for(int i=0; i<2; i++) {
-			EventCard kingsRecognition = new EventCard("King's Recognition");
-			this.deck.add(kingsRecognition);
-			EventCard queensFavor = new EventCard("Queen's Favor");
-			this.deck.add(queensFavor);
-			EventCard courtCalled = new EventCard("Court Called to Camelot");
-			this.deck.add(courtCalled);
+			this.deck.add(spawner.spawnStoryCard("kingsRecognition"));
+			this.deck.add(spawner.spawnStoryCard("queensFavor"));
+			this.deck.add(spawner.spawnStoryCard("courtCalledToCamelot"));
 		}
-		EventCard pox = new EventCard("Pox");
-		this.deck.add(pox);
-		EventCard plague = new EventCard("Plague");
-		this.deck.add(plague);
-		EventCard chivalrousDeed = new EventCard("Chivalrous Deed");
-		this.deck.add(chivalrousDeed);
-		EventCard prosperity = new EventCard("Prosperity Throughout the Realms");
-		this.deck.add(prosperity);
-		EventCard callToArms = new EventCard("King's Call to Arms");
-		this.deck.add(callToArms);
+		this.deck.add(spawner.spawnStoryCard("pox"));
+		this.deck.add(spawner.spawnStoryCard("plauge"));
+		this.deck.add(spawner.spawnStoryCard("chivalrousDeed"));
+		this.deck.add(spawner.spawnStoryCard("prosperityThroughoutTheRealms"));
+		this.deck.add(spawner.spawnStoryCard("kingsCallToArms"));
 	}
 	
 	private void initQuests() {
-		QuestCard holyGrail = new QuestCard("Search for the Holy Grail");
-		this.deck.add(holyGrail);
-		QuestCard greenKnight = new QuestCard("Test of the Green Knight");
-		this.deck.add(greenKnight);
-		QuestCard questingBeast = new QuestCard("Search for the Questing Beast");
-		this.deck.add(questingBeast);
-		QuestCard queensHonor = new QuestCard("Defend the Queen's Honor");
-		this.deck.add(queensHonor);
-		QuestCard fairMaiden = new QuestCard("Rescue the Fair Maiden");
-		this.deck.add(fairMaiden);
-		QuestCard enchantedForest = new QuestCard("Journey Through the Enchanted Forest");
-		this.deck.add(enchantedForest);
-		QuestCard slayTheDragon = new QuestCard("Slay the Dragon");
-		this.deck.add(slayTheDragon);
+		this.deck.add(spawner.spawnStoryCard("searchForTheHolyGrail"));
+		this.deck.add(spawner.spawnStoryCard("testOfTheGreenKnight"));
+		this.deck.add(spawner.spawnStoryCard("searchForTheQuestingBeast"));
+		this.deck.add(spawner.spawnStoryCard("defendTheQueensHonor"));
+		this.deck.add(spawner.spawnStoryCard("rescueTheFairMaiden"));
+		this.deck.add(spawner.spawnStoryCard("journeyThroughTheEnchantedForest"));
+		this.deck.add(spawner.spawnStoryCard("slayTheDragon"));
 		for(int i=0; i<2; i++) {
-			QuestCard vanquishEnemies = new QuestCard("Vanquish King Arthur's Enemies");
-			this.deck.add(vanquishEnemies);
-			QuestCard boarHunt = new QuestCard("Boar Hunt");
-			this.deck.add(boarHunt);
-			QuestCard saxonInvaders = new QuestCard("Repel the Saxon Invaders");
-			this.deck.add(saxonInvaders);
+			this.deck.add(spawner.spawnStoryCard("vanquishKingArthursEnemies"));
+			this.deck.add(spawner.spawnStoryCard("boarHunt"));
+			this.deck.add(spawner.spawnStoryCard("repelTheSaxonInvaders"));
 		}
 	}
 
