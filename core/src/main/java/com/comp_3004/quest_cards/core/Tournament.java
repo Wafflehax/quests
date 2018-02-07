@@ -57,7 +57,7 @@ public class Tournament extends GameMatch {
 	public void run() {
 		Players mainTurns = players;
 		System.out.println("-----------------\nPlayer: " + players.current().getName() + " has drawn :" 
-				+ " "+ currTour.getType() + " => " + currTour.getName());
+				+ " "+ currTour.getClass().getSimpleName() + " => " + currTour.getName());
 		determineParticipants();
 		Players tourjoiners = players.getTournamentParticipants();
 		players = tourjoiners;

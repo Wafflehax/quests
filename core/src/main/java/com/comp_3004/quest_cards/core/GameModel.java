@@ -48,8 +48,10 @@ public class GameModel{
 	public GameModel() {
 		advDeck = new AdventureDeck();
 		advDeck.shuffle();
+		//advDeck.printDeck();
 		storyDeck = new StoryDeck();
 		storyDeck.shuffle();
+		//storyDeck.printDeck();
 		initPlayersStart(4, MAX_HAND_SIZE);
 	}
 	

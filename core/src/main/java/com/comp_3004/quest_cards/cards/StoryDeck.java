@@ -1,23 +1,26 @@
 package com.comp_3004.quest_cards.cards;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
 
 public class StoryDeck extends Deck {
 	
 	//attributes
-	private Stack<StoryCard> deck;
-	private Stack<StoryCard> discard;
+	private Stack<StoryCard> deck;				//deck of cards
+	private Stack<StoryCard> discard;			//discard pile
+	private CardSpawner spawner;					//spawns cards
 	
-	//constructor
-	public StoryDeck() {
+	//constructors
+	public StoryDeck() {							//default constructor
 		this.deck = new Stack<StoryCard>();
 		this.discard = new Stack<StoryCard>();
+		this.spawner = new CardSpawner();
 		initTournaments();
 		initEvents();
 		initQuests();
 	}
-	public StoryDeck(String cardType) {
+	public StoryDeck(String cardType) {			//constructs deck consisting of only one type of card	
 		this.deck = new Stack<StoryCard>();
 		this.discard = new Stack<StoryCard>();
 		
@@ -28,23 +31,40 @@ public class StoryDeck extends Deck {
 		else if(cardType == "Quests")
 			initQuests();
 	}
-	//Used for player test
-	public StoryDeck(Stack<StoryCard> d) {
+	public StoryDeck(Stack<StoryCard> d) {		//constructs deck containing selected cards
+		this.spawner = new CardSpawner();
 		this.deck = d;
 		this.discard = new Stack<StoryCard>();
 	}
+	public StoryDeck(String[] d) {				//constructs deck containing selected cards
+		this.spawner = new CardSpawner();
+		this.deck = new Stack<StoryCard>();
+		for (String name : d)
+			this.deck.add(spawner.spawnStoryCard(name));
+		this.discard = new Stack<StoryCard>();
+	}
+	
+	//getters/setters
+		public boolean deckEmpty() { return this.deck.empty(); }
+		public boolean discardEmpty() { return this.discard.empty(); }
+		public Stack<StoryCard> getDeck() { return this.deck; }
+		public Stack<StoryCard> getDiscard() { return this.discard; }
 	
 	//methods
-	public void shuffle() {
+	public void shuffle() {							//shuffles the deck
 		Collections.shuffle(deck);
 	}
-	protected void shuffleDiscardIntoDeck() {
+	
+	
+	
+	protected void shuffleDiscardIntoDeck() {		//shuffles the discard pile into the deck
 		while(discard.empty() != true) {
 			deck.push(discard.pop());
 		}
 		shuffle();
 	}
-	public StoryCard drawCard() {
+	
+	public StoryCard drawCard() {					//draws the top card of the story deck
 		if(deck.empty()) {
 			shuffleDiscardIntoDeck();
 			return deck.pop();
@@ -52,20 +72,22 @@ public class StoryDeck extends Deck {
 		else
 			return deck.pop();
 	}
-	//moves card to decks discard pile
-	public void discardCard(StoryCard c) {
+	
+	public void discardCard(StoryCard c) {			//moves card to decks discard pile
 		discard.push(c);
 	}
-	public void printDeck() {
+	
+	public void printDeck() {						//prints cards in the deck
 		System.out.printf("Story Deck:\n");
-		System.out.printf("%-40s%s\n", "Name", "Type");
-		System.out.printf("==================================\n");
+		System.out.printf("%-40s%-20s%s\n", "Name", "Type", "ID");
+		System.out.printf("================================================================\n");
 		for(StoryCard s : deck) {
 			s.printCard();
 		}
 		System.out.printf("Number of cards: %s\n", deck.size());
 	}
-	public void printDiscard() {
+	
+	public void printDiscard() {						//prints cards in the discard
 		System.out.printf("Story Discard:\n");
 		System.out.printf("%-40s%s\n", "Name", "Type");
 		System.out.printf("==================================\n");
@@ -76,67 +98,39 @@ public class StoryDeck extends Deck {
 		
 	}
 	
-	//getters/setters
-	public boolean deckEmpty() { return this.deck.empty(); }
-	public boolean discardEmpty() { return this.discard.empty(); }
-	public Stack<StoryCard> getDeck() { return this.deck; }
-	public Stack<StoryCard> getDiscard() { return this.discard; }
-	
-	//constructor init methods
+	//constructor initialization methods
 	private void initTournaments() {
-		TournamentCard camelot = new TournamentCard("Tournament at Camelot", 3);
-		this.deck.add(camelot);
-		TournamentCard orkney = new TournamentCard("Tournament at Orkney", 2);
-		this.deck.add(orkney);
-		TournamentCard tintagel = new TournamentCard("Tournament at Tintagel", 1);
-		this.deck.add(tintagel);
-		TournamentCard york = new TournamentCard("Tournament at York", 0);
-		this.deck.add(york);
+		this.deck.add(spawner.spawnStoryCard("camelot"));
+		this.deck.add(spawner.spawnStoryCard("orkney"));
+		this.deck.add(spawner.spawnStoryCard("tintagel"));
+		this.deck.add(spawner.spawnStoryCard("york"));
 	}
 	
 	private void initEvents() {
 		for(int i=0; i<2; i++) {
-			EventCard kingsRecognition = new EventCard("King's Recognition");
-			this.deck.add(kingsRecognition);
-			EventCard queensFavor = new EventCard("Queen's Favor");
-			this.deck.add(queensFavor);
-			EventCard courtCalled = new EventCard("Court Called to Camelot");
-			this.deck.add(courtCalled);
+			this.deck.add(spawner.spawnStoryCard("kingsRecognition"));
+			this.deck.add(spawner.spawnStoryCard("queensFavor"));
+			this.deck.add(spawner.spawnStoryCard("courtCalledToCamelot"));
 		}
-		EventCard pox = new EventCard("Pox");
-		this.deck.add(pox);
-		EventCard plague = new EventCard("Plague");
-		this.deck.add(plague);
-		EventCard chivalrousDeed = new EventCard("Chivalrous Deed");
-		this.deck.add(chivalrousDeed);
-		EventCard prosperity = new EventCard("Prosperity Throughout the Realms");
-		this.deck.add(prosperity);
-		EventCard callToArms = new EventCard("King's Call to Arms");
-		this.deck.add(callToArms);
+		this.deck.add(spawner.spawnStoryCard("pox"));
+		this.deck.add(spawner.spawnStoryCard("plauge"));
+		this.deck.add(spawner.spawnStoryCard("chivalrousDeed"));
+		this.deck.add(spawner.spawnStoryCard("prosperityThroughoutTheRealms"));
+		this.deck.add(spawner.spawnStoryCard("kingsCallToArms"));
 	}
 	
 	private void initQuests() {
-		QuestCard holyGrail = new QuestCard("Search for the Holy Grail");
-		this.deck.add(holyGrail);
-		QuestCard greenKnight = new QuestCard("Test of the Green Knight");
-		this.deck.add(greenKnight);
-		QuestCard questingBeast = new QuestCard("Search for the Questing Beast");
-		this.deck.add(questingBeast);
-		QuestCard queensHonor = new QuestCard("Defend the Queen's Honor");
-		this.deck.add(queensHonor);
-		QuestCard fairMaiden = new QuestCard("Rescue the Fair Maiden");
-		this.deck.add(fairMaiden);
-		QuestCard enchantedForest = new QuestCard("Journey Through the Enchanted Forest");
-		this.deck.add(enchantedForest);
-		QuestCard slayTheDragon = new QuestCard("Slay the Dragon");
-		this.deck.add(slayTheDragon);
+		this.deck.add(spawner.spawnStoryCard("searchForTheHolyGrail"));
+		this.deck.add(spawner.spawnStoryCard("testOfTheGreenKnight"));
+		this.deck.add(spawner.spawnStoryCard("searchForTheQuestingBeast"));
+		this.deck.add(spawner.spawnStoryCard("defendTheQueensHonor"));
+		this.deck.add(spawner.spawnStoryCard("rescueTheFairMaiden"));
+		this.deck.add(spawner.spawnStoryCard("journeyThroughTheEnchantedForest"));
+		this.deck.add(spawner.spawnStoryCard("slayTheDragon"));
 		for(int i=0; i<2; i++) {
-			QuestCard vanquishEnemies = new QuestCard("Vanquish King Arthur's Enemies");
-			this.deck.add(vanquishEnemies);
-			QuestCard boarHunt = new QuestCard("Boar Hunt");
-			this.deck.add(boarHunt);
-			QuestCard saxonInvaders = new QuestCard("Repel the Saxon Invaders");
-			this.deck.add(saxonInvaders);
+			this.deck.add(spawner.spawnStoryCard("vanquishKingArthursEnemies"));
+			this.deck.add(spawner.spawnStoryCard("boarHunt"));
+			this.deck.add(spawner.spawnStoryCard("repelTheSaxonInvaders"));
 		}
 	}
 
