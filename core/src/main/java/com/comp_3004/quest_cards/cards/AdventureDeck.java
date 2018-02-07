@@ -164,8 +164,8 @@ public class AdventureDeck extends Deck {
 	
 	public void printDeck() {
 		System.out.printf("Adventure Deck:\n");
-		System.out.printf("%-15s%-15s%s\n", "Name", "Battle Points", "Type");
-		System.out.printf("==================================\n");
+		System.out.printf("%-15s%-15s%-20s\n", "Name", "Battle Points", "Type", "ID");
+		System.out.printf("==============================================================\n");
 		for(AdventureCard a : this.deck) {
 			a.printCard();
 		}

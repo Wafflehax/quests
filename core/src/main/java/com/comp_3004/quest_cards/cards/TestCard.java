@@ -6,10 +6,12 @@ public class TestCard extends AdventureCard {
 	public TestCard(String n) {
 		this.name = n;
 	}
-
+	
+	//methods
 	public void printCard() {
-		System.out.printf("%-30s", this.name);
-		System.out.printf("%s\n", this.getClass().getSimpleName());
+		System.out.printf("%-30s", name);
+		System.out.printf("%-20s", getClass().getSimpleName());
+		System.out.printf("%s\n", getID());
 	}
 
 }

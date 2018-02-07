@@ -58,8 +58,8 @@ public class StoryDeck extends Deck {
 	}
 	public void printDeck() {
 		System.out.printf("Story Deck:\n");
-		System.out.printf("%-40s%s\n", "Name", "Type");
-		System.out.printf("==================================\n");
+		System.out.printf("%-40s%-20s%s\n", "Name", "Type", "ID");
+		System.out.printf("================================================================\n");
 		for(StoryCard s : deck) {
 			s.printCard();
 		}

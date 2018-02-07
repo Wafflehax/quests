@@ -10,14 +10,17 @@ public class AllyCard extends AdventureCard {
 		this.battlePoints = bp;
 		this.bids = bd;
 	}
-
+	
+	//getters/setters
+	public int getBattlePts() { return this.battlePoints; }
+	
+	//methods
 	public void printCard() {
-		System.out.printf("%-15s", this.name);
-		System.out.printf("%-15s", this.battlePoints + "/" + this.bids);
-		System.out.printf("%s\n", this.getClass().getSimpleName());
+		System.out.printf("%-15s", name);
+		System.out.printf("%-15s", battlePoints + "/" + bids);
+		System.out.printf("%-20s", getClass().getSimpleName());
+		System.out.printf("%s\n", getID());
 	}
 
-	public int getBattlePts() {
-		return battlePoints;
-	}
+	
 }

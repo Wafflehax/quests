@@ -9,14 +9,16 @@ public class WeaponCard extends AdventureCard {
 		this.battlePoints = b;
 	}
 	
+	//getters/setters
+	public int getBattlePts() { return this.battlePoints; }
+	
+	//methods
 	public void printCard() {
-		System.out.printf("%-15s", this.name);
-		System.out.printf("%-15s", this.battlePoints);
-		System.out.printf("%s\n", this.getClass().getSimpleName());
+		System.out.printf("%-15s", name);
+		System.out.printf("%-15s", battlePoints);
+		System.out.printf("%-20s", getClass().getSimpleName());
+		System.out.printf("%s\n", getID());
 	}
 	
-	public int getBattlePts() {
-		return battlePoints;
-	}
 
 }
