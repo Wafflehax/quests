@@ -1,13 +1,17 @@
 package com.comp_3004.quest_cards.gui;
 
-import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-public class DeckView extends Group {
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.comp_3004.quest_cards.core.QuestCards;
+
+public class DeckView extends Table {
 
   private DisplayStrategy displayStrategy;
 
   public DeckView(DisplayStrategy displayStrategy) {
-
+    setLayoutEnabled(false);
     this.displayStrategy = displayStrategy;
   }
 

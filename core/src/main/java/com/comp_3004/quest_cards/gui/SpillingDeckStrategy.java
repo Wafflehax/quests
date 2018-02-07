@@ -22,6 +22,8 @@ public class SpillingDeckStrategy implements DeckView.DisplayStrategy {
     //Remove previous cards
     client.clearChildren();
 
+    System.out.printf("Discard pile x: %f width: %f\n", client.getX(), client.getWidth());
+
     float computedOverlap = computeOverlap(cards[0].getWidth(), cards.length, client.getWidth());
     System.out.printf("Computed overlap: %f\n", computedOverlap);
     computedOverlap = computedOverlap < minOverlap ? minOverlap : computedOverlap;
@@ -47,7 +49,9 @@ public class SpillingDeckStrategy implements DeckView.DisplayStrategy {
 
   private float computeOverlap(float cardWidth, int n, float maxWidth) {
 
-    return maxWidth / (n * cardWidth);
+    System.out.printf("CardWidth: %f. Card #: %d. MaxWidth: %f\n", cardWidth, n, maxWidth);
+
+    return maxWidth / (cardWidth * n);
   }
 
   public float getMinOverlap() {

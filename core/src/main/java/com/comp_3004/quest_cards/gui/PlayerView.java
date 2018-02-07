@@ -1,28 +1,21 @@
 package com.comp_3004.quest_cards.gui;
 
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.comp_3004.quest_cards.core.Player;
 
-import static com.comp_3004.quest_cards.gui.Config.PlayerView.*;
+public class PlayerView extends Table {
 
-public class PlayerView extends Group {
+  //Todo: Make these private after unit testing
 
+  public DeckView playerAdventureCards;
+  public Image hero;
+  public Image shields;
 
-  private DeckView playerAdventureCards;
+  public PlayerView() {
 
-  public PlayerView(TextureAtlas atlas) {
-
-    //Init
-    setBounds(X, Y, WIDTH, HEIGHT);
-
-    //Init background
-
-    Image background = new Image(atlas.findRegion("player-area"));
-    background.setBounds(getX(), getY(), getWidth(), getHeight());
-    addActor(background);
+    setLayoutEnabled(false);
 
     System.out.printf("Player view width: %f\n", getWidth());
     System.out.printf("Player view height: %f\n", getHeight());
@@ -30,48 +23,99 @@ public class PlayerView extends Group {
     System.out.printf("Player view X: %f\n", getX());
     System.out.printf("Player view y: %f\n", getY());
 
-    //Init adventure cards view (adventure cards held by player)
+    //Init widgets
 
-    DeckView.DisplayStrategy deckDisplay = new SpillingDeckStrategy(
-        ADVENTURE_CARDS_MIN_OVERLAP,
-        ADVENTURE_CARDS_MAX_OVERLAP);
+    shields = configureShields(new Image());
+    hero = configureHero(new Image());
+    playerAdventureCards = configureAdventureDeck(initAdventureDeck());
 
-    playerAdventureCards = new DeckView(deckDisplay);
-    playerAdventureCards.setSize(ADVENTURE_SPILLDECK_WIDTH, Config.CardView.CARD_HEIGHT);
-    playerAdventureCards.setPosition(getX() + PADDING_HORIZONTAL,
-        getY() + PADDING_VERTICAL);
-    playerAdventureCards.setColor(Color.GREEN);
-    addActor(playerAdventureCards);
+    //Set up widgets
 
-
-    System.out.printf("Adventure card area width: %f\n", playerAdventureCards.getWidth());
-    System.out.printf("Adventure card area height: %f\n", playerAdventureCards.getHeight());
-    System.out.printf("Adventure card area z-index: %d\n", playerAdventureCards.getZIndex());
-    System.out.printf("Adventure card area X: %f\n", playerAdventureCards.getX());
-    System.out.printf("Adventure card area y: %f\n", playerAdventureCards.getY());
-
-
+    add(playerAdventureCards);
+    add(shields);
+    add(hero);
   }
 
-  public static PlayerView debugPlayerHand(AssetManager manager) {
+  private DeckView initAdventureDeck() {
 
-    manager.load("sprites/backgrounds.atlas", TextureAtlas.class);
-    manager.load("sprites/cards.atlas", TextureAtlas.class);
-    manager.finishLoading();
+    DeckView.DisplayStrategy deckDisplay = new SpillingDeckStrategy(
+        Config.PlayerView.ADVENTURE_CARDS_MIN_OVERLAP,
+        Config.PlayerView.ADVENTURE_CARDS_MAX_OVERLAP);
 
+    playerAdventureCards = new DeckView(deckDisplay);
+    return playerAdventureCards;
+  }
 
-    TextureAtlas cardSprites = manager.get("sprites/cards.atlas", TextureAtlas.class);
-    TextureAtlas backgroundSprites = manager.get("sprites/backgrounds.atlas", TextureAtlas.class);
+  private DeckView configureAdventureDeck(DeckView playerAdventureCards) {
 
-    PlayerView hand = new PlayerView(backgroundSprites);
+    playerAdventureCards.setBounds(
+        Config.PlayerView.PADDING_HORIZONTAL,
+        Config.PlayerView.PADDING_VERTICAL,
+        Config.PlayerView.ADVENTURE_SPILLDECK_WIDTH,
+        Config.CardView.CARD_HEIGHT);
+
+    return playerAdventureCards;
+  }
+
+  private Image configureShields(Image shields) {
+
+    shields.setSize(Config.PlayerView.SHIELD_WIDTH, Config.PlayerView.SHIELD_HEIGHT);
+
+    float x = getWidth() - Config.PlayerView.PADDING_HORIZONTAL - shields.getWidth();
+    float y = getHeight() + Config.PlayerView.PADDING_VERTICAL;
+
+    shields.setPosition(x, y);
+
+    System.out.printf("Shields x: %f\n", x);
+    System.out.printf("Shields y: %f\n", y);
+    System.out.printf("Shields width: %f\n", shields.getWidth());
+    System.out.printf("Shields height: %f\n", shields.getHeight());
+
+    return shields;
+  }
+
+  private Image configureHero(Image hero) {
+
+    hero.setBounds(
+        getWidth() - hero.getWidth() - Config.PlayerView.PADDING_HORIZONTAL,
+        Config.PlayerView.PADDING_VERTICAL,
+        Config.CardView.CARD_WIDTH,
+        Config.CardView.CARD_HEIGHT);
+
+    return hero;
+  }
+
+  public PlayerView setShieldsTexture(TextureRegion shieldTexture) {
+
+    removeActor(this.shields);
+    shields = configureShields(new Image(shieldTexture));
+    addActor(shields);
+
+    return this;
+  }
+
+  /*
+  public void debugCards(GameView parent) {
+
+    TextureAtlas atlas = parent.getSprites();
     CardView[] cards = new CardView[12];
+
     for (int i = 0; i < cards.length; i++) {
-      cards[i] = new CardView(cardSprites.findRegion("A_King_Arthur"));
+      cards[i] = new CardView(atlas.findRegion("A_King_Arthur"));
     }
 
-    hand.setCards(cards);
+    setCards(cards);
+    setHero(new CardView(atlas.findRegion("R_Champion_Knight")));
+  }
+   */
 
-    return hand;
+  public PlayerView setHero(CardView hero) {
+
+    removeActor(this.hero);
+    this.hero = hero;
+    addActor(hero);
+
+    return this;
   }
 
   public PlayerView setCards(CardView[] cards) {
@@ -80,4 +124,8 @@ public class PlayerView extends Group {
   }
 
 
+  public static class PlayerViewTester {
+
+  }
 }
+

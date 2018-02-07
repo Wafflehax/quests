@@ -10,20 +10,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.comp_3004.quest_cards.gui.GameScreen;
+import com.comp_3004.quest_cards.gui.Config;
+import com.comp_3004.quest_cards.gui.GameView;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class QuestCards implements ApplicationListener {
-
-  //"World" coordinates
-
-  public static final int VIRTUAL_WIDTH = 1920;
-  public static final int VIRTUAL_HEIGHT = 1080;
 
   //Assets
 
@@ -41,12 +36,8 @@ public class QuestCards implements ApplicationListener {
 
   //Game Screens
 
-  private Map<String, GameScreen> gameScreens;
+  private Map<String, Group> gameScreens;
 
-  public static AssetManager getAssetManager() {
-
-    return ((QuestCards) Gdx.app.getApplicationListener()).manager;
-  }
 
   @Override
   public void create() {
@@ -57,7 +48,7 @@ public class QuestCards implements ApplicationListener {
     batch = new SpriteBatch();
     stage = new Stage();
 
-    //Load UI skin
+    //Load UI skin: Todo: Make this useful. It does nothing at the moment
 
     manager.load("skins/uiskin.json", Skin.class);
     manager.finishLoading();
@@ -66,20 +57,28 @@ public class QuestCards implements ApplicationListener {
     //Stage & camera set up
 
     camera = new OrthographicCamera();
-    viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
+    viewport = new FitViewport(Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT, camera);
     stage.setViewport(viewport);
-    camera.position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
+    camera.position.set(Config.VIRTUAL_WIDTH / 2, Config.VIRTUAL_HEIGHT / 2, 0);
     camera.update();
 
     //Init game screen & set as current screen
 
-    gameScreens = new HashMap<String, GameScreen>();
-    gameScreens.put("mainGame", new GameScreen());
-    
-    
-    GameModel model = new GameModel();   
-    GamePresenter gamePresenter = new GamePresenter(gameScreens.get("mainGame"), model);
-    stage.addActor(gamePresenter);
+    gameScreens = new HashMap<String, Group>();
+    gameScreens.put("mainGame", new GameView(this));
+
+    //Switch screen
+
+    stage.addActor(gameScreens.get("mainGame"));
+
+    //Create game MVC
+    //GameModel model = new GameModel();
+    //GameView view = new GameView(model);
+    //GameController controller = new GameController(model, view);
+
+    //testing
+    //in reality, this method would be triggered from an ActionListener in view when user clicks "New Game"
+    //controller.startGame(4);
   }
 
   @Override
@@ -89,6 +88,10 @@ public class QuestCards implements ApplicationListener {
 
   @Override
   public void render() {
+
+    //
+
+    //controller.update()
 
     //Clear screen
 
@@ -117,5 +120,10 @@ public class QuestCards implements ApplicationListener {
     stage.dispose();
     batch.dispose();
     manager.dispose();
+  }
+
+  public AssetManager getAssetManager() {
+
+    return manager;
   }
 }
