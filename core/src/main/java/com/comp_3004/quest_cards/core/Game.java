@@ -70,6 +70,7 @@ public class Game extends ApplicationAdapter {
 	}
 	public void toPlay(){gsm.set(new PlayState(gsm));
 	menuMusic.dispose();}
+
 	public void toRules(){gsm.set(new RulesState(gsm));}
 	
 	
