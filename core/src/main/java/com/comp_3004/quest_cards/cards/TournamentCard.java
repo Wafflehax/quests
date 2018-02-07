@@ -1,15 +1,16 @@
 package com.comp_3004.quest_cards.cards;
 
 public class TournamentCard extends StoryCard {
-	private int bonusShields;
+	
+	//attributes
+	private int bonusShields;		//bonus shields added to player who wins tournament
 
+	//constructor
 	public TournamentCard(String n, int b) {
 		this.name = n;
 		this.bonusShields = b;
 	}
 	
-	public int getBonusSh() {
-		return bonusShields;
-	}
-
+	//getters/setters
+	public int getBonusSh() { return this.bonusShields; }
 }

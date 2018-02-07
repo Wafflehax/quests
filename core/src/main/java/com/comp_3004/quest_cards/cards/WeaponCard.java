@@ -1,7 +1,9 @@
 package com.comp_3004.quest_cards.cards;
 
 public class WeaponCard extends AdventureCard {
-	private int battlePoints;
+	
+	//attributes
+	private int battlePoints;		//the battlepoints the card adds to the player or quest stage
 	
 	//constructor
 	public WeaponCard(String n, int b) {
@@ -9,14 +11,16 @@ public class WeaponCard extends AdventureCard {
 		this.battlePoints = b;
 	}
 	
-	public void printCard() {
-		System.out.printf("%-15s", this.name);
-		System.out.printf("%-15s", this.battlePoints);
-		System.out.printf("%s\n", this.getClass().getSimpleName());
+	//getters/setters
+	public int getBattlePts() { return this.battlePoints; }
+	
+	//methods
+	public void printCard() {				//prints name, battlepoints, type, and ID of the card
+		System.out.printf("%-15s", name);
+		System.out.printf("%-15s", battlePoints);
+		System.out.printf("%-20s", getClass().getSimpleName());
+		System.out.printf("%s\n", getID());
 	}
 	
-	public int getBattlePts() {
-		return battlePoints;
-	}
 
 }
