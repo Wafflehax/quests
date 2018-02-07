@@ -1,0 +1,192 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+
+\title{COMP 3004 - Progress Report \#2}
+\author{}
+\date{30/01/2018}
+
+\begin{document}
+
+
+\section*{Features}
+
+\begin{center}
+\begin{tabular}{l l l l }
+ID & Description & Status & Date\\
+\hline\\
+F1 & Adventure cards & Completed & 2018-01-22\\
+F2 & Story cards & Completed & 2018-01-22\\
+F3 & Adventure deck & Completed & 2018-01-29\\
+F4 & Story deck & Completed & 2018-01-29\\
+F5 & Player & Completed & 2018-01-29\\
+F6 & Tournaments & Planned & --\\
+F7 & UI(basic) & Planned & --\\
+F7.1 & Display human player adventure cards & finished & 30-01-2018\\
+F7.2 & Display human player hero card & planned & --\\
+F7.2.1 & Display human player's number of shields & planned & --\\
+F7.2.2 & Display human player's active ally/weapon cards alongside hero & planned & --\\
+F7.3 & Display Adventure deck & adventure discard pile & planned & --\\
+F7.4 & Display Story deck & story discard pile & planned & --\\
+F8 & Game menu & Planned & --\\
+F8.1 & Startup-Screen & Completed & 2018-02-05\\
+F8.2 & Main Menu & Completed & 2018-02-05\\
+F8.3 & Rules Screen & Completed & 2018-02-05\\
+F9 & Events & Completed & 2018-02-05\\
+F10 & MVC Pattern & Planned & --\\
+F11 & Winning Condition & Planned & --\\
+F12 & Turn sequence & Planned & --\\
+F13 & Hot seat play & Planned & --\\
+F14 & Tournament ties & Planned & --\\
+F15 & Tournament double ties & Planned & --\\
+F16 & Event - Kings Call to Arms & Planned & --\\
+F17 & Event - Kings Recognition & Planned & --\\
+F18 & Sponsoring/setting up a Quest & Planned & --\\
+F19 & Playing a Quest & Planned & --\\
+F20 & Quest end/winning conditions & Planned & --\\
+F21 & Allies with conditional battle points & Planned & --\\
+F22 & Tests/bIDs & Planned & --\\
+F23 & Allies with conditional bIDs & Planned & --\\
+F24 & Mordred's ability & Planned & --\\
+F25 & Merlin's ability & Planned & --\\
+F26 & AI & Planned & --\\
+F27 & UI sound effects & Planned & --\\
+F28 & UI animations & Planned & --\\
+F29 & Save game & Planned & --\\
+F30 & Resume game & Planned & --\\
+\end{tabular}
+\end{center}
+\newpage
+\section*{Tests}
+
+\begin{center}
+\begin{tabular}{l l l l }
+ID & Description & Status & Date\\
+\hline\\
+T1 & Test size of adventure deck & F3 & 2018-01-29\\
+T2 & Test card composition of adventure deck & F3 & 2018-01-29\\
+T3 & Test drawing from adventure deck & F3 & 2018-01-29\\
+T4 & Test discarding to adventure deck's discard pile & F3 & 2018-01-29\\
+T5 & Test shuffling discard pile into adventure deck when deck empty & F3 & 2018-01-29\\
+T6 & Test size of story deck & F4 & 2018-01-29\\
+T7 & Test card composition of story deck & F4 & 2018-01-29\\
+T8 & Test drawing from story deck & F4 & 2018-01-29\\
+T9 & Test discarding to story deck's discard pile & F4 & 2018-01-29\\
+T10 & Test shuffling discard pile into story deck when deck empty & F4 & 2018-01-29\\
+T11 & Test player initialization & F5 & 2018-01-29\\
+T12 & Test player drawing card & F5 & 2018-01-29\\
+T13 & Test player drawing card over hand limit & F5 & 2018-01-29\\
+T14 & Test player playing a card & F5 & 2018-01-29\\
+T15 & Test player discarding a card from hand & F5 & 2018-01-29\\
+T16 & Test player discarding a card from play & F5 & 2018-01-29\\
+T17 & Test player attempting illegal discard & F5 & 2018-01-29\\
+T18 & Test player adding shields & F5 & 2018-01-29\\
+T19 & Test Chivalrous Deed event & F9 & 2018-02-05\\
+T20 & Test Pox event & F9 & 2018-02-05\\
+T20 & Test Plague event & F9 & 2018-02-05\\
+T21 & Test Queens Favor event & F9 & 2018-02-05\\
+T22 & Test Court Called to Camelot event & F9 & 2018-02-05\\
+T23 & Test Prosperity throughout the realms event & F9 & 2018-02-05\\
+T24 & Test Player lose shields & F5 & 2018-02-05\\
+T25 & Test positioning and sizes of PlayerView UI widgets (human player cards, shields and hero) & Fail & 2018-02-06\\
+\end{tabular}
+\end{center}
+
+\newpage
+\section*{Individual contributions}
+
+\subsection*{Frerik}
+
+\subsubsection*{Code}
+\begin{itemize}
+\item F9.a Events: Chivalrous Deed
+\item F9.b Events: Pox
+\item F9.c Events: Plauge
+\item F9.d Events: Queens Favor
+\item F9.e Events: Court Called to Camelot
+\item F9.f Events: Prosperity Throughout the Realm
+\item F5.a Player: lose shields
+\item F10.a MVC: rough template
+\end{itemize}
+\subsubsection*{Research}
+\begin{itemize}
+\item MVC
+\end{itemize}
+\subsubsection*{NextWeek}
+\begin{itemize}
+\item F7 Finishing MVC - Model and Controller
+\item F12 Turn sequence
+\item F16 Event - Kings Call to Arms
+\end{itemize}
+\subsubsection*{Hours}
+14
+
+\subsection*{Joe}
+
+\subsubsection*{Code}
+\begin{itemize}
+\item F8.1 Fade-In SplashState, transition to MainMenu
+\item F8.2 Transition from Splash, MainMenu can transition to a completed RulesState, can Exit the application via ExitButton, and can transition to a placeholder PlayState
+\item F8.3 RulesState implemented to allow the player to examine the rules of the game, maintains asyncronous music support
+\end{itemize}
+\subsubsection*{Research}
+\begin{itemize}
+\item LibGDX Animations and State-Transitions
+\end{itemize}
+\subsubsection*{NextWeek}
+\begin{itemize}
+\item F7 Implementing MVC (once in PlayState)
+\end{itemize}
+\subsubsection*{Hours}
+10
+
+\subsection*{Kevin}
+
+\subsubsection*{Code}
+\begin{itemize}
+\item F7.2 Created methods to display current hero cards on screen
+\item F7.2.1 Created a method to display a texture for the player shields
+\item F7.3 Created methods to display drawing decks and their discard piles
+\end{itemize}
+\subsubsection*{Tests}
+\begin{itemize}
+\item T25 Created unit tests for PlayerView
+\end{itemize}
+\subsubsection*{Other}
+\begin{itemize}
+\item Refactored the entire GameView/GameScreen code as it was very coupled with controller logic, and was causing issues with testing
+\end{itemize}
+\subsubsection*{Hours}
+20
+
+\subsection*{Patrick}
+
+\subsubsection*{Code}
+\begin{itemize}
+\item test players setting their participation, setTournamentParticupation, Test 1, F6 2018-02-02
+\item test having too many cards joining tournament, and discarding a card to have valid hand, Test 2. F6 2018-02-02
+\item test Tournament->playCard tested Playing a Weapon Card during turn, check was added correctly to right player, Test 3, F6 2018-02-02
+\item test Tournament->playCard() Playing a card you do not own during your turn, check was not added to hand, Test 4, F6 2018-02-02
+\item test Tournament->calcBattlePoints() calculation of battle points of a player no special abilities (dependent cards), Weapons,Ally,Amour, Test 5, F6 2018-02-03
+\item test Tournament->determinewin() one winner, tied(first time stage = tie), tie again(stage = double_tie), right players won, tied, Test 6, F6 2018-02-03
+\item test player discarding amours they played, F5 2018-02-03
+\item test player discarding weapons they played, F5 2018-02-03
+\end{itemize}
+\subsubsection*{Research}
+\begin{itemize}
+\item MVC Design Pattern
+\item State Pattern
+\end{itemize}
+\subsubsection*{NextWeek}
+\begin{itemize}
+\item F18 Allies (conditional battle points)
+\item F6 Retractor Tournaments To be UI integrable
+\end{itemize}
+\subsubsection*{Hours}
+12
+
+\end{document}

@@ -112,8 +112,4 @@ public class GameView extends Table implements Disposable {
     playerView.setHero(hero);
     return this;
   }
-
-  public static class TestGameView {
-
-  }
 }
