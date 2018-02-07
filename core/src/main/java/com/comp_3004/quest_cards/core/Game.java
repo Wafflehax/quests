@@ -41,7 +41,6 @@ public class Game extends ApplicationAdapter {
         }
         Gdx.gl.glClearColor(0,0,0,1);
 		gsm.push(new SplashState(gsm));
-
 	}
 
 

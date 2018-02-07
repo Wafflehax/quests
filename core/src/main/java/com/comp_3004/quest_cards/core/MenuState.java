@@ -60,6 +60,13 @@ public class MenuState extends State {
                                         ((Game)Gdx.app.getApplicationListener()).toPlay();
                                         Gdx.app.log("New Game","CLICKED!");
                                         //startDialog.show(mainMenu);
+                                        
+                                        /* added an instance of GameModel here just so I can run the app,
+                                         * click new game and launch the model to devtest any changes while
+                                         * working on a feature. this should should be fixed to going through 
+                                         * a presenter instead of creating a new model eventually
+                                         */
+                                        GameModel game = new GameModel();
 
                                     }
                                 }
