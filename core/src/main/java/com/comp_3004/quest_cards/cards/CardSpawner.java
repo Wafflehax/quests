@@ -10,7 +10,7 @@ public class CardSpawner {
 		if(name == "camelot") { return new TournamentCard("Tournament at Camelot", 3); }
 		else if(name == "orkney") { return new TournamentCard("Tournament at Orkney", 2); }
 		else if(name == "tintagel") { return new TournamentCard("Tournament at Tintagel", 1); }
-		else if(name == "york") { return new TournamentCard("Tournament at Camelot", 3); }
+		else if(name == "york") { return new TournamentCard("Tournament at York", 0); }
 		
 		//event spawners
 		else if(name == "kingsRecognition") { return new EventCard("King's Recognition"); }
