@@ -65,16 +65,20 @@ public class Player{
 	public LinkedList<AdventureCard> getHand() { return this.playerHandCards; }
 	public LinkedList<AdventureCard> getActive() { return this.playerActiveCards; }
 	
-	public void setHand(LinkedList<AdventureCard> c) { 		//used in testing
-		playerHandCards = c;
+	public void setHand(String[] cards) { 		//used in testing
+		CardSpawner spawner = new CardSpawner();
+		for(String name : cards)
+			playerHandCards.add(spawner.spawnAdventureCard(name));
 		for(AdventureCard card : playerHandCards) {
 			card.setState(State.HAND);
 			card.setOwner(this);
 		}
 	}     
 	
-	public void setActiveHand(LinkedList<AdventureCard> c) {	//used in testing
-		playerActiveCards = c;
+	public void setActiveHand(String[] cards) {	//used in testing
+		CardSpawner spawner = new CardSpawner();
+		for(String name : cards)
+			playerActiveCards.add(spawner.spawnAdventureCard(name));
 		for(AdventureCard card : playerActiveCards) {
 			card.setState(State.PLAY);
 			card.setOwner(this);

@@ -1,5 +1,6 @@
 package com.comp_3004.quest_cards.cards;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
 
@@ -31,7 +32,15 @@ public class StoryDeck extends Deck {
 			initQuests();
 	}
 	public StoryDeck(Stack<StoryCard> d) {		//constructs deck containing selected cards
+		this.spawner = new CardSpawner();
 		this.deck = d;
+		this.discard = new Stack<StoryCard>();
+	}
+	public StoryDeck(String[] d) {				//constructs deck containing selected cards
+		this.spawner = new CardSpawner();
+		this.deck = new Stack<StoryCard>();
+		for (String name : d)
+			this.deck.add(spawner.spawnStoryCard(name));
 		this.discard = new Stack<StoryCard>();
 	}
 	
@@ -45,6 +54,8 @@ public class StoryDeck extends Deck {
 	public void shuffle() {							//shuffles the deck
 		Collections.shuffle(deck);
 	}
+	
+	
 	
 	protected void shuffleDiscardIntoDeck() {		//shuffles the discard pile into the deck
 		while(discard.empty() != true) {

@@ -23,7 +23,17 @@ public class AdventureDeck extends Deck {
 	}
 	
 	public AdventureDeck(Stack<AdventureCard> d) {	//constructs a deck with selected cards
+		this.spawner = new CardSpawner();
+		this.deck = new Stack<AdventureCard>();
 		this.deck = d;
+		this.discard = new Stack<AdventureCard>();
+	}
+	
+	public AdventureDeck(String[] d) {	//constructs a deck with selected cards
+		this.spawner = new CardSpawner();
+		this.deck = new Stack<AdventureCard>();
+		for (String name : d)
+			this.deck.add(spawner.spawnAdventureCard(name));
 		this.discard = new Stack<AdventureCard>();
 	}
 	

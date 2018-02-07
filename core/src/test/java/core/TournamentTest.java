@@ -100,10 +100,8 @@ public class TournamentTest extends TestCase{
 		game.initPlayersStart(numPlayers, numCards);
 		
 		Player p3 = new Player("Player 3");
-		LinkedList<AdventureCard> cards = new LinkedList<AdventureCard>();
+		String[] cards = {"excalibur"};
 		p3.participateTour(true);
-		WeaponCard excalibur = new WeaponCard("Excalibur", 30);
-		cards.add(excalibur);
 		p3.setHand(cards);
 		game.addPlayer(p3);
 		
@@ -138,7 +136,7 @@ public class TournamentTest extends TestCase{
 		game.playCard(curr, game.getMatch().getPlayers().current().getHand().get(0));
 		utils.sleep(time);
 		LinkedList<AdventureCard> cards2 = curr.getActive();
-		boolean r = (AdventureCard)cards2.get(0) == excalibur;
+		boolean r = cards2.get(0).getName() == "Excalibur";
 		assertEquals(true, r);		
 	}
 	
@@ -152,12 +150,10 @@ public class TournamentTest extends TestCase{
 		game.initPlayersStart(numPlayers, numCards);
 		
 		Player p3 = new Player("Player 3");
-		LinkedList<AdventureCard> cards = new LinkedList<AdventureCard>();
+		String[] cards = {"saxons"};
 		p3.participateTour(true);
-		FoeCard saxons = new FoeCard("Saxons", 10, 20);
 		WeaponCard excalibur = new WeaponCard("Excalibur", 30);
-		
-		cards.add(saxons);
+
 		p3.setHand(cards);
 		game.addPlayer(p3);
 		
@@ -201,13 +197,7 @@ public class TournamentTest extends TestCase{
 		Tournament t = new Tournament(new Players(0, 0, null), null, york, null, log);
 		//tested weapons and rank squire
 		Player p0 = new Player("Player 0"); // rank is SQUIRE = 5 bp
-		LinkedList<AdventureCard> cards = new LinkedList<AdventureCard>();
-		cards.add(new WeaponCard("Horse", 10));
-		cards.add(new WeaponCard("Sword", 10));
-		cards.add(new WeaponCard("Excalibur", 30));
-		cards.add(new WeaponCard("Lance", 20));
-		cards.add(new WeaponCard("Dagger", 5));
-		cards.add(new WeaponCard("Battle-Ax", 15)); //90 bp all cards + rank pts
+		String[] cards = {"horse", "sword", "excalibur", "lance", "dagger", "battleAx"}; //90 bp all cards + rank pts
 		p0.setActiveHand(cards);
 		assertEquals(95, t.calcBattlePoints(p0));
 		//tested weapons and rank knight
@@ -221,11 +211,8 @@ public class TournamentTest extends TestCase{
 				
 		p0 = new Player("Player 0");
 		p0.addShields(6); //Rank is knight bp = 10
-		cards.add(new AllyCard("Merlin", 0, 0)); // 0 bp
-		cards.add(new AllyCard("King Pellinore", 10, 0)); //bp 10
-		cards.add(new AllyCard("Queen Guinevere", 0, 3)); // 0 bp
-		cards.add(new AmourCard()); // +10 bp
-		p0.setActiveHand(cards); // 10 + 90 +10(ally)+ 10(amour) = 120
+		String[] cards2 = {"merlin", "pellinore", "guinevere", "amour"};
+		p0.setActiveHand(cards2); // 10 + 90 +10(ally)+ 10(amour) = 120
 		int result2 = t.calcBattlePoints(p0);
 		assertEquals(120,  result2);
 	}
@@ -236,9 +223,7 @@ public class TournamentTest extends TestCase{
 	    Logger log = Logger.getLogger(TournamentTest.class); //log4j logger
 		Tournament t = new Tournament(new Players(0, 0, null), null, york, null, log);
 		
-		LinkedList<AdventureCard> cards = new LinkedList<AdventureCard>();
-		cards.add(new WeaponCard("Horse", 10));
-		cards.add(new WeaponCard("Sword", 10));
+		String[] cards = {"horse", "sword"};
 		Player p0 = new Player("Player 0"); // rank is SQUIRE = 5 bp 
 		Player p1 = new Player("Player 1"); // rank is SQUIRE = 5 bp
 		Player p2 = new Player("Player 2"); // rank is SQUIRE = 5 bp
