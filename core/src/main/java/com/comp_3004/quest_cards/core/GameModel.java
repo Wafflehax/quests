@@ -53,7 +53,7 @@ public class GameModel{
 		initPlayersStart(4, MAX_HAND_SIZE);
 	}
 	
-	//testing constructor
+	//sandbox constructor: pass in premade decks to control/set up a scenario
 	public GameModel(int n, int c, AdventureDeck a, StoryDeck s) {
 		this.numPlayers = n;
 		this.advDeck = a;

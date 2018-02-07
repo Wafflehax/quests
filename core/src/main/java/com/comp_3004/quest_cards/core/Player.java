@@ -64,8 +64,22 @@ public class Player{
 	public int numberOfActiveCards() { return playerActiveCards.size(); }
 	public LinkedList<AdventureCard> getHand() { return this.playerHandCards; }
 	public LinkedList<AdventureCard> getActive() { return this.playerActiveCards; }
-	public void setHand(LinkedList<AdventureCard> c) { playerHandCards = c; }         //used in Tournament testing
-	public void setActiveHand(LinkedList<AdventureCard> c) { playerActiveCards = c; } //used in Tournament testing
+	
+	public void setHand(LinkedList<AdventureCard> c) { 		//used in testing
+		playerHandCards = c;
+		for(AdventureCard card : playerHandCards) {
+			card.setState(State.HAND);
+			card.setOwner(this);
+		}
+	}     
+	
+	public void setActiveHand(LinkedList<AdventureCard> c) {	//used in testing
+		playerActiveCards = c;
+		for(AdventureCard card : playerActiveCards) {
+			card.setState(State.PLAY);
+			card.setOwner(this);
+		}
+	} 
 
 	public boolean drawCard(AdventureDeck d) {
 		

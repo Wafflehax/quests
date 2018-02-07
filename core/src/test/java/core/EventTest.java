@@ -1,5 +1,6 @@
 package core;
 
+import java.util.LinkedList;
 import java.util.Stack;
 
 import com.comp_3004.quest_cards.cards.AdventureCard;
@@ -208,24 +209,18 @@ public class EventTest extends TestCase{
 		//set up adventure deck
 		Stack<AdventureCard> ad= new Stack<AdventureCard>();
 		AdventureDeck advDeck = new AdventureDeck(ad);
+		LinkedList<AdventureCard> active = new LinkedList<AdventureCard>();
 		AllyCard merlin = new AllyCard("Merlin", 0, 0);
-		ad.push(merlin);
+		active.push(merlin);
 		AllyCard gawain = new AllyCard("Sir Gawain", 10, 0);
-		ad.push(gawain);
+		active.push(gawain);
 		AllyCard pellinore = new AllyCard("King Pellinore", 10, 0);
-		ad.push(pellinore);
-		WeaponCard sword = new WeaponCard("Sword", 10);
-		ad.push(sword);
-		sword = new WeaponCard("Sword", 10);
-		ad.push(sword);
-		sword = new WeaponCard("Sword", 10);
-		ad.push(sword);
+		active.push(pellinore);
 		
 		//start game
-		GameModel game = new GameModel(2, 3, advDeck, storyDeck);
-		game.getPlayerAtIndex(1).playCard(merlin);
-		game.getPlayerAtIndex(1).playCard(gawain);
-		game.getPlayerAtIndex(1).playCard(pellinore);
+		GameModel game = new GameModel(2, 0, advDeck, storyDeck);
+		game.getPlayerAtIndex(1).setActiveHand(active);
+		assertEquals(3, game.getPlayerAtIndex(1).getActive().size());
 		
 		//starts turn, draws card from story deck
 		game.eventTest();

@@ -98,8 +98,9 @@ public class Event {
 					if(card instanceof AllyCard)
 						discard.add(card);
 				}
-				for(AdventureCard card : discard)
+				for(AdventureCard card : discard) {
 					p.discardCard(card, advDeck);
+				}
 			}
 			
 			
