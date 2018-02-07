@@ -4,11 +4,13 @@ import java.util.Collections;
 import java.util.Stack;
 
 public class AdventureDeck extends Deck {
-	private Stack<AdventureCard> deck;
-	private Stack<AdventureCard> discard;
+	
+	//attributes
+	private Stack<AdventureCard> deck;				//deck of cards
+	private Stack<AdventureCard> discard;			//discard pile
 
-	//constructor
-	public AdventureDeck() {
+	//constructors
+	public AdventureDeck() {							//default constructor
 		this.deck = new Stack<AdventureCard>();
 		this.discard = new Stack<AdventureCard>();
 		initFoes();
@@ -18,25 +20,30 @@ public class AdventureDeck extends Deck {
 		initTests();
 	}
 	
-	//Used for test
-	public AdventureDeck(Stack<AdventureCard> d) {
+	public AdventureDeck(Stack<AdventureCard> d) {	//constructs a deck with selected cards
 		this.deck = d;
 		this.discard = new Stack<AdventureCard>();
 	}
 	
+	//getters/setters
+	public boolean deckEmpty() { return this.deck.empty(); }
+	public boolean discardEmpty() { return this.discard.empty(); }
+	public Stack<AdventureCard> getDeck() { return this.deck; }
+	public Stack<AdventureCard> getDiscard() { return this.discard; }
+	
 	//methods
-	public void shuffle() {
+	public void shuffle() {						//shuffles the deck
 		Collections.shuffle(deck);
 	}
 	
-	public void shuffleDiscardIntoDeck() {
+	public void shuffleDiscardIntoDeck() {		//shuffles the discard pile into the deck
 		while(discard.empty() != true) {
 			deck.push(discard.pop());
 		}
 		shuffle();
 	}
 	
-	public AdventureCard drawCard() {
+	public AdventureCard drawCard() {			//draws the top card of the deck
 		if(deck.empty()) {
 			shuffleDiscardIntoDeck();
 			return deck.pop();
@@ -45,16 +52,31 @@ public class AdventureDeck extends Deck {
 			return deck.pop();
 	}
 	
-	public void discardCard(AdventureCard c) {
+	public void discardCard(AdventureCard c) {	//moves a card to the discard pile
 		discard.push(c);
 	}
 	
-	//getters/setters
-		public boolean deckEmpty() { return this.deck.empty(); }
-		public boolean discardEmpty() { return this.discard.empty(); }
-		public Stack<AdventureCard> getDeck() { return this.deck; }
-		public Stack<AdventureCard> getDiscard() { return this.discard; }
+	public void printDeck() {					//prints the cards in the deck
+		System.out.printf("Adventure Deck:\n");
+		System.out.printf("%-15s%-15s%-20s\n", "Name", "Battle Points", "Type", "ID");
+		System.out.printf("==============================================================\n");
+		for(AdventureCard a : this.deck) {
+			a.printCard();
+		}
+		System.out.printf("Number of cards: %s\n", this.deck.size());
+	}
 	
+	public void printDiscard() {					//prints the cards in the discard pile
+		System.out.printf("Adventure Discard:\n");
+		System.out.printf("%-15s%-15s%s\n", "Name", "Battle Points", "Type");
+		System.out.printf("==================================\n");
+		for(AdventureCard a : this.discard) {
+			a.printCard();
+		}
+		System.out.printf("Number of cards: %s\n", this.discard.size());
+	}
+	
+	//constructor initialization methods
 	private void initFoes() {
 		for(int i=0; i<8; i++) {
 			FoeCard thieves = new FoeCard("Thieves", 5);
@@ -161,25 +183,4 @@ public class AdventureDeck extends Deck {
 			this.deck.add(a);
 		}
 	}
-	
-	public void printDeck() {
-		System.out.printf("Adventure Deck:\n");
-		System.out.printf("%-15s%-15s%-20s\n", "Name", "Battle Points", "Type", "ID");
-		System.out.printf("==============================================================\n");
-		for(AdventureCard a : this.deck) {
-			a.printCard();
-		}
-		System.out.printf("Number of cards: %s\n", this.deck.size());
-	}
-	
-	public void printDiscard() {
-		System.out.printf("Adventure Discard:\n");
-		System.out.printf("%-15s%-15s%s\n", "Name", "Battle Points", "Type");
-		System.out.printf("==================================\n");
-		for(AdventureCard a : this.discard) {
-			a.printCard();
-		}
-		System.out.printf("Number of cards: %s\n", this.discard.size());
-	}
-
 }

@@ -6,18 +6,18 @@ import java.util.Stack;
 public class StoryDeck extends Deck {
 	
 	//attributes
-	private Stack<StoryCard> deck;
-	private Stack<StoryCard> discard;
+	private Stack<StoryCard> deck;				//deck of cards
+	private Stack<StoryCard> discard;			//discard pile
 	
-	//constructor
-	public StoryDeck() {
+	//constructors
+	public StoryDeck() {							//default constructor
 		this.deck = new Stack<StoryCard>();
 		this.discard = new Stack<StoryCard>();
 		initTournaments();
 		initEvents();
 		initQuests();
 	}
-	public StoryDeck(String cardType) {
+	public StoryDeck(String cardType) {			//constructs deck consisting of only one type of card	
 		this.deck = new Stack<StoryCard>();
 		this.discard = new Stack<StoryCard>();
 		
@@ -28,23 +28,30 @@ public class StoryDeck extends Deck {
 		else if(cardType == "Quests")
 			initQuests();
 	}
-	//Used for player test
-	public StoryDeck(Stack<StoryCard> d) {
+	public StoryDeck(Stack<StoryCard> d) {		//constructs deck containing selected cards
 		this.deck = d;
 		this.discard = new Stack<StoryCard>();
 	}
 	
+	//getters/setters
+		public boolean deckEmpty() { return this.deck.empty(); }
+		public boolean discardEmpty() { return this.discard.empty(); }
+		public Stack<StoryCard> getDeck() { return this.deck; }
+		public Stack<StoryCard> getDiscard() { return this.discard; }
+	
 	//methods
-	public void shuffle() {
+	public void shuffle() {							//shuffles the deck
 		Collections.shuffle(deck);
 	}
-	protected void shuffleDiscardIntoDeck() {
+	
+	protected void shuffleDiscardIntoDeck() {		//shuffles the discard pile into the deck
 		while(discard.empty() != true) {
 			deck.push(discard.pop());
 		}
 		shuffle();
 	}
-	public StoryCard drawCard() {
+	
+	public StoryCard drawCard() {					//draws the top card of the story deck
 		if(deck.empty()) {
 			shuffleDiscardIntoDeck();
 			return deck.pop();
@@ -52,11 +59,12 @@ public class StoryDeck extends Deck {
 		else
 			return deck.pop();
 	}
-	//moves card to decks discard pile
-	public void discardCard(StoryCard c) {
+	
+	public void discardCard(StoryCard c) {			//moves card to decks discard pile
 		discard.push(c);
 	}
-	public void printDeck() {
+	
+	public void printDeck() {						//prints cards in the deck
 		System.out.printf("Story Deck:\n");
 		System.out.printf("%-40s%-20s%s\n", "Name", "Type", "ID");
 		System.out.printf("================================================================\n");
@@ -65,7 +73,8 @@ public class StoryDeck extends Deck {
 		}
 		System.out.printf("Number of cards: %s\n", deck.size());
 	}
-	public void printDiscard() {
+	
+	public void printDiscard() {						//prints cards in the discard
 		System.out.printf("Story Discard:\n");
 		System.out.printf("%-40s%s\n", "Name", "Type");
 		System.out.printf("==================================\n");
@@ -76,13 +85,7 @@ public class StoryDeck extends Deck {
 		
 	}
 	
-	//getters/setters
-	public boolean deckEmpty() { return this.deck.empty(); }
-	public boolean discardEmpty() { return this.discard.empty(); }
-	public Stack<StoryCard> getDeck() { return this.deck; }
-	public Stack<StoryCard> getDiscard() { return this.discard; }
-	
-	//constructor init methods
+	//constructor initialization methods
 	private void initTournaments() {
 		TournamentCard camelot = new TournamentCard("Tournament at Camelot", 3);
 		this.deck.add(camelot);
