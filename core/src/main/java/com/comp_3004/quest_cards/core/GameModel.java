@@ -26,7 +26,26 @@ public class GameModel{
 	private Players players = new Players(0, numPlayers, new ArrayList<Player>());
 	private volatile Object lockObj = new Object(); // lock for current thread
 	protected volatile ThreadLock lock = new ThreadLock(lockObj);
-	public static enum cardModes { PLAY, DISCARD, NONE }; // determine when card was pressed what action it was. ex.going to discard, or activating(playing),none(nothing)
+	public static enum cardModes { PLAY, DISCARD, NONE }; // determine when card was pressed what action it was. ex.going to discard, or activating(playing),none(nothing)	
+	
+	// constructor
+		public GameModel() {
+			advDeck = new AdventureDeck();
+			advDeck.shuffle();
+			//advDeck.printDeck();
+			storyDeck = new StoryDeck();
+			storyDeck.shuffle();
+			//storyDeck.printDeck();
+			initPlayersStart(4, MAX_HAND_SIZE);
+		}
+		
+		//sandbox constructor: pass in premade decks to control/set up a scenario
+		public GameModel(int n, int c, AdventureDeck a, StoryDeck s) {
+			this.numPlayers = n;
+			this.advDeck = a;
+			this.storyDeck = s;
+			initPlayersStart(numPlayers, c); //c is the number of cards the player will start with
+		}
 	
 	//getters setters
 	public Players getPlayers() { return players; }
@@ -43,25 +62,6 @@ public class GameModel{
 	}
 	public GameMatch getMatch() { return match; }
 
-	
-	// constructor
-	public GameModel() {
-		advDeck = new AdventureDeck();
-		advDeck.shuffle();
-		//advDeck.printDeck();
-		storyDeck = new StoryDeck();
-		storyDeck.shuffle();
-		//storyDeck.printDeck();
-		initPlayersStart(4, MAX_HAND_SIZE);
-	}
-	
-	//sandbox constructor: pass in premade decks to control/set up a scenario
-	public GameModel(int n, int c, AdventureDeck a, StoryDeck s) {
-		this.numPlayers = n;
-		this.advDeck = a;
-		this.storyDeck = s;
-		initPlayersStart(numPlayers, c); //c is the number of cards the player will start with
-	}
 	
 	public void startGame() {
 		//testing

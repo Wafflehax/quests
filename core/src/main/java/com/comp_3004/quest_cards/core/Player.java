@@ -10,15 +10,12 @@ import com.comp_3004.quest_cards.cards.AdventureCard.State;
 
 public class Player{
 	static Logger log = Logger.getLogger(Player.class); //log4j logger
-	private String name;
 	public enum Rank implements Comparable<Rank>{ 
 		SQUIRE(0), KNIGHT(1), CHAMPION_KNIGHT(2), KNIGHT_OF_THE_ROUND_TABLE(3) ;
-		
 		private int index;
 		Rank(int i) {
 			this.index = i;
 		}
-		
 		public int getIndex() { return this.index; }
 	}
 	class RankComparator implements Comparator<Rank> {
@@ -34,14 +31,12 @@ public class Player{
 		      return returnValue;
 		  }
 	}
-
+	private String name;
+	private boolean kingsRecognitionBonus = false;		//if true, gain bonus shields when quest completed
 	private Rank rank;
-	private int shields;
-	
+	private int shields;	
 	protected LinkedList<AdventureCard> playerHandCards;
 	protected LinkedList<AdventureCard> playerActiveCards;
-
-	
 	protected boolean participateQuest;
 	protected volatile boolean participateTournament;
 	
@@ -64,6 +59,8 @@ public class Player{
 	public int numberOfActiveCards() { return playerActiveCards.size(); }
 	public LinkedList<AdventureCard> getHand() { return this.playerHandCards; }
 	public LinkedList<AdventureCard> getActive() { return this.playerActiveCards; }
+	public boolean getKingsRecognitionBonus() { return this.kingsRecognitionBonus; }
+	public void setKingsRecognitionBonus(boolean b) { this.kingsRecognitionBonus = b; }
 	
 	public void setHand(String[] cards) { 		//used in testing
 		CardSpawner spawner = new CardSpawner();

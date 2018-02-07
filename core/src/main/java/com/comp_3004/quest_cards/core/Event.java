@@ -69,8 +69,7 @@ public class Event {
 		}
 		
 		else if(evnt.getName() ==  "King's Recognition") {
-			System.out.printf("The event %s is not yet implemented\n", evnt.getName());
-			//TODO: implement this event later
+			players.current().setKingsRecognitionBonus(true);
 		}
 		
 		else if(evnt.getName() ==  "Queen's Favor") {

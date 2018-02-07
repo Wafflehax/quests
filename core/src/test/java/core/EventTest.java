@@ -219,7 +219,7 @@ public class EventTest extends TestCase{
 		StoryDeck storyDeck = new StoryDeck(sd);
 		
 		//set up adventure deck
-		String[] ad = {"sword", "sword", "sword", "sword", "sword", "sword", "sword", "sword", }; 
+		String[] ad = {"sword", "sword", "sword", "sword", "sword", "sword", "sword", "sword" }; 
 		AdventureDeck advDeck = new AdventureDeck(ad);
 		
 		GameModel game;
@@ -230,6 +230,43 @@ public class EventTest extends TestCase{
 		game.eventTest();
 		for(int i=0; i<4; i++)
 			assertEquals(2, game.getPlayerAtIndex(i).getHand().size());
+	}
+	
+	public void testKingsRecognition() {
+		//set up story deck
+				String[] sd = {"kingsRecognition"};
+				StoryDeck storyDeck = new StoryDeck(sd);
+				
+				//set up adventure deck
+				String[] ad = {}; 
+				AdventureDeck advDeck = new AdventureDeck(ad);
+				
+				GameModel game;
+				
+				//test 1 normal case
+				game = new GameModel(2, 0, advDeck, storyDeck);
+				
+				assert(!game.getPlayerAtIndex(0).getKingsRecognitionBonus());
+				assert(!game.getPlayerAtIndex(1).getKingsRecognitionBonus());
+				
+				game.eventTest();
+				
+				assert(game.getPlayerAtIndex(0).getKingsRecognitionBonus());
+				assert(!game.getPlayerAtIndex(1).getKingsRecognitionBonus());
+				
+				//test already has kings recognition
+				game = new GameModel(2, 0, advDeck, storyDeck);
+				game.getPlayerAtIndex(0).setKingsRecognitionBonus(true);
+				
+				assert(game.getPlayerAtIndex(0).getKingsRecognitionBonus());
+				assert(!game.getPlayerAtIndex(1).getKingsRecognitionBonus());
+				
+				game.eventTest();
+				
+				assert(game.getPlayerAtIndex(0).getKingsRecognitionBonus());
+				assert(!game.getPlayerAtIndex(1).getKingsRecognitionBonus());
+				
+				//TODO: test in quest tests that the player actually gets the bonus shields
 	}
 
 }
