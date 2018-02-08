@@ -1,5 +1,6 @@
 package com.comp_3004.quest_cards.core;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
@@ -17,19 +18,33 @@ public class Quest {
 	static Logger log = Logger.getLogger(Event.class); //log4j logger
 	private QuestCard quest;
 	private Players players;
+	private Player sponsor;
+	private ArrayList<AdventureCard>[] stages;
+	private ArrayList<AdventureCard> stage;
 	private AdventureDeck advDeck;
+	Scanner sc = new Scanner(System.in);
+	
+	//getters/setters
+	public ArrayList<AdventureCard> getStage(int i) { return this.stages[i]; }
 
 	//constructor
 	public Quest(QuestCard q, Players p, AdventureDeck d) {
 		this.quest = q;
 		this.players = p;
+		this.sponsor = null;
+		this.stages = new ArrayList[quest.getStages()];
+		for(int i=0; i<quest.getStages(); i++) {
+			stage = new ArrayList<AdventureCard>();
+			stages[i] = stage;
+		}
 		this.advDeck = d;
+		
 	}
 	
 	//abstract this method into submethods that are called such as questSponsorship(), questSetUp(), questPlay()
 	public void runQuest() {
 		log.info(players.current().getName() + " drew quest " + quest.getName());
-		Scanner sc = new Scanner(System.in);
+		
 		//game announces the quest drawn (show quest card on screen)
 		System.out.printf("Starting %s\n", quest.getName());
 		
@@ -54,8 +69,8 @@ public class Quest {
 					}	
 				}
 				if(numFoeTest >= quest.getStages()) {
-					questSponsored = true;
-					System.out.printf("%s sponsored the quest!", p.getName());
+					sponsor = p;
+					System.out.printf("%s sponsored the quest!\n", sponsor);
 					break;
 				}
 				else
@@ -63,10 +78,29 @@ public class Quest {
 							+ "(Quest requires %s foe+test cards, you have %s\n", p.getName(), quest.getStages(), numFoeTest);
 			}
 		}
-		if(!questSponsored)
+		if(sponsor == null)
 			System.out.println("No one sponsored quest, turn over");
 		
 		//sponsor sets up quest
+		boolean questSetUp = false;
+		while(!questSetUp) {
+			for(int i=0; i<quest.getStages(); i++) {
+				System.out.printf("%s, select cards for stage %s\n", sponsor, i);
+				sponsor.printHand();
+				choice = sc.nextInt();
+				sponsor.playCard(sponsor.getHand().get(choice), this, i);
+				//TODO:Check if the player wants to add more cards to the stage, if not continue on to the next stage
+			}
+			questSetUp = true;
+		}
+		
+		for(int i=0; i<quest.getStages(); i++) {
+			System.out.printf("Stage %s: \n", i);
+			for(AdventureCard card : stage)
+				card.printCard();
+		}
+
+		
 			//each stage must have a foe or a test
 				//only one test card per quest
 				//if a stage has a foe it can have weapons added as well

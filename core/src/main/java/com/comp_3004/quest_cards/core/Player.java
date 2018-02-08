@@ -34,7 +34,7 @@ public class Player{
 	private String name;
 	private boolean kingsRecognitionBonus = false;		//if true, gain bonus shields when quest completed
 	private Rank rank;
-	private int shields;	
+	private int shields;
 	protected LinkedList<AdventureCard> playerHandCards;
 	protected LinkedList<AdventureCard> playerActiveCards;
 	protected boolean participateQuest;
@@ -145,6 +145,21 @@ public class Player{
 		// can only add cards to table from your hand
 		if(playerHandCards.contains(c)) {
 			playerActiveCards.add(c);
+			playerHandCards.remove(c);
+			c.setState(State.PLAY);
+			log.info("played card " + c.getName());
+			return true;
+		}else {
+			//TODO: conditions where player cannot play card
+			log.info("Failed you do now have this card " + c.getName());
+			return false; 
+		}
+	}
+	
+	//plays card to quest stage when sponsoring
+	public boolean playCard(AdventureCard c, Quest q, int stageNum) {
+		if(playerHandCards.contains(c)) {
+			q.getStage(stageNum).add(c);
 			playerHandCards.remove(c);
 			c.setState(State.PLAY);
 			log.info("played card " + c.getName());
