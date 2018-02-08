@@ -19,6 +19,7 @@ public class GameModel{
 	public static final byte MAX_HAND_SIZE = 12;
 	
 	private Event event;
+	private Quest quest;
 	private AdventureDeck advDeck;
 	private StoryDeck storyDeck;
 	protected volatile GameMatch match; //calling quests and tours matches
@@ -156,11 +157,18 @@ public class GameModel{
 	
 	//Event testing
 	public void eventTest() {
-		
 			StoryCard cardDrawn = storyDeck.drawCard();
 			event = new Event(cardDrawn, players, advDeck);
 			event.runEvent();
 			storyDeck.discardCard(cardDrawn);
+	}
+	
+	//Quest testing
+	public void questTest() {
+		StoryCard cardDrawn = storyDeck.drawCard();
+		quest = new Quest(cardDrawn, players, advDeck);
+		quest.runQuest();
+		storyDeck.discardCard(cardDrawn);
 	}
 	
 }
