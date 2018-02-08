@@ -234,39 +234,90 @@ public class EventTest extends TestCase{
 	
 	public void testKingsRecognition() {
 		//set up story deck
-				String[] sd = {"kingsRecognition"};
-				StoryDeck storyDeck = new StoryDeck(sd);
-				
-				//set up adventure deck
-				String[] ad = {}; 
-				AdventureDeck advDeck = new AdventureDeck(ad);
-				
-				GameModel game;
-				
-				//test 1 normal case
-				game = new GameModel(2, 0, advDeck, storyDeck);
-				
-				assert(!game.getPlayerAtIndex(0).getKingsRecognitionBonus());
-				assert(!game.getPlayerAtIndex(1).getKingsRecognitionBonus());
-				
-				game.eventTest();
-				
-				assert(game.getPlayerAtIndex(0).getKingsRecognitionBonus());
-				assert(!game.getPlayerAtIndex(1).getKingsRecognitionBonus());
-				
-				//test already has kings recognition
-				game = new GameModel(2, 0, advDeck, storyDeck);
-				game.getPlayerAtIndex(0).setKingsRecognitionBonus(true);
-				
-				assert(game.getPlayerAtIndex(0).getKingsRecognitionBonus());
-				assert(!game.getPlayerAtIndex(1).getKingsRecognitionBonus());
-				
-				game.eventTest();
-				
-				assert(game.getPlayerAtIndex(0).getKingsRecognitionBonus());
-				assert(!game.getPlayerAtIndex(1).getKingsRecognitionBonus());
-				
-				//TODO: test in quest tests that the player actually gets the bonus shields
+		String[] sd = {"kingsRecognition"};
+		StoryDeck storyDeck = new StoryDeck(sd);
+		
+		//set up adventure deck
+		String[] ad = {}; 
+		AdventureDeck advDeck = new AdventureDeck(ad);
+		
+		GameModel game;
+		
+		//test 1 normal case
+		game = new GameModel(2, 0, advDeck, storyDeck);
+		
+		assert(!game.getPlayerAtIndex(0).getKingsRecognitionBonus());
+		assert(!game.getPlayerAtIndex(1).getKingsRecognitionBonus());
+		
+		game.eventTest();
+		
+		assert(game.getPlayerAtIndex(0).getKingsRecognitionBonus());
+		assert(!game.getPlayerAtIndex(1).getKingsRecognitionBonus());
+		
+		//test already has kings recognition
+		game = new GameModel(2, 0, advDeck, storyDeck);
+		game.getPlayerAtIndex(0).setKingsRecognitionBonus(true);
+		
+		assert(game.getPlayerAtIndex(0).getKingsRecognitionBonus());
+		assert(!game.getPlayerAtIndex(1).getKingsRecognitionBonus());
+		
+		game.eventTest();
+		
+		assert(game.getPlayerAtIndex(0).getKingsRecognitionBonus());
+		assert(!game.getPlayerAtIndex(1).getKingsRecognitionBonus());
+		
+		//TODO: test in quest tests that the player actually gets the bonus shields
+	}
+	
+	public void testKingsCallToArms() {
+		//set up story deck
+		String[] sd = {"kingsCallToArms"};
+		StoryDeck storyDeck = new StoryDeck(sd);
+		
+		//set up adventure deck
+		String[] ad = {}; 
+		AdventureDeck advDeck = new AdventureDeck(ad);
+		
+		//set up hands
+		String[] hand0 = {"dagger", "lance", "sword"};
+		String[] hand1 = {"dagger"};
+		
+		GameModel game;
+		
+		//test 1 players have weapons to discard
+		game = new GameModel(2, 0, advDeck, storyDeck);
+		game.getPlayerAtIndex(0).addShields(0);
+		game.getPlayerAtIndex(0).setHand(hand0);
+		game.getPlayerAtIndex(1).addShields(0);
+		game.getPlayerAtIndex(1).setHand(hand1);
+		
+		
+		game.eventTest();
+		assertEquals(2,game.getPlayerAtIndex(0).getHand().size());
+		assertEquals(0,game.getPlayerAtIndex(1).getHand().size());
+		assertEquals(2,game.getAdvDeck().getDiscard().size());
+		
+		//test 2 players have no weapons to discard
+		advDeck = new AdventureDeck();
+		String[] t2hand0 = {"boar", "saxons", "dragon"};
+		String[] t2hand1 = {"boar", "saxons"};
+		String[] t2hand2 = {"boar"};
+		
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		game.getPlayerAtIndex(0).addShields(0);
+		game.getPlayerAtIndex(0).setHand(t2hand0);
+		game.getPlayerAtIndex(1).addShields(0);
+		game.getPlayerAtIndex(1).setHand(t2hand1);
+		game.getPlayerAtIndex(2).addShields(0);
+		game.getPlayerAtIndex(2).setHand(t2hand2);
+		game.getPlayerAtIndex(3).addShields(0);
+		
+		game.eventTest();
+		assertEquals(1,game.getPlayerAtIndex(0).getHand().size());
+		assertEquals(0,game.getPlayerAtIndex(1).getHand().size());
+		assertEquals(0,game.getPlayerAtIndex(2).getHand().size());
+		assertEquals(0,game.getPlayerAtIndex(3).getHand().size());
+		assertEquals(5,game.getAdvDeck().getDiscard().size());
 	}
 
 }

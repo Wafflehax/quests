@@ -1,13 +1,16 @@
 package com.comp_3004.quest_cards.core;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.AllyCard;
+import com.comp_3004.quest_cards.cards.FoeCard;
 import com.comp_3004.quest_cards.cards.StoryCard;
+import com.comp_3004.quest_cards.cards.WeaponCard;
 
 public class Event {
 	
@@ -105,8 +108,61 @@ public class Event {
 			
 		}
 		else if(evnt.getName() ==  "King's Call to Arms") {
-			System.out.printf("The event %s is not yet implemented\n", evnt.getName());
-			//TODO: implement this event later
+			//get highest rank players
+			ArrayList<Player> highestRank = new ArrayList<Player>();
+			highestRank.add(0, players.getPlayerAtIndex(0));
+			for(int i=1; i<players.getNumPlayers(); i++) {
+				if(highestRank.get(0).getRank().compareTo(players.getPlayerAtIndex(i).getRank()) == -1) {
+					highestRank.clear();
+					highestRank.add(0, players.getPlayerAtIndex(i));
+				}
+				else if(highestRank.get(0).getRank().compareTo(players.getPlayerAtIndex(i).getRank()) == 0) {
+					highestRank.add(highestRank.size(), players.getPlayerAtIndex(i));
+				}
+			}
+			
+			//for each player, get a list of weapon cards they have
+			ArrayList<AdventureCard> discard;
+			for(Player p : highestRank) {
+				discard = new ArrayList<AdventureCard>();
+				for(AdventureCard card : p.getHand())
+					if(card instanceof WeaponCard)
+						discard.add(card);
+				//player has 1 weapon to discard
+				if(discard.size() == 1) {
+					p.discardCard(discard.get(0), advDeck);
+				}
+				//player has to choose which weapon to discard
+				else if(discard.size() > 1) {
+					Scanner sc = new Scanner(System.in);		//using scanner for user input for now
+					int index;								//when switching to ui control, use cardID
+					System.out.printf("%s please select index of card to discard\n", p.getName());
+					index = sc.nextInt();
+					p.discardCard(discard.get(index), advDeck);
+				}
+				//player has no weapon, must discard 2 foes
+				else {
+					//for each player, get a list of foe cards they have
+					for(AdventureCard card : p.getHand())
+						if(card instanceof FoeCard)
+							discard.add(card);
+					//player has 2 or less foes
+					if(discard.size() <= 2) {
+						for(AdventureCard c : discard)
+							p.discardCard(c, advDeck);
+					}
+					//player has to choose which foes to discard
+					else if(discard.size() > 2) {
+						for(int i=0; i<2; i++) {
+							Scanner sc = new Scanner(System.in);		//using scanner for user input for now
+							int index;								//when switching to ui control, use cardID
+							System.out.printf("%s please select index of card to discard\n", p.getName());
+							index = sc.nextInt();
+							p.discardCard(discard.get(index), advDeck);
+						}
+					}
+				}
+			}
 		}
 		else if(evnt.getName() ==  "Prosperity Throughout the Realms") {
 			for(int i=0; i<players.getNumPlayers(); i++) {
