@@ -23,16 +23,16 @@ public class CardSpawner {
 		else if(name =="kingsCallToArms") { return new EventCard("King's Call to Arms"); }
 		
 		//quest spawners
-		else if(name == "searchForTheHolyGrail") {return new QuestCard("Search for the Holy Grail"); }
-		else if(name == "testOfTheGreenKnight") { return new QuestCard("Test of the Green Knight"); }
-		else if(name == "searchForTheQuestingBeast") { return new QuestCard("Search for the Questing Beast"); }
-		else if(name == "defendTheQueensHonor") { return new QuestCard("Defend the Queen's Honor"); }
-		else if(name == "rescueTheFairMaiden") { return new QuestCard("Rescue the Fair Maiden");}
-		else if(name == "journeyThroughTheEnchantedForest") { return new QuestCard("Journey Through the Enchanted Forest"); }
-		else if(name == "slayTheDragon") { return new QuestCard("Slay the Dragon"); }
-		else if(name == "vanquishKingArthursEnemies") { return new QuestCard("Vanquish King Arthur's Enemies");}
-		else if(name == "boarHunt") { return new QuestCard("Boar Hunt"); }
-		else if(name == "repelTheSaxonInvaders") { return new QuestCard("Repel the Saxon Invaders"); }
+		else if(name == "searchForTheHolyGrail") {return new QuestCard("Search for the Holy Grail", 5, "all"); }
+		else if(name == "testOfTheGreenKnight") { return new QuestCard("Test of the Green Knight", 4, "greenKnight"); }
+		else if(name == "searchForTheQuestingBeast") { return new QuestCard("Search for the Questing Beast", 4); }
+		else if(name == "defendTheQueensHonor") { return new QuestCard("Defend the Queen's Honor", 4, "all"); }
+		else if(name == "rescueTheFairMaiden") { return new QuestCard("Rescue the Fair Maiden", 3, "blackKnight");}
+		else if(name == "journeyThroughTheEnchantedForest") { return new QuestCard("Journey Through the Enchanted Forest", 3, "evilKnight"); }
+		else if(name == "slayTheDragon") { return new QuestCard("Slay the Dragon", 3, "dragon"); }
+		else if(name == "vanquishKingArthursEnemies") { return new QuestCard("Vanquish King Arthur's Enemies", 3);}
+		else if(name == "boarHunt") { return new QuestCard("Boar Hunt", 2, "boar"); }
+		else if(name == "repelTheSaxonInvaders") { return new QuestCard("Repel the Saxon Invaders", 2, "allSaxons"); }
 		
 		return c;
 	}

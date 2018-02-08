@@ -10,6 +10,7 @@ import com.comp_3004.quest_cards.cards.AllyCard;
 import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.cards.TournamentCard;	//used for testing
 import com.comp_3004.quest_cards.cards.EventCard;			//used for testing
+import com.comp_3004.quest_cards.cards.QuestCard;
 import com.comp_3004.quest_cards.cards.StoryCard;
 
 
@@ -165,7 +166,7 @@ public class GameModel{
 	
 	//Quest testing
 	public void questTest() {
-		StoryCard cardDrawn = storyDeck.drawCard();
+		QuestCard cardDrawn = (QuestCard)storyDeck.drawCard();
 		quest = new Quest(cardDrawn, players, advDeck);
 		quest.runQuest();
 		storyDeck.discardCard(cardDrawn);
