@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.comp_3004.quest_cards.core.states.TourTest;
 import com.comp_3004.quest_cards.gui.GameScreen;
 
 import java.util.HashMap;
@@ -77,9 +78,13 @@ public class QuestCards implements ApplicationListener {
     gameScreens.put("mainGame", new GameScreen());
     stage.addActor(gameScreens.get("mainGame"));
     
-    GameModel model = new GameModel();   
-    GameController gameController = new GameController(model);
-    model.eventTest();
+    // Temp Tour testing
+    TourTest test = new TourTest();
+    test.test();
+    
+    //GameModel model = new GameModel();   
+    //GameController gameController = new GameController(model);
+    //model.eventTest();
   }
 
   @Override

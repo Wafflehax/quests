@@ -136,7 +136,7 @@ public class Player{
 			return true;
 		}else {
 			//TODO: conditions where player cannot play card
-			log.info("Failed you do now have this card " + c.getName());
+			log.info("Failed playCard(adv c): you do now have this card " + c.getName());
 			return false; 
 		}
 	}

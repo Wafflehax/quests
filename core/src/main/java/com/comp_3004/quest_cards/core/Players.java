@@ -12,6 +12,7 @@ public class Players{
 	private int position;
 	private int endIndex;
 	
+	//assuming start index at 0
 	// class stores int position from 0 to endPos. Once end Position reached loops to start
 	// and players
 
@@ -28,9 +29,26 @@ public class Players{
 
 	// getter/setter
 	protected boolean isEmpty() {		return players.isEmpty();		}
+	public int size() {	return players.size(); }
 	public int getNumPlayers() { return this.players.size(); }
 	public ArrayList<Player> getPlayers() { return this.players; }
 	public Player getPlayerAtIndex(int i) { return players.get(i); }
+	
+	//setter
+	public void setArray(ArrayList<Player> p) {
+		this.players = p;
+	}
+	public void setSize(int s) {
+		if(s > 0) {
+			endIndex = s-1;
+		}else if(s == 0) {
+			endIndex = s;
+		}
+	}
+	public void setPos(int i) {
+		position = i;
+	}
+	
 	
 	public void addPlayer(String name) {
 		Player p = new Player(name);
@@ -52,8 +70,20 @@ public class Players{
 		return position;
 	}
 	
+	private int prevIndex() {
+		if(position == 0)
+			position = endIndex;
+		else
+			position--;
+		return position;
+	}
+	
 	public Player next() {
 		return players.get(nextIndex());
+	}
+	
+	public Player prev() {
+		return players.get(prevIndex());
 	}
 	
 	public Player current() {
