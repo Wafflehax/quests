@@ -108,14 +108,14 @@ E_Court_Called_Camelot
   orig: 218, 300
   offset: 0, 0
   index: -1
-E_King's_Call_to_Arms
+E_Kings_Call_to_Arms
   rotate: false
   xy: 437, 1500
   size: 217, 300
   orig: 217, 300
   offset: 0, 0
   index: -1
-E_King's_Recognition
+E_Kings_Recognition
   rotate: false
   xy: 871, 1500
   size: 218, 300
@@ -143,7 +143,7 @@ E_Prosperity_Throughout_the_Realm
   orig: 216, 300
   offset: 0, 0
   index: -1
-E_Queen's_Favor
+E_Queens_Favor
   rotate: false
   xy: 654, 1500
   size: 217, 300
@@ -304,7 +304,7 @@ T_Test_of_Valor
   orig: 213, 300
   offset: 0, 0
   index: -1
-W_Battle-ax
+W_Battle_ax
   rotate: false
   xy: 434, 600
   size: 212, 300

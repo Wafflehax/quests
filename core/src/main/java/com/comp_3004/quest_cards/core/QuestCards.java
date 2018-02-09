@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.comp_3004.quest_cards.gui.Config;
-import com.comp_3004.quest_cards.gui.GameView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +35,7 @@ public class QuestCards implements ApplicationListener {
 
   //Game Screens
 
-  private Map<String, Group> gameScreens;
+  private Map<String, Group> gameStates;
 
 
   @Override
@@ -64,12 +63,12 @@ public class QuestCards implements ApplicationListener {
 
     //Init game screen & set as current screen
 
-    gameScreens = new HashMap<String, Group>();
-    gameScreens.put("mainGame", new GameView(this));
+    gameStates = new HashMap<String, Group>();
+    gameStates.put("mainGame", new GamePresenter(this));
 
     //Switch screen
 
-    stage.addActor(gameScreens.get("mainGame"));
+    stage.addActor(gameStates.get("mainGame"));
 
     //Create game MVC
     //GameModel model = new GameModel();
@@ -88,10 +87,6 @@ public class QuestCards implements ApplicationListener {
 
   @Override
   public void render() {
-
-    //
-
-    //controller.update()
 
     //Clear screen
 

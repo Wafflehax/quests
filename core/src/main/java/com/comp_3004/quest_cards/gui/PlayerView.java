@@ -3,6 +3,7 @@ package com.comp_3004.quest_cards.gui;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.comp_3004.quest_cards.core.Player;
 
 public class PlayerView extends Table {
@@ -25,74 +26,43 @@ public class PlayerView extends Table {
 
     //Init widgets
 
-    shields = configureShields(new Image());
-    hero = configureHero(new Image());
-    playerAdventureCards = configureAdventureDeck(initAdventureDeck());
+    shields = new Image();
+    shields.setBounds(
+        Config.PlayerView.WIDTH - Config.PlayerView.PADDING_HORIZONTAL - Config.PlayerView.SHIELD_WIDTH,
+        Config.PlayerView.HEIGHT + Config.PlayerView.PADDING_VERTICAL,
+        Config.PlayerView.SHIELD_WIDTH,
+        Config.PlayerView.SHIELD_HEIGHT);
 
-    //Set up widgets
+    //Init hero
 
-    add(playerAdventureCards);
-    add(shields);
-    add(hero);
-  }
+    hero = new Image();
+    hero.setBounds(
+        Config.PlayerView.WIDTH - Config.PlayerView.PADDING_HORIZONTAL - Config.CardView.CARD_WIDTH,
+        Config.PlayerView.PADDING_VERTICAL,
+        Config.CardView.CARD_WIDTH,
+        Config.CardView.CARD_HEIGHT);
 
-  private DeckView initAdventureDeck() {
+    //Init player hand
 
     DeckView.DisplayStrategy deckDisplay = new SpillingDeckStrategy(
         Config.PlayerView.ADVENTURE_CARDS_MIN_OVERLAP,
         Config.PlayerView.ADVENTURE_CARDS_MAX_OVERLAP);
 
     playerAdventureCards = new DeckView(deckDisplay);
-    return playerAdventureCards;
-  }
-
-  private DeckView configureAdventureDeck(DeckView playerAdventureCards) {
-
     playerAdventureCards.setBounds(
         Config.PlayerView.PADDING_HORIZONTAL,
         Config.PlayerView.PADDING_VERTICAL,
         Config.PlayerView.ADVENTURE_SPILLDECK_WIDTH,
         Config.CardView.CARD_HEIGHT);
 
-    return playerAdventureCards;
+    //Add widgets to table
+
+    add(playerAdventureCards);
+    add(shields);
+    add(hero);
   }
 
-  private Image configureShields(Image shields) {
 
-    shields.setSize(Config.PlayerView.SHIELD_WIDTH, Config.PlayerView.SHIELD_HEIGHT);
-
-    float x = getWidth() - Config.PlayerView.PADDING_HORIZONTAL - shields.getWidth();
-    float y = getHeight() + Config.PlayerView.PADDING_VERTICAL;
-
-    shields.setPosition(x, y);
-
-    System.out.printf("Shields x: %f\n", x);
-    System.out.printf("Shields y: %f\n", y);
-    System.out.printf("Shields width: %f\n", shields.getWidth());
-    System.out.printf("Shields height: %f\n", shields.getHeight());
-
-    return shields;
-  }
-
-  private Image configureHero(Image hero) {
-
-    hero.setBounds(
-        getWidth() - hero.getWidth() - Config.PlayerView.PADDING_HORIZONTAL,
-        Config.PlayerView.PADDING_VERTICAL,
-        Config.CardView.CARD_WIDTH,
-        Config.CardView.CARD_HEIGHT);
-
-    return hero;
-  }
-
-  public PlayerView setShieldsTexture(TextureRegion shieldTexture) {
-
-    removeActor(this.shields);
-    shields = configureShields(new Image(shieldTexture));
-    addActor(shields);
-
-    return this;
-  }
 
   /*
   public void debugCards(GameView parent) {
@@ -109,23 +79,28 @@ public class PlayerView extends Table {
   }
    */
 
-  public PlayerView setHero(CardView hero) {
+  public PlayerView setShieldsTexture(TextureRegion shieldTexture) {
 
-    removeActor(this.hero);
-    this.hero = hero;
-    addActor(hero);
-
+    shields.setDrawable(new TextureRegionDrawable(shieldTexture));
     return this;
   }
 
-  public PlayerView setCards(CardView[] cards) {
+  public PlayerView displayHero(TextureRegion heroDrawable) {
+
+    this.hero.setDrawable(new TextureRegionDrawable(heroDrawable));
+    return this;
+  }
+
+  public PlayerView displayPlayerHand(CardView[] cards) {
     playerAdventureCards.setCards(cards);
     return this;
   }
 
+  public PlayerView displayShieldNumber(int n){
 
-  public static class PlayerViewTester {
-
+    return null;
   }
+
+
 }
 

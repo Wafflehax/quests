@@ -8,7 +8,7 @@ public class Config {
   public static class GameView {
     public static final int DRAWING_DECKS_WIDTH = 600;
     public static final int PADDING_HORIZONTAL = 25;
-    public static final int PADDDING_VERTICAL = 10;
+    public static final int PADDING_VERTICAL = 10;
     public static final int DISCARD_PILE_WIDTH = 278;
   }
 
