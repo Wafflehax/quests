@@ -44,9 +44,8 @@ public class GameController extends Actor{
 	
 	//When player pulls from hand to table (playing card)
 	// returns true if card played to table
-	private boolean handPress(Card c) {
-		boolean played = false;
-		return played;
+	public boolean handPress(Card c) {
+		return m.getState().handPress(c);
 	}
 	// Card dragged to discard pile
 	// returns true if successful

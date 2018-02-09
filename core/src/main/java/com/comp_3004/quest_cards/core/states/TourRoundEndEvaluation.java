@@ -86,9 +86,10 @@ public class TourRoundEndEvaluation extends State{
 						out += " and shields " + this.c.m.getPlayers().getPlayerAtIndex(i).getShields() + "\n";
 					}
 					tourStage++;
-					//over pop self and move on
-					
 					log.info(out);
+					//over pop self and move on
+					this.c.m.sPop();
+					this.c.m.StateMsg(); //moving to next state
 				}
 				else {
 					log.info("Error stage greater than 2.");
@@ -97,15 +98,12 @@ public class TourRoundEndEvaluation extends State{
 			else {
 				log.info("Error calc winners");
 			}
-			
-			
 		}
 		else
 			log.info("Error no players to calc points but tour started with players");
-			
 	}
 
-	private int calcBattlePoints(Player p) {
+	public int calcBattlePoints(Player p) {
 		int bp = p.getRankBattlePts();
 		String out = "";
 		out += "Player : " + p.getName() + " has rank: "	+ p.getRankBattlePts() + "\nbattlepoints: ";

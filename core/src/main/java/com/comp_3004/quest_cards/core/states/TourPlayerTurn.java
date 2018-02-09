@@ -34,7 +34,7 @@ public class TourPlayerTurn extends State {
 	public boolean handPress(Card c) {
 		boolean played = false;
 		if(c instanceof WeaponCard || c instanceof AmourCard || c instanceof AllyCard) {
-			if( !(c instanceof AllyCard) && this.c.m.inPlay(c.getName())){
+			if((c instanceof AllyCard) == false && this.c.m.inPlay(c.getName())){
 				log.info("Can't play two of same weapons, or more than one amour");
 			}
 			else {
