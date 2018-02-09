@@ -8,7 +8,7 @@ public abstract class AdventureCard extends Card {
 	protected Player owner;	//player that currently owns the card (in hand/in play)
 	State state;				//where the card is currently located
 	public enum State {
-		HAND, PLAY, DECK, DISCARD
+		HAND, PLAY, QUEST, DECK, DISCARD
 	}
 	
 	//constructor

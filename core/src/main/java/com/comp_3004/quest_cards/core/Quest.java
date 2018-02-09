@@ -11,6 +11,7 @@ import com.comp_3004.quest_cards.cards.FoeCard;
 import com.comp_3004.quest_cards.cards.QuestCard;
 import com.comp_3004.quest_cards.cards.StoryCard;
 import com.comp_3004.quest_cards.cards.TestCard;
+import com.comp_3004.quest_cards.cards.WeaponCard;
 
 public class Quest {
 	
@@ -19,22 +20,22 @@ public class Quest {
 	private QuestCard quest;
 	private Players players;
 	private Player sponsor;
-	private ArrayList<AdventureCard>[] stages;
-	private ArrayList<AdventureCard> stage;
+	private QuestStage[] stages;
+	private QuestStage stage;
 	private AdventureDeck advDeck;
-	Scanner sc = new Scanner(System.in);
+	Scanner sc = new Scanner(System.in);		//used for user input for now
 	
 	//getters/setters
-	public ArrayList<AdventureCard> getStage(int i) { return this.stages[i]; }
+	public QuestStage getStage(int i) { return this.stages[i]; }
 
 	//constructor
 	public Quest(QuestCard q, Players p, AdventureDeck d) {
 		this.quest = q;
 		this.players = p;
 		this.sponsor = null;
-		this.stages = new ArrayList[quest.getStages()];
+		this.stages = new QuestStage[quest.getStages()];
 		for(int i=0; i<quest.getStages(); i++) {
-			stage = new ArrayList<AdventureCard>();
+			stage = new QuestStage();
 			stages[i] = stage;
 		}
 		this.advDeck = d;
@@ -48,6 +49,28 @@ public class Quest {
 		//game announces the quest drawn (show quest card on screen)
 		System.out.printf("Starting %s\n", quest.getName());
 		
+		//get a sponsor for the quest
+		questSponsorship();
+		//if no sponsor, quest is done, turn is over
+		if(sponsor == null) {
+			System.out.println("No one sponsored quest, turn over");
+			return;
+		}
+		
+		//sponsor sets up quest
+		questSetup();
+		
+		
+		//remaining players decide if they want to participate in the quest
+		
+		//playing a quest
+			//each participating player draws a card from the adventure deck
+			//TODO: finish steps in playing a quest
+		
+		
+	}
+	
+	private void questSponsorship() {
 		//players starting with current player accept/decline sponsoring quest
 		int choice;
 		boolean questSponsored = false;
@@ -70,7 +93,7 @@ public class Quest {
 				}
 				if(numFoeTest >= quest.getStages()) {
 					sponsor = p;
-					System.out.printf("%s sponsored the quest!\n", sponsor);
+					System.out.printf("%s sponsored the quest!\n", sponsor.getName());
 					break;
 				}
 				else
@@ -78,43 +101,125 @@ public class Quest {
 							+ "(Quest requires %s foe+test cards, you have %s\n", p.getName(), quest.getStages(), numFoeTest);
 			}
 		}
-		if(sponsor == null)
-			System.out.println("No one sponsored quest, turn over");
+	}
+	
+	private void questSetup() {
+		boolean setUpDone;
+		boolean doneAddingCards;
+		boolean stagesComplete;
+		boolean testAdded = false;
+		int c;		//stores player choice for card
+		int s;		//stores player choice for which stage to play the card
 		
-		//sponsor sets up quest
-		boolean questSetUp = false;
-		while(!questSetUp) {
-			for(int i=0; i<quest.getStages(); i++) {
-				System.out.printf("%s, select cards for stage %s\n", sponsor, i);
+		setUpDone = false;
+		while(!setUpDone) {
+			doneAddingCards = false;
+			while(!doneAddingCards) {
+				System.out.printf("%s, select card\n", sponsor.getName());
 				sponsor.printHand();
-				choice = sc.nextInt();
-				sponsor.playCard(sponsor.getHand().get(choice), this, i);
-				//TODO:Check if the player wants to add more cards to the stage, if not continue on to the next stage
+				c = sc.nextInt();
+				AdventureCard cardToPlay = sponsor.getHand().get(c);
+				//if quest has a test, can't add another test
+				if(testAdded && (cardToPlay instanceof TestCard))
+					System.out.println("Quest already contains a test, cannot add another");
+				else {
+					System.out.printf("%s, select stage to play %s\n", sponsor.getName(), cardToPlay.getName());
+					s = sc.nextInt();
+					if(cardToPlay instanceof TestCard) {
+						if(sponsor.playCard(cardToPlay, this, s)) {
+							testAdded = true;
+						}
+					}
+					else {
+						sponsor.playCard(cardToPlay, this, s);
+					}
+					printStages();
+				}
+				System.out.println("Would you like to add more cards to the quest? (1: yes 0: no)" );
+				int choice = sc.nextInt();
+				if(choice == 0)
+					doneAddingCards = true;
 			}
-			questSetUp = true;
+				
+			//check if quest is set up correctly
+			//check that each stage has increasing battlepoints, ignore 0's as they are stages with tests
+			boolean increasingBPs = false;
+			int[] stageBPs = new int[quest.getStages()];
+			for(int i=0; i<quest.getStages(); i++) {
+				for(AdventureCard card : stages[i].getCards()) {
+					if(card instanceof FoeCard) {
+						if(quest.getNamedFoe() == card.getName())
+							stageBPs[i] += ((FoeCard) card).getAltBattlePts();
+						else if(quest.getNamedFoe() == "allSaxons") {
+							if(card.getName() == "Saxons" || card.getName() == "Saxon Knight")
+								stageBPs[i] += ((FoeCard) card).getAltBattlePts();
+						}
+						else if(quest.getNamedFoe() == "all") {
+							if(((FoeCard) card).getAltBattlePts() != 0)
+								stageBPs[i] += ((FoeCard) card).getAltBattlePts();
+							else
+								stageBPs[i] += ((FoeCard) card).getBattlePts();
+						}
+						else
+							stageBPs[i] += ((FoeCard) card).getBattlePts();
+					}
+					if(card instanceof WeaponCard)
+						stageBPs[i] += ((WeaponCard) card).getBattlePts();
+				}
+			}
+			for(int i=0; i<quest.getStages(); i++) {
+				System.out.printf("Stage %s has %s battlepoints\n", i, stageBPs[i]);
+			}
+			if(isSorted(stageBPs))
+				increasingBPs = true;
+			else
+				System.out.println("Battlepoints do not increase from stage to stage");
+			
+			//check all stages of quest are completed
+			stagesComplete = stagesComplete();
+			
+			if(increasingBPs && stagesComplete) {
+				setUpDone = true;
+				System.out.println("Quest successfully set up");
+			}
+			else {
+				for(QuestStage stage : stages) {
+					System.out.println("Cards sent back to sponsor's hand");
+					stage.sendCardsBackToPlayer(sponsor);
+				}
+			}
+			printStages();
 		}
 		
+	}
+	
+	public void printStages() {
 		for(int i=0; i<quest.getStages(); i++) {
 			System.out.printf("Stage %s: \n", i);
-			for(AdventureCard card : stage)
+			for(AdventureCard card : stages[i].getCards())
 				card.printCard();
 		}
-
-		
-			//each stage must have a foe or a test
-				//only one test card per quest
-				//if a stage has a foe it can have weapons added as well
-					//no two weapons with the same name
-			//each stage must increase in battlepoints (ignore tests)
-		//quest set up complete
-		
-		//remaining players decide if they want to participate in the quest
-		
-		//playing a quest
-			//each participating player draws a card from the adventure deck
-			//TODO: finish steps in playing a quest
-		
-		
+	}
+	
+	private boolean isSorted(int[] data){
+	    for(int i = 1; i < data.length; i++){
+	    		if(data[i] == 0)
+	    			continue;
+	        if(data[i-1] > data[i]){
+	            return false;
+	        }
+	    }
+	    return true;
+	}
+	
+	private boolean stagesComplete() {
+		for(QuestStage stage : stages) {
+			if(stage.getCards().size() == 0) {
+				System.out.println("Quest does not have a card in each stage");
+				return false;
+			}
+		}
+		return true;
 	}
 
 }

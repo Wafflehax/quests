@@ -159,14 +159,19 @@ public class Player{
 	//plays card to quest stage when sponsoring
 	public boolean playCard(AdventureCard c, Quest q, int stageNum) {
 		if(playerHandCards.contains(c)) {
-			q.getStage(stageNum).add(c);
-			playerHandCards.remove(c);
-			c.setState(State.PLAY);
-			log.info("played card " + c.getName());
-			return true;
+			if(q.getStage(stageNum).addCard(c)) {
+				playerHandCards.remove(c);
+				c.setState(State.QUEST);
+				log.info("played card " + c.getName() + " in stage " + stageNum + " of quest");
+				return true;
+			}
+			else {
+				log.info("Failed to play the card" + c.getName());
+				return false;
+			}
 		}else {
 			//TODO: conditions where player cannot play card
-			log.info("Failed you do now have this card " + c.getName());
+			log.info("Failed you do not have this card " + c.getName());
 			return false; 
 		}
 	}

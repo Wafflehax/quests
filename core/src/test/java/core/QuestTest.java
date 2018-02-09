@@ -12,7 +12,7 @@ public class QuestTest extends TestCase{
 
 	public void testQuest() {
 		//set up story deck
-		String[] sd = {"vanquishKingArthursEnemies"};
+		String[] sd = {"defendTheQueensHonor"};
 		StoryDeck storyDeck = new StoryDeck(sd);
 		
 		//set up adventure deck
@@ -20,7 +20,7 @@ public class QuestTest extends TestCase{
 		AdventureDeck advDeck = new AdventureDeck(ad);
 		
 		//set up hands
-		String[] hand0 = {"boar", "valor", "temptation"};
+		String[] hand0 = {"boar", "valor", "thieves", "dragon", "sword", "sword", "dagger"};
 		String[] hand2 = {"boar", "valor", "dragon"};
 		
 		GameModel game;
