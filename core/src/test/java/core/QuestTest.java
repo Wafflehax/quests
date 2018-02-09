@@ -16,11 +16,11 @@ public class QuestTest extends TestCase{
 		StoryDeck storyDeck = new StoryDeck(sd);
 		
 		//set up adventure deck
-		String[] ad = { };
-		AdventureDeck advDeck = new AdventureDeck(ad);
+		AdventureDeck advDeck = new AdventureDeck();
+		advDeck.shuffle();
 		
 		//set up hands
-		String[] hand0 = {"boar", "valor", "thieves", "dragon", "sword", "sword", "dagger"};
+		String[] hand0 = {"lance", "valor", "thieves", "dragon", "sword", "sword", "dagger"};
 		String[] hand2 = {"boar", "valor", "dragon"};
 		
 		GameModel game;

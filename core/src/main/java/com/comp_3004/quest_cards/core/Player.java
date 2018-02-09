@@ -37,6 +37,7 @@ public class Player{
 	private int shields;
 	protected LinkedList<AdventureCard> playerHandCards;
 	protected LinkedList<AdventureCard> playerActiveCards;
+	protected LinkedList<AdventureCard> playerStageCards;
 	protected boolean participateQuest;
 	protected volatile boolean participateTournament;
 	
@@ -47,6 +48,7 @@ public class Player{
 		this.shields = 0;
 		this.playerHandCards = new LinkedList<AdventureCard>();
 		this.playerActiveCards = new LinkedList<AdventureCard>();
+		this.playerStageCards = new LinkedList<AdventureCard>();
 	}
 	
 	// getters/setters
@@ -59,6 +61,7 @@ public class Player{
 	public int numberOfActiveCards() { return playerActiveCards.size(); }
 	public LinkedList<AdventureCard> getHand() { return this.playerHandCards; }
 	public LinkedList<AdventureCard> getActive() { return this.playerActiveCards; }
+	public LinkedList<AdventureCard> getStage() { return this.playerStageCards; }
 	public boolean getKingsRecognitionBonus() { return this.kingsRecognitionBonus; }
 	public void setKingsRecognitionBonus(boolean b) { this.kingsRecognitionBonus = b; }
 	
@@ -95,6 +98,7 @@ public class Player{
 			playerHandCards.add(card);
 			card.setOwner(this);
 			card.setState(State.HAND);
+			log.info(name + " drew " + card.getName() + " from adventure deck");
 			return true;
 		}
 	}
@@ -150,8 +154,7 @@ public class Player{
 			log.info("played card " + c.getName());
 			return true;
 		}else {
-			//TODO: conditions where player cannot play card
-			log.info("Failed you do now have this card " + c.getName());
+			log.info("Failed you do not have this card " + c.getName());
 			return false; 
 		}
 	}
@@ -159,7 +162,7 @@ public class Player{
 	//plays card to quest stage when sponsoring
 	public boolean playCard(AdventureCard c, Quest q, int stageNum) {
 		if(playerHandCards.contains(c)) {
-			if(q.getStage(stageNum).addCard(c)) {
+			if(q.getStage(stageNum).addSponsorCard(c)) {
 				playerHandCards.remove(c);
 				c.setState(State.QUEST);
 				log.info("played card " + c.getName() + " in stage " + stageNum + " of quest");
@@ -170,10 +173,61 @@ public class Player{
 				return false;
 			}
 		}else {
-			//TODO: conditions where player cannot play card
 			log.info("Failed you do not have this card " + c.getName());
 			return false; 
 		}
+	}
+	
+	//plays card to quest stage when participating
+	public boolean playStageCard(AdventureCard c) {
+		if(playerHandCards.contains(c)) {
+			//cannot play test or foe cards
+			if((c instanceof TestCard) || (c instanceof FoeCard)) {
+				System.out.println("Cant play foe or test cards when participating in a quest");
+				return false;
+			}
+			else if(c instanceof AmourCard) {
+				//can only have 1 amour active
+				for(AdventureCard activeCard : playerActiveCards) {
+					if(activeCard instanceof AmourCard) {
+						System.out.println("Cant have more than one amour active");
+						return false;
+					}
+				}
+				for(AdventureCard stageCard : playerStageCards) {
+					if(stageCard instanceof AmourCard) {
+						System.out.println("Cant play more than one amour in a stage");
+						return false;
+					}
+				}
+			}
+			else if(c instanceof WeaponCard) {
+			//can't have 2 weapons with same name
+				for(AdventureCard stageCard : playerStageCards) {
+					if(stageCard.getName() == c.getName()) {
+						System.out.println("Cant play more than one weapon with the same name in a stage");
+						return false;
+					}
+				}
+			}
+			playerStageCards.add(c);
+			playerHandCards.remove(c);
+			c.setState(State.STAGE);
+			log.info("played card " + c.getName() + " to stage");
+			return true;
+		}
+		else {
+			log.info("Failed you do not have this card " + c.getName());
+			return false; 
+		}
+	}
+	
+	public void revealStageCards() {
+		for(AdventureCard stageCard : playerStageCards) {
+			playerActiveCards.add(stageCard);
+			stageCard.setState(State.PLAY);
+		}
+		playerStageCards.clear();
 	}
 	
 	public boolean discardCard(AdventureCard c, AdventureDeck d) {
@@ -243,5 +297,15 @@ public class Player{
 			a.printCard();
 		}
 		System.out.printf("Number of cards: %s\n", this.playerActiveCards.size());
+	}
+	
+	public void printStage() {
+		System.out.printf("Stage:\n");
+		System.out.printf("%-15s%-15s%s\n", "Name", "Battle Points", "Type");
+		System.out.printf("==================================\n");
+		for(AdventureCard a : this.playerStageCards) {
+			a.printCard();
+		}
+		System.out.printf("Number of cards: %s\n", this.playerStageCards.size());
 	}
 }
