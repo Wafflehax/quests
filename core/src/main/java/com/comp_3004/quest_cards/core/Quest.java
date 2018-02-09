@@ -13,6 +13,7 @@ import com.comp_3004.quest_cards.cards.StoryCard;
 import com.comp_3004.quest_cards.cards.TestCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 
+//TODO: implement state pattern (sponsorship state, set up state, participation state ...)
 public class Quest {
 	
 	//attributes
@@ -20,6 +21,7 @@ public class Quest {
 	private QuestCard quest;
 	private Players players;
 	private Player sponsor;
+	private ArrayList<Player> participants;
 	private QuestStage[] stages;
 	private QuestStage stage;
 	private AdventureDeck advDeck;
@@ -33,6 +35,7 @@ public class Quest {
 		this.quest = q;
 		this.players = p;
 		this.sponsor = null;
+		participants = new ArrayList<Player>();
 		this.stages = new QuestStage[quest.getStages()];
 		for(int i=0; i<quest.getStages(); i++) {
 			stage = new QuestStage();
@@ -61,12 +64,23 @@ public class Quest {
 		questSetup();
 		
 		
-		//remaining players decide if they want to participate in the quest
+		//determine participation
+		boolean noParticipants = false;
+		questParticipation();
 		
+		if(participants.size() == 0) {
+			System.out.println("No one participated in the quest"); 	//if true, quest is over - go to quest clean up
+			noParticipants = true;
+		}
+		
+		if(!noParticipants) {
 		//playing a quest
 			//each participating player draws a card from the adventure deck
 			//TODO: finish steps in playing a quest
 		
+		}
+		
+		//quest cleanup
 		
 	}
 	
@@ -184,13 +198,31 @@ public class Quest {
 			}
 			else {
 				for(QuestStage stage : stages) {
-					System.out.println("Cards sent back to sponsor's hand");
 					stage.sendCardsBackToPlayer(sponsor);
 				}
 			}
 			printStages();
 		}
 		
+	}
+	
+	private void questParticipation() {
+		int choice;
+		int sponsorIndex = -1; //used to determine which player declares participation next (clockwise after sponsor)
+		for(int i=0; i<players.getPlayers().size(); i++) {
+			if(sponsor == players.getPlayers().get(i))
+				sponsorIndex = i;
+		}
+		System.out.println("Sponsor Index: " + sponsorIndex);
+		//remaining players decide if they want to participate in the quest
+		for(int i=sponsorIndex + 1; i % players.getPlayers().size() != sponsorIndex; i = ((i+1) % players.getPlayers().size())) {
+			System.out.printf("%s, would you like to participate in quest? (1: yes 0: no)", players.getPlayerAtIndex(i).getName());
+			choice = sc.nextInt();
+			if(choice == 1)
+				participants.add(players.getPlayerAtIndex(i));
+		}
+		for(Player p : participants)
+			System.out.printf("%s is participating\n", p.getName());
 	}
 	
 	public void printStages() {

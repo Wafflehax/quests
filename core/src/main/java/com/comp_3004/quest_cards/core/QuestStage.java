@@ -69,10 +69,12 @@ public class QuestStage {
 	
 	//TODO:change to send single cards back to player when player drags card from stage back to hand
 	public void sendCardsBackToPlayer(Player p) {
+		System.out.println("Resetting quest set up...");
 		for(AdventureCard card : stage) {
 			card.setState(State.HAND);
 			card.setOwner(p);
 			p.getHand().add(card);
+			System.out.printf("Sending %s back to %s's hand\n", card.getName(), p.getName());
 		}
 	}
 

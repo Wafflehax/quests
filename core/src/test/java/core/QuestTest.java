@@ -12,7 +12,7 @@ public class QuestTest extends TestCase{
 
 	public void testQuest() {
 		//set up story deck
-		String[] sd = {"defendTheQueensHonor"};
+		String[] sd = {"boarHunt"};
 		StoryDeck storyDeck = new StoryDeck(sd);
 		
 		//set up adventure deck
