@@ -4,7 +4,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.comp_3004.quest_cards.core.Game;
 import com.comp_3004.quest_cards.core.QuestCards;
-import com.comp_3004.quest_cards.gui.DragAndDropTest;
+//import com.comp_3004.quest_cards.gui.DragAndDropTest;   compile error
 
 public class GameDesktop {
   public static void main(String[] args) {
@@ -14,6 +14,7 @@ public class GameDesktop {
     config.height = Game.HEIGHT;
     config.title = Game.TITLE;
     //new LwjglApplication(new QuestCards(), config);
-    new LwjglApplication(new DragAndDropTest(), config);
+    //new LwjglApplication(new DragAndDropTest(), config);  compile error replaced with line under
+    new LwjglApplication(new QuestCards(), config); 
   }
 }

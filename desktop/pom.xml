@@ -17,6 +17,13 @@
 	</properties>
 
 	<dependencies>
+	<!-- https://mvnrepository.com/artifact/org.mini2Dx/universal-tween-engine -->
+<dependency>
+    <groupId>org.mini2Dx</groupId>
+    <artifactId>universal-tween-engine</artifactId>
+    <version>6.3.3</version>
+</dependency>
+	
 		<dependency>
 			<groupId>com.comp_3004.quest_cards</groupId>
 			<artifactId>quest_cards-core</artifactId>
