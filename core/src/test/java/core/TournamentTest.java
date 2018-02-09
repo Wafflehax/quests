@@ -32,6 +32,7 @@ import utils.IntPlayerPair;
 import utils.utils;
 
 public class TournamentTest extends TestCase{
+	/*
 	public void testTourInit(){
 		
 		//test TourInit pushes right things on state stack
@@ -153,7 +154,6 @@ public class TournamentTest extends TestCase{
 		
 		
 		//test playing a Foe card
-		
 		Player p3 = c.m.getcurrentTurn();
 		LinkedList<AdventureCard> cardsp3 = new LinkedList<AdventureCard>();
 		cardsp3.add(Theives1);
@@ -169,5 +169,57 @@ public class TournamentTest extends TestCase{
 		}
 		p3.setActiveHand(p3Active);
 		assertEquals(false, c.doneTurn());
+		
 	}	
+	*/
+	public void testTour2(){
+		
+		
+		GameModel m = new GameModel(4);   // init with 4 players
+	    GameController c = new GameController(m);
+		TournamentCard t = new TournamentCard("Tournament at Camelot", 3);
+		m.setStory(t);
+		m.pushSt(new TourInit(c));
+		m.StateMsg();
+		
+		
+		//test playing card you don't own
+		AdventureCard amour1 = new AmourCard();
+		
+		c.yes();
+		c.disCardPress(m.getPlayers().current().getHand().getFirst());
+		c.doneTurn();
+		c.yes();
+		c.disCardPress(m.getPlayers().current().getHand().getFirst());
+		c.doneTurn();
+		c.no();
+		c.no();
+		assertEquals(false, c.handPress(amour1));
+		
+		
+		//testing calculation of battle points
+		//no special abilities (dependent cards), Weapons,Ally,Amour
+		TourRoundEndEvaluation ev = new TourRoundEndEvaluation(c); 
+		LinkedList<AdventureCard> cards = new LinkedList<AdventureCard>();
+		Player p0 = new Player("Player 0");
+		p0.setActiveHand(cards);
+		cards.add(new WeaponCard("Horse", 10));
+		cards.add(new WeaponCard("Sword", 10));
+		cards.add(new WeaponCard("Excalibur", 30));
+		cards.add(new WeaponCard("Lance", 20));
+		cards.add(new WeaponCard("Dagger", 5));
+		cards.add(new WeaponCard("Battle-Ax", 15));		
+		cards.add(new AllyCard("King Pellinore", 10, 0)); // + 10 bp
+		cards.add(new AllyCard("Merlin", 0, 0)); // + 0 bp
+		// + 5 rank
+		
+		assertEquals(105 ,ev.calcBattlePoints(p0));
+		//testing calculating battle points
+			
+		
+	}
+	
+	
+	
+	
 }
