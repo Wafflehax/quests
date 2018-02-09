@@ -3,6 +3,8 @@ package com.comp_3004.quest_cards.java;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.comp_3004.quest_cards.core.Game;
+import com.comp_3004.quest_cards.core.QuestCards;
+import com.comp_3004.quest_cards.gui.DragAndDropTest;
 
 public class GameDesktop {
   public static void main(String[] args) {
@@ -12,6 +14,6 @@ public class GameDesktop {
     config.height = Game.HEIGHT;
     config.title = Game.TITLE;
     //new LwjglApplication(new QuestCards(), config);
-    new LwjglApplication(new Game(), config);
+    new LwjglApplication(new DragAndDropTest(), config);
   }
 }

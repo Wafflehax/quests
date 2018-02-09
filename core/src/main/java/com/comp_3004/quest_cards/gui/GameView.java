@@ -1,41 +1,22 @@
 package com.comp_3004.quest_cards.gui;
 
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Disposable;
-import com.comp_3004.quest_cards.core.QuestCards;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-public class GameView extends Table implements Disposable {
+public class GameView extends Table {
 
-  private QuestCards parent;
 
   //Widgets
 
   public PlayerView playerView;
   public Image storyDeck;
+  public Image storyDeckDiscardPile;
+  public Image adventureDeckDiscardPile;
+  public Image adventureDeck;
 
   public GameView() {
-
-    setLayoutEnabled(false);
-    setBounds(0, 0, Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
-
-    storyDeck = new Image();
-    storyDeck.setBounds(
-        getHeight() - Config.CardView.CARD_HEIGHT,
-        Config.GameView.PADDING_HORIZONTAL,
-        Config.CardView.CARD_WIDTH,
-        Config.CardView.CARD_HEIGHT);
-  }
-
-  public GameView(QuestCards parent) {
-    this.parent = parent;
-
-    //Load assets
-
-    loadAssets();
 
     //Set up layout
 
@@ -44,62 +25,103 @@ public class GameView extends Table implements Disposable {
 
     //Init widgets
 
-    playerView = configurePlayerView(new PlayerView());
-    storyDeck = initStoryDeck();
-
-    //Add widgets to table
-
-    addActor(playerView);
-    addActor(storyDeck);
-  }
-
-  //Todo: move this to controller class
-
-  private void loadAssets() {
-
-    AssetManager manager = parent.getAssetManager();
-    manager.load(Assets.GAME_BACKGROUNDS, TextureAtlas.class);
-    manager.load(Assets.GAME_SPRITES, TextureAtlas.class);
-    manager.finishLoading();
-  }
-
-  private PlayerView configurePlayerView(PlayerView playerView) {
+    playerView = new PlayerView();
     playerView.setBounds(
-        getWidth() / 2 - Config.PlayerView.WIDTH / 2,
-        Config.GameView.PADDDING_VERTICAL,
+        Config.VIRTUAL_WIDTH / 2 - Config.PlayerView.WIDTH / 2,
+        Config.GameView.PADDING_VERTICAL,
         Config.PlayerView.WIDTH,
         Config.PlayerView.HEIGHT);
 
-    return playerView;
-  }
-
-  private Image initStoryDeck() {
-
-    Image storyDeck = new Image();
+    storyDeck = new Image();
     storyDeck.setBounds(
-        getHeight() - Config.CardView.CARD_HEIGHT,
         Config.GameView.PADDING_HORIZONTAL,
+        Config.VIRTUAL_HEIGHT - Config.GameView.PADDING_VERTICAL - Config.CardView.CARD_HEIGHT,
         Config.CardView.CARD_WIDTH,
         Config.CardView.CARD_HEIGHT);
 
-    return storyDeck;
+    storyDeckDiscardPile = new Image();
+    storyDeckDiscardPile.setBounds(
+        storyDeck.getX() + Config.CardView.CARD_WIDTH + Config.GameView.PADDING_HORIZONTAL,
+        storyDeck.getY(),
+        Config.CardView.CARD_WIDTH,
+        Config.CardView.CARD_HEIGHT);
+
+    adventureDeck = new Image();
+    adventureDeck.setBounds(
+        storyDeckDiscardPile.getX() + Config.CardView.CARD_WIDTH + Config.GameView.PADDING_HORIZONTAL,
+        storyDeckDiscardPile.getY(),
+        Config.CardView.CARD_WIDTH,
+        Config.CardView.CARD_HEIGHT);
+
+    adventureDeckDiscardPile = new Image();
+    adventureDeckDiscardPile.setBounds(
+        adventureDeck.getX() + Config.CardView.CARD_WIDTH + Config.GameView.PADDING_HORIZONTAL,
+        storyDeckDiscardPile.getY(),
+        Config.CardView.CARD_WIDTH,
+        Config.CardView.CARD_HEIGHT
+    );
+
+    //Add widgets to table
+
+    addActor(storyDeck);
+    addActor(storyDeckDiscardPile);
+    addActor(adventureDeck);
+    addActor(adventureDeckDiscardPile);
+    addActor(playerView);
   }
 
-  @Override
-  public void dispose() {
-
-    AssetManager manager = parent.getAssetManager();
-    manager.unload(Assets.GAME_SPRITES);
-    manager.unload(Assets.GAME_BACKGROUNDS);
-  }
-
-  public GameView setStoryDeckView(CardView storyDeckView) {
-    storyDeck.setDrawable(storyDeckView.getDrawable());
+  public GameView displayHero(TextureRegion hero) {
+    playerView.displayHero(hero);
     return this;
   }
 
-  public GameView setPlayerHand(CardView[] cards) {
-    playerView.setCards(cards);
+  public GameView displayPlayerHand(CardView[] cards) {
+    playerView.displayPlayerHand(cards);
+    return this;
+  }
+
+  public GameView displayShieldNumber(int n) {
+
+    return null;
+  }
+
+  public GameView displayStoryDeck(TextureRegion storyDeck){
+
+    this.storyDeck.setDrawable(new TextureRegionDrawable(storyDeck));
+    return this;
+  }
+
+  public GameView displayAdventureDiscardPile(TextureRegion card) {
+
+    adventureDeckDiscardPile.setDrawable(new TextureRegionDrawable(card));
+    return this;
+  }
+
+  public GameView displayStoryDiscardPile(TextureRegion card) {
+
+    storyDeckDiscardPile.setDrawable(new TextureRegionDrawable(card));
+    return this;
+  }
+
+  public GameView displayDrawCardAnimation(CardView card) {
+
+
+    return this;
+  }
+
+  public void displayAdventureDeck(TextureRegion adventureDeck) {
+    this.adventureDeck.setDrawable(new TextureRegionDrawable(adventureDeck));
+  }
+
+  public GameView setBackground(TextureRegion background){
+
+    setBackground(new TextureRegionDrawable(background));
+    return this;
+  }
+
+  public GameView setPlayerViewBackground(TextureRegion background) {
+
+    playerView.setBackground(new TextureRegionDrawable(background));
     return this;
   }
 
@@ -108,8 +130,4 @@ public class GameView extends Table implements Disposable {
     return this;
   }
 
-  public GameView setHero(CardView hero) {
-    playerView.setHero(hero);
-    return this;
-  }
 }
