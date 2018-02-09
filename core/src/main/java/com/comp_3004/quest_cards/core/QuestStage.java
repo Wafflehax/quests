@@ -28,7 +28,7 @@ public class QuestStage {
 	public int getBattlePts() { return this.battlePoints; }
 	
 	//methods
-	public boolean addSponsorCard(AdventureCard card) { 
+	public boolean addSponsorCard(AdventureCard card, String namedFoe) { 
 		//adding test card
 		if(card instanceof TestCard) {
 			for(AdventureCard stageCard : sponsorCards) {
@@ -78,12 +78,20 @@ public class QuestStage {
 			return false;
 		}
 		sponsorCards.add(card);
-		if(card instanceof FoeCard) {
-			battlePoints += ((FoeCard)card).getBattlePts();	//need to handle named foes
+		if(namedFoe == card.getName())
+			battlePoints += ((FoeCard) card).getAltBattlePts();
+		else if(namedFoe == "allSaxons") {
+			if(card.getName() == "Saxons" || card.getName() == "Saxon Knight")
+				battlePoints += ((FoeCard) card).getAltBattlePts();
 		}
-		if(card instanceof WeaponCard) {
-			battlePoints += ((WeaponCard)card).getBattlePts();
+		else if(namedFoe == "all") {
+			if(((FoeCard) card).getAltBattlePts() != 0)
+				battlePoints += ((FoeCard) card).getAltBattlePts();
+			else
+				battlePoints += ((FoeCard) card).getBattlePts();
 		}
+		else
+			battlePoints += ((FoeCard) card).getBattlePts();
 		return true;
 	}
 	

@@ -32,6 +32,7 @@ public class Quest {
 	
 	//getters/setters
 	public QuestStage getStage(int i) { return this.stages[i]; }
+	public QuestCard getQuest() { return this.quest; }
 
 	//constructor
 	public Quest(QuestCard q, Players p, AdventureDeck d) {
@@ -125,6 +126,7 @@ public class Quest {
 					}
 					
 					//for each player
+					ArrayList<Player> failedStage = new ArrayList<Player>();
 					for(Player p : participants) {
 						//if they have more battle points then stage they pass
 						int battlePoints = p.getRankBattlePts();
@@ -137,9 +139,17 @@ public class Quest {
 								battlePoints += ((WeaponCard)activeCard).getBattlePts();
 						}
 						if(s.getBattlePts() > battlePoints) {
-							System.out.printf("%s did not have enough battle points to pass stage", p.getName());
-							participants.remove(p);
+							System.out.printf("%s did not have enough battle points to pass stage\n", p.getName());
+							System.out.printf("Stage BPs: %s  Player BPs: %s\n", s.getBattlePts(), battlePoints);
+							failedStage.add(p);
 						}
+						else {
+							System.out.printf("%s passed stage\n", p.getName());
+							System.out.printf("Stage BPs: %s  Player BPs: %s\n", s.getBattlePts(), battlePoints);
+						}
+					}
+					for(Player p : failedStage) {
+						participants.remove(p);
 					}
 				}
 				//stage clean up

@@ -162,7 +162,7 @@ public class Player{
 	//plays card to quest stage when sponsoring
 	public boolean playCard(AdventureCard c, Quest q, int stageNum) {
 		if(playerHandCards.contains(c)) {
-			if(q.getStage(stageNum).addSponsorCard(c)) {
+			if(q.getStage(stageNum).addSponsorCard(c, q.getQuest().getNamedFoe())) {
 				playerHandCards.remove(c);
 				c.setState(State.QUEST);
 				log.info("played card " + c.getName() + " in stage " + stageNum + " of quest");
