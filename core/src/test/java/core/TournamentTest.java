@@ -54,7 +54,9 @@ public class TournamentTest extends TestCase{
 		c.no();
 		//Tour Started
 		//Player one turn
-		m.getcurrentTurn().addShields(7);// advance rank so they win in calc pts after
+		//m.getcurrentTurn().addShields(7);// advance rank so they win in calc pts after
+		c.doneTurn(); //p0 plays nothing okay
+		c.doneTurn(); //p1 nothing
 		c.doneTurn(); //p0 plays nothing okay
 		c.doneTurn(); //p1 nothing
 	}

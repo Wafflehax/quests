@@ -17,13 +17,21 @@ import utils.utils;
 
 public class TourRoundEndEvaluation extends State{
 
+	private int tourStage = 1;
+	private int joiners;
+	private int bonus;
+	
 	public TourRoundEndEvaluation(GameController c) {
 		super(c);
+		TournamentCard tour = (TournamentCard)this.c.m.getStory();
+		bonus = tour.getBonusSh();
+		
 	}
 
 	@Override
 	public void msg() {
-		String msg = "Calculating Player battle points and outcome";
+		String msg = "Calculating Player battle points and outcome of stage " + tourStage;
+		joiners = this.c.m.getJoiners();
 		log.info(msg);
 		//calculate battle points
 		int pl = this.c.m.getNumPlayers();
@@ -44,9 +52,6 @@ public class TourRoundEndEvaluation extends State{
 			String out = "";
 			if(pairs.size() == 1) {
 				// one winner display and tour ends, resets turns to regular sequence before Tour
-				TournamentCard tour = (TournamentCard)this.c.m.getStory();
-				int joiners = this.c.m.getJoiners();
-				int bonus = tour.getBonusSh();
 				out += pairs.get(0).player.getName() + " won the tournament! Gained Sheilds: " + joiners + " + bonus(" + bonus + ") = " + (joiners+bonus);
 				this.c.m.getcurrentTurn().addShields(joiners + bonus);
 				log.info(out);
@@ -56,11 +61,38 @@ public class TourRoundEndEvaluation extends State{
 				this.c.m.sPop(); //pop
 				this.c.m.StateMsg(); //move on
 			}
-			else if(pairs.size() > 1) {
-				this.c.m.SetPlayerArrayResetPos(winners); //players = winners //used if tied and need to play another round
-				log.info("Ties not coded yet");
-				
-				
+			else if(pairs.size() == 2) {
+				if(tourStage == 1) {
+					out += "Tied. Here are the tied players going to the Tie Breaker:\n";
+					this.c.m.SetPlayerArrayResetPos(winners);
+					for(int i = 0; i < this.c.m.getPlayers().size(); i++) {
+						out += "Player : " + this.c.m.getPlayers().getPlayerAtIndex(i).getName() + "\n";
+					}
+					log.info(out);
+					// push more player turns and do not pop self
+					for(int i = 0; i < this.c.m.getPlayers().size(); i++) {
+						this.c.m.pushSt(new TourPlayerTurn(this.c));
+					}
+					this.c.m.StateMsg(); // move to next state					
+					tourStage++;
+				}
+				else if(tourStage == 2) { //over Tied players win
+					out += "Tied again. Tied players win " + (bonus+joiners) + " battle points:\n";
+					this.c.m.SetPlayerArrayResetPos(winners);
+					for(int i = 0; i < this.c.m.getPlayers().size(); i++) {
+						out += "Player : " + this.c.m.getPlayers().getPlayerAtIndex(i).getName() + " With Rank ";
+						this.c.m.getPlayers().getPlayerAtIndex(i).addShields(bonus+joiners);
+						out += this.c.m.getPlayers().getPlayerAtIndex(i).getRankS();
+						out += " and shields " + this.c.m.getPlayers().getPlayerAtIndex(i).getShields() + "\n";
+					}
+					tourStage++;
+					//over pop self and move on
+					
+					log.info(out);
+				}
+				else {
+					log.info("Error stage greater than 2.");
+				}
 			}
 			else {
 				log.info("Error calc winners");

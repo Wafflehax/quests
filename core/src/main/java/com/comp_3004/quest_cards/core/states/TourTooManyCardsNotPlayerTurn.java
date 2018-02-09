@@ -2,7 +2,6 @@ package com.comp_3004.quest_cards.core.states;
 
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.Card;
-import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.core.GameController;
 
 public class TourTooManyCardsNotPlayerTurn extends State{

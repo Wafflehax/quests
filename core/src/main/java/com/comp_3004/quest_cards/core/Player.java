@@ -57,6 +57,7 @@ public class Player{
 	// getters/setters
 	public String getName() { return this.name; }
 	public Rank getRank() { return this.rank; }
+	public String getRankS() { return rankS(); }
 	public int getShields() { return this.shields; }
 	public boolean participantInTournament() { return participateTournament; }
 	public void participateTour(boolean b) { participateTournament = b; }
@@ -198,6 +199,18 @@ public class Player{
 			a.printCard();
 		}
 		System.out.printf("Number of cards: %s\n", this.playerHandCards.size());
+	}
+	
+	private String rankS() {
+		if(this.rank == Rank.SQUIRE)
+			return "Squire";
+		else if(this.rank == Rank.KNIGHT)
+			return "Knight";
+		else if(this.rank == Rank.CHAMPION_KNIGHT)
+			return "Champion Knight";
+		else if(this.rank == Rank.KNIGHT_OF_THE_ROUND_TABLE)
+			return "Knight of the Round Table";
+		return "";
 	}
 	
 	public void printActive() {

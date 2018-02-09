@@ -29,7 +29,7 @@ public class GameModel{
 	private Players players = new Players(0, numPlayers, new ArrayList<Player>());
 	private Card StoryEv; //hold current Story card, Event
 	public Players playersTemp;
-	
+	     
 	private int joiners; // holds the amount of players that initally joined a tournament
 	
 	public void resetJoiners() { joiners = 0; }
