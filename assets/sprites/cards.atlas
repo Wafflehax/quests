@@ -1,314 +1,348 @@
-
 cards.png
-size: 2048,2048
+size: 1741, 1800
 format: RGBA8888
-filter: Nearest,Nearest
+filter: Linear,Linear
 repeat: none
 A_King_Arthur
   rotate: false
-  xy: 662, 2
+  xy: 1513, 600
   size: 216, 300
   orig: 216, 300
   offset: 0, 0
   index: -1
 A_King_Pellinore
   rotate: false
-  xy: 2, 606
+  xy: 887, 900
   size: 223, 300
   orig: 223, 300
   offset: 0, 0
   index: -1
 A_Merlin
   rotate: false
-  xy: 880, 2
+  xy: 1329, 900
   size: 214, 300
   orig: 214, 300
   offset: 0, 0
   index: -1
 A_Queen_Guinevere
   rotate: false
-  xy: 1130, 1512
+  xy: 220, 1200
   size: 219, 300
   orig: 219, 300
   offset: 0, 0
   index: -1
 A_Queen_Iseult
   rotate: false
-  xy: 680, 1210
+  xy: 0, 1200
   size: 220, 300
   orig: 220, 300
   offset: 0, 0
   index: -1
 A_Sir_Galahad
   rotate: false
-  xy: 902, 1210
+  xy: 1110, 900
   size: 219, 300
   orig: 219, 300
   offset: 0, 0
   index: -1
 A_Sir_Gawain
   rotate: false
-  xy: 2, 908
+  xy: 662, 900
   size: 225, 300
   orig: 225, 300
   offset: 0, 0
   index: -1
 A_Sir_Lancelot
   rotate: false
-  xy: 677, 908
+  xy: 1294, 600
   size: 219, 300
   orig: 219, 300
   offset: 0, 0
   index: -1
 A_Sir_Percival
   rotate: false
-  xy: 685, 1512
+  xy: 0, 900
   size: 222, 300
   orig: 222, 300
   offset: 0, 0
   index: -1
 A_Sir_Tristan
   rotate: false
-  xy: 1351, 1512
+  xy: 445, 900
   size: 217, 300
   orig: 217, 300
   offset: 0, 0
   index: -1
 Amour
   rotate: false
-  xy: 229, 908
+  xy: 222, 900
   size: 223, 300
   orig: 223, 300
   offset: 0, 0
   index: -1
+blue
+  rotate: false
+  xy: 0, 0
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+card_back
+  rotate: false
+  xy: 1292, 300
+  size: 218, 300
+  orig: 218, 300
+  offset: 0, 0
+  index: -1
 E_Chivalrous_Deed
   rotate: false
-  xy: 1104, 304
+  xy: 439, 1200
   size: 214, 300
   orig: 214, 300
   offset: 0, 0
   index: -1
 E_Court_Called_Camelot
   rotate: false
-  xy: 671, 606
+  xy: 877, 1200
   size: 218, 300
   orig: 218, 300
   offset: 0, 0
   index: -1
-E_King's_Call_to_Arms
+E_Kings_Call_to_Arms
   rotate: false
-  xy: 891, 606
+  xy: 437, 1500
   size: 217, 300
   orig: 217, 300
   offset: 0, 0
   index: -1
-E_King's_Recognition
+E_Kings_Recognition
   rotate: false
-  xy: 223, 2
+  xy: 871, 1500
   size: 218, 300
   orig: 218, 300
   offset: 0, 0
   index: -1
 E_Plague
   rotate: false
-  xy: 909, 1512
+  xy: 1522, 1500
   size: 219, 300
   orig: 219, 300
   offset: 0, 0
   index: -1
 E_Pox
   rotate: false
-  xy: 1342, 1210
+  xy: 1089, 1500
   size: 217, 300
   orig: 217, 300
   offset: 0, 0
   index: -1
 E_Prosperity_Throughout_the_Realm
   rotate: false
-  xy: 1110, 606
+  xy: 1306, 1500
   size: 216, 300
   orig: 216, 300
   offset: 0, 0
   index: -1
-E_Queen's_Favor
+E_Queens_Favor
   rotate: false
-  xy: 667, 304
+  xy: 654, 1500
   size: 217, 300
   orig: 217, 300
   offset: 0, 0
   index: -1
 F_Black_Knight
   rotate: false
-  xy: 450, 606
+  xy: 218, 1500
   size: 219, 300
   orig: 219, 300
   offset: 0, 0
   index: -1
 F_Boar
   rotate: false
-  xy: 230, 1210
+  xy: 653, 1200
   size: 224, 300
   orig: 224, 300
   offset: 0, 0
   index: -1
 F_Dragon
   rotate: false
-  xy: 443, 2
+  xy: 1095, 1200
   size: 217, 300
   orig: 217, 300
   offset: 0, 0
   index: -1
 F_Evil_Knight
   rotate: false
-  xy: 898, 908
+  xy: 0, 1500
   size: 218, 300
   orig: 218, 300
   offset: 0, 0
   index: -1
 F_Giant
   rotate: false
-  xy: 2, 2
+  xy: 1312, 1200
   size: 219, 300
   orig: 219, 300
   offset: 0, 0
   index: -1
 F_Green_Knight
   rotate: false
-  xy: 1561, 1210
+  xy: 1079, 600
   size: 215, 300
   orig: 215, 300
   offset: 0, 0
   index: -1
 F_Mordred
   rotate: false
-  xy: 1118, 908
+  xy: 0, 600
   size: 217, 300
   orig: 217, 300
   offset: 0, 0
   index: -1
 F_Robber_Knight
   rotate: false
-  xy: 2, 1512
+  xy: 1498, 0
   size: 227, 300
   orig: 227, 300
   offset: 0, 0
   index: -1
 F_Saxon_Knight
   rotate: false
-  xy: 447, 304
+  xy: 215, 300
   size: 218, 300
   orig: 218, 300
   offset: 0, 0
   index: -1
 F_Saxons
   rotate: false
-  xy: 2, 1210
+  xy: 1046, 0
   size: 226, 300
   orig: 226, 300
   offset: 0, 0
   index: -1
 F_Thieves
   rotate: false
-  xy: 231, 1512
+  xy: 1272, 0
   size: 226, 300
   orig: 226, 300
   offset: 0, 0
   index: -1
+green
+  rotate: false
+  xy: 2, 0
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+out
+  rotate: false
+  xy: 1078, 300
+  size: 214, 300
+  orig: 214, 300
+  offset: 0, 0
+  index: -1
 R_Champion_Knight
   rotate: false
-  xy: 456, 1210
+  xy: 824, 0
   size: 222, 300
   orig: 222, 300
   offset: 0, 0
   index: -1
 R_Knight
   rotate: false
-  xy: 454, 908
+  xy: 162, 0
   size: 221, 300
   orig: 221, 300
   offset: 0, 0
   index: -1
 R_Squire
   rotate: false
-  xy: 2, 304
+  xy: 383, 0
   size: 222, 300
   orig: 222, 300
   offset: 0, 0
   index: -1
+red
+  rotate: false
+  xy: 1, 0
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+shield
+  rotate: false
+  xy: 3, 0
+  size: 159, 200
+  orig: 159, 200
+  offset: 0, 0
+  index: -1
 T_Test_of_Morgan_Le_Fey
   rotate: false
-  xy: 226, 304
+  xy: 605, 0
   size: 219, 300
   orig: 219, 300
   offset: 0, 0
   index: -1
 T_Test_of_Temptation
   rotate: false
-  xy: 1337, 908
+  xy: 0, 300
   size: 215, 300
   orig: 215, 300
   offset: 0, 0
   index: -1
-T_Test_of_Valor
-  rotate: false
-  xy: 1328, 606
-  size: 213, 300
-  orig: 213, 300
-  offset: 0, 0
-  index: -1
 T_Test_of_the_Questing_Beast
   rotate: false
-  xy: 1570, 1512
+  xy: 433, 300
   size: 216, 300
   orig: 216, 300
   offset: 0, 0
   index: -1
-W_Battle-ax
+T_Test_of_Valor
   rotate: false
-  xy: 1778, 1210
+  xy: 649, 300
+  size: 213, 300
+  orig: 213, 300
+  offset: 0, 0
+  index: -1
+W_Battle_ax
+  rotate: false
+  xy: 434, 600
   size: 212, 300
   orig: 212, 300
   offset: 0, 0
   index: -1
 W_Dagger
   rotate: false
-  xy: 1554, 908
+  xy: 867, 600
   size: 212, 300
   orig: 212, 300
   offset: 0, 0
   index: -1
 W_Excalibur
   rotate: false
-  xy: 227, 606
+  xy: 646, 600
   size: 221, 300
   orig: 221, 300
   offset: 0, 0
   index: -1
 W_Horse
   rotate: false
-  xy: 1123, 1210
+  xy: 217, 600
   size: 217, 300
   orig: 217, 300
   offset: 0, 0
   index: -1
 W_Lance
   rotate: false
-  xy: 459, 1512
+  xy: 1510, 300
   size: 224, 300
   orig: 224, 300
   offset: 0, 0
   index: -1
 W_Sword
   rotate: false
-  xy: 886, 304
+  xy: 862, 300
   size: 216, 300
   orig: 216, 300
-  offset: 0, 0
-  index: -1
-out
-  rotate: false
-  xy: 1788, 1512
-  size: 214, 300
-  orig: 214, 300
   offset: 0, 0
   index: -1

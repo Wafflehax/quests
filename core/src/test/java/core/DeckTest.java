@@ -48,11 +48,14 @@ public class DeckTest extends TestCase {
 		for(Entry<String, Integer> s : cardCounts.entrySet()) {
 		    String key = s.getKey();
 		    int value = s.getValue();
+		    System.out.printf("%-20s %s\n", key, value);
 		    
-		    if(twos.contains(key))
+		    if(twos.contains(key)) {
 		    		assertEquals(2, value);
-		    else
+		    }
+		    else {
 		    		assertEquals(1, value);
+		    }
 		}
 	}
 	

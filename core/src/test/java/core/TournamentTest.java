@@ -32,7 +32,6 @@ import utils.IntPlayerPair;
 import utils.utils;
 
 public class TournamentTest extends TestCase{
-	/*
 	public void testTourInit(){
 		
 		//test TourInit pushes right things on state stack
@@ -137,7 +136,8 @@ public class TournamentTest extends TestCase{
 		LinkedList<AdventureCard> cardsp2 = new LinkedList<AdventureCard>();
 		sword1.setOwner(p2);
 		cardsp2.add(sword1);
-		p2.setActiveHand(cardsp2);
+		String sw[] = {"sword"};
+		p2.setActiveHand(sw);
 		assertEquals(false, c.handPress(sword1)); //can't play Sword already have it
 		
 		//test playing two amours
@@ -163,15 +163,12 @@ public class TournamentTest extends TestCase{
 		
 		
 		//Test player doneTurn with a hand over 12
-		LinkedList<AdventureCard> p3Active = new LinkedList<AdventureCard>();
-		for(int i = 0; i < 13; i++){
-			p3Active.add(new AmourCard());	
-		}
-		p3.setActiveHand(p3Active);
+		String ammour[] = {"amour","amour","amour","amour","amour","amour","amour","amour","amour","amour","amour","amour","amour"};
+		p3.setActiveHand(ammour);
 		assertEquals(false, c.doneTurn());
 		
 	}	
-	*/
+	
 	public void testTour2(){
 		
 		
@@ -195,6 +192,7 @@ public class TournamentTest extends TestCase{
 		c.no();
 		c.no();
 		assertEquals(false, c.handPress(amour1));
+
 		
 		
 		//testing calculation of battle points
@@ -202,21 +200,12 @@ public class TournamentTest extends TestCase{
 		TourRoundEndEvaluation ev = new TourRoundEndEvaluation(c); 
 		LinkedList<AdventureCard> cards = new LinkedList<AdventureCard>();
 		Player p0 = new Player("Player 0");
-		p0.setActiveHand(cards);
-		cards.add(new WeaponCard("Horse", 10));
-		cards.add(new WeaponCard("Sword", 10));
-		cards.add(new WeaponCard("Excalibur", 30));
-		cards.add(new WeaponCard("Lance", 20));
-		cards.add(new WeaponCard("Dagger", 5));
-		cards.add(new WeaponCard("Battle-Ax", 15));		
-		cards.add(new AllyCard("King Pellinore", 10, 0)); // + 10 bp
-		cards.add(new AllyCard("Merlin", 0, 0)); // + 0 bp
-		// + 5 rank
+		String cards1[] = {"horse","sword","excalibur","lance","dagger","battleAx","pellinore","merlin"};
+		p0.setActiveHand(cards1);
+	
 		
 		assertEquals(105 ,ev.calcBattlePoints(p0));
 		//testing calculating battle points
-			
-		
 	}
 	
 	

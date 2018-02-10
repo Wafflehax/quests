@@ -12,13 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.Card;
 import com.comp_3004.quest_cards.cards.StoryCard;
-import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.core.Player.Rank;
-import com.comp_3004.quest_cards.core.states.TourAskParticipation;
-import com.comp_3004.quest_cards.core.states.State;
-import com.comp_3004.quest_cards.core.states.TourStartFirstTime;
-import com.comp_3004.quest_cards.gui.GameScreen;
-
 public class GameController extends Actor{
 	public GameModel m;
 	Group view;

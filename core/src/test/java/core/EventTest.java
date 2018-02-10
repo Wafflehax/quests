@@ -1,10 +1,14 @@
 package core;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.AllyCard;
+import com.comp_3004.quest_cards.cards.CardSpawner;
 import com.comp_3004.quest_cards.cards.EventCard;
 import com.comp_3004.quest_cards.cards.StoryCard;
 import com.comp_3004.quest_cards.cards.StoryDeck;
@@ -15,18 +19,18 @@ import com.comp_3004.quest_cards.core.Player.Rank;
 import junit.framework.TestCase;
 
 public class EventTest extends TestCase{
+	CardSpawner spawner = new CardSpawner();
 
 	
 	public void testChivalrousDeed() {
 		//set up story deck
-		Stack<StoryCard> sd= new Stack<StoryCard>();
-		EventCard chivalrousDeed = new EventCard("Chivalrous Deed");
-		sd.add(chivalrousDeed);
+		String[] sd = {"chivalrousDeed"};
 		StoryDeck storyDeck = new StoryDeck(sd);
 		
 		//set up adventure deck
-		Stack<AdventureCard> ad= new Stack<AdventureCard>();
+		String[] ad = { };
 		AdventureDeck advDeck = new AdventureDeck(ad);
+		
 		GameModel game;
 		
 		//test1 - 4 way tie
@@ -66,14 +70,13 @@ public class EventTest extends TestCase{
 	
 	public void testPox() {
 		//set up story deck
-		Stack<StoryCard> sd= new Stack<StoryCard>();
-		EventCard pox = new EventCard("Pox");
-		sd.add(pox);
+		String[] sd= {"pox"};
 		StoryDeck storyDeck = new StoryDeck(sd);
 		
 		//set up adventure deck
-		Stack<AdventureCard> ad= new Stack<AdventureCard>();
+		String[] ad= {};
 		AdventureDeck advDeck = new AdventureDeck(ad);
+		
 		GameModel game;
 		
 		//test 1 - players unable to lose shields
@@ -103,14 +106,13 @@ public class EventTest extends TestCase{
 	
 	public void testPlague() {
 		//set up story deck
-		Stack<StoryCard> sd= new Stack<StoryCard>();
-		EventCard plague = new EventCard("Plague");
-		sd.add(plague);
+		String[] sd = {"plauge"};
 		StoryDeck storyDeck = new StoryDeck(sd);
 		
 		//set up adventure deck
-		Stack<AdventureCard> ad= new Stack<AdventureCard>();
+		String[] ad = {};
 		AdventureDeck advDeck = new AdventureDeck(ad);
+		
 		GameModel game;
 		
 		//test 1 - players unable to lose shields
@@ -137,17 +139,11 @@ public class EventTest extends TestCase{
 	
 	public void testQueensFavor() {
 		//set up story deck
-		Stack<StoryCard> sd= new Stack<StoryCard>();
-		EventCard queensFavor = new EventCard("Queen's Favor");
-		sd.add(queensFavor);
+		String[] sd = {"queensFavor"};
 		StoryDeck storyDeck = new StoryDeck(sd);
 		
 		//set up adventure deck
-		Stack<AdventureCard> ad= new Stack<AdventureCard>();
-		for(int i=0; i<8; i++) {
-			WeaponCard sword = new WeaponCard("Sword", 10);
-			ad.push(sword);
-		}
+		String[] ad = {"sword", "sword", "sword", "sword", "sword", "sword", "sword", "sword"};
 		AdventureDeck advDeck = new AdventureDeck(ad);
 		
 		GameModel game;
@@ -164,11 +160,9 @@ public class EventTest extends TestCase{
 			assertEquals(2, game.getPlayerAtIndex(i).getHand().size());
 		
 		//test 2 - 2 way tie
+		advDeck = new AdventureDeck(ad);
 		game = new GameModel(4, 0, advDeck, storyDeck);
-		for(int i=0; i<8; i++) {
-			WeaponCard sword = new WeaponCard("Sword", 10);
-			ad.push(sword);
-		}
+
 		game.getPlayerAtIndex(0).addShields(2);
 		game.getPlayerAtIndex(1).addShields(1);
 		game.getPlayerAtIndex(2).addShields(8);
@@ -181,11 +175,9 @@ public class EventTest extends TestCase{
 		assertEquals(0, game.getPlayerAtIndex(3).getHand().size());
 		
 		//test 2 - normal case
+		advDeck = new AdventureDeck(ad);
 		game = new GameModel(4, 0, advDeck, storyDeck);
-		for(int i=0; i<8; i++) {
-			WeaponCard sword = new WeaponCard("Sword", 10);
-			ad.push(sword);
-		}
+
 		game.getPlayerAtIndex(0).addShields(2);
 		game.getPlayerAtIndex(1).addShields(9);
 		game.getPlayerAtIndex(2).addShields(8);
@@ -200,32 +192,19 @@ public class EventTest extends TestCase{
 	
 	public void testCourtCalledToCamelot() {
 		//set up story deck
-		Stack<StoryCard> sd= new Stack<StoryCard>();
-		EventCard courtCalledToCamelot = new EventCard("Court Called to Camelot");
-		sd.add(courtCalledToCamelot);
+		String[] sd= {"courtCalledToCamelot"};
 		StoryDeck storyDeck = new StoryDeck(sd);
 		
 		//set up adventure deck
-		Stack<AdventureCard> ad= new Stack<AdventureCard>();
+		String[] ad= {};
 		AdventureDeck advDeck = new AdventureDeck(ad);
-		AllyCard merlin = new AllyCard("Merlin", 0, 0);
-		ad.push(merlin);
-		AllyCard gawain = new AllyCard("Sir Gawain", 10, 0);
-		ad.push(gawain);
-		AllyCard pellinore = new AllyCard("King Pellinore", 10, 0);
-		ad.push(pellinore);
-		WeaponCard sword = new WeaponCard("Sword", 10);
-		ad.push(sword);
-		sword = new WeaponCard("Sword", 10);
-		ad.push(sword);
-		sword = new WeaponCard("Sword", 10);
-		ad.push(sword);
+		
+		String[] active = {"merlin", "gawain", "pellinore"};
 		
 		//start game
-		GameModel game = new GameModel(2, 3, advDeck, storyDeck);
-		game.getPlayerAtIndex(1).playCard(merlin);
-		game.getPlayerAtIndex(1).playCard(gawain);
-		game.getPlayerAtIndex(1).playCard(pellinore);
+		GameModel game = new GameModel(2, 0, advDeck, storyDeck);
+		game.getPlayerAtIndex(1).setActiveHand(active);
+		assertEquals(3, game.getPlayerAtIndex(1).getActive().size());
 		
 		//starts turn, draws card from story deck
 		game.eventTest();
@@ -236,17 +215,11 @@ public class EventTest extends TestCase{
 	
 	public void testProsperityThroughoutTheRealms() {
 		//set up story deck
-		Stack<StoryCard> sd= new Stack<StoryCard>();
-		EventCard prosperity = new EventCard("Prosperity Throughout the Realms");
-		sd.add(prosperity);
+		String[] sd = {"prosperityThroughoutTheRealms"};
 		StoryDeck storyDeck = new StoryDeck(sd);
 		
 		//set up adventure deck
-		Stack<AdventureCard> ad= new Stack<AdventureCard>();
-		for(int i=0; i<8; i++) {
-			WeaponCard sword = new WeaponCard("Sword", 10);
-			ad.push(sword);
-		}
+		String[] ad = {"sword", "sword", "sword", "sword", "sword", "sword", "sword", "sword" }; 
 		AdventureDeck advDeck = new AdventureDeck(ad);
 		
 		GameModel game;
@@ -257,6 +230,94 @@ public class EventTest extends TestCase{
 		game.eventTest();
 		for(int i=0; i<4; i++)
 			assertEquals(2, game.getPlayerAtIndex(i).getHand().size());
+	}
+	
+	public void testKingsRecognition() {
+		//set up story deck
+		String[] sd = {"kingsRecognition"};
+		StoryDeck storyDeck = new StoryDeck(sd);
+		
+		//set up adventure deck
+		String[] ad = {}; 
+		AdventureDeck advDeck = new AdventureDeck(ad);
+		
+		GameModel game;
+		
+		//test 1 normal case
+		game = new GameModel(2, 0, advDeck, storyDeck);
+		
+		assert(!game.getPlayerAtIndex(0).getKingsRecognitionBonus());
+		assert(!game.getPlayerAtIndex(1).getKingsRecognitionBonus());
+		
+		game.eventTest();
+		
+		assert(game.getPlayerAtIndex(0).getKingsRecognitionBonus());
+		assert(!game.getPlayerAtIndex(1).getKingsRecognitionBonus());
+		
+		//test already has kings recognition
+		game = new GameModel(2, 0, advDeck, storyDeck);
+		game.getPlayerAtIndex(0).setKingsRecognitionBonus(true);
+		
+		assert(game.getPlayerAtIndex(0).getKingsRecognitionBonus());
+		assert(!game.getPlayerAtIndex(1).getKingsRecognitionBonus());
+		
+		game.eventTest();
+		
+		assert(game.getPlayerAtIndex(0).getKingsRecognitionBonus());
+		assert(!game.getPlayerAtIndex(1).getKingsRecognitionBonus());
+		
+		//TODO: test in quest tests that the player actually gets the bonus shields
+	}
+	
+	public void testKingsCallToArms() {
+		//set up story deck
+		String[] sd = {"kingsCallToArms"};
+		StoryDeck storyDeck = new StoryDeck(sd);
+		
+		//set up adventure deck
+		String[] ad = {}; 
+		AdventureDeck advDeck = new AdventureDeck(ad);
+		
+		//set up hands
+		String[] hand0 = {"dagger", "lance", "sword"};
+		String[] hand1 = {"dagger"};
+		
+		GameModel game;
+		
+		//test 1 players have weapons to discard
+		game = new GameModel(2, 0, advDeck, storyDeck);
+		game.getPlayerAtIndex(0).addShields(0);
+		game.getPlayerAtIndex(0).setHand(hand0);
+		game.getPlayerAtIndex(1).addShields(0);
+		game.getPlayerAtIndex(1).setHand(hand1);
+		
+		
+		game.eventTest();
+		assertEquals(2,game.getPlayerAtIndex(0).getHand().size());
+		assertEquals(0,game.getPlayerAtIndex(1).getHand().size());
+		assertEquals(2,game.getAdvDeck().getDiscard().size());
+		
+		//test 2 players have no weapons to discard
+		advDeck = new AdventureDeck();
+		String[] t2hand0 = {"boar", "saxons", "dragon"};
+		String[] t2hand1 = {"boar", "saxons"};
+		String[] t2hand2 = {"boar"};
+		
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		game.getPlayerAtIndex(0).addShields(0);
+		game.getPlayerAtIndex(0).setHand(t2hand0);
+		game.getPlayerAtIndex(1).addShields(0);
+		game.getPlayerAtIndex(1).setHand(t2hand1);
+		game.getPlayerAtIndex(2).addShields(0);
+		game.getPlayerAtIndex(2).setHand(t2hand2);
+		game.getPlayerAtIndex(3).addShields(0);
+		
+		game.eventTest();
+		assertEquals(1,game.getPlayerAtIndex(0).getHand().size());
+		assertEquals(0,game.getPlayerAtIndex(1).getHand().size());
+		assertEquals(0,game.getPlayerAtIndex(2).getHand().size());
+		assertEquals(0,game.getPlayerAtIndex(3).getHand().size());
+		assertEquals(5,game.getAdvDeck().getDiscard().size());
 	}
 
 }

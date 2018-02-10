@@ -31,6 +31,7 @@ public class GameModel{
 	public Players playersTemp;
 	     
 	private int joiners; // holds the amount of players that initally joined a tournament
+
 	
 	public void resetJoiners() { joiners = 0; }
 	public int getJoiners() { return joiners; }
@@ -93,6 +94,7 @@ public class GameModel{
 		this.advDeck = a;
 		this.storyDeck = s;
 		initPlayersStart(numPlayers, c); //c is the number of cards the player will start with
+
 	}
 	
 	public void addPlayer(Player p) {
