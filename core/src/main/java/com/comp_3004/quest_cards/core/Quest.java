@@ -19,7 +19,7 @@ import com.comp_3004.quest_cards.cards.WeaponCard;
 public class Quest {
 	
 	//attributes
-	static Logger log = Logger.getLogger(Event.class); //log4j logger
+	static Logger log = Logger.getLogger(Quest.class); //log4j logger
 	private QuestCard quest;
 	private Players players;
 	private Player sponsor;
@@ -83,7 +83,7 @@ public class Quest {
 			//for each stage of the quest
 			int i=0;
 			for(QuestStage s : stages) {
-				System.out.printf("Stage %s ", i++);
+				log.info("Stage " + i++);
 				//each participating player draws a card from the adventure deck
 				for(Player p : participants)
 					p.drawCard(advDeck);

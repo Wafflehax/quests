@@ -21,7 +21,7 @@ public class QuestTest extends TestCase{
 		
 		//set up hands
 		String[] hand0 = {"lance", "valor", "thieves", "dragon", "sword", "sword", "dagger"};
-		String[] hand2 = {"boar", "valor", "dragon"};
+		String[] hand2 = {"thieves", "valor", "boar"};
 		
 		GameModel game;
 		

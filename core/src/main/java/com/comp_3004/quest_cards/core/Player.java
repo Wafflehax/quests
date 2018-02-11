@@ -35,11 +35,12 @@ public class Player{
 	private boolean kingsRecognitionBonus = false;		//if true, gain bonus shields when quest completed
 	private Rank rank;
 	private int shields;
-	protected LinkedList<AdventureCard> playerHandCards;
-	protected LinkedList<AdventureCard> playerActiveCards;
-	protected LinkedList<AdventureCard> playerStageCards;
-	protected boolean participateQuest;
+	private LinkedList<AdventureCard> playerHandCards;
+	private LinkedList<AdventureCard> playerActiveCards;
+	private LinkedList<AdventureCard> playerStageCards;
+	private boolean participateQuest;
 	protected volatile boolean participateTournament;
+	private PlayerState state_;
 	
 	// constructor
 	public Player(String name) {
@@ -49,6 +50,7 @@ public class Player{
 		this.playerHandCards = new LinkedList<AdventureCard>();
 		this.playerActiveCards = new LinkedList<AdventureCard>();
 		this.playerStageCards = new LinkedList<AdventureCard>();
+		this.state_ = new NormalState();
 	}
 	
 	// getters/setters
@@ -86,7 +88,6 @@ public class Player{
 	} 
 
 	public boolean drawCard(AdventureDeck d) {
-		
 		// can't have more than 12 cards
 		//TODO: allow player to play cards if player is already at hand limit
 		if(playerHandCards.size() >= 12) {
@@ -146,17 +147,7 @@ public class Player{
 	}
 	
 	public boolean playCard(AdventureCard c) {
-		// can only add cards to table from your hand
-		if(playerHandCards.contains(c)) {
-			playerActiveCards.add(c);
-			playerHandCards.remove(c);
-			c.setState(State.PLAY);
-			log.info("played card " + c.getName());
-			return true;
-		}else {
-			log.info("Failed you do not have this card " + c.getName());
-			return false; 
-		}
+		return state_.playCard(c, this);
 	}
 	
 	//plays card to quest stage when sponsoring
@@ -235,9 +226,11 @@ public class Player{
 		if(c.getOwner() == this && (c.getState() == State.PLAY || c.getState() == State.HAND)) {
 			if(playerActiveCards.contains(c)){
 				playerActiveCards.remove(c);
+				log.info(name + " discarded " + c.getName() + " from active");
 			}
 			else if(playerHandCards.contains(c)) {
 				playerHandCards.remove(c);
+				log.info(name + " discarded " + c.getName() + " from hand");
 			}
 			d.discardCard(c);
 			c.setState(State.DISCARD);
@@ -258,16 +251,20 @@ public class Player{
 	
 	public void addShields(int sh) {
 		shields += sh;
+		log.info(name + " gained " + sh + " shields.");
 		if(shields >= 5 && rank == Rank.SQUIRE) {
 			rank = Rank.KNIGHT;
 			shields -= 5;
+			log.info(name + " ranked up to " + rank + ".");
 		}
 		if(shields >= 7 && rank == Rank.KNIGHT) {
 			rank = Rank.CHAMPION_KNIGHT;
 			shields -= 7;
+			log.info(name + " ranked up to " + rank + ".");
 		}
 		if(shields >= 10 && rank == Rank.CHAMPION_KNIGHT) {
 			rank = Rank.KNIGHT_OF_THE_ROUND_TABLE;
+			log.info(name + " ranked up to " + rank + ".");
 			//triggers winning condition
 		}
 	}

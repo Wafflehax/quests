@@ -152,8 +152,8 @@ public class Tournament extends GameMatch {
 		int bp = p.getRankBattlePts();
 		String out = "";
 		out += "Player : " + p.getName() + " has rank: "	+ p.getRankBattlePts() + " battlepoints\n";
-		for(int w = 0; w < p.playerActiveCards.size(); w++) {
-			AdventureCard c = p.playerActiveCards.get(w);
+		for(int w = 0; w < p.getActive().size(); w++) {
+			AdventureCard c = p.getActive().get(w);
 			if(c instanceof WeaponCard) {
 				 WeaponCard weapon = (WeaponCard)c; bp += weapon.getBattlePts();
 				 out += weapon.getName() + " : "  + weapon.getBattlePts() + " ";

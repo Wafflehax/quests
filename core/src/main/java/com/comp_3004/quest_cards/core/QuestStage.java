@@ -88,10 +88,10 @@ public class QuestStage {
 			if(((FoeCard) card).getAltBattlePts() != 0)
 				battlePoints += ((FoeCard) card).getAltBattlePts();
 			else
-				battlePoints += ((FoeCard) card).getBattlePts();
+				battlePoints += card.getBattlePts();
 		}
 		else
-			battlePoints += ((FoeCard) card).getBattlePts();
+			battlePoints += card.getBattlePts();
 		return true;
 	}
 	

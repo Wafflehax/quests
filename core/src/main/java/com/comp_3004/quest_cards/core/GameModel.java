@@ -81,7 +81,7 @@ public class GameModel{
 			if(match == null) {
 				log.info("Pressed card on null match error");
 			}else {
-				if(pos < 0 || pos > match.getPlayers().current().playerHandCards.size()-1) {
+				if(pos < 0 || pos > match.getPlayers().current().getHand().size()-1) {
 					log.info("invalid card, does not match hand");
 				}else {
 				AdventureCard c = match.getPlayers().current().getHandCard(pos);
