@@ -14,24 +14,24 @@ import com.comp_3004.quest_cards.cards.WeaponCard;
 public class QuestStage {
 	
 	//attributes
-	private ArrayList<AdventureCard> sponsorCards;
+	private ArrayList<AdventureCard> cards;
 	private int battlePoints;
 
 	//constructor
 	public QuestStage() {
-		this.sponsorCards = new ArrayList<AdventureCard>();
+		this.cards = new ArrayList<AdventureCard>();
 		this.battlePoints = 0;
 	}
 	
 	//getters/setters
-	public ArrayList<AdventureCard> getSponsorCards() { return this.sponsorCards; }
+	public ArrayList<AdventureCard> getSponsorCards() { return this.cards; }
 	public int getBattlePts() { return this.battlePoints; }
 	
 	//methods
-	public boolean addSponsorCard(AdventureCard card, String namedFoe) { 
+	public boolean addCard(AdventureCard card, String namedFoe) { 
 		//adding test card
 		if(card instanceof TestCard) {
-			for(AdventureCard stageCard : sponsorCards) {
+			for(AdventureCard stageCard : cards) {
 				if(stageCard instanceof FoeCard) {
 					System.out.println("Can't add a test card to a stage that already has a foe in it");
 					return false;
@@ -40,7 +40,7 @@ public class QuestStage {
 		}
 		//adding foe card
 		else if(card instanceof FoeCard) {
-			for(AdventureCard stageCard : sponsorCards) {
+			for(AdventureCard stageCard : cards) {
 				if((stageCard instanceof FoeCard) || (stageCard instanceof TestCard)) {
 					System.out.println("Can't add a foe card to a stage that already has a foe or test in it");
 					return false;
@@ -50,7 +50,7 @@ public class QuestStage {
 		//adding weapon card
 		else if(card instanceof WeaponCard) {
 			boolean containsFoe = false;
-			for(AdventureCard stageCard : sponsorCards) {
+			for(AdventureCard stageCard : cards) {
 				if(stageCard instanceof TestCard) {
 					System.out.println("Can't add a weapon card to a stage that already has a test in it");
 					return false;
@@ -77,7 +77,7 @@ public class QuestStage {
 			System.out.println("Can't add an amour card to a stage");
 			return false;
 		}
-		sponsorCards.add(card);
+		cards.add(card);
 		if(namedFoe == card.getName())
 			battlePoints += ((FoeCard) card).getAltBattlePts();
 		else if(namedFoe == "allSaxons") {
@@ -95,24 +95,28 @@ public class QuestStage {
 		return true;
 	}
 	
+	public void removeCard(AdventureCard c) {
+		cards.remove(c);
+	}
+	
 	//TODO:change to send single cards back to player when player drags card from stage back to hand
 	public void sendCardsBackToPlayer(Player p) {
 		System.out.println("Resetting quest set up...");
-		for(AdventureCard card : sponsorCards) {
+		for(AdventureCard card : cards) {
 			card.setState(State.HAND);
 			card.setOwner(p);
 			p.getHand().add(card);
 			System.out.printf("Sending %s back to %s's hand\n", card.getName(), p.getName());
 		}
-		sponsorCards.clear();
+		cards.clear();
 	}
 	
 	public void discardCards(AdventureDeck adv) {
-		for(AdventureCard card : sponsorCards) {
+		for(AdventureCard card : cards) {
 			card.setState(State.DISCARD);
 			card.setOwner(null);
 			adv.getDiscard().add(card);
 		}
-		sponsorCards.clear();
+		cards.clear();
 	}
 }

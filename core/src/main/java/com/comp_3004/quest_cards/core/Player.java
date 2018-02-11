@@ -67,6 +67,13 @@ public class Player{
 	public boolean getKingsRecognitionBonus() { return this.kingsRecognitionBonus; }
 	public void setKingsRecognitionBonus(boolean b) { this.kingsRecognitionBonus = b; }
 	
+	public void setState(String s) { 
+		if(s == "normal")
+			state_ = new NormalState();
+		else if(s == "sponsor")
+			state_ = new SponsorState();
+		}
+	
 	public void setHand(String[] cards) { 		//used in testing
 		CardSpawner spawner = new CardSpawner();
 		for(String name : cards)
@@ -148,25 +155,6 @@ public class Player{
 	
 	public boolean playCard(AdventureCard c) {
 		return state_.playCard(c, this);
-	}
-	
-	//plays card to quest stage when sponsoring
-	public boolean playCard(AdventureCard c, Quest q, int stageNum) {
-		if(playerHandCards.contains(c)) {
-			if(q.getStage(stageNum).addSponsorCard(c, q.getQuest().getNamedFoe())) {
-				playerHandCards.remove(c);
-				c.setState(State.QUEST);
-				log.info("played card " + c.getName() + " in stage " + stageNum + " of quest");
-				return true;
-			}
-			else {
-				log.info("Failed to play the card" + c.getName());
-				return false;
-			}
-		}else {
-			log.info("Failed you do not have this card " + c.getName());
-			return false; 
-		}
 	}
 	
 	//plays card to quest stage when participating

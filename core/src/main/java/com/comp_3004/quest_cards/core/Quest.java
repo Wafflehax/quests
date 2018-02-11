@@ -185,7 +185,6 @@ public class Quest {
 	private void questSponsorship() {
 		//players starting with current player accept/decline sponsoring quest
 		int choice;
-		boolean questSponsored = false;
 		for(Player p : players.getPlayers()) {
 			System.out.printf("%s, do you want to Sponsor this Quest? (1: yes 0: no)\n", p.getName());
 			choice = sc.nextInt();
@@ -205,6 +204,7 @@ public class Quest {
 				}
 				if(numFoeTest >= quest.getStages()) {
 					sponsor = p;
+					sponsor.setState("sponsor");
 					System.out.printf("%s sponsored the quest!\n", sponsor.getName());
 					break;
 				}
@@ -238,14 +238,23 @@ public class Quest {
 					System.out.printf("%s, select stage to play %s\n", sponsor.getName(), cardToPlay.getName());
 					s = sc.nextInt();
 					if(cardToPlay instanceof TestCard) {
-						if(sponsor.playCard(cardToPlay, this, s)) {
-							cardsUsedToSponsor++;
-							testAdded = true;
+						//if(sponsor.playCard(cardToPlay, this, s)) {
+						if(stages[s].addCard(cardToPlay, quest.getNamedFoe())) {
+							if(sponsor.playCard(cardToPlay)) {
+								cardsUsedToSponsor++;
+								testAdded = true;
+							}
+							else
+								stages[s].removeCard(cardToPlay);
 						}
 					}
 					else {
-						if(sponsor.playCard(cardToPlay, this, s))
-							cardsUsedToSponsor++;
+						if(stages[s].addCard(cardToPlay, quest.getNamedFoe())) {
+							if(sponsor.playCard(cardToPlay))
+								cardsUsedToSponsor++;
+							else
+								stages[s].removeCard(cardToPlay);
+						}
 					}
 					printStages();
 				}
