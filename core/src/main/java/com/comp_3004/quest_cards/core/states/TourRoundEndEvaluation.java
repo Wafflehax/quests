@@ -55,15 +55,22 @@ public class TourRoundEndEvaluation extends State{
 				out += pairs.get(0).player.getName() + " won the tournament! Gained Sheilds: " + joiners + " + bonus(" + bonus + ") = " + (joiners+bonus);
 				this.c.m.getcurrentTurn().addShields(joiners + bonus);
 				log.info(out);
-				
+				// discard amours, weapons
+				this.c.m.discardAmours();
+				this.c.m.discardWeapons();
+				//set turn to regular before tour
 				this.c.m.setPlayers(this.c.m.playersTemp);
 				this.c.m.playersTemp = null;
+				//pop curr state go to next
 				this.c.m.sPop(); //pop
 				this.c.m.StateMsg(); //move on
 			}
 			else if(pairs.size() == 2) {
 				if(tourStage == 1) {
 					out += "Tied. Here are the tied players going to the Tie Breaker:\n";
+					//discard of everyone's weapons
+					this.c.m.discardWeapons();
+					//set players to those tied					
 					this.c.m.SetPlayerArrayResetPos(winners);
 					for(int i = 0; i < this.c.m.getPlayers().size(); i++) {
 						out += "Player : " + this.c.m.getPlayers().getPlayerAtIndex(i).getName() + "\n";
@@ -78,7 +85,9 @@ public class TourRoundEndEvaluation extends State{
 				}
 				else if(tourStage == 2) { //over Tied players win
 					out += "Tied again. Tied players win " + (bonus+joiners) + " battle points:\n";
-					this.c.m.SetPlayerArrayResetPos(winners);
+					//tied but this was the last round discard weapons,amours
+					this.c.m.discardAmours();
+					this.c.m.discardWeapons();
 					for(int i = 0; i < this.c.m.getPlayers().size(); i++) {
 						out += "Player : " + this.c.m.getPlayers().getPlayerAtIndex(i).getName() + " With Rank ";
 						this.c.m.getPlayers().getPlayerAtIndex(i).addShields(bonus+joiners);
@@ -87,12 +96,15 @@ public class TourRoundEndEvaluation extends State{
 					}
 					tourStage++;
 					log.info(out);
+					//set players back to regular turn before tour
+					this.c.m.setPlayers(this.c.m.playersTemp);
+					this.c.m.playersTemp = null;
 					//over pop self and move on
 					this.c.m.sPop();
 					this.c.m.StateMsg(); //moving to next state
 				}
 				else {
-					log.info("Error stage greater than 2.");
+					log.info("Error stage greater than 2. Can't play more than two rounds start,tie breaker");
 				}
 			}
 			else {
