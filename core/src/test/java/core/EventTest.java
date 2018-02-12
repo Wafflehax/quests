@@ -14,7 +14,7 @@ import com.comp_3004.quest_cards.cards.StoryCard;
 import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.core.GameModel;
-import com.comp_3004.quest_cards.core.Player.Rank;
+import com.comp_3004.quest_cards.player.Player.Rank;
 
 import junit.framework.TestCase;
 

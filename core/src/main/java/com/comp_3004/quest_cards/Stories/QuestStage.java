@@ -1,4 +1,5 @@
-package com.comp_3004.quest_cards.core;
+package com.comp_3004.quest_cards.Stories;
+
 
 import java.util.ArrayList;
 
@@ -6,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureCard.State;
+import com.comp_3004.quest_cards.player.Player;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.AllyCard;
 import com.comp_3004.quest_cards.cards.AmourCard;

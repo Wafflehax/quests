@@ -1,4 +1,4 @@
-package com.comp_3004.quest_cards.core;
+package com.comp_3004.quest_cards.Stories;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -11,6 +11,8 @@ import com.comp_3004.quest_cards.cards.AllyCard;
 import com.comp_3004.quest_cards.cards.FoeCard;
 import com.comp_3004.quest_cards.cards.StoryCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
+import com.comp_3004.quest_cards.player.Player;
+import com.comp_3004.quest_cards.player.Players;
 
 public class Event {
 	

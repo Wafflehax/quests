@@ -1,4 +1,4 @@
-package com.comp_3004.quest_cards.core;
+package com.comp_3004.quest_cards.player;
 
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -39,7 +39,7 @@ public class Player{
 	private LinkedList<AdventureCard> playerActiveCards;
 	private LinkedList<AdventureCard> playerStageCards;
 	private boolean participateQuest;
-	protected volatile boolean participateTournament;
+	public volatile boolean participateTournament;
 	private PlayerState state_;
 	
 	// constructor
@@ -147,7 +147,7 @@ public class Player{
 		return (playerHandCards.size() > 12);
 	}
 	
-	protected boolean existsActive(String cardName) {
+	public boolean existsActive(String cardName) {
 		for(int i = 0; i < playerActiveCards.size(); i++) {
 			if(playerActiveCards.get(i).getName().equalsIgnoreCase(cardName))
 				return true;

@@ -1,4 +1,5 @@
-package com.comp_3004.quest_cards.core;
+package com.comp_3004.quest_cards.Stories;
+
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -14,6 +15,8 @@ import com.comp_3004.quest_cards.cards.QuestCard;
 import com.comp_3004.quest_cards.cards.StoryCard;
 import com.comp_3004.quest_cards.cards.TestCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
+import com.comp_3004.quest_cards.player.Player;
+import com.comp_3004.quest_cards.player.Players;
 
 //TODO: implement state pattern (sponsorship state, set up state, participation state ...)
 public class Quest {

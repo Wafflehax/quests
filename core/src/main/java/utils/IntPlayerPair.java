@@ -1,6 +1,6 @@
 package utils;
 
-import com.comp_3004.quest_cards.core.Player;
+import com.comp_3004.quest_cards.player.Player;
 
 public class IntPlayerPair{
 	public final int value;

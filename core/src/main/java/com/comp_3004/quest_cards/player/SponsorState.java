@@ -1,25 +1,17 @@
-package com.comp_3004.quest_cards.core;
+package com.comp_3004.quest_cards.player;
 
 import org.apache.log4j.Logger;
 
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureCard.State;
 
-public class NormalState extends PlayerState {
-
-	static Logger log = Logger.getLogger(NormalState.class); //log4j logger
-	
-	public NormalState() {
-		// TODO Auto-generated constructor stub
-	}
+public class SponsorState extends PlayerState {
+	static Logger log = Logger.getLogger(SponsorState.class); //log4j logger
 
 	public boolean playCard(AdventureCard c, Player p) {
-		// can only add cards to table from your hand
 		if(p.getHand().contains(c)) {
-			p.getActive().add(c);
 			p.getHand().remove(c);
-			c.setState(State.PLAY);
-			log.info(p.getName() + " played card " + c.getName());
+			c.setState(State.QUEST);
 			return true;
 		}else {
 			log.info("Error: " + p.getName() + " does not have the card " + c.getName() + " in hand");
@@ -28,7 +20,7 @@ public class NormalState extends PlayerState {
 	}
 
 	public boolean userInput() {
-		// TODO: handle user input during normal state
+		// TODO: handle user input during sponsor state
 		return false;
 	}
 

@@ -5,6 +5,8 @@ import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
+import com.comp_3004.quest_cards.Stories.Event;
+import com.comp_3004.quest_cards.Stories.Quest;
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.AllyCard;
@@ -13,6 +15,8 @@ import com.comp_3004.quest_cards.cards.Card;
 import com.comp_3004.quest_cards.cards.StoryDeck;	//used for testing
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.core.states.State;			//used for testing
+import com.comp_3004.quest_cards.player.Player;
+import com.comp_3004.quest_cards.player.Players;
 import com.comp_3004.quest_cards.cards.QuestCard;
 import com.comp_3004.quest_cards.cards.StoryCard;
 
@@ -68,7 +72,7 @@ public class GameModel{
 	
 	//reset position to start
 	public void SetPlayerArrayResetPos(ArrayList<Player> p) {
-		players.players = p;
+		players.setPlayers(p);
 		players.setSize(p.size());
 		players.setPos(0);
 	}

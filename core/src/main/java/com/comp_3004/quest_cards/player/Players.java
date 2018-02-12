@@ -1,4 +1,4 @@
-package com.comp_3004.quest_cards.core;
+package com.comp_3004.quest_cards.player;
 
 import java.util.ArrayList;
 
@@ -32,6 +32,7 @@ public class Players{
 	public int size() {	return players.size(); }
 	public int getNumPlayers() { return this.players.size(); }
 	public ArrayList<Player> getPlayers() { return this.players; }
+	public void setPlayers(ArrayList<Player> p) { this.players = p; }
 	public Player getPlayerAtIndex(int i) { return players.get(i); }
 	
 	//setter

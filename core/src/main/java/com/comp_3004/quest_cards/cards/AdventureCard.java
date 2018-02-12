@@ -1,6 +1,6 @@
 package com.comp_3004.quest_cards.cards;
 
-import com.comp_3004.quest_cards.core.Player;
+import com.comp_3004.quest_cards.player.Player;
 
 public abstract class AdventureCard extends Card {
 	

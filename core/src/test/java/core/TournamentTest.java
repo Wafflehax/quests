@@ -19,13 +19,13 @@ import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.core.GameController;
 import com.comp_3004.quest_cards.core.GameModel;
-import com.comp_3004.quest_cards.core.Player;
-import com.comp_3004.quest_cards.core.Players;
 import com.comp_3004.quest_cards.core.states.TourAskParticipation;
 import com.comp_3004.quest_cards.core.states.TourInit;
 import com.comp_3004.quest_cards.core.states.TourRoundEndEvaluation;
 import com.comp_3004.quest_cards.core.states.State;
 import com.comp_3004.quest_cards.core.states.TourStartFirstTime;
+import com.comp_3004.quest_cards.player.Player;
+import com.comp_3004.quest_cards.player.Players;
 
 import junit.framework.TestCase;
 import utils.IntPlayerPair;

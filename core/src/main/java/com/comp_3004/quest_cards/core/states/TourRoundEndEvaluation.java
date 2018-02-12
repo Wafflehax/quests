@@ -10,7 +10,7 @@ import com.comp_3004.quest_cards.cards.Card;
 import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.core.GameController;
-import com.comp_3004.quest_cards.core.Player;
+import com.comp_3004.quest_cards.player.Player;
 
 import utils.IntPlayerPair;
 import utils.utils;
