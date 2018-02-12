@@ -24,7 +24,7 @@ public class QuestParticipationState extends PlayerState {
 	}
 
 	//handle user input: YES/NO for determining participation
-	public boolean userInput() {
+	public boolean userInput(boolean b) {
 		// TODO Auto-generated method stub
 		return false;
 	}

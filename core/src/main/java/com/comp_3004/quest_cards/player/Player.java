@@ -162,6 +162,16 @@ public class Player{
 		return state_.playCard(c, this);
 	}
 	
+	//discard a card from hand or play
+	public boolean discardCard(AdventureCard c, AdventureDeck d) {
+		return state_.discardCard(c, d, this);
+	}
+	
+	//do something based on user input (Yes/No/Done)
+	public void userInput(boolean b) {
+		state_.userInput(b);
+	}
+	
 	//during quest, reveals cards played in a stage
 	public void revealStageCards() {
 		for(AdventureCard stageCard : playerStageCards) {
@@ -172,23 +182,7 @@ public class Player{
 		playerStageCards.clear();
 	}
 	
-	//discard a card from hand or play
-	public boolean discardCard(AdventureCard c, AdventureDeck d) {
-		if(c.getOwner() == this && (c.getState() == State.PLAY || c.getState() == State.HAND)) {
-			if(playerActiveCards.contains(c)){
-				playerActiveCards.remove(c);
-				log.info(name + " discarded " + c.getName() + " from active");
-			}
-			else if(playerHandCards.contains(c)) {
-				playerHandCards.remove(c);
-				log.info(name + " discarded " + c.getName() + " from hand");
-			}
-			d.discardCard(c);
-			c.setState(State.DISCARD);
-			c.setOwner(null);
-		}
-		return false;
-	}
+	
 	
 	//discards all the players active weapsons
 	public void discardWeaponsActive(AdventureDeck d) {

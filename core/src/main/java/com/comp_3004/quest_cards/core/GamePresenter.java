@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.gui.Assets;
 import com.comp_3004.quest_cards.gui.CardView;
 import com.comp_3004.quest_cards.gui.GameView;
@@ -29,7 +30,6 @@ public class GamePresenter extends Group{
   TextureAtlas backgrounds;
 
   private AssetManager manager;
-
 
   public GamePresenter(QuestCards parent) {
 
@@ -94,9 +94,42 @@ public class GamePresenter extends Group{
   public void act(float delta) {
     super.act(delta);
   }
-
-
+  
+  	//temporary methods to use for model testing
+  	//takes cardID as input from view, finds corresponding card in model
+  	public void playCard(int cardID) {
+	  	AdventureCard cardToPlay = null;
+	  	for(AdventureCard card : model.getAdvDeck().getDeck())
+	  		if(card.getID() == cardID)
+	  			cardToPlay = card;
+	  	if(cardToPlay != null)
+	  		if(model.getPlayers().current().playCard(cardToPlay)) {
+	  			int temp;
+	  			//then update view with what changed in the model
+	  		}
+  	}
+  	
+  	//takes cardID as input from view, finds corresponding card in model
+  	public void discardCard(int cardID) {
+  		AdventureCard cardToDiscard = null;
+	  	for(AdventureCard card : model.getAdvDeck().getDeck())
+	  		if(card.getID() == cardID)
+	  			cardToDiscard = card;
+	  	if(cardToDiscard != null)
+	  		if(model.getPlayers().current().discardCard(cardToDiscard, model.getAdvDeck())) {
+	  			int temp;
+	  			//then update view with what changed in the model
+	  		}
+  	}
+  
+  	public void userInput(int b) {
+  		if(b == 1)
+  			model.getPlayers().current().userInput(true);
+  		else if(b == 0)
+  			model.getPlayers().current().userInput(false);
+  	}
 }
+
 
 /*
     //this is just a rough idea of what a listener may look like...

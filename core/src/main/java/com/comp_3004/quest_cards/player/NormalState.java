@@ -45,7 +45,7 @@ public class NormalState extends PlayerState {
 		return false;
 	}
 
-	public boolean userInput() {
+	public boolean userInput(boolean b) {
 		// TODO: handle user input during normal state
 		return false;
 	}
