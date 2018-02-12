@@ -10,13 +10,23 @@ public class SponsorState extends PlayerState {
 	static Logger log = Logger.getLogger(SponsorState.class); //log4j logger
 
 	public boolean playCard(AdventureCard c, Player p) {
+		return false; //need to fix this later
+	}
+	
+	public boolean playCard(AdventureCard c, Player p, int stageNum) {
 		if(p.getHand().contains(c)) {
-			p.getHand().remove(c);
-			c.setState(State.QUEST);
-			return true;
-		}else {
+			if(p.getQuest().addStageCard(c, stageNum)) {
+				p.getHand().remove(c);
+				c.setState(State.QUEST);
+				return true;
+			}else {
+				log.info("Failed to play  " + c.getName());
+				return false; 
+			}
+		}
+		else {
 			log.info("Error: " + p.getName() + " does not have the card " + c.getName() + " in hand");
-			return false; 
+			return false;
 		}
 	}
 	
@@ -27,8 +37,14 @@ public class SponsorState extends PlayerState {
 
 	public boolean userInput(boolean b, Player p) {
 		if(b) {
+			if(p.getQuest().getSponsor() == p) {
+				//quest set up complete
+				return p.getQuest().checkQuestSetup();
+			}
 			return p.getQuest().questSponsorship(p);
 		}
+		else
+			log.info(p.getName()+" declined sponsoring the quest");
 		return false;
 	}
 

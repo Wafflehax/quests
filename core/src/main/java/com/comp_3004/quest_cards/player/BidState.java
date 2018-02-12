@@ -20,7 +20,7 @@ public class BidState extends PlayerState {
 	}
 
 
-	public boolean userInput(boolean b) {
+	public boolean userInput(boolean b, Player p) {
 		// TODO get current amount player wants to bid, update TestBids with player bid
 		return false;
 	}

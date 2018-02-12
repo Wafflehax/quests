@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.comp_3004.quest_cards.cards.AdventureCard;
+import com.comp_3004.quest_cards.cards.QuestCard;
 import com.comp_3004.quest_cards.gui.Assets;
 import com.comp_3004.quest_cards.gui.CardView;
 import com.comp_3004.quest_cards.gui.GameView;
@@ -109,12 +110,25 @@ public class GamePresenter extends Group{
   	//takes cardID as input from view, finds corresponding card in model
   	public void playCard(int cardID) {
 	  	AdventureCard cardToPlay = null;
-	  	for(AdventureCard card : model.getAdvDeck().getDeck())
+	  	for(AdventureCard card : model.getPlayers().current().getHand())
 	  		if(card.getID() == cardID)
 	  			cardToPlay = card;
 	  	if(cardToPlay != null)
 	  		if(model.getPlayers().current().playCard(cardToPlay)) {
-	  			int temp;
+	  			//then update view with what changed in the model
+	  		}
+  	}
+  //had to overload for sponsoring a quest as you can add cards to different stages :(
+  	public void playCard(int cardID, int stageNum) {
+	  	AdventureCard cardToPlay = null;
+	  	System.out.println(model.getPlayers().current().getName());
+	  	for(AdventureCard card : model.getPlayers().current().getHand())
+	  		if(card.getID() == cardID)
+	  			cardToPlay = card;
+	  	if(cardToPlay == null)
+	  		System.out.println("Card ID not found");
+	  	if(cardToPlay != null)
+	  		if(model.getPlayers().current().playCard(cardToPlay, stageNum)) {
 	  			//then update view with what changed in the model
 	  		}
   	}
@@ -122,7 +136,7 @@ public class GamePresenter extends Group{
   	//takes cardID as input from view, finds corresponding card in model
   	public void discardCard(int cardID) {
   		AdventureCard cardToDiscard = null;
-	  	for(AdventureCard card : model.getAdvDeck().getDeck())
+	  	for(AdventureCard card : model.getPlayers().current().getHand())
 	  		if(card.getID() == cardID)
 	  			cardToDiscard = card;
 	  	if(cardToDiscard != null)
@@ -133,12 +147,28 @@ public class GamePresenter extends Group{
   	}
   
   	public void userInput(int b) {
-  		if(b == 1)
-  			model.getPlayers().current().userInput(true);
+  		if(b == 1) {
+  			//sponsor clicks done while setting up quest
+  			if(model.getQuest().getSponsor() == model.getPlayers().current()) {
+  				model.getPlayers().current().userInput(true);
+  				return;
+  			}
+  			//player hits yes when asked if participating
+  			else if(model.getPlayers().current().userInput(true))
+  				return;
+  		}
   		else if(b == 0)
+  			//user hits no when asked if participating
   			model.getPlayers().current().userInput(false);
   		model.getPlayers().next();
-  		//view.update
+  		//checks if no one wants to sponsor quest
+  		if(model.getStory() instanceof QuestCard) {
+			if((model.getPlayers().current() == model.getQuest().getDrewQuest()) && model.getQuest().getSponsor() == null) {
+				model.getQuest().noSponsor();
+				model.getPlayers().next();
+				model.beginTurn();
+			}
+  		}
   	}
 }
 

@@ -128,6 +128,7 @@ public class QuestStage {
 			System.out.printf("Sending %s back to %s's hand\n", card.getName(), p.getName());
 		}
 		cards.clear();
+		p.printHand();
 	}
 	
 	public void discardCards(AdventureDeck adv) {

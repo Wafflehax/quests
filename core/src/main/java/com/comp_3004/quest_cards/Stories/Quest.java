@@ -25,21 +25,27 @@ public class Quest {
 	private QuestCard quest;					//current quest
 	private Players players;					//players in the game
 	private Player sponsor;					//player who decides to sponsor quest
+	private Player drewQuest;
 	private int cardsUsedToSponsor;			//number of cards the sponsor uses to set up the quest
 	private ArrayList<Player> participants;	//players who choose to participate in the quest
 	private QuestStage[] stages;				//stores all the stages of the current quest
 	private AdventureDeck advDeck;			//deck of adventure cards
+	private boolean noSponsor;
 	Scanner sc = new Scanner(System.in);		//used for user input for now
+	boolean testAdded = false;
 	
 	//getters/setters
 	public QuestStage getStage(int i) { return this.stages[i]; }
 	public QuestCard getQuest() { return this.quest; }
 	public void setSponsor(Player p) { this.sponsor = p; }
+	public Player getSponsor() { return this.sponsor; }
+	public Player getDrewQuest() { return this.drewQuest; }
 
 	//constructor
 	public Quest(QuestCard q, Players p, AdventureDeck d) {
 		this.quest = q;
 		this.players = p;
+		this.drewQuest = players.current();
 		for(Player pl : players.getPlayers()) {
 			pl.setQuest(this);
 			pl.setState("sponsor");
@@ -53,6 +59,7 @@ public class Quest {
 			stages[i] = stage;
 		}
 		this.advDeck = d;
+		this.noSponsor = false;
 		log.info(players.current().getName() + " drew quest " + quest.getName());
 	}
 	
@@ -113,6 +120,94 @@ public class Quest {
 			return false;
 		}
 
+	}
+	
+	public void noSponsor() {
+		log.info("No one wanted to sponsor the quest");
+	}
+	
+	public boolean addStageCard(AdventureCard c, int stageNum) {
+		//if quest has a test, can't add another test
+		if(testAdded && (c instanceof TestCard)) {
+			log.info("Error: Quest already contains a test, cannot add another");
+			return false;
+		}
+		else {
+			if(c instanceof TestCard) {
+				if(stages[stageNum].addCard(c, quest.getNamedFoe())) {
+						log.info(sponsor.getName()+" played "+c.getName()+" to stage "+stageNum);
+						cardsUsedToSponsor++;
+						testAdded = true;
+						printStages();
+						return true;
+				}
+				else
+					return false;
+			}
+			else {
+				if(stages[stageNum].addCard(c, quest.getNamedFoe())) {
+					log.info(sponsor.getName()+" played "+c.getName()+" to stage "+stageNum);
+					cardsUsedToSponsor++;
+					printStages();
+					return true;
+				}
+				else
+					return false;
+			}
+		}
+	}
+	
+	public boolean checkQuestSetup() {
+		//check if quest is set up correctly
+		//check that each stage has increasing battlepoints, ignore 0's as they are stages with tests
+		boolean stagesComplete = false;
+		boolean increasingBPs = false;
+		int[] stageBPs = new int[quest.getStages()];
+		for(int i=0; i<quest.getStages(); i++) {
+			for(AdventureCard card : stages[i].getSponsorCards()) {
+				if(card instanceof FoeCard) {
+					if(quest.getNamedFoe() == card.getName())
+						stageBPs[i] += ((FoeCard) card).getAltBattlePts();
+					else if(quest.getNamedFoe() == "allSaxons") {
+						if(card.getName() == "Saxons" || card.getName() == "Saxon Knight")
+							stageBPs[i] += ((FoeCard) card).getAltBattlePts();
+					}
+					else if(quest.getNamedFoe() == "all") {
+						if(((FoeCard) card).getAltBattlePts() != 0)
+							stageBPs[i] += ((FoeCard) card).getAltBattlePts();
+						else
+							stageBPs[i] += ((FoeCard) card).getBattlePts();
+					}
+					else
+						stageBPs[i] += ((FoeCard) card).getBattlePts();
+				}
+				if(card instanceof WeaponCard)
+					stageBPs[i] += ((WeaponCard) card).getBattlePts();
+			}
+		}
+		if(isSorted(stageBPs))
+			increasingBPs = true;
+		else
+			log.info("Error: Battlepoints do not increase from stage to stage");
+		
+		//check all stages of quest are completed
+		stagesComplete = stagesComplete();
+		
+		if(increasingBPs && stagesComplete) {
+			log.info("Quest set up complete.");
+			for(int i=0; i<quest.getStages(); i++) {
+				log.info("Stage "+i+": "+stageBPs[i]+" battlepoints");
+			}
+		}
+		else {
+			for(QuestStage stage : stages) {
+				stage.sendCardsBackToPlayer(sponsor);
+				cardsUsedToSponsor = 0;
+			}
+			return false;
+		}
+		printStages();
+		return true;
 	}
 	
 	private void questSetup() {

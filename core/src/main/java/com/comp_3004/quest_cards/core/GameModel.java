@@ -51,6 +51,8 @@ public class GameModel{
 	public AdventureDeck getAdvDeck() { return this.advDeck; }
 	public StoryDeck getStoryDeck() { return this.storyDeck; }
 	public Card getStory() { return StoryEv; }
+	public Quest getQuest() { return this.quest; }
+	
 	
 	public State getState() { 
 		if(state == null || state.isEmpty()) {
@@ -83,6 +85,7 @@ public class GameModel{
 		advDeck.shuffle();
 		storyDeck = new StoryDeck();
 		storyDeck.shuffle();
+		StoryEv = null;
 		initPlayersStart(4, MAX_HAND_SIZE);
 	}
 
@@ -91,6 +94,7 @@ public class GameModel{
 		advDeck.shuffle();
 		storyDeck = new StoryDeck();
 		storyDeck.shuffle();
+		StoryEv = null;
 		initPlayersStart(num, MAX_HAND_SIZE);
 	}
 	
@@ -99,12 +103,14 @@ public class GameModel{
 		this.numPlayers = n;
 		this.advDeck = a;
 		this.storyDeck = s;
+		StoryEv = null;
 		initPlayersStart(numPlayers, c); //c is the number of cards the player will start with
 
 	}
 	
 	public void beginTurn() {
 		StoryCard cardDrawn = storyDeck.drawCard();
+		StoryEv = cardDrawn;
 		if(cardDrawn instanceof QuestCard) {
 			quest = new Quest((QuestCard)cardDrawn, players, advDeck);
 			//quest.runQuest();

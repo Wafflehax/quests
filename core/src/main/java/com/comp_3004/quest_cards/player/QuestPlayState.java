@@ -64,7 +64,7 @@ public class QuestPlayState extends PlayerState {
 	}
 
 	//handle user input "done playing cards"
-	public boolean userInput(boolean b) {
+	public boolean userInput(boolean b, Player p) {
 		// TODO Auto-generated method stub
 		return false;
 	}

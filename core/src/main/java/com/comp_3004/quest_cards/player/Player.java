@@ -165,6 +165,12 @@ public class Player{
 	public boolean playCard(AdventureCard c) {
 		return state_.playCard(c, this);
 	}
+	public boolean playCard(AdventureCard c, int stageNum) {
+		if(state_ instanceof SponsorState)
+			return ((SponsorState)state_).playCard(c, this, stageNum);
+		else
+			return false;
+	}
 	
 	//discard a card from hand or play
 	public boolean discardCard(AdventureCard c, AdventureDeck d) {
@@ -172,8 +178,8 @@ public class Player{
 	}
 	
 	//do something based on user input (Yes/No/Done)
-	public void userInput(boolean b) {
-		state_.userInput(b, this);
+	public boolean userInput(boolean b) {
+		return state_.userInput(b, this);
 	}
 	
 	//during quest, reveals cards played in a stage
