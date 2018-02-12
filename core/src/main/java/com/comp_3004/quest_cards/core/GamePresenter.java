@@ -31,6 +31,16 @@ public class GamePresenter extends Group{
 
   private AssetManager manager;
 
+  //used in JUnit tests
+  public GamePresenter(GameModel m) {
+
+	    this.parent = null;
+	    manager = null;
+	    view = null;
+	    model = m;
+	  }
+  public GameModel getModel() { return this.model; }
+  
   public GamePresenter(QuestCards parent) {
 
     this.parent = parent;
@@ -127,6 +137,8 @@ public class GamePresenter extends Group{
   			model.getPlayers().current().userInput(true);
   		else if(b == 0)
   			model.getPlayers().current().userInput(false);
+  		model.getPlayers().next();
+  		//view.update
   	}
 }
 

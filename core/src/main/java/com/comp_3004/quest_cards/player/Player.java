@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 
+import com.comp_3004.quest_cards.Stories.Quest;
 import com.comp_3004.quest_cards.cards.*;
 import com.comp_3004.quest_cards.cards.AdventureCard.State;
 
@@ -38,7 +39,7 @@ public class Player{
 	private LinkedList<AdventureCard> playerHandCards;
 	private LinkedList<AdventureCard> playerActiveCards;
 	private LinkedList<AdventureCard> playerStageCards;
-	private boolean participateQuest;
+	private Quest currentQuest;
 	public volatile boolean participateTournament;
 	private PlayerState state_;
 	
@@ -50,6 +51,7 @@ public class Player{
 		this.playerHandCards = new LinkedList<AdventureCard>();
 		this.playerActiveCards = new LinkedList<AdventureCard>();
 		this.playerStageCards = new LinkedList<AdventureCard>();
+		this.currentQuest = null;
 		this.state_ = new NormalState();
 	}
 	
@@ -67,6 +69,8 @@ public class Player{
 	public LinkedList<AdventureCard> getStage() { return this.playerStageCards; }
 	public boolean getKingsRecognitionBonus() { return this.kingsRecognitionBonus; }
 	public void setKingsRecognitionBonus(boolean b) { this.kingsRecognitionBonus = b; }
+	public void setQuest(Quest q) { this.currentQuest = q; }
+	public Quest getQuest() { return this.currentQuest; }
 	
 	public void setState(String s) { 
 		if(s == "normal")
@@ -169,7 +173,7 @@ public class Player{
 	
 	//do something based on user input (Yes/No/Done)
 	public void userInput(boolean b) {
-		state_.userInput(b);
+		state_.userInput(b, this);
 	}
 	
 	//during quest, reveals cards played in a stage

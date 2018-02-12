@@ -25,8 +25,10 @@ public class SponsorState extends PlayerState {
 		return false;
 	}
 
-	public boolean userInput(boolean b) {
-		// TODO: handle user input during sponsor state (done adding cards)
+	public boolean userInput(boolean b, Player p) {
+		if(b) {
+			return p.getQuest().questSponsorship(p);
+		}
 		return false;
 	}
 

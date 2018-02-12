@@ -103,6 +103,15 @@ public class GameModel{
 
 	}
 	
+	public void beginTurn() {
+		StoryCard cardDrawn = storyDeck.drawCard();
+		if(cardDrawn instanceof QuestCard) {
+			quest = new Quest((QuestCard)cardDrawn, players, advDeck);
+			//quest.runQuest();
+			//storyDeck.discardCard(cardDrawn);
+		}
+	}
+	
 	public void addPlayer(Player p) {
 		players.addPlayer(p);
 	}

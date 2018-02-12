@@ -24,8 +24,11 @@ public class QuestParticipationState extends PlayerState {
 	}
 
 	//handle user input: YES/NO for determining participation
-	public boolean userInput(boolean b) {
-		// TODO Auto-generated method stub
+	public boolean userInput(boolean b, Player p) {
+		if(b) {
+			//p.getQuest().questSponsorship(p);
+			return true;
+		}
 		return false;
 	}
 

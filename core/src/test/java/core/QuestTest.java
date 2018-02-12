@@ -6,6 +6,7 @@ import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.CardSpawner;
 import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.core.GameModel;
+import com.comp_3004.quest_cards.core.GamePresenter;
 
 import junit.framework.TestCase;
 
@@ -24,17 +25,23 @@ public class QuestTest extends TestCase{
 		
 		GameModel game;
 		
-		game = new GameModel(4, 0, advDeck, storyDeck);
+		game = new GameModel(4, 1, advDeck, storyDeck);
+		GamePresenter pres = new GamePresenter(game);
 		
-		ByteArrayInputStream in = new ByteArrayInputStream("0\n0\n0\n0\n".getBytes());
-		System.setIn(in);
-		game.questTest();
+		pres.getModel().beginTurn();
+		System.out.println("Sponsor Quest?");
+		pres.userInput(1);
+		pres.userInput(1);
+		pres.userInput(1);
+		pres.userInput(1);
+		
+		//game.questTest();
 		//System.setIn(System.in);
 		
 	}
 	
 	//named foe case - 3 way tie
-	public void testQuest2() {
+	/*public void testQuest2() {
 		//set up story deck
 		String[] sd = {"boarHunt"};
 		StoryDeck storyDeck = new StoryDeck(sd);
@@ -60,6 +67,6 @@ public class QuestTest extends TestCase{
 		ByteArrayInputStream in = new ByteArrayInputStream("0\n1\n1\n0\n0\n1\n1\n1\n0\n1\n1\n1\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0".getBytes());
 		System.setIn(in);
 		game.questTest();
-	}
+	}*/
 
 }

@@ -34,11 +34,16 @@ public class Quest {
 	//getters/setters
 	public QuestStage getStage(int i) { return this.stages[i]; }
 	public QuestCard getQuest() { return this.quest; }
+	public void setSponsor(Player p) { this.sponsor = p; }
 
 	//constructor
 	public Quest(QuestCard q, Players p, AdventureDeck d) {
 		this.quest = q;
 		this.players = p;
+		for(Player pl : players.getPlayers()) {
+			pl.setQuest(this);
+			pl.setState("sponsor");
+		}
 		this.sponsor = null;
 		cardsUsedToSponsor = 0;
 		participants = new ArrayList<Player>();
@@ -48,15 +53,14 @@ public class Quest {
 			stages[i] = stage;
 		}
 		this.advDeck = d;
-		
+		log.info(players.current().getName() + " drew quest " + quest.getName());
 	}
 	
 	//main quest method, handles sequence of quest "events"
 	public void runQuest() {
-		log.info(players.current().getName() + " drew quest " + quest.getName());
 		
 		//get a sponsor for the quest
-		questSponsorship();
+		//questSponsorship();
 		//if no sponsor, quest is done, turn is over
 		if(sponsor == null) {
 			log.info("No one sponsored quest, turn over");
@@ -84,40 +88,31 @@ public class Quest {
 		questCleanup();
 	}
 	
-	private void questSponsorship() {
-		//players starting with current player accept/decline sponsoring quest
-		int choice;
-		for(Player p : players.getPlayers()) {
-			System.out.printf("%s, do you want to Sponsor this Quest? (1: yes 0: no)\n", p.getName());
-			choice = sc.nextInt();
-			if(choice == 1) {
-				//check if player has foe/test cards at least equal to the number of stages in the quest
-				int numFoeTest = 0;
-				boolean testCardCounted = false;
-				for(AdventureCard card : p.getHand()) {
-					if(card instanceof FoeCard)
-						numFoeTest++;
-					if(card instanceof TestCard) {
-						if(!testCardCounted) {
-							numFoeTest++;
-							testCardCounted = true;
-						}
-					}	
+	public boolean questSponsorship(Player p) {
+		int numFoeTest = 0;
+		boolean testCardCounted = false;
+		for(AdventureCard card : p.getHand()) {
+			if(card instanceof FoeCard)
+				numFoeTest++;
+			if(card instanceof TestCard) {
+				if(!testCardCounted) {
+					numFoeTest++;
+					testCardCounted = true;
 				}
-				if(numFoeTest >= quest.getStages()) {
-					sponsor = p;
-					sponsor.setState("sponsor");
-					log.info(sponsor.getName() + " sponsored the quest!");
-					break;
-				}
-				else {
-					log.info(p.getName() + " does not have the required cards to sponsor the quest. ");
-					log.info("Quest requires "+quest.getStages()+" foe + at most 1 test card. Eligible cards: "+numFoeTest);
-				}
-			}
-			else
-				log.info(p.getName()+" declined to sponsor quest");
+			}	
 		}
+		if(numFoeTest >= quest.getStages()) {
+			sponsor = p;
+			sponsor.setState("sponsor");
+			log.info(sponsor.getName() + " sponsored the quest!");
+			return true;
+		}
+		else {
+			log.info(p.getName() + " does not have the required cards to sponsor the quest. ");
+			log.info("Quest requires "+quest.getStages()+" foe + at most 1 test card. Eligible cards: "+numFoeTest);
+			return false;
+		}
+
 	}
 	
 	private void questSetup() {
