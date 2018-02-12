@@ -129,6 +129,21 @@ public class GameModel{
 			return false;
 	}
 	
+	public void discardAmours() {
+		if(players.size() > 0) {
+			for(int i = 0; i < players.size(); i++) {
+				players.getPlayerAtIndex(i).discardAmoursActive(advDeck);
+			}
+		}
+	}
+	
+	public void discardWeapons() {
+		if(players.size() > 0) {
+			for(int i = 0; i < players.size(); i++) {
+				players.getPlayerAtIndex(i).discardWeaponsActive(advDeck);
+			}
+		}
+	}
 	
 	
 	public boolean inPlay(String name) {
