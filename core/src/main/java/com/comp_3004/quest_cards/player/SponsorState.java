@@ -3,6 +3,7 @@ package com.comp_3004.quest_cards.player;
 import org.apache.log4j.Logger;
 
 import com.comp_3004.quest_cards.cards.AdventureCard;
+import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.AdventureCard.State;
 
 public class SponsorState extends PlayerState {
@@ -18,9 +19,14 @@ public class SponsorState extends PlayerState {
 			return false; 
 		}
 	}
+	
+	public boolean discardCard(AdventureCard c, AdventureDeck d, Player p) {
+		//handle player discarding cards during quest cleanup after drawing cards
+		return false;
+	}
 
 	public boolean userInput() {
-		// TODO: handle user input during sponsor state
+		// TODO: handle user input during sponsor state (done adding cards)
 		return false;
 	}
 

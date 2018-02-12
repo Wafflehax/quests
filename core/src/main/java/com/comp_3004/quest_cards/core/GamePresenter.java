@@ -123,6 +123,12 @@ public class GamePresenter extends Group{
   }
 });
     }
+    public playCard(AdventureCard card) {
+    		model.getPlayers().current().playCard(card);
+    }
+    public userInput(boolean b) {
+    		model.getPlayers().current().userInput(b);
+    }
 
     //won't need these, as the calls to model.getSomething can be placed directly in the listeners
 	/*update view with model data - called when a change in model occurs

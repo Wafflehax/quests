@@ -12,7 +12,6 @@ import com.comp_3004.quest_cards.cards.AllyCard;
 import com.comp_3004.quest_cards.cards.AmourCard;
 import com.comp_3004.quest_cards.cards.FoeCard;
 import com.comp_3004.quest_cards.cards.QuestCard;
-import com.comp_3004.quest_cards.cards.StoryCard;
 import com.comp_3004.quest_cards.cards.TestCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.player.Player;
@@ -247,6 +246,9 @@ public class Quest {
 	private void playQuest() {
 		//for each stage of the quest
 		int i=0;
+		for(Player p : participants) {
+			p.setState("playQuest");
+		}
 		for(QuestStage s : stages) {
 			//each participating player draws a card from the adventure deck
 			for(Player p : participants)

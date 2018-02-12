@@ -74,7 +74,9 @@ public class Player{
 		else if(s == "sponsor")
 			state_ = new SponsorState();
 		else if(s == "questParticipant")
-			state_ = new QuestParticipantState();
+			state_ = new QuestParticipationState();
+		else if(s == "playQuest")
+			state_ = new QuestPlayState();
 		}
 	
 	public void setHand(String[] cards) { 		//used in testing
