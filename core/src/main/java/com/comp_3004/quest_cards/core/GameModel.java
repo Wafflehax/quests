@@ -13,6 +13,7 @@ import com.comp_3004.quest_cards.cards.Card;
 import com.comp_3004.quest_cards.cards.StoryDeck;	//used for testing
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.core.states.State;			//used for testing
+import com.comp_3004.quest_cards.cards.QuestCard;
 import com.comp_3004.quest_cards.cards.StoryCard;
 
 
@@ -23,6 +24,7 @@ public class GameModel{
 	public Stack<State> state = new Stack<State>();
 	
 	private Event event;
+	private Quest quest;
 	private AdventureDeck advDeck;
 	private StoryDeck storyDeck;
 	private int numPlayers;
@@ -175,11 +177,18 @@ public class GameModel{
 	//          Tester functions 
 	//Event testing
 	public void eventTest() {
-		
 			StoryCard cardDrawn = storyDeck.drawCard();
 			event = new Event(cardDrawn, players, advDeck);
 			event.runEvent();
 			storyDeck.discardCard(cardDrawn);
+	}
+	
+	//Quest testing
+	public void questTest() {
+		QuestCard cardDrawn = (QuestCard)storyDeck.drawCard();
+		quest = new Quest(cardDrawn, players, advDeck);
+		quest.runQuest();
+		storyDeck.discardCard(cardDrawn);
 	}
 	
 }

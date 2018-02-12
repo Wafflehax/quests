@@ -34,11 +34,13 @@ public class Player{
 	private String name;
 	private boolean kingsRecognitionBonus = false;		//if true, gain bonus shields when quest completed
 	private Rank rank;
-	private int shields;	
-	protected LinkedList<AdventureCard> playerHandCards;
-	protected LinkedList<AdventureCard> playerActiveCards;
-	protected boolean participateQuest;
+	private int shields;
+	private LinkedList<AdventureCard> playerHandCards;
+	private LinkedList<AdventureCard> playerActiveCards;
+	private LinkedList<AdventureCard> playerStageCards;
+	private boolean participateQuest;
 	protected volatile boolean participateTournament;
+	private PlayerState state_;
 	
 	// constructor
 	public Player(String name) {
@@ -47,6 +49,8 @@ public class Player{
 		this.shields = 0;
 		this.playerHandCards = new LinkedList<AdventureCard>();
 		this.playerActiveCards = new LinkedList<AdventureCard>();
+		this.playerStageCards = new LinkedList<AdventureCard>();
+		this.state_ = new NormalState();
 	}
 	
 	// getters/setters
@@ -60,8 +64,18 @@ public class Player{
 	public int numberOfActiveCards() { return playerActiveCards.size(); }
 	public LinkedList<AdventureCard> getHand() { return this.playerHandCards; }
 	public LinkedList<AdventureCard> getActive() { return this.playerActiveCards; }
+	public LinkedList<AdventureCard> getStage() { return this.playerStageCards; }
 	public boolean getKingsRecognitionBonus() { return this.kingsRecognitionBonus; }
 	public void setKingsRecognitionBonus(boolean b) { this.kingsRecognitionBonus = b; }
+	
+	public void setState(String s) { 
+		if(s == "normal")
+			state_ = new NormalState();
+		else if(s == "sponsor")
+			state_ = new SponsorState();
+		else if(s == "questParticipant")
+			state_ = new QuestParticipantState();
+		}
 	
 	public void setHand(String[] cards) { 		//used in testing
 		CardSpawner spawner = new CardSpawner();
@@ -88,9 +102,17 @@ public class Player{
 		this.playerHandCards = l;
 	}
 	
+	public int getRankBattlePts() {
+		if(rank == Rank.SQUIRE)
+			return 5;
+		else if(rank == Rank.KNIGHT)
+			return 10;
+		else if(rank == Rank.CHAMPION_KNIGHT || rank == Rank.KNIGHT_OF_THE_ROUND_TABLE)
+			return 20;
+		return 0;
+	}
 
 	public boolean drawCard(AdventureDeck d) {
-		
 		// can't have more than 12 cards
 		//TODO: allow player to play cards if player is already at hand limit
 		if(playerHandCards.size() >= 12) {
@@ -102,23 +124,8 @@ public class Player{
 			playerHandCards.add(card);
 			card.setOwner(this);
 			card.setState(State.HAND);
+			log.info(name + " drew " + card.getName() + " from adventure deck");
 			return true;
-		}
-	}
-	
-	public void discardWeaponsActive(AdventureDeck d) {
-		for(int i = 0; i < playerActiveCards.size(); i++) {
-			if(playerActiveCards.get(i) instanceof WeaponCard) {
-				discardCard(playerActiveCards.get(i), d);
-			}
-		}
-	}
-	
-	public void discardAmoursActive(AdventureDeck deck) {
-		for(int i = 0; i < playerActiveCards.size(); i++) {
-			if(playerActiveCards.get(i) instanceof AmourCard) {
-				discardCard(playerActiveCards.get(i), deck);
-			}
 		}
 	}
 	
@@ -148,29 +155,31 @@ public class Player{
 		return false;
 	}
 	
+	//play card functionality based on current state of the player
 	public boolean playCard(AdventureCard c) {
-		// can only add cards to table from your hand
-		if(playerHandCards.contains(c)) {
-			playerActiveCards.add(c);
-			playerHandCards.remove(c);
-			c.setState(State.PLAY);
-			log.info("played card " + c.getName());
-			return true;
-		}else {
-			//TODO: conditions where player cannot play card
-			log.info("Failed playCard(adv c): you do now have this card " + c.getName());
-			return false; 
-		}
+		return state_.playCard(c, this);
 	}
 	
+	//during quest, reveals cards played in a stage
+	public void revealStageCards() {
+		for(AdventureCard stageCard : playerStageCards) {
+			playerActiveCards.add(stageCard);
+			stageCard.setState(State.PLAY);
+			log.info(name + " reveals " + stageCard.getName());
+		}
+		playerStageCards.clear();
+	}
+	
+	//discard a card from hand or play
 	public boolean discardCard(AdventureCard c, AdventureDeck d) {
-		// can only discard cards from table or from your hand
 		if(c.getOwner() == this && (c.getState() == State.PLAY || c.getState() == State.HAND)) {
 			if(playerActiveCards.contains(c)){
 				playerActiveCards.remove(c);
+				log.info(name + " discarded " + c.getName() + " from active");
 			}
 			else if(playerHandCards.contains(c)) {
 				playerHandCards.remove(c);
+				log.info(name + " discarded " + c.getName() + " from hand");
 			}
 			d.discardCard(c);
 			c.setState(State.DISCARD);
@@ -178,38 +187,58 @@ public class Player{
 		}
 		return false;
 	}
-		
-	public int getRankBattlePts() {
-		if(rank == Rank.SQUIRE)
-			return 5;
-		else if(rank == Rank.KNIGHT)
-			return 10;
-		else if(rank == Rank.CHAMPION_KNIGHT || rank == Rank.KNIGHT_OF_THE_ROUND_TABLE)
-			return 20;
-		return 0;
+	
+	//discards all the players active weapsons
+	public void discardWeaponsActive(AdventureDeck d) {
+		for(int i = 0; i < playerActiveCards.size(); i++) {
+			if(playerActiveCards.get(i) instanceof WeaponCard) {
+				discardCard(playerActiveCards.get(i), d);
+			}
+		}
 	}
 	
+	//discards the players active amour
+	public void discardAmoursActive(AdventureDeck deck) {
+		for(int i = 0; i < playerActiveCards.size(); i++) {
+			if(playerActiveCards.get(i) instanceof AmourCard) {
+				discardCard(playerActiveCards.get(i), deck);
+			}
+		}
+	}
+	
+	//add shields to a player
 	public void addShields(int sh) {
 		shields += sh;
+		log.info(name + " gained " + sh + " shields.");
+		log.info((shields - sh) + " -> " + shields);
 		if(shields >= 5 && rank == Rank.SQUIRE) {
 			rank = Rank.KNIGHT;
 			shields -= 5;
+			log.info(name + " ranked up to " + rank + ".");
 		}
 		if(shields >= 7 && rank == Rank.KNIGHT) {
 			rank = Rank.CHAMPION_KNIGHT;
 			shields -= 7;
+			log.info(name + " ranked up to " + rank + ".");
 		}
 		if(shields >= 10 && rank == Rank.CHAMPION_KNIGHT) {
 			rank = Rank.KNIGHT_OF_THE_ROUND_TABLE;
+			log.info(name + " ranked up to " + rank + ".");
 			//triggers winning condition
 		}
 	}
 	
+	
 	public void loseShields(int sh) {
-		if(shields < sh)
+		log.info(name + " lost " + sh + " shields.");
+		if(shields < sh) {
+			log.info(shields + " -> 0");
 			shields = 0;
-		else
+		}
+		else {
+			log.info(shields + " -> " + (shields - sh));
 			shields -= sh;
+		}
 	}
 	
 	public void printHand() {
@@ -242,5 +271,15 @@ public class Player{
 			a.printCard();
 		}
 		System.out.printf("Number of cards: %s\n", this.playerActiveCards.size());
+	}
+	
+	public void printStage() {
+		System.out.printf("Stage:\n");
+		System.out.printf("%-15s%-15s%s\n", "Name", "Battle Points", "Type");
+		System.out.printf("==================================\n");
+		for(AdventureCard a : this.playerStageCards) {
+			a.printCard();
+		}
+		System.out.printf("Number of cards: %s\n", this.playerStageCards.size());
 	}
 }

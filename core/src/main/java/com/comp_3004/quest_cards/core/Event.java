@@ -14,11 +14,13 @@ import com.comp_3004.quest_cards.cards.WeaponCard;
 
 public class Event {
 	
+	//attributes
 	static Logger log = Logger.getLogger(Event.class); //log4j logger
 	private StoryCard evnt;
 	private Players players;
 	private AdventureDeck advDeck;
 
+	//constructor
 	public Event(StoryCard e, Players p, AdventureDeck d) {
 		this.evnt = e;
 		this.players = p;
