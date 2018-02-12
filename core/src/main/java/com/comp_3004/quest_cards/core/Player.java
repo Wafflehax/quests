@@ -72,6 +72,8 @@ public class Player{
 			state_ = new NormalState();
 		else if(s == "sponsor")
 			state_ = new SponsorState();
+		else if(s == "questParticipant")
+			state_ = new QuestParticipantState();
 		}
 	
 	public void setHand(String[] cards) { 		//used in testing
@@ -93,6 +95,16 @@ public class Player{
 			card.setOwner(this);
 		}
 	} 
+	
+	public int getRankBattlePts() {
+		if(rank == Rank.SQUIRE)
+			return 5;
+		else if(rank == Rank.KNIGHT)
+			return 10;
+		else if(rank == Rank.CHAMPION_KNIGHT || rank == Rank.KNIGHT_OF_THE_ROUND_TABLE)
+			return 20;
+		return 0;
+	}
 
 	public boolean drawCard(AdventureDeck d) {
 		// can't have more than 12 cards
@@ -108,22 +120,6 @@ public class Player{
 			card.setState(State.HAND);
 			log.info(name + " drew " + card.getName() + " from adventure deck");
 			return true;
-		}
-	}
-	
-	public void discardWeaponsActive(AdventureDeck d) {
-		for(int i = 0; i < playerActiveCards.size(); i++) {
-			if(playerActiveCards.get(i) instanceof WeaponCard) {
-				discardCard(playerActiveCards.get(i), d);
-			}
-		}
-	}
-	
-	public void discardAmoursActive(AdventureDeck deck) {
-		for(int i = 0; i < playerActiveCards.size(); i++) {
-			if(playerActiveCards.get(i) instanceof AmourCard) {
-				discardCard(playerActiveCards.get(i), deck);
-			}
 		}
 	}
 	
@@ -153,64 +149,23 @@ public class Player{
 		return false;
 	}
 	
+	//play card functionality based on current state of the player
 	public boolean playCard(AdventureCard c) {
 		return state_.playCard(c, this);
 	}
 	
-	//plays card to quest stage when participating
-	public boolean playStageCard(AdventureCard c) {
-		if(playerHandCards.contains(c)) {
-			//cannot play test or foe cards
-			if((c instanceof TestCard) || (c instanceof FoeCard)) {
-				System.out.println("Cant play foe or test cards when participating in a quest");
-				return false;
-			}
-			else if(c instanceof AmourCard) {
-				//can only have 1 amour active
-				for(AdventureCard activeCard : playerActiveCards) {
-					if(activeCard instanceof AmourCard) {
-						System.out.println("Cant have more than one amour active");
-						return false;
-					}
-				}
-				for(AdventureCard stageCard : playerStageCards) {
-					if(stageCard instanceof AmourCard) {
-						System.out.println("Cant play more than one amour in a stage");
-						return false;
-					}
-				}
-			}
-			else if(c instanceof WeaponCard) {
-			//can't have 2 weapons with same name
-				for(AdventureCard stageCard : playerStageCards) {
-					if(stageCard.getName() == c.getName()) {
-						System.out.println("Cant play more than one weapon with the same name in a stage");
-						return false;
-					}
-				}
-			}
-			playerStageCards.add(c);
-			playerHandCards.remove(c);
-			c.setState(State.STAGE);
-			log.info("played card " + c.getName() + " to stage");
-			return true;
-		}
-		else {
-			log.info("Failed you do not have this card " + c.getName());
-			return false; 
-		}
-	}
-	
+	//during quest, reveals cards played in a stage
 	public void revealStageCards() {
 		for(AdventureCard stageCard : playerStageCards) {
 			playerActiveCards.add(stageCard);
 			stageCard.setState(State.PLAY);
+			log.info(name + " reveals " + stageCard);
 		}
 		playerStageCards.clear();
 	}
 	
+	//discard a card from hand or play
 	public boolean discardCard(AdventureCard c, AdventureDeck d) {
-		// can only discard cards from table or from your hand
 		if(c.getOwner() == this && (c.getState() == State.PLAY || c.getState() == State.HAND)) {
 			if(playerActiveCards.contains(c)){
 				playerActiveCards.remove(c);
@@ -226,20 +181,30 @@ public class Player{
 		}
 		return false;
 	}
-		
-	public int getRankBattlePts() {
-		if(rank == Rank.SQUIRE)
-			return 5;
-		else if(rank == Rank.KNIGHT)
-			return 10;
-		else if(rank == Rank.CHAMPION_KNIGHT || rank == Rank.KNIGHT_OF_THE_ROUND_TABLE)
-			return 20;
-		return 0;
+	
+	//discards all the players active weapsons
+	public void discardWeaponsActive(AdventureDeck d) {
+		for(int i = 0; i < playerActiveCards.size(); i++) {
+			if(playerActiveCards.get(i) instanceof WeaponCard) {
+				discardCard(playerActiveCards.get(i), d);
+			}
+		}
 	}
 	
+	//discards the players active amour
+	public void discardAmoursActive(AdventureDeck deck) {
+		for(int i = 0; i < playerActiveCards.size(); i++) {
+			if(playerActiveCards.get(i) instanceof AmourCard) {
+				discardCard(playerActiveCards.get(i), deck);
+			}
+		}
+	}
+	
+	//add shields to a player
 	public void addShields(int sh) {
 		shields += sh;
 		log.info(name + " gained " + sh + " shields.");
+		log.info((shields - sh) + " -> " + shields);
 		if(shields >= 5 && rank == Rank.SQUIRE) {
 			rank = Rank.KNIGHT;
 			shields -= 5;
@@ -257,11 +222,17 @@ public class Player{
 		}
 	}
 	
+	
 	public void loseShields(int sh) {
-		if(shields < sh)
+		log.info(name + " lost " + sh + " shields.");
+		if(shields < sh) {
+			log.info(shields + " -> 0");
 			shields = 0;
-		else
+		}
+		else {
+			log.info(shields + " -> " + (shields - sh));
 			shields -= sh;
+		}
 	}
 	
 	public void printHand() {

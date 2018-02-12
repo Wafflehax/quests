@@ -19,10 +19,10 @@ public class NormalState extends PlayerState {
 			p.getActive().add(c);
 			p.getHand().remove(c);
 			c.setState(State.PLAY);
-			log.info("played card " + c.getName());
+			log.info(p.getName() + " played card " + c.getName());
 			return true;
 		}else {
-			log.info("Failed you do not have this card " + c.getName());
+			log.info("Error: " + p.getName() + " does not have the card " + c.getName() + " in hand");
 			return false; 
 		}
 	}

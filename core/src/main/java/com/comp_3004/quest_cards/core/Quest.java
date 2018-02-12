@@ -107,7 +107,7 @@ public class Quest {
 							p.printHand();
 							c = sc.nextInt();
 							AdventureCard cardToPlay = p.getHand().get(c);
-							p.playStageCard(cardToPlay);
+							p.playCard(cardToPlay);
 							p.printStage();
 							System.out.println("Would you like to add more cards to the quest? (1: yes 0: no)" );
 							int choice = sc.nextInt();
@@ -327,11 +327,12 @@ public class Quest {
 		for(int i=sponsorIndex + 1; i % players.getPlayers().size() != sponsorIndex; i = ((i+1) % players.getPlayers().size())) {
 			System.out.printf("%s, would you like to participate in quest? (1: yes 0: no)\n", players.getPlayerAtIndex(i).getName());
 			choice = sc.nextInt();
-			if(choice == 1)
+			if(choice == 1) {
 				participants.add(players.getPlayerAtIndex(i));
+				players.getPlayerAtIndex(i).setState("questParticipant");
+				log.info(players.getPlayerAtIndex(i).getName() + " is participating in the quest");
+			}
 		}
-		for(Player p : participants)
-			System.out.printf("%s is participating\n", p.getName());
 	}
 	
 	public void printStages() {
@@ -347,7 +348,7 @@ public class Quest {
 			card.printCard();
 	}
 	
-	
+	//used in determining if each stage has more battle points than the previous stage
 	private boolean isSorted(int[] data){
 	    for(int i = 1; i < data.length; i++){
 	    		if(data[i] == 0)
@@ -359,10 +360,11 @@ public class Quest {
 	    return true;
 	}
 	
+	//checks if each card has at least one  card added to it during set up
 	private boolean stagesComplete() {
 		for(QuestStage stage : stages) {
 			if(stage.getSponsorCards().size() == 0) {
-				System.out.println("Quest does not have a card in each stage");
+				log.info("Error: Quest does not have a card in each stage");
 				return false;
 			}
 		}
