@@ -2,6 +2,8 @@ package com.comp_3004.quest_cards.core;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureCard.State;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
@@ -16,6 +18,7 @@ public class QuestStage {
 	//attributes
 	private ArrayList<AdventureCard> cards;
 	private int battlePoints;
+	static Logger log = Logger.getLogger(QuestStage.class); //log4j logger
 
 	//constructor
 	public QuestStage() {
@@ -33,7 +36,7 @@ public class QuestStage {
 		if(card instanceof TestCard) {
 			for(AdventureCard stageCard : cards) {
 				if(stageCard instanceof FoeCard) {
-					System.out.println("Can't add a test card to a stage that already has a foe in it");
+					log.info("Error: Can't add a test card to a stage that already has a foe in it");
 					return false;
 				}
 			}
@@ -42,7 +45,7 @@ public class QuestStage {
 		else if(card instanceof FoeCard) {
 			for(AdventureCard stageCard : cards) {
 				if((stageCard instanceof FoeCard) || (stageCard instanceof TestCard)) {
-					System.out.println("Can't add a foe card to a stage that already has a foe or test in it");
+					log.info("Error: Can't add a foe card to a stage that already has a foe or test in it");
 					return false;
 				}
 			}
@@ -52,12 +55,12 @@ public class QuestStage {
 			boolean containsFoe = false;
 			for(AdventureCard stageCard : cards) {
 				if(stageCard instanceof TestCard) {
-					System.out.println("Can't add a weapon card to a stage that already has a test in it");
+					log.info("Error: Can't add a weapon card to a stage that already has a test in it");
 					return false;
 				}
 				if(stageCard instanceof WeaponCard) {
 					if(stageCard.getName() == card.getName()) {
-						System.out.println("Can't add a weapon card to a stage that already has that weapon in it");
+						log.info("Error: Can't add a weapon card to a stage that already has that weapon in it");
 						return false;
 					}
 				}
@@ -65,16 +68,16 @@ public class QuestStage {
 					containsFoe = true;
 			}
 			if(!containsFoe) {
-				System.out.println("Stage does not contain a foe card, cannot add a weapon");
+				log.info("Error: Stage does not contain a foe card, cannot add a weapon");
 				return false;
 			}
 		}
 		else if(card instanceof AllyCard) {
-			System.out.println("Can't add an ally card to a stage");
+			log.info("Error: Can't add an ally card to a stage");
 			return false;
 		}
 		else if(card instanceof AmourCard) {
-			System.out.println("Can't add an amour card to a stage");
+			log.info("Error: Can't add an amour card to a stage");
 			return false;
 		}
 		cards.add(card);
@@ -95,8 +98,22 @@ public class QuestStage {
 		return true;
 	}
 	
-	public void removeCard(AdventureCard c) {
+	public void removeCard(AdventureCard c, String namedFoe) {
 		cards.remove(c);
+		if(namedFoe == c.getName())
+			battlePoints -= ((FoeCard) c).getAltBattlePts();
+		else if(namedFoe == "allSaxons") {
+			if(c.getName() == "Saxons" || c.getName() == "Saxon Knight")
+				battlePoints -= ((FoeCard) c).getAltBattlePts();
+		}
+		else if(namedFoe == "all") {
+			if(((FoeCard) c).getAltBattlePts() != 0)
+				battlePoints -= ((FoeCard) c).getAltBattlePts();
+			else
+				battlePoints -= c.getBattlePts();
+		}
+		else
+			battlePoints -= c.getBattlePts();
 	}
 	
 	//TODO:change to send single cards back to player when player drags card from stage back to hand
@@ -116,6 +133,7 @@ public class QuestStage {
 			card.setState(State.DISCARD);
 			card.setOwner(null);
 			adv.getDiscard().add(card);
+			log.info(card.getName()+" used to set up quest is discarded");
 		}
 		cards.clear();
 	}

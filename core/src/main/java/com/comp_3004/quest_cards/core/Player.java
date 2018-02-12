@@ -159,7 +159,7 @@ public class Player{
 		for(AdventureCard stageCard : playerStageCards) {
 			playerActiveCards.add(stageCard);
 			stageCard.setState(State.PLAY);
-			log.info(name + " reveals " + stageCard);
+			log.info(name + " reveals " + stageCard.getName());
 		}
 		playerStageCards.clear();
 	}

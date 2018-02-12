@@ -16,20 +16,20 @@ public class QuestParticipantState extends PlayerState {
 		if(p.getHand().contains(c)) {
 			//cannot play test or foe cards
 			if((c instanceof TestCard) || (c instanceof FoeCard)) {
-				log.info(p.getName() + "Error: cant play foe or test cards when participating in a quest");
+				log.info(p.getName() + " Error: cant play foe or test cards when participating in a quest");
 				return false;
 			}
 			else if(c instanceof AmourCard) {
 				//can only have 1 amour active
 				for(AdventureCard activeCard : p.getActive()) {
 					if(activeCard instanceof AmourCard) {
-						log.info(p.getName() + "Error: cant have more than one amour active");
+						log.info(p.getName() + " Error: cant have more than one amour active");
 						return false;
 					}
 				}
 				for(AdventureCard stageCard : p.getStage()) {
 					if(stageCard instanceof AmourCard) {
-						log.info(p.getName() + "Error: cant play more than one amour in a stage");
+						log.info(p.getName() + " Error: cant play more than one amour in a stage");
 						return false;
 					}
 				}

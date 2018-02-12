@@ -12,7 +12,6 @@ public class SponsorState extends PlayerState {
 		if(p.getHand().contains(c)) {
 			p.getHand().remove(c);
 			c.setState(State.QUEST);
-			log.info(p.getName() + " played card " + c.getName());
 			return true;
 		}else {
 			log.info("Error: " + p.getName() + " does not have the card " + c.getName() + " in hand");
