@@ -21,13 +21,28 @@ public class GameView extends Table {
     //Set up layout
 
     setLayoutEnabled(false);
-    setBounds(0, 0, Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
+    
+
+    //Add widgets to table
+
+    addActor(storyDeck);
+    addActor(storyDeckDiscardPile);
+    addActor(adventureDeck);
+    addActor(adventureDeckDiscardPile);
+    addActor(playerView);
+  }
+
+  @Override
+  public void setBounds(float x, float y, float width, float height){
+
+
+    super.setBounds(0, 0, width, height);
 
     //Init widgets
 
-    playerView = new PlayerView();
+
     playerView.setBounds(
-        Config.VIRTUAL_WIDTH / 2 - Config.PlayerView.WIDTH / 2,
+        width / 2 - Config.PlayerView.WIDTH / 2,
         Config.GameView.PADDING_VERTICAL,
         Config.PlayerView.WIDTH,
         Config.PlayerView.HEIGHT);
@@ -58,16 +73,7 @@ public class GameView extends Table {
         adventureDeck.getX() + Config.CardView.CARD_WIDTH + Config.GameView.PADDING_HORIZONTAL,
         storyDeckDiscardPile.getY(),
         Config.CardView.CARD_WIDTH,
-        Config.CardView.CARD_HEIGHT
-    );
-
-    //Add widgets to table
-
-    addActor(storyDeck);
-    addActor(storyDeckDiscardPile);
-    addActor(adventureDeck);
-    addActor(adventureDeckDiscardPile);
-    addActor(playerView);
+        Config.CardView.CARD_HEIGHT);
   }
 
   public GameView displayHero(TextureRegion hero) {
@@ -121,7 +127,7 @@ public class GameView extends Table {
 
   public GameView setPlayerViewBackground(TextureRegion background) {
 
-    playerView.setBackground(new TextureRegionDrawable(background));
+    playerView.setBackground(background);
     return this;
   }
 

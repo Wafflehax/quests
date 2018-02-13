@@ -1,22 +1,25 @@
 package com.comp_3004.quest_cards.gui;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.comp_3004.quest_cards.player.Player;
 
-public class PlayerView extends Table {
+public class PlayerView extends Group {
 
   //Todo: Make these private after unit testing
 
   public DeckView playerAdventureCards;
   public Image hero;
   public Image shields;
+  public Image background;
 
   public PlayerView() {
 
-    setLayoutEnabled(false);
+    background = new Image();
+    background.setBounds(0,0,getWidth(), getHeight());
 
     System.out.printf("Player view width: %f\n", getWidth());
     System.out.printf("Player view height: %f\n", getHeight());
@@ -57,12 +60,17 @@ public class PlayerView extends Table {
 
     //Add widgets to table
 
-    add(playerAdventureCards);
-    add(shields);
-    add(hero);
+    addActor(background);
+    addActor(playerAdventureCards);
+    addActor(shields);
+    addActor(hero);
   }
 
-
+  @Override
+  public void setBounds(float x, float y, float width, float height){
+    super.setBounds(x,y,width, height);
+    background.setBounds(0,0,width, height);
+  }
 
   /*
   public void debugCards(GameView parent) {
@@ -101,6 +109,10 @@ public class PlayerView extends Table {
     return null;
   }
 
+  public PlayerView setBackground(TextureRegion textureRegion){
+    this.background.setDrawable(new TextureRegionDrawable(textureRegion));
+    return this;
+  }
 
 }
 

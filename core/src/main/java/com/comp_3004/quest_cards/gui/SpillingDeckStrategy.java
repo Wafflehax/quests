@@ -1,5 +1,9 @@
 package com.comp_3004.quest_cards.gui;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
 public class SpillingDeckStrategy implements DeckView.DisplayStrategy {
 
 
@@ -52,6 +56,14 @@ public class SpillingDeckStrategy implements DeckView.DisplayStrategy {
     System.out.printf("CardWidth: %f. Card #: %d. MaxWidth: %f\n", cardWidth, n, maxWidth);
 
     return maxWidth / (cardWidth * n);
+  }
+
+  private static class CardBehavior extends ClickListener{
+
+    @Override
+    public void enter(InputEvent event, float x, float y, int pointer, Actor actor){
+      //actor.;
+    }
   }
 
   public float getMinOverlap() {
