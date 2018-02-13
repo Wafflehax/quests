@@ -47,12 +47,6 @@ public class QuestCards implements ApplicationListener {
     batch = new SpriteBatch();
     stage = new Stage();
 
-    //Load UI skin: Todo: Make this useful. It does nothing at the moment
-
-    manager.load("skins/uiskin.json", Skin.class);
-    manager.finishLoading();
-    uiSkin = manager.get("skins/uiskin.json", Skin.class);
-
     //Stage & camera set up
 
     camera = new OrthographicCamera();
