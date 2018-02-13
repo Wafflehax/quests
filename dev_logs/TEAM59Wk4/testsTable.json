@@ -1,0 +1,158 @@
+[
+  {
+    "ID": "T1",
+    "Description": "Test size of adventure deck",
+    "Status": "F3",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "T2",
+    "Description": "Test card composition of adventure deck",
+    "Status": "F3",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "T3",
+    "Description": "Test drawing from adventure deck",
+    "Status": "F3",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "T4",
+    "Description": "Test discarding to adventure deck's discard pile",
+    "Status": "F3",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "T5",
+    "Description": "Test shuffling discard pile into adventure deck when deck empty",
+    "Status": "F3",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "T6",
+    "Description": "Test size of story deck",
+    "Status": "F4",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "T7",
+    "Description": "Test card composition of story deck",
+    "Status": "F4",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "T8",
+    "Description": "Test drawing from story deck",
+    "Status": "F4",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "T9",
+    "Description": "Test discarding to story deck's discard pile",
+    "Status": "F4",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "T10",
+    "Description": "Test shuffling discard pile into story deck when deck empty",
+    "Status": "F4",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "T11",
+    "Description": "Test player initialization",
+    "Status": "F5",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "T12",
+    "Description": "Test player drawing card",
+    "Status": "F5",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "T13",
+    "Description": "Test player drawing card over hand limit",
+    "Status": "F5",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "T14",
+    "Description": "Test player playing a card",
+    "Status": "F5",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "T15",
+    "Description": "Test player discarding a card from hand",
+    "Status": "F5",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "T16",
+    "Description": "Test player discarding a card from play",
+    "Status": "F5",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "T17",
+    "Description": "Test player attempting illegal discard",
+    "Status": "F5",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "T18",
+    "Description": "Test player adding shields",
+    "Status": "F5",
+    "Date": "2018-01-29"
+  },
+  {
+    "ID": "T19",
+    "Description": "Test Chivalrous Deed event",
+    "Status": "F9",
+    "Date": "2018-02-05"
+  },
+  {
+    "ID": "T20",
+    "Description": "Test Pox event",
+    "Status": "F9",
+    "Date": "2018-02-05"
+  },
+  {
+    "ID": "T20",
+    "Description": "Test Plague event",
+    "Status": "F9",
+    "Date": "2018-02-05"
+  },
+  {
+    "ID": "T21",
+    "Description": "Test Queens Favor event",
+    "Status": "F9",
+    "Date": "2018-02-05"
+  },
+  {
+    "ID": "T22",
+    "Description": "Test Court Called to Camelot event",
+    "Status": "F9",
+    "Date": "2018-02-05"
+  },
+  {
+    "ID": "T23",
+    "Description": "Test Prosperity throughout the realms event",
+    "Status": "F9",
+    "Date": "2018-02-05"
+  },
+  {
+    "ID": "T24",
+    "Description": "Test Player lose shields",
+    "Status": "F5",
+    "Date": "2018-02-05"
+  },
+{
+    "ID": "T25”,
+    "Description": “Quest testing scenario: tests no sponsor, illegal sponsor, legal sponsor, all illegal quest set up card plays, set up a quest incorrectly, set up a quest correctly, playing a quest, 3-way tie winning condition“,
+    "Status": "F18/F19/F20”,
+    "Date": "2018-02-12”
+  }
+]

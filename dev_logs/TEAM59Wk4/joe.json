@@ -1,0 +1,13 @@
+{
+  "Code": [
+    "F8.1 Fade-In SplashState, transition to MainMenu"
+    "F8.2 Transition from Splash, MainMenu can transition to a completed RulesState, can Exit the application via ExitButton, and can transition to a placeholder PlayState"
+    "F8.3 RulesState implemented to allow the player to examine the rules of the game, maintains asyncronous music support"
+ 
+  ],
+  "Research": ["LibGDX Animations and State-Transitions"],
+  "NextWeek": [
+    "F7 Implementing MVC (once in PlayState)"
+  ],
+  "Hours": 10
+}
