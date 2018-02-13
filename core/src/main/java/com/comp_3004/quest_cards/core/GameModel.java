@@ -113,8 +113,6 @@ public class GameModel{
 		StoryEv = cardDrawn;
 		if(cardDrawn instanceof QuestCard) {
 			quest = new Quest((QuestCard)cardDrawn, players, advDeck);
-			//quest.runQuest();
-			//storyDeck.discardCard(cardDrawn);
 		}
 	}
 	
@@ -216,13 +214,6 @@ public class GameModel{
 			event.runEvent();
 			storyDeck.discardCard(cardDrawn);
 	}
-	
-	//Quest testing
-	public void questTest() {
-		QuestCard cardDrawn = (QuestCard)storyDeck.drawCard();
-		quest = new Quest(cardDrawn, players, advDeck);
-		quest.runQuest();
-		storyDeck.discardCard(cardDrawn);
-	}
+
 	
 }

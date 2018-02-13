@@ -26,7 +26,7 @@ public class QuestParticipationState extends PlayerState {
 	//handle user input: YES/NO for determining participation
 	public boolean userInput(boolean b, Player p) {
 		if(b) {
-			//p.getQuest().questSponsorship(p);
+			p.getQuest().questParticipation(p);
 			return true;
 		}
 		return false;

@@ -82,6 +82,18 @@ public class Player{
 		else if(s == "playQuest")
 			state_ = new QuestPlayState();
 		}
+	public String getState() {
+		String state = null;
+		if(state_ instanceof NormalState)
+			state = "normal";
+		else if(state_ instanceof SponsorState)
+			state = "sponsor";
+		else if(state_ instanceof QuestParticipationState)
+			state = "questParticipant";
+		else if(state_ instanceof QuestPlayState)
+			state = "playQuest";
+		return state;
+	}
 	
 	public void setHand(String[] cards) { 		//used in testing
 		CardSpawner spawner = new CardSpawner();

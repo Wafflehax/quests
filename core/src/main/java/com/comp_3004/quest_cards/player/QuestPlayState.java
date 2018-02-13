@@ -59,14 +59,25 @@ public class QuestPlayState extends PlayerState {
 	}
 	
 	public boolean discardCard(AdventureCard c, AdventureDeck d, Player p) {
-		//TODO handle player discarding card when over hand limit
+		if(c.getOwner() == p && (c.getState() == State.PLAY || c.getState() == State.HAND)) {
+			if(p.getActive().contains(c)){
+				p.getActive().remove(c);
+				log.info(p.getName() + " discarded " + c.getName() + " from active");
+			}
+			else if(p.getHand().contains(c)) {
+				p.getHand().remove(c);
+				log.info(p.getName() + " discarded " + c.getName() + " from hand");
+			}
+			d.discardCard(c);
+			c.setState(State.DISCARD);
+			c.setOwner(null);
+		}
 		return false;
 	}
 
 	//handle user input "done playing cards"
 	public boolean userInput(boolean b, Player p) {
-		// TODO Auto-generated method stub
-		return false;
+		return p.getQuest().doneAddingCards();
 	}
 
 }

@@ -113,6 +113,8 @@ public class GamePresenter extends Group{
 	  	for(AdventureCard card : model.getPlayers().current().getHand())
 	  		if(card.getID() == cardID)
 	  			cardToPlay = card;
+	  	if(cardToPlay == null)
+	  		System.out.println("Card not found");
 	  	if(cardToPlay != null)
 	  		if(model.getPlayers().current().playCard(cardToPlay)) {
 	  			//then update view with what changed in the model
@@ -148,28 +150,45 @@ public class GamePresenter extends Group{
   
   	public void userInput(int b) {
   		if(b == 1) {
+  			if(!model.getPlayers().current().userInput(true))
+  				model.beginTurn();
+  		}
+  		else if(b == 0) {
+  			if(!model.getPlayers().current().userInput(false))
+  				model.beginTurn();
+  		}
+  	}
+  	
+  	/*public void userInput(int b) {
+  		if(b == 1) {
   			//sponsor clicks done while setting up quest
   			if(model.getQuest().getSponsor() == model.getPlayers().current()) {
-  				model.getPlayers().current().userInput(true);
+  				if(model.getPlayers().current().userInput(true))
+  					model.getPlayers().next();
   				return;
   			}
-  			//player hits yes when asked if participating
-  			else if(model.getPlayers().current().userInput(true))
-  				return;
+  			//player hits yes when asked if sponsoring
+  			else if(model.getPlayers().current().userInput(true)) {
+  				//user input while in sponsor state
+  				if(model.getPlayers().current().getState() == "sponsor")
+  					if(model.getPlayers().peekNext().getState() == "sponsor")
+  						return;
+  			}
   		}
   		else if(b == 0)
   			//user hits no when asked if participating
   			model.getPlayers().current().userInput(false);
   		model.getPlayers().next();
+  		
   		//checks if no one wants to sponsor quest
   		if(model.getStory() instanceof QuestCard) {
-			if((model.getPlayers().current() == model.getQuest().getDrewQuest()) && model.getQuest().getSponsor() == null) {
-				model.getQuest().noSponsor();
-				model.getPlayers().next();
-				model.beginTurn();
-			}
+			if(model.getQuest().getNumDeclines() == model.getNumPlayers())
+				model.noQuestSponsor();
   		}
-  	}
+  		
+  		//move to next player if current player is sponsor in quest
+  		//if(model.getPlayers().current() == model.getQuest().getSponsor() )
+  	}*/
 }
 
 
