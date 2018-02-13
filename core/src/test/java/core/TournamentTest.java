@@ -1,38 +1,13 @@
 package core;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Stack;
-
-import javax.naming.spi.DirStateFactory.Result;
-
-import org.apache.log4j.Logger;
-
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
-import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
-import com.comp_3004.quest_cards.cards.AllyCard;
-import com.comp_3004.quest_cards.cards.AmourCard;
-import com.comp_3004.quest_cards.cards.Card;
-import com.comp_3004.quest_cards.cards.FoeCard;
+
 import com.comp_3004.quest_cards.cards.StoryDeck;
-import com.comp_3004.quest_cards.cards.TournamentCard;
-import com.comp_3004.quest_cards.cards.WeaponCard;
-import com.comp_3004.quest_cards.core.GameController;
 import com.comp_3004.quest_cards.core.GameModel;
 import com.comp_3004.quest_cards.core.GamePresenter;
-import com.comp_3004.quest_cards.core.states.TourAskParticipation;
-import com.comp_3004.quest_cards.core.states.TourInit;
-import com.comp_3004.quest_cards.core.states.TourRoundEndEvaluation;
-import com.comp_3004.quest_cards.core.states.State;
-import com.comp_3004.quest_cards.core.states.TourStartFirstTime;
 import com.comp_3004.quest_cards.player.Player;
-import com.comp_3004.quest_cards.player.Players;
-
 import junit.framework.TestCase;
-import utils.IntPlayerPair;
-import utils.utils;
+
 
 public class TournamentTest extends TestCase{
 	
@@ -71,9 +46,15 @@ public class TournamentTest extends TestCase{
 				// 1 ==> true
 				//asking players if they want to participate
 				System.out.println(game.getcurrentTurn().getName() + " Participate in Tour " + game.getcurrentTurn().getTour().getCurTour().getName() + " ?");
-				for(int i=0; i<game.getNumPlayers(); i++) {
-					pres.userInput(1);
-				}
+				
+				pres.userInput(1);
+				pres.userInput(1);
+				pres.userInput(1); 
+				pres.userInput(0); 
+				
+				pres.userInput(1); //done turn
+				pres.userInput(1); //done turn
+				pres.userInput(1); //done turn
 				
 	}
 	

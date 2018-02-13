@@ -6,9 +6,9 @@ import java.util.LinkedList;
 import org.apache.log4j.Logger;
 
 import com.comp_3004.quest_cards.Stories.Quest;
+import com.comp_3004.quest_cards.Stories.Tour;
 import com.comp_3004.quest_cards.cards.*;
 import com.comp_3004.quest_cards.cards.AdventureCard.State;
-import com.comp_3004.quest_cards.core.states.Tour;
 
 public class Player{
 	static Logger log = Logger.getLogger(Player.class); //log4j logger
@@ -87,6 +87,8 @@ public class Player{
 			state_ = new QuestPlayState();
 		else if(s == "tourask")
 			state_ = new TourParticipationState();
+		else if(s== "playtour") 
+			state_ = new TourPlayState();
 	}
 	public String getState() {
 		String state = null;

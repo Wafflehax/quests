@@ -23,7 +23,11 @@ public class TourParticipationState extends PlayerState{
 	@Override
 	public boolean userInput(boolean b, Player p) {
 		if(b) {
-			p.getTour().tourParticipate(p);
+			p.getTour().tourParticipate(p, true);
+			return true;
+		}
+		else if(!b) {
+			p.getTour().tourParticipate(p, false);
 			return true;
 		}
 		return false;
