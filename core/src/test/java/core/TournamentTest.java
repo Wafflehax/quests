@@ -11,14 +11,17 @@ import org.apache.log4j.Logger;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.comp_3004.quest_cards.cards.AdventureCard;
+import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.AllyCard;
 import com.comp_3004.quest_cards.cards.AmourCard;
 import com.comp_3004.quest_cards.cards.Card;
 import com.comp_3004.quest_cards.cards.FoeCard;
+import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.core.GameController;
 import com.comp_3004.quest_cards.core.GameModel;
+import com.comp_3004.quest_cards.core.GamePresenter;
 import com.comp_3004.quest_cards.core.states.TourAskParticipation;
 import com.comp_3004.quest_cards.core.states.TourInit;
 import com.comp_3004.quest_cards.core.states.TourRoundEndEvaluation;
@@ -32,7 +35,50 @@ import utils.IntPlayerPair;
 import utils.utils;
 
 public class TournamentTest extends TestCase{
-	public void testTourInit(){			
+	
+	public void testTourPart() {
+		
+		//set up story deck
+				String[] sd = {"orkney"};
+				StoryDeck storyDeck = new StoryDeck(sd);
+				
+				//set up adventure deck
+				AdventureDeck advDeck = new AdventureDeck();
+				advDeck.shuffle();
+				
+				GameModel game;
+				game = new GameModel(4, 0, advDeck, storyDeck);
+				
+				//set up hands
+				String[] hand0 = {"thieves", "dagger", "boar"};
+				String[] hand1 = {"dagger", "lance"};
+				String[] hand2 = {"dagger", "lance"};
+				String[] hand3 = {"dagger", "lance"};
+				game.getPlayerAtIndex(0).setHand(hand0);
+				game.getPlayerAtIndex(1).setHand(hand1);
+				game.getPlayerAtIndex(2).setHand(hand2);
+				game.getPlayerAtIndex(3).setHand(hand3);
+				
+				GamePresenter pres = new GamePresenter(game);
+				pres.getModel().beginTurn();
+				
+				for(Player p : game.getPlayers().getPlayers()) {
+					System.out.println(p.getName());
+					p.printHand();
+				}
+				
+				//userInput(0) ==> false
+				// 1 ==> true
+				//asking players if they want to participate
+				System.out.println(game.getcurrentTurn().getName() + " Participate in Tour " + game.getcurrentTurn().getTour().getCurTour().getName() + " ?");
+				for(int i=0; i<game.getNumPlayers(); i++) {
+					pres.userInput(1);
+				}
+				
+	}
+	
+	
+	/*public void testTourInit(){			
 		
 		//test TourInit pushes right things on state stack
 		GameModel m = new GameModel(4);   // init with 4 players
@@ -311,5 +357,5 @@ public class TournamentTest extends TestCase{
 		assertEquals(false, p0.getActive().contains(amour));
 		assertEquals(false, p0.getActive().contains(lance));
 	}
-	
+	*/
 }

@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import com.comp_3004.quest_cards.Stories.Quest;
 import com.comp_3004.quest_cards.cards.*;
 import com.comp_3004.quest_cards.cards.AdventureCard.State;
+import com.comp_3004.quest_cards.core.states.Tour;
 
 public class Player{
 	static Logger log = Logger.getLogger(Player.class); //log4j logger
@@ -40,6 +41,7 @@ public class Player{
 	private LinkedList<AdventureCard> playerActiveCards;
 	private LinkedList<AdventureCard> playerStageCards;
 	private Quest currentQuest;
+	private Tour currTour;
 	public volatile boolean participateTournament;
 	private PlayerState state_;
 	
@@ -52,6 +54,7 @@ public class Player{
 		this.playerActiveCards = new LinkedList<AdventureCard>();
 		this.playerStageCards = new LinkedList<AdventureCard>();
 		this.currentQuest = null;
+		this.currTour = null;
 		this.state_ = new NormalState();
 	}
 	
@@ -71,7 +74,8 @@ public class Player{
 	public void setKingsRecognitionBonus(boolean b) { this.kingsRecognitionBonus = b; }
 	public void setQuest(Quest q) { this.currentQuest = q; }
 	public Quest getQuest() { return this.currentQuest; }
-	
+	public void setTour(Tour t) { this.currTour = t; }
+	public Tour getTour() { return this.currTour; }
 	public void setState(String s) { 
 		if(s == "normal")
 			state_ = new NormalState();
@@ -81,7 +85,9 @@ public class Player{
 			state_ = new QuestParticipationState();
 		else if(s == "playQuest")
 			state_ = new QuestPlayState();
-		}
+		else if(s == "tourask")
+			state_ = new TourParticipationState();
+	}
 	public String getState() {
 		String state = null;
 		if(state_ instanceof NormalState)

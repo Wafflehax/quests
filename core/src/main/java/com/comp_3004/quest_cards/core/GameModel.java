@@ -13,8 +13,10 @@ import com.comp_3004.quest_cards.cards.AllyCard;
 import com.comp_3004.quest_cards.cards.AmourCard;
 import com.comp_3004.quest_cards.cards.Card;
 import com.comp_3004.quest_cards.cards.StoryDeck;	//used for testing
+import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.core.states.State;			//used for testing
+import com.comp_3004.quest_cards.core.states.Tour;
 import com.comp_3004.quest_cards.player.Player;
 import com.comp_3004.quest_cards.player.Players;
 import com.comp_3004.quest_cards.cards.QuestCard;
@@ -29,6 +31,7 @@ public class GameModel{
 	
 	private Event event;
 	private Quest quest;
+	private Tour tour;
 	private AdventureDeck advDeck;
 	private StoryDeck storyDeck;
 	private int numPlayers;
@@ -113,6 +116,9 @@ public class GameModel{
 		StoryEv = cardDrawn;
 		if(cardDrawn instanceof QuestCard) {
 			quest = new Quest((QuestCard)cardDrawn, players, advDeck);
+		}
+		else if(cardDrawn instanceof TournamentCard) {
+			tour = new Tour(players, (TournamentCard)cardDrawn, advDeck);
 		}
 	}
 	
