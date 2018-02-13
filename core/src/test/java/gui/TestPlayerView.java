@@ -1,6 +1,7 @@
 package gui;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.comp_3004.quest_cards.gui.DeckView;
 import com.comp_3004.quest_cards.gui.GameView;
 import com.comp_3004.quest_cards.gui.PlayerView;
@@ -12,8 +13,8 @@ public class TestPlayerView extends TestCase {
   @Test
   public void testSelfBounds() {
 
-    GameView gameView = new GameView();
-    PlayerView playerView =gameView.playerView;
+    GameView gameView = new GameView(new Skin());
+    PlayerView playerView = gameView.playerView;
 
     assertEquals(playerView.getWidth(), 1900);
     assertEquals(playerView.getHeight(), 340);

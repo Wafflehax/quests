@@ -25,20 +25,4 @@ public class ShieldWidget extends Container {
 
   }
 
-
-  static class Factory {
-
-    BitmapFont font;
-    Color fontColor;
-
-    public Factory setBitmapFont(BitmapFont font) {
-      this.font = font;
-      return this;
-    }
-
-    public Factory setFontColor(Color fontColor) {
-      this.fontColor = fontColor;
-      return this;
-    }
-  }
 }

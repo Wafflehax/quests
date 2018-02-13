@@ -1,13 +1,21 @@
 {
-com.badlogic.gdx.graphics.g2d.BitmapFont: {
-	supermarket: {
-		file: supermarket.fnt
-	}
-}
-com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
-	default: {
-		background: modal
-		titleFont: supermarket
-	}
-}
+  com.badlogic.gdx.graphics.g2d.BitmapFont: {
+    supermarket: {
+      file: supermarket.fnt
+    }
+  },
+  com.badlogic.gdx.graphics.Color: {
+    text-color-highlighted: {
+      r: 0.96288896,
+      g: 1,
+      b: 0,
+      a: 1
+    },
+    text-color-main: {
+      r: 1,
+      g: 1,
+      b: 1,
+      a: 1
+    }
+  }
 }

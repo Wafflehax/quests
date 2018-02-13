@@ -2,47 +2,58 @@ package com.comp_3004.quest_cards.gui;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-public class GameView extends Table {
+public class GameView extends Group {
 
 
   //Widgets
 
   public PlayerView playerView;
+  public Image background;
   public Image storyDeck;
   public Image storyDeckDiscardPile;
   public Image adventureDeckDiscardPile;
   public Image adventureDeck;
 
-  public GameView() {
+
+  private Skin skin;
+
+  public GameView(Skin skin) {
+
+    this.skin = skin;
 
     //Set up layout
 
-    setLayoutEnabled(false);
-    
+    background = new Image();
+    storyDeck = new Image();
+    storyDeckDiscardPile = new Image();
+    adventureDeck = new Image();
+    adventureDeckDiscardPile = new Image();
+    playerView = new PlayerView();
 
     //Add widgets to table
 
+    addActor(background);
     addActor(storyDeck);
     addActor(storyDeckDiscardPile);
     addActor(adventureDeck);
     addActor(adventureDeckDiscardPile);
     addActor(playerView);
+    addActor(new Dialog("Hello", skin));
+
   }
 
   @Override
-  public void setBounds(float x, float y, float width, float height){
+  public void setBounds(float x, float y, float width, float height) {
 
+    super.setBounds(x, y, width, height);
 
-    super.setBounds(0, 0, width, height);
-
-    //Init widgets
-
+    //Resize widgets
+    background.setBounds(x, y, width, height);
 
     playerView.setBounds(
         width / 2 - Config.PlayerView.WIDTH / 2,
@@ -50,28 +61,24 @@ public class GameView extends Table {
         Config.PlayerView.WIDTH,
         Config.PlayerView.HEIGHT);
 
-    storyDeck = new Image();
     storyDeck.setBounds(
         Config.GameView.PADDING_HORIZONTAL,
         Config.VIRTUAL_HEIGHT - Config.GameView.PADDING_VERTICAL - Config.CardView.CARD_HEIGHT,
         Config.CardView.CARD_WIDTH,
         Config.CardView.CARD_HEIGHT);
 
-    storyDeckDiscardPile = new Image();
     storyDeckDiscardPile.setBounds(
         storyDeck.getX() + Config.CardView.CARD_WIDTH + Config.GameView.PADDING_HORIZONTAL,
         storyDeck.getY(),
         Config.CardView.CARD_WIDTH,
         Config.CardView.CARD_HEIGHT);
 
-    adventureDeck = new Image();
     adventureDeck.setBounds(
         storyDeckDiscardPile.getX() + Config.CardView.CARD_WIDTH + Config.GameView.PADDING_HORIZONTAL,
         storyDeckDiscardPile.getY(),
         Config.CardView.CARD_WIDTH,
         Config.CardView.CARD_HEIGHT);
 
-    adventureDeckDiscardPile = new Image();
     adventureDeckDiscardPile.setBounds(
         adventureDeck.getX() + Config.CardView.CARD_WIDTH + Config.GameView.PADDING_HORIZONTAL,
         storyDeckDiscardPile.getY(),
@@ -124,7 +131,7 @@ public class GameView extends Table {
 
   public GameView setBackground(TextureRegion background) {
 
-    setBackground(new TextureRegionDrawable(background));
+    this.background.setDrawable(new TextureRegionDrawable(background));
     return this;
   }
 

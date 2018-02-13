@@ -1,5 +1,6 @@
 package com.comp_3004.quest_cards.core;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
@@ -11,15 +12,17 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.comp_3004.quest_cards.gui.Assets;
 import com.comp_3004.quest_cards.gui.CardView;
+import com.comp_3004.quest_cards.gui.Config;
 import com.comp_3004.quest_cards.gui.GameView;
 import com.sun.corba.se.pept.transport.EventHandler;
 import org.apache.log4j.Logger;
 
-public class GamePresenter extends Group{
+public class GamePresenter extends Group {
 
   private QuestCards parent;
   private GameModel model;
@@ -29,6 +32,7 @@ public class GamePresenter extends Group{
   TextureAtlas backgrounds;
 
   private AssetManager manager;
+  private Skin skin;
 
 
   public GamePresenter(QuestCards parent) {
@@ -43,28 +47,30 @@ public class GamePresenter extends Group{
     model = new GameModel();
   }
 
-  public void loadAssets(){
+  public void loadAssets() {
 
     AssetManager manager = parent.getAssetManager();
     manager.load(Assets.GAME_BACKGROUNDS, TextureAtlas.class);
     manager.load(Assets.GAME_SPRITES, TextureAtlas.class);
+    manager.load(Assets.SKIN, Skin.class);
     manager.finishLoading();
 
+    skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
     sprites = manager.get(Assets.GAME_SPRITES, TextureAtlas.class);
     backgrounds = manager.get(Assets.GAME_BACKGROUNDS, TextureAtlas.class);
   }
 
 
-  public GameView initGameView(){
+  public GameView initGameView() {
 
-    GameView view = new GameView();
+    GameView view = new GameView(skin);
     view.setShieldsTexture(sprites.findRegion("shield"));
     view.setBackground(backgrounds.findRegion("game_board"));
     view.setPlayerViewBackground(backgrounds.findRegion("player_area"));
-
+    view.setBounds(0,0 , Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
 
     CardView[] cards = new CardView[12];
-    for(int i = 0; i < cards.length; i++){
+    for (int i = 0; i < cards.length; i++) {
 
       cards[i] = new CardView(sprites.findRegion("A_King_Arthur"));
     }
@@ -83,56 +89,4 @@ public class GamePresenter extends Group{
 
     return view;
   }
-
-  @Override
-  public void draw(Batch batch, float alpha) {
-    drawChildren(batch, alpha);
-  }
-
-
-  @Override
-  public void act(float delta) {
-    super.act(delta);
-  }
-
-
 }
-
-/*
-    //this is just a rough idea of what a listener may look like...
-    //play card from hand listener
-    view.addListener(new DragListener() {
-      //user clicks on a card and drags it
-      public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				/*if x,y are inside a cards tap square
-					get card ID
-					return true;
-				else x,y are not inside a cards tap square
-        return false;
-}
-
-  //user drags card to play and releases it
-  public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				/*if x,y are inside the play area's tap square
-					if (model.getcurrentTurn().playCard(card)) {
-						card played successfully (card was allowed to be played by model)
-						these next two methods are essentially setters for view attributes
-						view.updateHand(model.getcurrentTurn().getHand());
-						view.updateActive(model.getcurrentTurn().getActive());
-					}
-  }
-});
-    }
-
-    //won't need these, as the calls to model.getSomething can be placed directly in the listeners
-	/*update view with model data - called when a change in model occurs
-	private Rank updateRank() { return model.getcurrentTurn().getRank(); }
-	private int updateShields() { return model.getcurrentTurn().getShields(); }
-	private LinkedList<AdventureCard> updateHand() { return model.getcurrentTurn().getHand(); }
-	private LinkedList<AdventureCard> updateActive() { return model.getcurrentTurn().getActive(); }
-	private Stack<AdventureCard> updateAdvDeck() { return model.getAdvDeck().getDeck(); }
-	private Stack<AdventureCard> updateAdvDiscard() { return model.getAdvDeck().getDiscard(); }
-	private Stack<StoryCard> updateStoryDeck() { return model.getStoryDeck().getDeck(); }
-	private Stack<StoryCard> updateStoryDiscard() { return model.getStoryDeck().getDiscard(); }
-    }
- */

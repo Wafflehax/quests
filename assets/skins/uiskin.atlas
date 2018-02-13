@@ -6,14 +6,42 @@ filter: Linear,Linear
 repeat: none
 supermarket
   rotate: false
-  xy: 1, 1
-  size: 512, 512
-  orig: 512, 512
+  xy: 1, 529
+  size: 507, 73
+  orig: 507, 73
+  offset: 0, 0
+  index: -1
+deck_icon
+  rotate: false
+  xy: 773, 777
+  size: 87, 83
+  orig: 87, 83
+  offset: 0, 0
+  index: -1
+shield
+  rotate: false
+  xy: 1, 327
+  size: 159, 200
+  orig: 159, 200
+  offset: 0, 0
+  index: -1
+button
+  rotate: false
+  xy: 515, 666
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+flag
+  rotate: false
+  xy: 515, 732
+  size: 256, 128
+  orig: 256, 128
   offset: 0, 0
   index: -1
 modal
   rotate: false
-  xy: 1, 515
+  xy: 1, 604
   size: 512, 256
   orig: 512, 256
   offset: 0, 0
