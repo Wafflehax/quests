@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.comp_3004.quest_cards.gui.Config;
 
 public class RulesPresenter extends Group {
     private QuestCards parent;
@@ -106,7 +107,7 @@ public class RulesPresenter extends Group {
         Gdx.input.setInputProcessor(rulesStage);
         this.rulesStage.act(Gdx.graphics.getDeltaTime());
         ruleImage.setDrawable(new TextureRegionDrawable(new TextureRegion(rules[pageNum%10])));
-        batch.draw(rules[pageNum%10], 0,0,Game.WIDTH,Game.HEIGHT);
+        batch.draw(rules[pageNum%10], 0,0, Config.VIRTUAL_WIDTH,Config.VIRTUAL_HEIGHT);
 
         this.rulesStage.draw();
 

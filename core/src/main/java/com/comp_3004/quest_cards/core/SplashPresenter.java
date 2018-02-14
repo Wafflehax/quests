@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.comp_3004.quest_cards.gui.Config;
 
 public class SplashPresenter extends Group {
     private QuestCards parent;
@@ -22,7 +23,7 @@ public class SplashPresenter extends Group {
 
         splashTexture = new Texture("splashScreen.png");
         splash = new Sprite(splashTexture);
-        splash.setSize(Game.WIDTH,Game.HEIGHT);
+        splash.setSize(Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
 
         tweenManager = new TweenManager();
         Tween.registerAccessor(Sprite.class,new SpriteAccessor());

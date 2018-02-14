@@ -158,7 +158,7 @@ public class GamePresenter extends Group{
   				model.beginTurn();
   		}
   	}
-  	
+
   	
   	/*public void userInput(int b) {
   		if(b == 1) {
