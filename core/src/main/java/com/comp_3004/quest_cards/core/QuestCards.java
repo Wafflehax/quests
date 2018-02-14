@@ -3,6 +3,7 @@ package com.comp_3004.quest_cards.core;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -24,7 +25,7 @@ public class QuestCards implements ApplicationListener {
   private AssetManager manager;
   private SpriteBatch batch;
   private Skin uiSkin;
-
+  private Music _menuSong; //Asyncronous Menu Music
 
   //Stage
 
@@ -36,6 +37,10 @@ public class QuestCards implements ApplicationListener {
   //Game Screens
 
   private Map<String, Group> gameStates;
+
+
+
+
 
 
   @Override
@@ -50,8 +55,11 @@ public class QuestCards implements ApplicationListener {
     //Load UI skin: Todo: Make this useful. It does nothing at the moment
 
     manager.load("skins/uiskin.json", Skin.class);
+    manager.load("music/MainMenu.wav",Music.class); //Asyncronous MenuMusic
+    //manager.load("skins/buttonSkin.json", Skin.class);
     manager.finishLoading();
     uiSkin = manager.get("skins/uiskin.json", Skin.class);
+    _menuSong = manager.get("music/MainMenu.wav",Music.class);
 
     //Stage & camera set up
 
@@ -65,10 +73,14 @@ public class QuestCards implements ApplicationListener {
 
     gameStates = new HashMap<String, Group>();
     gameStates.put("mainGame", new GamePresenter(this));
+    gameStates.put("mainMenu", new MenuPresenter(this));
+    gameStates.put("preMenu", new SplashPresenter(this));
+    gameStates.put("rulesDisplay", new RulesPresenter(this));
 
     //Switch screen
 
-    stage.addActor(gameStates.get("mainGame"));
+    stage.addActor(gameStates.get("preMenu"));
+
 
     //Create game MVC
     //GameModel model = new GameModel();
@@ -120,5 +132,27 @@ public class QuestCards implements ApplicationListener {
   public AssetManager getAssetManager() {
 
     return manager;
+  }
+
+  public void ScreenAssign(String State)
+  {stage.clear();
+    stage.addActor(gameStates.get(State));
+    System.out.println(stage.getActors() + " " + State + " " + Gdx.input.getInputProcessor());
+
+    if (State.compareTo("mainGame")==0)
+    { Group temp = gameStates.get("rulesDisplay");
+      ((RulesPresenter) temp).dispose();}
+
+  }
+
+  public void SetMenuMusic(boolean ON)
+  {if (ON)
+  {_menuSong.setLooping(ON);
+  _menuSong.setVolume(0.5f);
+  _menuSong.play();}
+
+  else
+  {_menuSong.stop();
+  _menuSong.dispose();}
   }
 }

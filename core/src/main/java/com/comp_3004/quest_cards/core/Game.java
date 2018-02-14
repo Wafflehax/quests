@@ -40,7 +40,7 @@ public class Game extends ApplicationAdapter {
             e.printStackTrace();
         }
         Gdx.gl.glClearColor(0,0,0,1);
-		gsm.push(new SplashState(gsm));
+		//gsm.push(new SplashPresenter(gsm));
 	}
 
 
@@ -64,13 +64,13 @@ public class Game extends ApplicationAdapter {
 		
 	}
 
-	public void toMenu(){gsm.set(new MenuState(gsm));
+	/*public void toMenu(){gsm.set(new MenuState(gsm));
 		menuMusic.play();
 	}
 	public void toPlay(){gsm.set(new PlayState(gsm));
 	menuMusic.dispose();}
 
-	public void toRules(){gsm.set(new RulesState(gsm));}
-	
+	public void toRules(){gsm.set(new RulesPresenter(gsm));}
+	*/
 	
 }

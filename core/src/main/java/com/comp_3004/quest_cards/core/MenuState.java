@@ -4,6 +4,7 @@ import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -14,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 
-public class MenuState extends State {
+public class MenuState extends Group {
     private Texture background;
     //private Music menuMusic;
     //private Texture play;
@@ -28,8 +29,8 @@ public class MenuState extends State {
     //private Sound click; //TODO
 
 
-    public MenuState(GameStateManager gsm)
-    {super(gsm);
+    public MenuState(QuestCards parent)
+    {
     //menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/MainMenu.mp3"));
     tweenManager = new TweenManager();
     background = new Texture("bg-castle.jpg");
@@ -57,7 +58,7 @@ public class MenuState extends State {
         startButton.addListener(new ClickListener(){
                                     @Override
                                     public void clicked(InputEvent event, float x, float y) {
-                                        ((Game)Gdx.app.getApplicationListener()).toPlay();
+                                        //(Game)Gdx.app.getApplicationListener()).toPlay();
                                         Gdx.app.log("New Game","CLICKED!");
                                         //startDialog.show(mainMenu);
                                         
@@ -89,9 +90,9 @@ public class MenuState extends State {
         rulesButton.addListener(new ClickListener(){
                                     @Override
                                     public void clicked(InputEvent event, float x, float y) {
-                                        ((Game)Gdx.app.getApplicationListener()).toRules();
+                                        //((Game)Gdx.app.getApplicationListener()).toRules();
                                         dispose();
-                                        //gsm.push(new RulesState(gsm));
+                                        //gsm.push(new RulesPresenter(gsm));
                                     }
                                 }
         );
@@ -115,17 +116,14 @@ public class MenuState extends State {
     }
 
 
-    @Override
-    protected void handleInput() {
 
-    }
 
-    @Override
+
     public void update(float dt) {
         stage.act(dt);
     }
 
-    @Override
+
     public void render(SpriteBatch sb) {
         this.stage.act(Gdx.graphics.getDeltaTime());
 
@@ -137,7 +135,7 @@ public class MenuState extends State {
         this.stage.draw();
     }
 
-    @Override
+
     public void dispose() {
         background.dispose();
         stage.dispose();
