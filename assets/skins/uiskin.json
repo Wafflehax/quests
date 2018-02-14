@@ -17,6 +17,12 @@
       g: 1,
       r: 1
     },
+    grey: {
+      a: 0.7,
+      b: 1,
+      g: 1,
+      r: 1
+    },
     red: {
       a: 1,
       b: 0,
@@ -64,7 +70,7 @@
       up: default-round,
       checked: default-round-down,
       font: default-font,
-      fontColor: white,
+      fontColor: red,
       downFontColor: red
     }
   },
@@ -143,7 +149,7 @@
     default: {
       fontColorUnselected: white,
       selection: selection,
-      fontColorSelected: white,
+      fontColorSelected: grey,
       font: default-font
     }
   },

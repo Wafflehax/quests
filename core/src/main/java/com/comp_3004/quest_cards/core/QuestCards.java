@@ -21,7 +21,6 @@ import java.util.Map;
 public class QuestCards implements ApplicationListener {
 
   //Assets
-
   private AssetManager manager;
   private SpriteBatch batch;
   private Skin uiSkin;

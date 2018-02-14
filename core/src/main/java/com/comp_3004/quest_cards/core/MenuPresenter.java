@@ -59,7 +59,7 @@ public class MenuPresenter extends Group {
 
         //Init
         startButton = new TextButton("New Game",skin,"default");
-        loadButton = new TextButton("Load Game",skin,"default");
+        //loadButton = new TextButton("Load Game",skin,"default");
         rulesButton = new TextButton("Rules",skin,"default");
         exitButton = new TextButton("Exit",skin,"default");
         startTable = new Table();
@@ -68,7 +68,7 @@ public class MenuPresenter extends Group {
         startTable.align(Align.left|Align.bottom);
         startTable.setPosition(100,100);
         startButton.setSize(250,100);
-        loadButton.setSize(250,100);
+        //loadButton.setSize(250,100);
         rulesButton.setSize(250,100);
         exitButton.setSize(250,100);
         //LISTENERS
@@ -77,8 +77,8 @@ public class MenuPresenter extends Group {
         //Actor Allocation
         startTable.add(startButton);
         startTable.row();
-        startTable.add(loadButton);
-        startTable.row();
+        //startTable.add(loadButton); //TODO: Add when required
+        //startTable.row();
         startTable.add(rulesButton);
         startTable.row();
         startTable.add(exitButton);
@@ -113,13 +113,13 @@ public class MenuPresenter extends Group {
                                                                 }
     );
 
-        loadButton.addListener(new ClickListener(){
+        /*loadButton.addListener(new ClickListener(){
                                    @Override
                                    public void clicked(InputEvent event, float x, float y) {
 
                                    }
                                }
-        );
+        );*/
 
         exitButton.addListener(new ClickListener(){
                                    @Override
