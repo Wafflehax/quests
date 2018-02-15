@@ -16,7 +16,6 @@ public class AllySubjectObserver extends AllyCard {
 	private int abp, abids;
 	private boolean activated;
 	private String[] activators;
-	private boolean inPlay = false;
 	
 	public boolean isActivated() { return activated; }
 	
@@ -40,13 +39,29 @@ public class AllySubjectObserver extends AllyCard {
 		}
 	}
 	
+	//removes observer from List and their point to this instance
+	public void deregister(AllySubjectObserver c) {
+		c.subject = null;
+		this.deactivate();
+		obs.remove(c);
+	}
+	
+	public void deregisterBoth(AllySubjectObserver c) {
+		obs.remove(c);
+		AllySubjectObserver temp = subject;
+		c.subject = null;
+		subject = null;
+		if(temp == c)
+			c.deregister(this);	
+	}
+	
 	
 	@Override
 	public void setState(State s) {
 		// only notify when inPlay Changes
 		boolean inPlay = inPlay(s);
-		if(this.inPlay != inPlay) {
-			this.inPlay = inPlay;
+		if(this.inPlay(getState()) != inPlay) {
+			//this.inPlay(getState()) = inPlay;
 			this.state = s;
 			notifyAllO();
 		}
@@ -59,22 +74,30 @@ public class AllySubjectObserver extends AllyCard {
 	}
 	
 	private void update() {
-		log.info("I => " + this.getName() + " Got update from subject => " + subject.getName());
-		//Subject are you my activator?
-		boolean myActivator = false;
-		String sub = subject.getName();
-		for(int i = 0; i < activators.length; i++) {
-			if(activators[i].equalsIgnoreCase(sub)) {
-				myActivator = true;
-				break;
-			}
+		if(subject == null) {
+			//deregistered so special ability disabled
+			log.info(this.getName() + " no longer observing a subject");
+			this.activated = false;
+			this.switchvars();
 		}
-		//is activator inPlay && myself? 
-		if(myActivator && subject.inPlay(subject.getState()) && this.inPlay(getState()))
-			activate();
-		else if(myActivator && subject.inPlay(subject.getState()) == false || this.inPlay(getState()) == false)
-			deactivate();
-		//if not activator do nothing
+		else {
+			log.info("I => " + this.getName() + " Got update from subject => " + subject.getName());
+			//Subject are you my activator?
+			boolean myActivator = false;
+			String sub = subject.getName();
+			for(int i = 0; i < activators.length; i++) {
+				if(activators[i].equalsIgnoreCase(sub)) {
+					myActivator = true;
+					break;
+				}
+			}
+			//is activator inPlay && myself? 
+			if(myActivator && subject.inPlay(subject.getState()) && this.inPlay(getState()) && subject.subject != null)
+				activate();
+			else if(myActivator && subject.inPlay(subject.getState()) == false || this.inPlay(getState()) == false || subject.subject == null)
+				deactivate();
+			//if not activator do nothing
+		}
 	}
 	
 	private void notifyAllO() {

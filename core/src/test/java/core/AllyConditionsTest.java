@@ -15,8 +15,6 @@ public class AllyConditionsTest extends TestCase {
 	public void testOne() {
 		
 		GameModel m = new GameModel(4);
-		
-		
 		AdventureDeck ad = m.getAdvDeck();
 		ad.printDeck();
 		
@@ -43,8 +41,17 @@ public class AllyConditionsTest extends TestCase {
 		assertEquals(true, tris.isActivated());
 		
 		qu.setState(State.HAND);
-		assertEquals(false, qu.isActivated());
-		assertEquals(false, tris.isActivated());
+		tris.setState(State.HAND);
+		
+		qu.setState(State.PLAY);
+		tris.setState(State.PLAY);
+		assertEquals(true, qu.isActivated());
+		assertEquals(true, tris.isActivated());
+		
+		//removes tristian as an observer on the queen, queen still observing tristian
+		qu.deregister(tris);
+		// queen no longer getting tristian updates
+		tris.deregister(qu);
 		
 		
 	}
