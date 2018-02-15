@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.comp_3004.quest_cards.core.QuestCards;
 
 public class DeckView extends Table {

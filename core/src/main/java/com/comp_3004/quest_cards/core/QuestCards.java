@@ -72,15 +72,15 @@ public class QuestCards implements ApplicationListener {
 
 
     gameStates = new HashMap<String, Group>();
-    gameStates.put("mainGame", new GamePresenter(this));
     gameStates.put("mainMenu", new MenuPresenter(this));
     gameStates.put("preMenu", new SplashPresenter(this));
     gameStates.put("rulesDisplay", new RulesPresenter(this));
+    gameStates.put("mainGame", new GamePresenter(this));
 
     //Switch screen
 
-    stage.addActor(gameStates.get("preMenu"));
-
+    stage.addActor(gameStates.get("mainGame"));
+    ScreenAssign("mainGame");
 
     // Temp Tour testing
     //TourTest test = new TourTest();
@@ -141,11 +141,14 @@ public class QuestCards implements ApplicationListener {
   public void ScreenAssign(String State)
   {stage.clear();
     stage.addActor(gameStates.get(State));
+
     System.out.println(stage.getActors() + " " + State + " " + Gdx.input.getInputProcessor());
 
     if (State.compareTo("mainGame")==0)
     { Group temp = gameStates.get("rulesDisplay");
-      ((RulesPresenter) temp).dispose();}
+      ((RulesPresenter) temp).dispose();
+      Gdx.input.setInputProcessor(stage);
+    }
 
   }
 
@@ -159,4 +162,6 @@ public class QuestCards implements ApplicationListener {
   {_menuSong.stop();
   _menuSong.dispose();}
   }
+
+
 }

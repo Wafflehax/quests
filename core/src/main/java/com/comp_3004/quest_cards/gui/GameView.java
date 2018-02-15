@@ -1,5 +1,8 @@
 package com.comp_3004.quest_cards.gui;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -15,6 +18,7 @@ public class GameView extends Table {
   public Image storyDeckDiscardPile;
   public Image adventureDeckDiscardPile;
   public Image adventureDeck;
+  public CardDropZone CDZ;
 
   public GameView() {
 
@@ -61,14 +65,20 @@ public class GameView extends Table {
         Config.CardView.CARD_HEIGHT
     );
 
+    CDZ = new CardDropZone(new Sprite(new Texture("WHITE.png")));
+
     //Add widgets to table
 
     addActor(storyDeck);
     addActor(storyDeckDiscardPile);
     addActor(adventureDeck);
     addActor(adventureDeckDiscardPile);
+    addActor(CDZ);
     addActor(playerView);
+    //addActor(cardDropZone);
   }
+
+
 
   public GameView displayHero(TextureRegion hero) {
     playerView.displayHero(hero);

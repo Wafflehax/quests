@@ -4,16 +4,20 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import utils.Pair;
 
 import java.util.AbstractMap;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Assets {
 
   public static String GAME_BACKGROUNDS = "sprites/backgrounds.atlas";
   public static String GAME_SPRITES = "sprites/cards.atlas";
-
+  public Map<String,String> CardSpawnerMap = new HashMap<String, String>();
   public static class Cards {
 
+
     public static String CARD_BACK = "card_back";
+
+    //CardSpawnerMap.
 
     public static class Allies {
       public static String KING_ARTHUR = "A_King_Arthur";
@@ -77,5 +81,7 @@ public class Assets {
       public static String LANCE = "W_Lance";
       public static String SWORD = "W_Sword";
     }
+
+
   }
 }

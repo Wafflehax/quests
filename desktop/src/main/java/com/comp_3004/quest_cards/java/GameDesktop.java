@@ -10,7 +10,6 @@ public class GameDesktop {
     LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
     config.forceExit = true;
 
-    new LwjglApplication(new QuestCards(), config);
     config.width = Config.VIRTUAL_WIDTH;
     config.height = Config.VIRTUAL_HEIGHT;
     config.title = "Quests of the Round Table";

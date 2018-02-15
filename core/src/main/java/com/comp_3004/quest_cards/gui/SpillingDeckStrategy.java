@@ -39,6 +39,9 @@ public class SpillingDeckStrategy implements DeckView.DisplayStrategy {
       float y = 0;
 
       card.setPosition(x, y);
+      card.setDeckY(y);
+      card.setDeckX(x);
+      card.setDeckZ(i);
       card.setZIndex(i);
 
       System.out.printf("Placing adveture card at (%f, %f)\n", card.getX(), card.getY());
