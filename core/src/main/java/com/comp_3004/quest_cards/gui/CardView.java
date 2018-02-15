@@ -47,9 +47,16 @@ public class CardView extends Image {
                       @Override
                       public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                         //RESETS THE CARD'S POSITIONING
-                        card.setX(card.getDeckX());
-                        card.setY(card.getDeckY());
-                        card.setZIndex(card.getDeckZ());
+                        if(CardBounds.overlaps(DropZoneBounds))
+                        {
+                          //DO NOTHING
+                        }
+                        else{
+                          card.setX(card.getDeckX());
+                          card.setY(card.getDeckY());
+                          card.setZIndex(card.getDeckZ());
+                        }
+
                       }
 
                     }
@@ -73,20 +80,28 @@ public class CardView extends Image {
       if(CardBounds.overlaps(DropZoneBounds))
       {setColor(0.6f,1,0.6f,1);}
 
-      else setColor(1f,0.2f,0.8f,1);
+      else setColor(1f,0.6f,0.6f,1);
 
     }
 
     @Override
     public void dragStop(InputEvent event, float x, float y, int pointer) {
       Gdx.app.log("dragStop:","Perceived Ending Coord (" + card.getX() + "," + card.getY() + ")");
-      card.setX(card.getDeckX());
-      card.setY(card.getDeckY());
-      Gdx.app.log("DragStop Rectangles (CARD, CDZ):","Card:" + getCardBounds() + "CDZ: " + getDropZoneBounds() + ")");
-      Gdx.app.log("CardBounds.overlaps(DropZoneBounds)", ""+CardBounds.overlaps(DropZoneBounds));
-      CardBounds.set(card.getX(),card.getY(),getWidth(),getHeight());
+      //card.setX(card.getDeckX());
+      //card.setY(card.getDeckY());
+
+
       setColor(1,1,1,1);
-      //(dropZone.withInBounds)
+      if(CardBounds.overlaps(DropZoneBounds))
+      {Gdx.app.log("CardBounds.overlaps(DropZoneBounds)", ""+CardBounds.overlaps(DropZoneBounds));
+       card.setX(getX());
+       card.setY(getY());
+      }
+
+      else
+      {card.setX(card.getDeckX());
+        card.setY(card.getDeckY());}
+
     }
 
 
