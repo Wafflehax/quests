@@ -3,7 +3,7 @@ package com.comp_3004.quest_cards.cards;
 public class AllyCard extends AdventureCard {
 	
 	//attributes
-	private int bids;				//the bids the card adds to the player
+	protected int bids;				//the bids the card adds to the player
 
 	//constructors
 	public AllyCard(String n, int bp, int bd) {

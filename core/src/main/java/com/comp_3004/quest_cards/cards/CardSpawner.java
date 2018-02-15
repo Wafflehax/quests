@@ -65,11 +65,11 @@ public class CardSpawner {
 		else if(name == "gawain") { return new AllyCard("Sir Gawain", 10, 0); }
 		else if(name == "pellinore") { return new AllyCard("King Pellinore", 10, 0); }
 		else if(name == "percival") { return new  AllyCard("Sir Percival", 5, 0); }
-		else if(name == "tristan") { return new AllyCard("Sir Tristan", 10, 0); }
+		else if(name == "tristan") { return new AllySubjectObserver("Sir Tristan", 10, 0, 20, 0, new String[] {"Queen Iseult"}); }
 		else if(name == "arthur") { return new AllyCard("King Arthur", 10,2); }
 		else if(name == "guinevere") { return new AllyCard("Queen Guinevere", 0, 3); }
 		else if(name == "merlin") { return new AllyCard("Merlin", 0, 0); }
-		else if(name == "iseult") { return new AllyCard("Queen Iseult", 0, 2); }
+		else if(name == "iseult") { return new AllySubjectObserver("Queen Iseult", 0, 2, 0, 4, new String[] {"Sir Tristan"}); }
 		else if(name == "lancelot") { return new AllyCard("Sir Lancelot", 15, 0); }
 		else if(name == "galahad" ) { return new AllyCard("Sir Galahad", 15, 0); }
 		
