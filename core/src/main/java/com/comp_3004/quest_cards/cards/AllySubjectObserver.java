@@ -47,6 +47,10 @@ public class AllySubjectObserver extends AllyCard {
 	}
 	
 	public void deregisterBoth(AllySubjectObserver c) {
+		this.activated = false;
+		this.switchvars();
+		c.activated = false;
+		c.switchvars();
 		obs.remove(c);
 		AllySubjectObserver temp = subject;
 		c.subject = null;
@@ -61,7 +65,6 @@ public class AllySubjectObserver extends AllyCard {
 		// only notify when inPlay Changes
 		boolean inPlay = inPlay(s);
 		if(this.inPlay(getState()) != inPlay) {
-			//this.inPlay(getState()) = inPlay;
 			this.state = s;
 			notifyAllO();
 		}
@@ -130,8 +133,8 @@ public class AllySubjectObserver extends AllyCard {
 		this.battlePts = abp;
 		this.bids = abids;
 		
-		this.abids = tempB;
-		this.abp = tempBids;
+		this.abids = tempBids;
+		this.abp = tempB;
 	}
 	
 	

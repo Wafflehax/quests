@@ -67,13 +67,26 @@ public class StoryDeck extends Deck {
 	public StoryCard drawCard() {					//draws the top card of the story deck
 		if(deck.empty()) {
 			shuffleDiscardIntoDeck();
-			return deck.pop();
+			StoryCard drawn = deck.pop();
+			if(drawn instanceof QuestCardSubject) {
+				QuestCardSubject p = (QuestCardSubject)drawn;
+				p.setPlayed(true);
+			}
+			return drawn;
 		}
-		else
-			return deck.pop();
+		else {
+			StoryCard drawn = deck.pop();
+			if(drawn instanceof QuestCardSubject) {
+				QuestCardSubject p = (QuestCardSubject)drawn;
+				p.setPlayed(true);
+			}
+			return drawn;
+		}
 	}
 	
 	public void discardCard(StoryCard c) {			//moves card to decks discard pile
+		if(c instanceof QuestCardSubject)
+			((QuestCardSubject)c).setPlayed(false);
 		discard.push(c);
 	}
 	
