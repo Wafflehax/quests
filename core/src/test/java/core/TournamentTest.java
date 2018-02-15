@@ -13,7 +13,7 @@ public class TournamentTest extends TestCase{
 	
 	public void testTourPart() {
 		
-		//set up story deck
+				//set up story deck
 				String[] sd = {"orkney"};
 				StoryDeck storyDeck = new StoryDeck(sd);
 				
@@ -25,11 +25,14 @@ public class TournamentTest extends TestCase{
 				game = new GameModel(4, 0, advDeck, storyDeck);
 				
 				//set up hands
-				String[] hand0 = {"thieves", "dagger", "boar"};
+				String[] hand0 = {"thieves", "dagger", "boar", "amour", "amour"};
 				String[] hand1 = {"dagger", "lance"};
 				String[] hand2 = {"dagger", "lance"};
 				String[] hand3 = {"dagger", "lance"};
 				game.getPlayerAtIndex(0).setHand(hand0);
+				game.getPlayerAtIndex(0).findH(130).setOwner(game.getPlayerAtIndex(0));
+				game.getPlayerAtIndex(0).findH(131).setOwner(game.getPlayerAtIndex(0));
+				
 				game.getPlayerAtIndex(1).setHand(hand1);
 				game.getPlayerAtIndex(2).setHand(hand2);
 				game.getPlayerAtIndex(3).setHand(hand3);
@@ -41,20 +44,26 @@ public class TournamentTest extends TestCase{
 					System.out.println(p.getName());
 					p.printHand();
 				}
-				
-				//userInput(0) ==> false
-				// 1 ==> true
 				//asking players if they want to participate
-				System.out.println(game.getcurrentTurn().getName() + " Participate in Tour " + game.getcurrentTurn().getTour().getCurTour().getName() + " ?");
 				
-				pres.userInput(1);
-				pres.userInput(1);
-				pres.userInput(1); 
-				pres.userInput(0); 
+				pres.userInput(1); //yes
+				pres.userInput(1); //yes
+				pres.userInput(1); //yes
+				pres.userInput(0); //no
+				
+				//check input registered correctly
+				assertEquals(true, game.getTour().getPlayers().getPlayers().contains(game.getPlayerAtIndex(0)));
+				assertEquals(true, game.getTour().getPlayers().getPlayers().contains(game.getPlayerAtIndex(1)));
+				assertEquals(true, game.getTour().getPlayers().getPlayers().contains(game.getPlayerAtIndex(2)));
+				assertEquals(3, game.getTour().getPlayers().size());
+				
+				pres.playCard(130);
+				pres.userInput(1); //done turn
+				
 				
 				pres.userInput(1); //done turn
 				pres.userInput(1); //done turn
-				pres.userInput(1); //done turn
+				
 				
 	}
 	
@@ -216,15 +225,6 @@ public class TournamentTest extends TestCase{
 		c.no();
 		assertEquals(false, c.handPress(amour1));
 
-		//testing calculation of battle points
-		//no special abilities (dependent cards), Weapons,Ally,Amour
-		TourRoundEndEvaluation ev = new TourRoundEndEvaluation(c); 
-		Player p0 = new Player("Player 0");
-		String cards1[] = {"horse","sword","excalibur","lance","dagger","battleAx","pellinore","merlin"};
-		p0.setActiveHand(cards1);
-	
-		assertEquals(105 ,ev.calcBattlePoints(p0));
-		//testing calculating battle points	
 	}
 	
 	public void testTour3() {

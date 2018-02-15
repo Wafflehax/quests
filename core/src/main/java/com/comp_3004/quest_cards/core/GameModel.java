@@ -1,14 +1,12 @@
 package com.comp_3004.quest_cards.core;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
 import com.comp_3004.quest_cards.Stories.Event;
 import com.comp_3004.quest_cards.Stories.Quest;
 import com.comp_3004.quest_cards.Stories.Tour;
-import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.AllyCard;
 import com.comp_3004.quest_cards.cards.AmourCard;
@@ -48,6 +46,7 @@ public class GameModel{
 	public StoryDeck getStoryDeck() { return this.storyDeck; }
 	public Card getStory() { return StoryEv; }
 	public Quest getQuest() { return this.quest; }
+	public Tour getTour() { return tour; }
 	
 	
 	// Setters

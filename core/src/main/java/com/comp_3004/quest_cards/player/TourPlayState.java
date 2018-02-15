@@ -1,5 +1,7 @@
 package com.comp_3004.quest_cards.player;
 
+import org.apache.log4j.Logger;
+
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.AllyCard;
@@ -9,6 +11,8 @@ import com.comp_3004.quest_cards.cards.AdventureCard.State;
 
 public class TourPlayState extends PlayerState{
 
+	static Logger log = Logger.getLogger(TourPlayState.class); //log4j logger
+	
 	@Override
 	public boolean playCard(AdventureCard c, Player p) {
 		if(p.getHand().contains(c)) {
@@ -36,7 +40,22 @@ public class TourPlayState extends PlayerState{
 
 	@Override
 	public boolean discardCard(AdventureCard c, AdventureDeck d, Player p) {
-		// TODO Auto-generated method stub
+		//discards card from either hand or active hand
+		if(p.getHand().contains(c)) {
+			p.getHand().remove(c);
+			d.discardCard(c);
+			c.setState(State.DISCARD);
+			log.info(p.getName() + " discarded their hand" + c.getName());
+			return true;
+		}
+		else if(p.getActive().contains(c)) {
+			p.getActive().remove(c);
+			d.discardCard(c);
+			c.setState(State.DISCARD);
+			log.info(p.getName() + " discarded from active" + c.getName());
+			return true;
+		}
+		log.info(p.getName() + " can't discard a card they don't own :=>" + c.getName() + " kept");
 		return false;
 	}
 

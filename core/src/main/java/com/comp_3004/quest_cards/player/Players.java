@@ -110,18 +110,4 @@ public class Players{
 		}
 	}
 	
-	public Players getTournamentParticipants() {
-		//TODO: TESTING FUNCTIONALITY
-		ArrayList<Player> playing = new ArrayList<Player>();
-		for(int i = 0; i < players.size(); i++) {
-			if(players.get(i).participateTournament) {
-				playing.add(players.get(i));
-			}
-		}
-		Players partic = new Players(0, playing.size(), playing);
-		// can return with no participants 
-		return partic;
-	}
-	
-	
 }

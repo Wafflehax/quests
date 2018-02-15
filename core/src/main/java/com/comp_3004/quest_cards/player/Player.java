@@ -42,7 +42,6 @@ public class Player{
 	private LinkedList<AdventureCard> playerStageCards;
 	private Quest currentQuest;
 	private Tour currTour;
-	public volatile boolean participateTournament;
 	private PlayerState state_;
 	
 	// constructor
@@ -63,8 +62,6 @@ public class Player{
 	public Rank getRank() { return this.rank; }
 	public String getRankS() { return rankS(); }
 	public int getShields() { return this.shields; }
-	public boolean participantInTournament() { return participateTournament; }
-	public void participateTour(boolean b) { participateTournament = b; }
 	public int numberOfHandCards() { return playerHandCards.size(); }
 	public int numberOfActiveCards() { return playerActiveCards.size(); }
 	public LinkedList<AdventureCard> getHand() { return this.playerHandCards; }
@@ -89,6 +86,8 @@ public class Player{
 			state_ = new TourParticipationState();
 		else if(s== "playtour") 
 			state_ = new TourPlayState();
+		else if(s == "tourcomp")
+			state_ = new TourComputerState();
 	}
 	public String getState() {
 		String state = null;
@@ -100,6 +99,14 @@ public class Player{
 			state = "questParticipant";
 		else if(state_ instanceof QuestPlayState)
 			state = "playQuest";
+		else if(state_ instanceof TourParticipationState)
+			state = "tourask";
+		else if(state_ instanceof TourPlayState)
+			state = "playtour";
+		else if(state_ instanceof TourComputerState)
+			state = "tourcomp";
+		
+		
 		return state;
 	}
 	
@@ -174,11 +181,23 @@ public class Player{
 	}
 	
 	public boolean existsActive(String cardName) {
-		for(int i = 0; i < playerActiveCards.size(); i++) {
-			if(playerActiveCards.get(i).getName().equalsIgnoreCase(cardName))
-				return true;
+		if(playerActiveCards.size() > 0) {
+			for(int i = 0; i < playerActiveCards.size(); i++) {
+				if(playerActiveCards.get(i).getName().equalsIgnoreCase(cardName))
+					return true;
+			}
 		}
 		return false;
+	}
+	
+	public AdventureCard findH(int id) {
+		if(playerHandCards.size() > 0) {
+			for(int i = 0; i < playerHandCards.size(); i++) {
+				if(playerHandCards.get(i).getID() == id)
+					return playerHandCards.get(i);
+			}
+		}
+		return null;
 	}
 	
 	//play card functionality based on current state of the player

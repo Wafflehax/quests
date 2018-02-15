@@ -1,6 +1,7 @@
 package com.comp_3004.quest_cards.Stories;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
@@ -34,6 +35,12 @@ public class Tour {
 	public TournamentCard getCurTour() { return tour; }
 	
 	
+	//getters setters 
+	public int getleftToPlayCard() { return leftToPlayCard; }
+	public Players getPlayers() { return players; }
+	
+	
+	//constructor
 	public Tour(Players p, TournamentCard c, AdventureDeck d) {
 		players = p;
 		tour = c;
@@ -46,6 +53,7 @@ public class Tour {
 		leftAsk = p.getNumPlayers();
 		participants = new ArrayList<Player>();
 		joiners = 0;
+		log.info(players.current().getName() + " Participate in Tour " + players.current().getTour().getCurTour().getName() + " ?");
 	}
 	
 	
@@ -130,8 +138,8 @@ public class Tour {
 			if(pairs.size() == 1) {
 				// one winner display and tour ends, resets turns to regular sequence before Tour
 				out += pairs.get(0).player.getName() + " won the tournament! Gained Sheilds: " + joiners + " + bonus(" + bonus + ") = " + (joiners+bonus);
-				pairs.get(0).player.addShields(joiners + bonus);
 				log.info(out);
+				pairs.get(0).player.addShields(joiners + bonus);
 				// discard amours, weapons
 				discardAmours();
 				discardWeapons();
@@ -206,19 +214,45 @@ public class Tour {
 	}
 	
 	public void discardAmours() {
+		LinkedList<String> oldState = setStatePlayers("tourcomp");
 		if(players.size() > 0) {
 			for(int i = 0; i < players.size(); i++) {
 				players.getPlayerAtIndex(i).discardAmoursActive(d);
 			}
 		}
+		setStatePlayers(oldState);
 	}
 	
 	public void discardWeapons() {
+		LinkedList<String> oldState = setStatePlayers("tourcomp");
 		if(players.size() > 0) {
 			for(int i = 0; i < players.size(); i++) {
 				players.getPlayerAtIndex(i).discardWeaponsActive(d);
 			}
 		}
+		setStatePlayers(oldState);
+	}
+	
+	
+	private void setStatePlayers(LinkedList<String> s) {
+		if(s.size() == players.size()) {
+			int i = 0;
+			for(Player pl: players.getPlayers()) {
+				pl.setState(s.get(i));
+				i++;
+			}	
+		}
+		else
+			log.info("Failed setting Player States");
+	}
+	
+	private LinkedList<String> setStatePlayers(String s){
+		LinkedList<String> oldState = new LinkedList<String>();
+		for(Player pl: players.getPlayers()) {
+			oldState.add(pl.getState());
+			pl.setState(s);
+		}
+		return oldState;
 	}
 	
 	
