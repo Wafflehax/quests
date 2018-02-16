@@ -76,7 +76,7 @@ public class QuestPlayState extends PlayerState {
 	}
 
 	//handle user input "done playing cards"
-	public boolean userInput(boolean b, Player p) {
+	public boolean userInput(int input, Player p) {
 		return p.getQuest().doneAddingCards();
 	}
 

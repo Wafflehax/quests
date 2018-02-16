@@ -72,9 +72,9 @@ public class Quest {
 	}
 	
 	//determines who will sponsor the quest
-	public boolean questSponsorship(Player p, boolean b) {
+	public boolean questSponsorship(Player p, int input) {
 		//player declines sponsoring the quest
-		if(!b) {
+		if(input == 0) {
 			log.info(p.getName()+" declined sponsoring the quest");
 			players.next();
 			numDeclines++;

@@ -11,6 +11,6 @@ public abstract class PlayerState {
 	//methods will have different functionality in different states
 	public abstract boolean playCard(AdventureCard c, Player p);		//play cards
 	public abstract boolean discardCard(AdventureCard c, AdventureDeck d, Player p);	//discard cards
-	public abstract boolean userInput(boolean b, Player p);								//used in yes/no situations (confirm participation in...)
+	public abstract boolean userInput(int input, Player p);								//used in yes/no situations (confirm participation in...)
 
 }
