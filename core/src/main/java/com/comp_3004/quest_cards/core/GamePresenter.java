@@ -138,15 +138,14 @@ public class GamePresenter extends Group{
 	  		}
   	}
   
-  	//takes user input from clicks on dialog box( 1: yes/OK 0: no )
-  	public void userInput(int b) {
-  		if(b == 1) {
-  			if(!model.getPlayers().current().userInput(true))
-  				model.beginTurn();
-  		}
-  		else if(b == 0) {
-  			if(!model.getPlayers().current().userInput(false))
-  				model.beginTurn();
-  		}
+  	/* takes user input from clicks on dialog box
+  	 * result of input depends on player state
+  	 * if in BidState, input is the number the player is bidding
+  	 * if in sponsor/participate state, 1:yes 0: no
+  	 * if in QuestPlay state, 1: Done playing cards
+  	 */
+  	public void userInput(int input) {
+		if(!model.getPlayers().current().userInput(input))
+			model.beginTurn();
   	}
 }

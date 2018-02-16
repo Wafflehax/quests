@@ -186,8 +186,8 @@ public class Player{
 	}
 	
 	//do something based on user input (Yes/No/Done)
-	public boolean userInput(boolean b) {
-		return state_.userInput(b, this);
+	public boolean userInput(int input) {
+		return state_.userInput(input, this);
 	}
 	
 	//during quest, reveals cards played in a stage
