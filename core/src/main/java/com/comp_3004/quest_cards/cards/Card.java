@@ -18,6 +18,6 @@ public abstract class Card {
 	public int getID() { return this.ID; }
 
 	//abstract methods
-	abstract public void printCard();		//prints name, stats, type, and ID of card
+	abstract public String printCard();		//prints name, stats, type, and ID of card
 
 }

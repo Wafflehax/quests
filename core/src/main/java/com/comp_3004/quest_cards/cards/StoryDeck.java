@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
 
+import org.apache.log4j.Logger;
+
 public class StoryDeck extends Deck {
 	
 	//attributes
 	private Stack<StoryCard> deck;				//deck of cards
 	private Stack<StoryCard> discard;			//discard pile
 	private CardSpawner spawner;					//spawns cards
+	static Logger log = Logger.getLogger(StoryDeck.class); //log4j logger
 	
 	//constructors
 	public StoryDeck() {							//default constructor
@@ -78,23 +81,23 @@ public class StoryDeck extends Deck {
 	}
 	
 	public void printDeck() {						//prints cards in the deck
-		System.out.printf("Story Deck:\n");
-		System.out.printf("%-40s%-20s%s\n", "Name", "Type", "ID");
-		System.out.printf("================================================================\n");
+		log.info("Story Deck: ");
+		log.info(String.format("%-40s%s", "Name", "ID"));
+		log.info("=============================================");
 		for(StoryCard s : deck) {
-			s.printCard();
+			log.info(s.printCard());
 		}
-		System.out.printf("Number of cards: %s\n", deck.size());
+		log.info("Number of cards: "+deck.size());
 	}
 	
 	public void printDiscard() {						//prints cards in the discard
-		System.out.printf("Story Discard:\n");
-		System.out.printf("%-40s%s\n", "Name", "Type");
-		System.out.printf("==================================\n");
+		log.info("Story Discard: ");
+		log.info(String.format("%-40s%s", "Name", "ID"));
+		log.info("=============================================");
 		for(StoryCard s : discard) {
-			s.printCard();
+			log.info(s.printCard());
 		}
-		System.out.printf("Number of cards: %s\n", discard.size());
+		log.info("Number of cards: "+discard.size());
 		
 	}
 	

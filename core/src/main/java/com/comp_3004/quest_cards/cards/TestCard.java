@@ -8,10 +8,8 @@ public class TestCard extends AdventureCard {
 	}
 	
 	//methods
-	public void printCard() {			//prints the name, type, and ID of the cards
-		System.out.printf("%-30s", name);
-		System.out.printf("%-20s", getClass().getSimpleName());
-		System.out.printf("%s\n", getID());
+	public String printCard() {			//prints the name, type, and ID of the cards
+		return String.format("%-30s%s", name, getID());
 	}
 
 }

@@ -20,14 +20,11 @@ public class FoeCard extends AdventureCard {
 	public int getAltBattlePts() { return this.altBattlePts; }
 	
 	//methods
-	public void printCard() {				//prints the name, battlepoints/altbattlepoints, type, and ID of card
-		System.out.printf("%-15s", name);
+	public String printCard() {				//prints the name, battlepoints/altbattlepoints, and ID of card
 		if(altBattlePts != 0)
-			System.out.printf("%-15s", battlePts + "/" + altBattlePts);
+			return String.format("%-15s%-15s%s", name, battlePts + "/" + altBattlePts, getID());
 		else
-			System.out.printf("%-15s", battlePts);
-		System.out.printf("%-20s", getClass().getSimpleName());
-		System.out.printf("%s\n", getID());
+			return String.format("%-15s%-15s%s", name, battlePts, getID());
 	}
 
 }

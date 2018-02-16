@@ -256,13 +256,13 @@ public class Player{
 	}
 	
 	public void printHand() {
-		System.out.printf("Hand:\n");
-		System.out.printf("%-15s%-15s%s\n", "Name", "Battle Points", "Type");
-		System.out.printf("==================================\n");
+		log.info(name+"'s Hand: ");
+		log.info(String.format("%-15s%-15s%s", "Name", "Battle Points", "ID"));
+		log.info("==================================");
 		for(AdventureCard a : this.playerHandCards) {
-			a.printCard();
+			log.info(a.printCard());
 		}
-		System.out.printf("Number of cards: %s\n", this.playerHandCards.size());
+		log.info("Number of cards: "+this.playerHandCards.size());
 	}
 	
 	private String rankS() {
@@ -278,13 +278,13 @@ public class Player{
 	}
 	
 	public void printActive() {
-		System.out.printf("Active:\n");
-		System.out.printf("%-15s%-15s%s\n", "Name", "Battle Points", "Type");
-		System.out.printf("==================================\n");
+		log.info(name+"'s Active: ");
+		log.info(String.format("%-15s%-15s%s", "Name", "Battle Points", "ID"));
+		log.info("==================================");
 		for(AdventureCard a : this.playerActiveCards) {
-			a.printCard();
+			log.info(a.printCard());
 		}
-		System.out.printf("Number of cards: %s\n", this.playerActiveCards.size());
+		log.info("Number of cards: "+this.playerActiveCards.size());
 	}
 	
 	public void printStage() {

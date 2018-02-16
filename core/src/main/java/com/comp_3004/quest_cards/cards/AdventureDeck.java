@@ -3,12 +3,17 @@ package com.comp_3004.quest_cards.cards;
 import java.util.Collections;
 import java.util.Stack;
 
+import org.apache.log4j.Logger;
+
+import core.QuestTest;
+
 public class AdventureDeck extends Deck {
 	
 	//attributes
 	private Stack<AdventureCard> deck;				//deck of cards
 	private Stack<AdventureCard> discard;			//discard pile
 	private CardSpawner spawner;						//spawns cards
+	static Logger log = Logger.getLogger(AdventureDeck.class); //log4j logger
 
 	//constructors
 	public AdventureDeck() {							//default constructor
@@ -69,23 +74,23 @@ public class AdventureDeck extends Deck {
 	}
 	
 	public void printDeck() {					//prints the cards in the deck
-		System.out.printf("Adventure Deck:\n");
-		System.out.printf("%-15s%-15s%-20s\n", "Name", "Battle Points", "Type", "ID");
-		System.out.printf("==============================================================\n");
+		log.info("Adventure Deck: ");
+		log.info(String.format("%-15s%-15s%-20s", "Name", "Battle Points", "ID"));
+		log.info("========================================");
 		for(AdventureCard a : this.deck) {
-			a.printCard();
+			log.info(a.printCard());
 		}
-		System.out.printf("Number of cards: %s\n", this.deck.size());
+		log.info("Number of cards: "+this.deck.size());
 	}
 	
 	public void printDiscard() {					//prints the cards in the discard pile
-		System.out.printf("Adventure Discard:\n");
-		System.out.printf("%-15s%-15s%s\n", "Name", "Battle Points", "Type");
-		System.out.printf("==================================\n");
+		log.info("Adventure Discard: ");
+		log.info(String.format("%-15s%-15s%s", "Name", "Battle Points", "Type"));
+		log.info("========================================");
 		for(AdventureCard a : this.discard) {
-			a.printCard();
+			log.info(a.printCard());
 		}
-		System.out.printf("Number of cards: %s\n", this.discard.size());
+		log.info("Number of cards: "+this.discard.size());
 	}
 	
 	//constructor initialization methods
