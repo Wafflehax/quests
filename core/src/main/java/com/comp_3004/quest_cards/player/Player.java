@@ -179,15 +179,11 @@ public class Player{
 		return false;
 	}
 	
-	//play card functionality based on current state of the player
-	public boolean playCard(AdventureCard c) {
-		return state_.playCard(c, this);
-	}
 	public boolean playCard(AdventureCard c, int stageNum) {
 		if(state_ instanceof SponsorState)
 			return ((SponsorState)state_).playCard(c, this, stageNum);
 		else
-			return false;
+			return state_.playCard(c, this);
 	}
 	
 	//discard a card from hand or play

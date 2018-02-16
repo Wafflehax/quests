@@ -128,11 +128,11 @@ public class GameModel{
 	
 	public boolean playCard(Card c) {
 		if(c instanceof WeaponCard) {
-			return players.current().playCard((WeaponCard)c);
+			return players.current().playCard((WeaponCard)c, -1);
 		}else if(c instanceof AmourCard) {
-			return players.current().playCard((AmourCard)c);
+			return players.current().playCard((AmourCard)c, -1);
 		}else if(c instanceof AllyCard) {
-			return players.current().playCard((AllyCard)c);
+			return players.current().playCard((AllyCard)c, -1);
 		}else {
 			log.info("playCard(Card c):Error could not cast to proper card to play");
 			return false;

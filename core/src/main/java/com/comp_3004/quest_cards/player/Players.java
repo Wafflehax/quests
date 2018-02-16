@@ -97,6 +97,14 @@ public class Players{
 		return players.get(position);
 	}
 	
+	public void setCurrent(Player p) {
+		for(int i=0; i<players.size() ; i++) {
+			if(players.get(i) == p)
+				position = i;
+		}
+			
+	}
+	
 	public void discardAllWeapons(AdventureDeck d) {
 		for(int i = 0; i < players.size(); i++) {
 			players.get(i).discardWeaponsActive(d);
