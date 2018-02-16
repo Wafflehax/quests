@@ -79,4 +79,14 @@ public class Assets {
       public static String SWORD = "W_Sword";
     }
   }
+
+  public static class Strings {
+
+    public static class Buttons {
+      public static String ACKNOWLEDGE = "Continue";
+      public static String TRUE = "Yes";
+      public static String FALSE = "No";
+    }
+
+  }
 }

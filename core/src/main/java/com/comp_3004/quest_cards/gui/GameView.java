@@ -3,8 +3,10 @@ package com.comp_3004.quest_cards.gui;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class GameView extends Group {
@@ -18,6 +20,8 @@ public class GameView extends Group {
   public Image storyDeckDiscardPile;
   public Image adventureDeckDiscardPile;
   public Image adventureDeck;
+  public AnnouncementDialog announcementDialog;
+  public BooleanDialog questionDialog;
 
 
   private Skin skin;
@@ -34,6 +38,7 @@ public class GameView extends Group {
     adventureDeck = new Image();
     adventureDeckDiscardPile = new Image();
     playerView = new PlayerView();
+    announcementDialog = new AnnouncementDialog(skin);
 
     //Add widgets to table
 
@@ -43,8 +48,6 @@ public class GameView extends Group {
     addActor(adventureDeck);
     addActor(adventureDeckDiscardPile);
     addActor(playerView);
-    addActor(new Dialog("Hello", skin));
-
   }
 
   @Override
@@ -84,6 +87,9 @@ public class GameView extends Group {
         storyDeckDiscardPile.getY(),
         Config.CardView.CARD_WIDTH,
         Config.CardView.CARD_HEIGHT);
+
+    announcementDialog.setSize(Config.GameView.Modal.WIDTH, Config.GameView.Modal.HEIGHT);
+    announcementDialog.setCenterPosition(getWidth() / 2, getHeight() / 2);
   }
 
   public GameView displayHero(TextureRegion hero) {
@@ -144,6 +150,44 @@ public class GameView extends Group {
   public GameView setShieldsTexture(TextureRegion texture) {
     playerView.setShieldsTexture(texture);
     return this;
+  }
+
+  public void displayAnnouncementDialog(String title, String message, final Callback action){
+
+    announcementDialog.setTitle(title);
+    announcementDialog.text(message);
+    announcementDialog.setActionListener(new ClickListener(){
+
+      @Override
+      public void clicked(InputEvent event, float x, float y){
+        action.call();
+        announcementDialog.remove();
+      }
+    });
+
+    addActor(announcementDialog);
+
+  }
+
+  public void displayQuestionDialog(String title, String message, final Callback action){
+
+    questionDialog.setActionTrue(new ClickListener(){
+
+      @Override
+      public void clicked(InputEvent event, float x, float y){
+        action.call(true);
+        questionDialog.remove();
+      }
+    });
+
+    questionDialog.setActionTrue(new ClickListener(){
+
+      @Override
+      public void clicked(InputEvent event, float x, float y){
+        action.call(false);
+        questionDialog.remove();
+      }
+    });
   }
 
 }
