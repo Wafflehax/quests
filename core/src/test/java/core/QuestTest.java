@@ -43,11 +43,6 @@ public class QuestTest extends TestCase{
 		GamePresenter pres = new GamePresenter(game);
 		pres.getModel().beginTurn();
 		
-		for(Player p : game.getPlayers().getPlayers()) {
-			System.out.println(p.getName());
-			p.printHand();
-		}
-		
 		//turn 1
 		assertEquals("Player 0", game.getcurrentTurn().getName());
 		for(int i=0; i<game.getNumPlayers(); i++) {
@@ -145,11 +140,6 @@ public class QuestTest extends TestCase{
 		GamePresenter pres = new GamePresenter(game);
 		pres.getModel().beginTurn();
 		
-		for(Player p : game.getPlayers().getPlayers()) {
-			System.out.println(p.getName());
-			p.printHand();
-		}
-		
 		//turn 1
 		System.out.println("Sponsor Quest?");
 		pres.userInput(0);
@@ -192,33 +182,88 @@ public class QuestTest extends TestCase{
 		assertEquals("Player 1", game.getcurrentTurn().getName());	
 	}
 	
-	//named foe case - 3 way tie
-	/*public void testQuest2() {
+	public void testQuest3() {
 		//set up story deck
-		String[] sd = {"boarHunt"};
+		log.info("QUEST TEST 3");
+		log.info("===================================");
+		
+		String[] sd = {"boarHunt", "boarHunt", "boarHunt"};
 		StoryDeck storyDeck = new StoryDeck(sd);
 		
 		//set up adventure deck
 		AdventureDeck advDeck = new AdventureDeck();
 		advDeck.shuffle();
 		
-		//set up hands
-		String[] hand0 = {"dagger", "sword"};
-		String[] hand1 = {"dagger", "sword"};
-		String[] hand2 = {"thieves", "valor", "boar", "valor"};
-		String[] hand3 = {"dagger", "sword"};
-		
 		GameModel game;
-		
 		game = new GameModel(4, 0, advDeck, storyDeck);
+		
+		//set up hands
+		String[] hand0 = {"dagger", "lance"};
+		String[] hand1 = {"dagger", "lance", "tristan", "arthur", "giant", "saxonKnight"};
+		String[] hand2 = {"thieves", "dagger", "boar", "valor"};
+		String[] hand3 = {"dagger", "lance"};
 		game.getPlayerAtIndex(0).setHand(hand0);
 		game.getPlayerAtIndex(1).setHand(hand1);
 		game.getPlayerAtIndex(2).setHand(hand2);
 		game.getPlayerAtIndex(3).setHand(hand3);
 		
-		ByteArrayInputStream in = new ByteArrayInputStream("0\n1\n1\n0\n0\n1\n1\n1\n0\n1\n1\n1\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0".getBytes());
-		System.setIn(in);
-		game.questTest();
-	}*/
+		GamePresenter pres = new GamePresenter(game);
+		pres.getModel().beginTurn();
+		
+		for(Player p : game.getPlayers().getPlayers())
+			p.printHand();
+		
+		//turn 1
+		System.out.println("Sponsor Quest?");
+		pres.userInput(0);
+		pres.userInput(0);
+		pres.userInput(1);		//player 2 sponsors quest
+		
+		//player 2 sets up quest
+		game.getPlayers().current().printHand();
+		pres.playCard(413, 0);
+		pres.playCard(416, 1);
+		pres.userInput(1);
+		
+		//players confirm participation
+		pres.userInput(1);
+		pres.userInput(1);
+		pres.userInput(1);
+		for(Player p : game.getQuest().getPlayers()) {
+			if(p != game.getQuest().getSponsor())
+				assert(game.getQuest().getParticipants().contains(p));
+		}
+			
+		
+		//players play cards for stage 0
+		pres.playCard(417, -1);
+		pres.userInput(1);
+		assertEquals("Dagger", game.getPlayerAtIndex(3).getStage().get(0).getName());
+		assertEquals(417, game.getPlayerAtIndex(3).getStage().get(0).getID());
+		
+		//player 0 and 1 dont play any cards
+		pres.userInput(1);
+		pres.userInput(1);
+		
+		//stage 1 : test
+		pres.userInput(3);
+		pres.userInput(5);
+		pres.userInput(4);
+		pres.userInput(6);
+		pres.userInput(-1);
+		pres.userInput(-1);
+		//player 1 wins the bidding war
+		
+		//player 1 discards cards
+		pres.discardCard(407);
+		pres.discardCard(408);
+		pres.discardCard(409);
+		pres.discardCard(410);
+		pres.discardCard(411);
+		pres.discardCard(412);
+		
+		//assertEquals("Player 1", game.getcurrentTurn().getName());	
+	}
+	
 
 }

@@ -81,6 +81,8 @@ public class Player{
 			state_ = new QuestParticipationState();
 		else if(s == "playQuest")
 			state_ = new QuestPlayState();
+		else if(s == "bid")
+			state_ = new BidState();
 		}
 	public String getState() {
 		String state = null;

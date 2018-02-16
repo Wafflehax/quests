@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.comp_3004.quest_cards.Stories.Quest;
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.QuestCard;
 import com.comp_3004.quest_cards.gui.Assets;
@@ -31,6 +32,7 @@ public class GamePresenter extends Group{
   TextureAtlas backgrounds;
 
   private AssetManager manager;
+  static Logger log = Logger.getLogger(GamePresenter.class); //log4j logger
 
   //used in JUnit tests
   public GamePresenter(GameModel m) {
@@ -131,11 +133,16 @@ public class GamePresenter extends Group{
 	  	for(AdventureCard card : model.getPlayers().current().getHand())
 	  		if(card.getID() == cardID)
 	  			cardToDiscard = card;
-	  	if(cardToDiscard != null)
+	  	if(cardToDiscard != null) {
 	  		if(model.getPlayers().current().discardCard(cardToDiscard, model.getAdvDeck())) {
 	  			int temp;
 	  			//then update view with what changed in the model
 	  		}
+	  		else
+	  			model.beginTurn();
+	  	}
+	  	else
+	  		log.info(cardID+"  not found in "+model.getPlayers().current().getName()+"'s hand");
   	}
   
   	/* takes user input from clicks on dialog box

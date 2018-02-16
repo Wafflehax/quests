@@ -33,6 +33,7 @@ public class Quest {
 	private int numDeclines;
 	private AdventureCard stageCard;
 	private int currentStage;
+	private TestBids test;
 
 	//constructor
 	public Quest(QuestCard q, Players p, AdventureDeck d) {
@@ -54,6 +55,7 @@ public class Quest {
 		this.advDeck = d;
 		this.numDeclines = 0;
 		this.currentStage = 0;
+		this.test = null;
 		log.info(players.current().getName() + " drew quest " + quest.getName());
 	}
 	
@@ -65,6 +67,7 @@ public class Quest {
 	public int getNumDeclines() { return this.numDeclines; }
 	public ArrayList<Player> getPlayers() { return this.players.getPlayers(); }
 	public ArrayList<Player> getParticipants() { return this.participants; }
+	public TestBids getTest() { return this.test; }
 	
 	//methods
 	public void increaseNumDeclines() {
@@ -240,7 +243,10 @@ public class Quest {
 		
 		//if test - implement later (move on to next stage)
 		if(stageCard instanceof TestCard) {
-			System.out.println("Test cards not yet implemented, moving to next stage...");
+			test = new TestBids(participants, players, (TestCard)stageCard, sponsor);
+			for(Player p : participants)
+				p.setState("bid");
+			test.start();
 		}
 	}
 	

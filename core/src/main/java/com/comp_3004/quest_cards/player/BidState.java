@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
+import com.comp_3004.quest_cards.cards.AdventureCard.State;
 
 public class BidState extends PlayerState {
 	
@@ -15,14 +16,27 @@ public class BidState extends PlayerState {
 	}
 	
 	public boolean discardCard(AdventureCard c, AdventureDeck d, Player p) {
-		//player chooses cards to discard based off of bid number
+		if(c.getOwner() == p && c.getState() == State.HAND) {
+			if(p.getHand().contains(c)) {
+				p.getHand().remove(c);
+				log.info(p.getName() + " discarded " + c.getName() + " from hand");
+			}
+			d.discardCard(c);
+			c.setState(State.DISCARD);
+			c.setOwner(null);
+			if(p.getQuest().getTest().discardedACard())
+				return true;
+			else
+				return false;
+		}
+		log.info(p.getName()+" does not have "+c.getName()+" in their hand");
 		return false;
 	}
 
 
 	public boolean userInput(int input, Player p) {
-		// TODO get current amount player wants to bid, update TestBids with player bid
-		return false;
+		p.getQuest().getTest().placeBid(input, p);
+		return true;
 	}
 
 }
