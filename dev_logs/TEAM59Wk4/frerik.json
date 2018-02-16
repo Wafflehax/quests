@@ -1,0 +1,26 @@
+{
+  "Code": [
+    “F1/F2 Adventure/Story cards: added unique IDs to each card when created”,
+    “F1/F2 Adventure/Story cards: created CardSpawner class to handle card creation”,
+    “F3/F4 Adventure/Story deck: added constructors to create decks from an array of card names”,
+    “F5 Player : created methods to set player hand/active cards from an array of card names”,
+    “F5 Player : implemented state design pattern for player states”,
+    "F10.a MVP: implemented userInput method in presenter”,
+    "F10.b MVP: implemented playCard method in presenter ”,
+    "F10.c MVP: implemented discardCard method in presenter”,
+    "F16 Event - Kings Call to Arms: implemented”,
+    “F17 Event - Kings Recognition: implemented”,
+    “F18.a Sponsoring/setting up a Quest: implemented”,
+    “F18.b Sponsoring/setting up a Quest: handling named foes”,
+    “F19 Playing a Quest: implemented”,
+    “F20 Quest end/winning conditions: implemented”
+  ],
+  "Research": [“Mediator Design Pattern”],
+  "NextWeek": [
+    "F18-20 Quests - Create additional testing scenarios”,
+    “F21 Allies with conditional battle points”,
+    “F22 Tests/bids”,
+    “F23 Allies with free/conditional bids”
+  ],
+  "Hours": 33
+}

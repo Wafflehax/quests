@@ -127,7 +127,9 @@ public class QuestStage {
 			p.getHand().add(card);
 			System.out.printf("Sending %s back to %s's hand\n", card.getName(), p.getName());
 		}
+		battlePoints = 0;
 		cards.clear();
+		p.printHand();
 	}
 	
 	public void discardCards(AdventureDeck adv) {

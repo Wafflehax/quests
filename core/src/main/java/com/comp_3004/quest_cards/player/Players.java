@@ -79,6 +79,12 @@ public class Players{
 		return position;
 	}
 	
+	public Player peekNext() {
+		if(position == endIndex)
+			return players.get(0);
+		else
+			return players.get(position+1);
+	}
 	public Player next() {
 		return players.get(nextIndex());
 	}

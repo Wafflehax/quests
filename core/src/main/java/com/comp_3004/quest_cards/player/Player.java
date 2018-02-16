@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 
+import com.comp_3004.quest_cards.Stories.Quest;
 import com.comp_3004.quest_cards.cards.*;
 import com.comp_3004.quest_cards.cards.AdventureCard.State;
 
@@ -38,7 +39,7 @@ public class Player{
 	private LinkedList<AdventureCard> playerHandCards;
 	private LinkedList<AdventureCard> playerActiveCards;
 	private LinkedList<AdventureCard> playerStageCards;
-	private boolean participateQuest;
+	private Quest currentQuest;
 	public volatile boolean participateTournament;
 	private PlayerState state_;
 	
@@ -50,6 +51,7 @@ public class Player{
 		this.playerHandCards = new LinkedList<AdventureCard>();
 		this.playerActiveCards = new LinkedList<AdventureCard>();
 		this.playerStageCards = new LinkedList<AdventureCard>();
+		this.currentQuest = null;
 		this.state_ = new NormalState();
 	}
 	
@@ -67,6 +69,8 @@ public class Player{
 	public LinkedList<AdventureCard> getStage() { return this.playerStageCards; }
 	public boolean getKingsRecognitionBonus() { return this.kingsRecognitionBonus; }
 	public void setKingsRecognitionBonus(boolean b) { this.kingsRecognitionBonus = b; }
+	public void setQuest(Quest q) { this.currentQuest = q; }
+	public Quest getQuest() { return this.currentQuest; }
 	
 	public void setState(String s) { 
 		if(s == "normal")
@@ -74,8 +78,22 @@ public class Player{
 		else if(s == "sponsor")
 			state_ = new SponsorState();
 		else if(s == "questParticipant")
-			state_ = new QuestParticipantState();
+			state_ = new QuestParticipationState();
+		else if(s == "playQuest")
+			state_ = new QuestPlayState();
 		}
+	public String getState() {
+		String state = null;
+		if(state_ instanceof NormalState)
+			state = "normal";
+		else if(state_ instanceof SponsorState)
+			state = "sponsor";
+		else if(state_ instanceof QuestParticipationState)
+			state = "questParticipant";
+		else if(state_ instanceof QuestPlayState)
+			state = "playQuest";
+		return state;
+	}
 	
 	public void setHand(String[] cards) { 		//used in testing
 		CardSpawner spawner = new CardSpawner();
@@ -159,6 +177,22 @@ public class Player{
 	public boolean playCard(AdventureCard c) {
 		return state_.playCard(c, this);
 	}
+	public boolean playCard(AdventureCard c, int stageNum) {
+		if(state_ instanceof SponsorState)
+			return ((SponsorState)state_).playCard(c, this, stageNum);
+		else
+			return false;
+	}
+	
+	//discard a card from hand or play
+	public boolean discardCard(AdventureCard c, AdventureDeck d) {
+		return state_.discardCard(c, d, this);
+	}
+	
+	//do something based on user input (Yes/No/Done)
+	public boolean userInput(boolean b) {
+		return state_.userInput(b, this);
+	}
 	
 	//during quest, reveals cards played in a stage
 	public void revealStageCards() {
@@ -170,23 +204,7 @@ public class Player{
 		playerStageCards.clear();
 	}
 	
-	//discard a card from hand or play
-	public boolean discardCard(AdventureCard c, AdventureDeck d) {
-		if(c.getOwner() == this && (c.getState() == State.PLAY || c.getState() == State.HAND)) {
-			if(playerActiveCards.contains(c)){
-				playerActiveCards.remove(c);
-				log.info(name + " discarded " + c.getName() + " from active");
-			}
-			else if(playerHandCards.contains(c)) {
-				playerHandCards.remove(c);
-				log.info(name + " discarded " + c.getName() + " from hand");
-			}
-			d.discardCard(c);
-			c.setState(State.DISCARD);
-			c.setOwner(null);
-		}
-		return false;
-	}
+	
 	
 	//discards all the players active weapsons
 	public void discardWeaponsActive(AdventureDeck d) {

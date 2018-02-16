@@ -15,6 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.comp_3004.quest_cards.cards.AdventureCard;
+import com.comp_3004.quest_cards.cards.QuestCard;
 import com.comp_3004.quest_cards.gui.Assets;
 import com.comp_3004.quest_cards.gui.CardView;
 import com.comp_3004.quest_cards.gui.Config;
@@ -34,7 +36,16 @@ public class GamePresenter extends Group {
   private AssetManager manager;
   private Skin skin;
 
+  //used in JUnit tests
+  public GamePresenter(GameModel m) {
 
+	    this.parent = null;
+	    manager = null;
+	    view = null;
+	    model = m;
+	  }
+  public GameModel getModel() { return this.model; }
+  
   public GamePresenter(QuestCards parent) {
 
     this.parent = parent;
@@ -89,4 +100,68 @@ public class GamePresenter extends Group {
 
     return view;
   }
+
+  @Override
+  public void draw(Batch batch, float alpha) {
+    drawChildren(batch, alpha);
+  }
+
+
+  @Override
+  public void act(float delta) {
+    super.act(delta);
+  }
+  
+  	//temporary methods to use for model testing
+  	//takes cardID as input from view, finds corresponding card in model
+  	public void playCard(int cardID) {
+	  	AdventureCard cardToPlay = null;
+	  	for(AdventureCard card : model.getPlayers().current().getHand())
+	  		if(card.getID() == cardID)
+	  			cardToPlay = card;
+	  	if(cardToPlay == null)
+	  		System.out.println("Card not found");
+	  	if(cardToPlay != null)
+	  		if(model.getPlayers().current().playCard(cardToPlay)) {
+	  			//then update view with what changed in the model
+	  		}
+  	}
+  //had to overload for sponsoring a quest as you can add cards to different stages :(
+  	public void playCard(int cardID, int stageNum) {
+	  	AdventureCard cardToPlay = null;
+	  	System.out.println(model.getPlayers().current().getName());
+	  	for(AdventureCard card : model.getPlayers().current().getHand())
+	  		if(card.getID() == cardID)
+	  			cardToPlay = card;
+	  	if(cardToPlay == null)
+	  		System.out.println("Card ID not found");
+	  	if(cardToPlay != null)
+	  		if(model.getPlayers().current().playCard(cardToPlay, stageNum)) {
+	  			//then update view with what changed in the model
+	  		}
+  	}
+  	
+  	//takes cardID as input from view, finds corresponding card in model
+  	public void discardCard(int cardID) {
+  		AdventureCard cardToDiscard = null;
+	  	for(AdventureCard card : model.getPlayers().current().getHand())
+	  		if(card.getID() == cardID)
+	  			cardToDiscard = card;
+	  	if(cardToDiscard != null)
+	  		if(model.getPlayers().current().discardCard(cardToDiscard, model.getAdvDeck())) {
+	  			int temp;
+	  			//then update view with what changed in the model
+	  		}
+  	}
+  
+  	public void userInput(int b) {
+  		if(b == 1) {
+  			if(!model.getPlayers().current().userInput(true))
+  				model.beginTurn();
+  		}
+  		else if(b == 0) {
+  			if(!model.getPlayers().current().userInput(false))
+  				model.beginTurn();
+  		}
+  	}
 }

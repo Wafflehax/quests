@@ -32,7 +32,7 @@ import utils.IntPlayerPair;
 import utils.utils;
 
 public class TournamentTest extends TestCase{
-	public void testTourInit(){
+	public void testTourInit(){			
 		
 		//test TourInit pushes right things on state stack
 		GameModel m = new GameModel(4);   // init with 4 players
@@ -88,7 +88,7 @@ public class TournamentTest extends TestCase{
 		ac = m.state.pop().getClass().getName(); // player turn
 		assertEquals(ac,"com.comp_3004.quest_cards.core.states.TourRoundEndEvaluation");
 		
-		//check TourStartFirstTime does not proceed does not have required amount of players
+		//check TourStartFirstTime does not proceed, does not have required amount of players
 		//have 1 player wanting to play
 		m = new GameModel(4);
 		c = new GameController(m);
@@ -108,7 +108,6 @@ public class TournamentTest extends TestCase{
 		
 		//static cards
 		AdventureCard sword1 = new WeaponCard("Sword", 10);
-		//AdventureCard sword2 = new WeaponCard("Sword", 10);
 		AdventureCard amour1 = new AmourCard();
 		AdventureCard amour2 = new AmourCard();
 		AdventureCard Theives1 = new FoeCard("Thieves", 5);
@@ -166,12 +165,9 @@ public class TournamentTest extends TestCase{
 		String ammour[] = {"amour","amour","amour","amour","amour","amour","amour","amour","amour","amour","amour","amour","amour"};
 		p3.setActiveHand(ammour);
 		assertEquals(false, c.doneTurn());
-		
 	}	
 	
-	public void testTour2(){
-		
-		
+	public void testTour2() {			
 		GameModel m = new GameModel(4);   // init with 4 players
 	    GameController c = new GameController(m);
 		TournamentCard t = new TournamentCard("Tournament at Camelot", 3);
@@ -193,22 +189,127 @@ public class TournamentTest extends TestCase{
 		c.no();
 		assertEquals(false, c.handPress(amour1));
 
-		
-		
 		//testing calculation of battle points
 		//no special abilities (dependent cards), Weapons,Ally,Amour
 		TourRoundEndEvaluation ev = new TourRoundEndEvaluation(c); 
-		LinkedList<AdventureCard> cards = new LinkedList<AdventureCard>();
 		Player p0 = new Player("Player 0");
 		String cards1[] = {"horse","sword","excalibur","lance","dagger","battleAx","pellinore","merlin"};
 		p0.setActiveHand(cards1);
 	
-		
 		assertEquals(105 ,ev.calcBattlePoints(p0));
-		//testing calculating battle points
+		//testing calculating battle points	
 	}
 	
+	public void testTour3() {
+		//tests both weapons and amours and discarded at the end of a tournament with a single winer at 1 round
+		GameModel m = new GameModel(4);   // init with 4 players
+	    GameController c = new GameController(m);
+		TournamentCard t = new TournamentCard("Tournament at Camelot", 3);
+		m.setStory(t);
+		m.pushSt(new TourInit(c));
+		m.StateMsg();
+		
+		Player p0 = c.m.getcurrentTurn();  
+		WeaponCard horse = new WeaponCard("Horse", 10);
+		AmourCard amour = new AmourCard();
+		LinkedList<AdventureCard> cardsp0 = new LinkedList<AdventureCard>();
+		cardsp0.add(horse);
+		cardsp0.add(amour);
+		amour.setOwner(p0);
+		horse.setOwner(p0);
+		p0.setHand(cardsp0);
+		
+		c.yes();
+		c.doneTurn();
+		c.yes();
+		c.disCardPress(m.getPlayers().current().getHand().getFirst());
+		c.doneTurn();
+		c.no();
+		c.no();
+		
+		//p0,p1 playing Tour
+		c.handPress(horse);
+		c.doneTurn();
+		//p1 plays nothing
+		c.doneTurn();
+		assertEquals(false, p0.getActive().contains(horse));
+		assertEquals(false, p0.getActive().contains(amour));		
+	}
 	
-	
+	public void testTour4() {
+		//tests only weapons discarded at a tie during round 1 and not amours
+		//tests both weapons,amours discarded at round 2, round 2 is end of tournament no matter tie, single winner
+		
+		
+		//testing tie first stage only weapons discarded not amours
+		GameModel m = new GameModel(4);   // init with 4 players
+	    GameController c = new GameController(m);
+		TournamentCard t = new TournamentCard("Tournament at Camelot", 3);
+		m.setStory(t);
+		m.pushSt(new TourInit(c));
+		m.StateMsg();
+		
+		Player p0 = c.m.getcurrentTurn();  
+		Player p1;
+		WeaponCard axe = new WeaponCard("Battle-Ax", 15);
+		WeaponCard dagger = new WeaponCard("Dagger", 5);		
+		AmourCard amour = new AmourCard();
+		WeaponCard lance = new WeaponCard("Lance", 20);
+		LinkedList<AdventureCard> cardsp0 = new LinkedList<AdventureCard>();
+		LinkedList<AdventureCard> cardsp1 = new LinkedList<AdventureCard>();
+		
+		dagger.setOwner(p0);
+		amour.setOwner(p0);
+		lance.setOwner(p0);
+		cardsp0.add(dagger);
+		cardsp0.add(amour);
+		cardsp0.add(lance);
+		p0.setHand(cardsp0);
+		
+		//set p0 to play amour, dagger
+		//p1 plays battle-axe , which ties them and check right cards discarded
+		
+		
+		c.yes();
+		c.doneTurn();
+		
+		p1 = m.getcurrentTurn();
+		axe.setOwner(p1);
+		cardsp1.add(axe);
+		p1.setHand(cardsp1);
+		
+		
+		c.yes();
+		c.disCardPress(m.getPlayers().current().getHand().getFirst());
+		c.doneTurn();
+		c.no();
+		c.no();
+		
+		//p0,p1 playing Tour
+		
+		//make tie
+		c.handPress(amour);
+		c.handPress(dagger);
+		c.doneTurn();
+		c.handPress(axe);
+		c.doneTurn();
+		
+		//test amour stays and weapons gone
+		assertEquals(true, p0.getActive().contains(amour));
+		assertEquals(false, p0.getActive().contains(dagger));
+		assertEquals(false, p1.getActive().contains(axe));
+		
+		//p0 plays lance and still has amour
+		c.handPress(lance);
+		c.doneTurn();
+		
+		//p1 plays nothing
+		c.doneTurn();
+		
+		
+		//test amours and weapons are gone
+		assertEquals(false, p0.getActive().contains(amour));
+		assertEquals(false, p0.getActive().contains(lance));
+	}
 	
 }

@@ -40,7 +40,11 @@ public class TourAskParticipation extends State{
 				// push new TOur too many hands
 				State tooM = new TourTooManyCardsNotPlayerTurn(c);
 				c.m.state.push(tooM);
-				c.m.getState().msg();//top state now tooM,
+				c.m.StateMsg();//top state now tooM,
+			}else {
+				log.info("Player=> " + this.c.m.getcurrentTurn().getName() + " is participating and has enough cards moving on");
+				log.debug("Moving onto next state");
+				c.m.StateMsg();
 			}
 		}
 		else {
