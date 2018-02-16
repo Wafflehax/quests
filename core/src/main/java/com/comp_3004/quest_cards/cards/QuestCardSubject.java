@@ -17,7 +17,6 @@ public class QuestCardSubject extends QuestCard{
 		obs = new LinkedList<AllyObserver>();	
 	}
 	
-
 	public void register(AllyObserver ob) {
 		obs.add(ob);
 		ob.subject = this;

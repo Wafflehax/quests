@@ -62,22 +62,22 @@ public class AllyConditionsTest extends TestCase {
 	
 	public void testTwo() {
 		
-		Stack<StoryCard> d = new Stack<StoryCard>();
+		//Stack<StoryCard> d = new Stack<StoryCard>();
 		CardSpawner s = new CardSpawner();
-		d.add(s.spawnStoryCard("testOfTheGreenKnight"));
+		//d.add(s.spawnStoryCard("testOfTheGreenKnight"));
 		
-		StoryDeck sdeck = new StoryDeck(d);
+		StoryDeck sdeck = new StoryDeck();//new StoryDeck(d);
 		AdventureDeck ad = new AdventureDeck();
 		GameModel m = new GameModel(4, 5, ad, sdeck); //everyone starting with 5 cards
 		
-		QuestCardSubject test = (QuestCardSubject)sdeck.getDeck().get(0);
-		AllyObserver gaw = (AllyObserver)findCard(101, m.getPlayers(), ad);
+		//QuestCardSubject test = (QuestCardSubject)sdeck.getDeck().get(0);
+		//AllyObserver gaw = (AllyObserver)findCard(101, m.getPlayers(), ad);
 		
-		test.register(gaw);
-		
-		ad.printDeck();
-		sdeck.drawCard();
-		sdeck.discardCard(test);
+		//test.register(gaw);
+		//
+		//ad.printDeck();
+		//sdeck.drawCard();
+		//sdeck.discardCard(test);
 		
 		
 		
@@ -86,7 +86,7 @@ public class AllyConditionsTest extends TestCase {
 	
 	
 	
-	public AdventureCard findCard(int id, Players p, AdventureDeck d) {
+	public static AdventureCard findCard(int id, Players p, AdventureDeck d) {
 		
 		if(p.size() > 0) {
 			AdventureCard cc = find(id, d);
@@ -106,7 +106,7 @@ public class AllyConditionsTest extends TestCase {
 		return null;
 	}
 	
-	private AdventureCard find(int id, AdventureDeck d) {
+	public static AdventureCard find(int id, AdventureDeck d) {
 		for(AdventureCard c: d.getDeck()) {
 			if(c.getID() == id)
 				return c;	
@@ -114,7 +114,7 @@ public class AllyConditionsTest extends TestCase {
 		return null;
 	}
 	
-	private AdventureCard find(int id, LinkedList<AdventureCard> d) {
+	public static AdventureCard find(int id, LinkedList<AdventureCard> d) {
 		for(AdventureCard c: d) {
 			if(c.getID() == id)
 				return c;	

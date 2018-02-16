@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
 
+import core.AllyConditionsTest;
+
 public class StoryDeck extends Deck {
 	
 	//attributes
@@ -54,8 +56,6 @@ public class StoryDeck extends Deck {
 	public void shuffle() {							//shuffles the deck
 		Collections.shuffle(deck);
 	}
-	
-	
 	
 	protected void shuffleDiscardIntoDeck() {		//shuffles the discard pile into the deck
 		while(discard.empty() != true) {
@@ -146,5 +146,4 @@ public class StoryDeck extends Deck {
 			this.deck.add(spawner.spawnStoryCard("repelTheSaxonInvaders"));
 		}
 	}
-
 }

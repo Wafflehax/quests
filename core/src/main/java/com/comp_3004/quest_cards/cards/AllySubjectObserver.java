@@ -47,16 +47,18 @@ public class AllySubjectObserver extends AllyCard {
 	}
 	
 	public void deregisterBoth(AllySubjectObserver c) {
-		this.activated = false;
-		this.switchvars();
-		c.activated = false;
-		c.switchvars();
+		if(this.activated) {
+			this.switchvars();
+			this.activated = false;
+		}
+		if(c.activated) {
+			c.activated = false;
+			c.switchvars();	
+		}
 		obs.remove(c);
-		AllySubjectObserver temp = subject;
+		c.obs.remove(this);
 		c.subject = null;
 		subject = null;
-		if(temp == c)
-			c.deregister(this);	
 	}
 	
 	

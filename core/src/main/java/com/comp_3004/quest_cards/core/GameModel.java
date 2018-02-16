@@ -1,14 +1,18 @@
 package com.comp_3004.quest_cards.core;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
 import com.comp_3004.quest_cards.Stories.Event;
 import com.comp_3004.quest_cards.Stories.Quest;
 import com.comp_3004.quest_cards.Stories.Tour;
+import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.AllyCard;
+import com.comp_3004.quest_cards.cards.AllyObserver;
+import com.comp_3004.quest_cards.cards.AllySubjectObserver;
 import com.comp_3004.quest_cards.cards.AmourCard;
 import com.comp_3004.quest_cards.cards.Card;
 import com.comp_3004.quest_cards.cards.StoryDeck;
@@ -17,6 +21,7 @@ import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.player.Player;
 import com.comp_3004.quest_cards.player.Players;
 import com.comp_3004.quest_cards.cards.QuestCard;
+import com.comp_3004.quest_cards.cards.QuestCardSubject;
 import com.comp_3004.quest_cards.cards.StoryCard;
 
 
@@ -60,6 +65,8 @@ public class GameModel{
 		storyDeck = new StoryDeck();
 		storyDeck.shuffle();
 		StoryEv = null;
+		//init special cards
+		initSpecialAlly();
 		initPlayersStart(4, MAX_HAND_SIZE);
 	}
 
@@ -69,6 +76,7 @@ public class GameModel{
 		storyDeck = new StoryDeck();
 		storyDeck.shuffle();
 		StoryEv = null;
+		initSpecialAlly();
 		initPlayersStart(num, MAX_HAND_SIZE);
 	}
 	
@@ -78,8 +86,8 @@ public class GameModel{
 		this.advDeck = a;
 		this.storyDeck = s;
 		StoryEv = null;
+		initSpecialAlly();
 		initPlayersStart(numPlayers, c); //c is the number of cards the player will start with
-
 	}
 	
 	public void beginTurn() {
@@ -108,6 +116,49 @@ public class GameModel{
 			log.info("playCard(Card c):Error could not cast to proper card to play");
 			return false;
 		}
+	}
+	
+	private void initSpecialAlly() {
+		AllySubjectObserver qu = (AllySubjectObserver) find("Queen Iseult", advDeck);
+		AllySubjectObserver tris = (AllySubjectObserver) find("Sir Tristan", advDeck);	
+		qu.register(tris);
+		tris.register(qu);
+		
+		QuestCardSubject testgknight = (QuestCardSubject)find("Test of the Green Knight", storyDeck);
+		AllyObserver gawain = (AllyObserver) find("Sir Gawain", advDeck);	
+		testgknight.register(gawain);
+		
+		QuestCardSubject dqueenhonor = (QuestCardSubject)find("Defend the Queen's Honor", storyDeck);
+		AllyObserver lancelot = (AllyObserver) find("Sir Lancelot", advDeck);	
+		dqueenhonor.register(lancelot);
+		
+		QuestCardSubject grailho = (QuestCardSubject)find("Search for the Holy Grail", storyDeck);
+		AllyObserver perciv = (AllyObserver) find("Sir Percival", advDeck);	
+		grailho.register(perciv);
+		
+		QuestCardSubject questbeat = (QuestCardSubject)find("Search for the Questing Beast", storyDeck);
+		AllyObserver pellin = (AllyObserver) find("King Pellinore", advDeck);	
+		questbeat.register(pellin);
+		
+		
+		
+		
+	}
+	
+	private AdventureCard find(String n, AdventureDeck d) {
+		for(AdventureCard c: d.getDeck()) {
+			if(c.getName().equalsIgnoreCase(n))
+				return c;	
+		}
+		return null;
+	}
+	
+	private StoryCard find(String n, StoryDeck d) {
+		for(StoryCard c: d.getDeck()) {
+			if(c.getName().equalsIgnoreCase(n))
+				return c;	
+		}
+		return null;
 	}
 	
 	public boolean inPlay(String name) {
