@@ -8,11 +8,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class CardDropZone extends Image {
     private Rectangle bounds;
+    public static int X = 50;
+    public static int Y = Config.CardView.CARD_HEIGHT+150;
+    public static int WIDTH = 1500;
+    public static int HEIGHT = Config.CardView.CARD_HEIGHT;
+
 
     public CardDropZone(Sprite sprite)
     {super(sprite);
-    setBounds(50,Config.CardView.CARD_HEIGHT+150,1000,Config.CardView.CARD_HEIGHT+10);
-        bounds=new Rectangle((int)getX(), (int)getY(), (int)getWidth(), (int)getHeight());
+    setBounds(X,Y,WIDTH,HEIGHT);
+        bounds=new Rectangle((int)getX(), (int)getY()-30, (int)getWidth(), (int)getHeight());
         this.setColor(1,1,1,0.2f);
     }
 

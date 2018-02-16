@@ -21,6 +21,7 @@ public class CardView extends Image {
   private int deckZ;
   private GamePresenter gamePresenter;
   private int cardID;
+  private boolean inPlay;
 
   //ADD AN ID PARAMETER SO THE VIEW CARRIES THE ID WITH IT
   public CardView(TextureRegion sprite, int ID) {
@@ -41,6 +42,7 @@ public class CardView extends Image {
   {card.addListener(new ClickListener() {
                       @Override
                       public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                        //if(active)
                         if (y > card.getY() + (card.getHeight() / 3)) {
                           card.moveBy(0, card.getHeight() / 3);
                           card.setZIndex(12);
@@ -76,6 +78,7 @@ public class CardView extends Image {
     }
 
     public void drag(InputEvent event, float x, float y, int pointer) {
+      //if(!active) DO NOTHING
       card.moveBy(x - card.getWidth() / 2, y - card.getHeight() / 2);
       CardBounds.set(card.getX(),card.getY(),card.getWidth(),card.getHeight());
 
@@ -97,6 +100,7 @@ public class CardView extends Image {
       if(CardBounds.overlaps(DropZoneBounds))
       {card.setX(getX());
        card.setY(getY());
+       //card.scaleBy(-0.5f);
        System.out.println("PlayCard = " + gamePresenter.playCard(card.cardID) +"; CardID = "+card.cardID);
       }
 
@@ -120,6 +124,7 @@ public float getDeckX(){return deckX;}
 public float getDeckY(){return deckY;}
 public int getDeckZ(){return deckZ;}
 public int getCardID() {return cardID;}
+public boolean getInPlay(){return inPlay;}
 public Rectangle getCardBounds() {return CardBounds;}
 public Rectangle getDropZoneBounds() {return DropZoneBounds;}
 
@@ -127,7 +132,8 @@ public Rectangle getDropZoneBounds() {return DropZoneBounds;}
 public void setDeckX(float x){deckX=x;}
 public void setDeckY(float y){deckY=y;}
 public void setDeckZ(int z){deckZ = z;}
-public void setDropZoneBounds(Rectangle CDZ){this.DropZoneBounds = CDZ;}
+public void setInPlay(boolean inPlaySet){inPlay=inPlaySet;}
+public void setDropZoneBounds(Rectangle CDZ){DropZoneBounds = CDZ;}
 public void setGamePresenter(GamePresenter gamePresenter_in){gamePresenter=gamePresenter_in;}
 
 

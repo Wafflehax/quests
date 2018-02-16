@@ -102,7 +102,7 @@ public class GamePresenter extends Group{
     for(int i = 0; i < temp.size(); i++){
         String spriteGet = temp.get(i).getName();
 
-        if(spriteGet.compareTo("Amour")==0) spriteGet = "Thieves"; //TODO: HAVE THIS PLACEDHOLDER RECTIFIED!!
+        //if(spriteGet.compareTo("Amour")==0) spriteGet = "Thieves"; //TODO: HAVE THIS PLACEDHOLDER RECTIFIED!!
 
         System.out.println("spriteGet = "+spriteGet+"\nCardAssetMap.get(spriteGet) = "+CardAssetMap.get(spriteGet));
       cards[i] = new CardView(sprites.findRegion(CardAssetMap.get(spriteGet)),temp.get(i).getID());
@@ -149,11 +149,13 @@ public class GamePresenter extends Group{
         return false;}
 	  	if(cardToPlay != null)
 	  		if(model.getPlayers().current().playCard(cardToPlay)) {
+	  	    Gdx.app.log("Playing Card (ID,NAME):","("+cardToPlay.getID()+","+cardToPlay.getName()+")");
 	  			//then update view with what changed in the model
                 return true;
 	  		}
 	  		return false;
   	}
+
   //had to overload for sponsoring a quest as you can add cards to different stages :(
   	public void playCard(int cardID, int stageNum) {
 	  	AdventureCard cardToPlay = null;
@@ -244,6 +246,7 @@ public class GamePresenter extends Group{
         CardAssetMap.put("Chivalrous Deed","E_Chivalrous_Deed");
         CardAssetMap.put("Prosperity Throughout the Realms","E_Prosperity_Throughout_the_Realm");
         CardAssetMap.put("King's Call to Arms","E_Kings_Call_to_Arms");
+        CardAssetMap.put("Amour","Amour");
         //QUESTS
         /*CardAssetMap.put("Search for the Holy Grail","");
         CardAssetMap.put("Test of the Green Knight","");

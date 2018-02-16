@@ -79,7 +79,7 @@ public class QuestCards implements ApplicationListener {
 
     //Switch screen
 
-    stage.addActor(gameStates.get("mainGame"));
+    //stage.addActor(gameStates.get("mainGame"));
     ScreenAssign("mainGame");
 
     // Temp Tour testing

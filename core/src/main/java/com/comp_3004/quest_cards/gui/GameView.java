@@ -73,7 +73,7 @@ public class GameView extends Table {
     addActor(storyDeckDiscardPile);
     addActor(adventureDeck);
     addActor(adventureDeckDiscardPile);
-    addActor(CDZ);
+    addActor(CDZ); //CDZ = CARDDROPZONE
     addActor(playerView);
     //addActor(cardDropZone);
   }
