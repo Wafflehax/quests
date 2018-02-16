@@ -11,7 +11,7 @@ public class Assets {
 
   public static String GAME_BACKGROUNDS = "sprites/backgrounds.atlas";
   public static String GAME_SPRITES = "sprites/cards.atlas";
-  public Map<String,String> CardSpawnerMap = new HashMap<String, String>();
+
   public static class Cards {
 
 

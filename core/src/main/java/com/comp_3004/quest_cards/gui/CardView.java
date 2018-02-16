@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+import com.comp_3004.quest_cards.core.GamePresenter;
 
 public class CardView extends Image {
 
@@ -18,10 +19,13 @@ public class CardView extends Image {
   private Rectangle CardBounds;
   private float deckX, deckY;
   private int deckZ;
+  private GamePresenter gamePresenter;
+  private int cardID;
 
   //ADD AN ID PARAMETER SO THE VIEW CARRIES THE ID WITH IT
-  public CardView(TextureRegion sprite) {
+  public CardView(TextureRegion sprite, int ID) {
     super(sprite);
+    cardID=ID;
     dragConfig(this);
     /*this.addListener(new ClickListener(){
       @Override
@@ -68,34 +72,32 @@ public class CardView extends Image {
     card.addListener(new DragListener() {
     @Override
     public void dragStart(InputEvent event, float x, float y, int pointer) {
-      Gdx.app.log("DragStart:","Perceived Starting Coord (" + card.getX() + "," + card.getY() + ")");
 
     }
 
     public void drag(InputEvent event, float x, float y, int pointer) {
-      //Gdx.app.log("Dragging:","(" + card.getX() + "," + card.getY() + ")");
       card.moveBy(x - card.getWidth() / 2, y - card.getHeight() / 2);
       CardBounds.set(card.getX(),card.getY(),card.getWidth(),card.getHeight());
 
       if(CardBounds.overlaps(DropZoneBounds))
-      {setColor(0.6f,1,0.6f,1);}
+        {setColor(0.6f,1,0.6f,1);}
 
-      else setColor(1f,0.6f,0.6f,1);
+      else
+        {setColor(1f,0.5f,0.5f,1);}
 
     }
 
     @Override
     public void dragStop(InputEvent event, float x, float y, int pointer) {
-      Gdx.app.log("dragStop:","Perceived Ending Coord (" + card.getX() + "," + card.getY() + ")");
       //card.setX(card.getDeckX());
       //card.setY(card.getDeckY());
 
 
       setColor(1,1,1,1);
       if(CardBounds.overlaps(DropZoneBounds))
-      {Gdx.app.log("CardBounds.overlaps(DropZoneBounds)", ""+CardBounds.overlaps(DropZoneBounds));
-       card.setX(getX());
+      {card.setX(getX());
        card.setY(getY());
+       System.out.println("PlayCard = " + gamePresenter.playCard(card.cardID) +"; CardID = "+card.cardID);
       }
 
       else
@@ -117,6 +119,7 @@ public class CardView extends Image {
 public float getDeckX(){return deckX;}
 public float getDeckY(){return deckY;}
 public int getDeckZ(){return deckZ;}
+public int getCardID() {return cardID;}
 public Rectangle getCardBounds() {return CardBounds;}
 public Rectangle getDropZoneBounds() {return DropZoneBounds;}
 
@@ -125,6 +128,7 @@ public void setDeckX(float x){deckX=x;}
 public void setDeckY(float y){deckY=y;}
 public void setDeckZ(int z){deckZ = z;}
 public void setDropZoneBounds(Rectangle CDZ){this.DropZoneBounds = CDZ;}
+public void setGamePresenter(GamePresenter gamePresenter_in){gamePresenter=gamePresenter_in;}
 
 
 

@@ -44,7 +44,7 @@ public class SpillingDeckStrategy implements DeckView.DisplayStrategy {
       card.setDeckZ(i);
       card.setZIndex(i);
 
-      System.out.printf("Placing adveture card at (%f, %f)\n", card.getX(), card.getY());
+      System.out.printf("Placing adventure card at (%f, %f)\n", card.getX(), card.getY());
 
       client.addActor(card);
     }

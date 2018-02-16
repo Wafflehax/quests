@@ -26,8 +26,11 @@ import com.comp_3004.quest_cards.gui.GameView;
 import com.sun.corba.se.pept.transport.EventHandler;
 import org.apache.log4j.Logger;
 
+import javax.smartcardio.Card;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class GamePresenter extends Group{
 
@@ -35,6 +38,7 @@ public class GamePresenter extends Group{
   private GameModel model;
   private GameView view;
   private DragAndDrop dnd;
+  public Map<String,String> CardAssetMap;
 
   TextureAtlas sprites;
   TextureAtlas backgrounds;
@@ -58,13 +62,13 @@ public class GamePresenter extends Group{
 
     this.parent = parent;
     manager = parent.getAssetManager();
+    CardAssetMap = new HashMap<String, String>();
+    PopulateCardAssetMap();
     loadAssets();
 
     model = new GameModel();
     view = initGameView();
     addActor(view);
-
-    System.out.println(model.getcurrentTurn().getHand().get(10).getName());
 
 
 
@@ -72,7 +76,8 @@ public class GamePresenter extends Group{
 
 
 
-  public void loadAssets(){
+
+    public void loadAssets(){
 
     AssetManager manager = parent.getAssetManager();
     manager.load(Assets.GAME_BACKGROUNDS, TextureAtlas.class);
@@ -92,11 +97,17 @@ public class GamePresenter extends Group{
     view.setPlayerViewBackground(backgrounds.findRegion("player_area"));
 
    LinkedList<AdventureCard> temp = model.getcurrentTurn().getHand();
-    CardView [] cards = new CardView[12];
-    for(int i = 0; i < cards.length; i++){
 
-      cards[i] = new CardView(sprites.findRegion("A_King_Arthur"));
+    CardView [] cards = new CardView[12];
+    for(int i = 0; i < temp.size(); i++){
+        String spriteGet = temp.get(i).getName();
+
+        if(spriteGet.compareTo("Amour")==0) spriteGet = "Thieves"; //TODO: HAVE THIS PLACEDHOLDER RECTIFIED!!
+
+        System.out.println("spriteGet = "+spriteGet+"\nCardAssetMap.get(spriteGet) = "+CardAssetMap.get(spriteGet));
+      cards[i] = new CardView(sprites.findRegion(CardAssetMap.get(spriteGet)),temp.get(i).getID());
       cards[i].setDropZoneBounds(view.CDZ.getBounds());
+      cards[i].setGamePresenter(this);
 
     }
     //DragConfig(cards);
@@ -128,17 +139,20 @@ public class GamePresenter extends Group{
   
   	//temporary methods to use for model testing
   	//takes cardID as input from view, finds corresponding card in model
-  	public void playCard(int cardID) {
+  	public boolean playCard(int cardID) {
 	  	AdventureCard cardToPlay = null;
 	  	for(AdventureCard card : model.getPlayers().current().getHand())
 	  		if(card.getID() == cardID)
 	  			cardToPlay = card;
 	  	if(cardToPlay == null)
-	  		System.out.println("Card not found");
+        {System.out.println("Card not found");
+        return false;}
 	  	if(cardToPlay != null)
 	  		if(model.getPlayers().current().playCard(cardToPlay)) {
 	  			//then update view with what changed in the model
+                return true;
 	  		}
+	  		return false;
   	}
   //had to overload for sponsoring a quest as you can add cards to different stages :(
   	public void playCard(int cardID, int stageNum) {
@@ -180,6 +194,73 @@ public class GamePresenter extends Group{
   		}
   	}
 
+    private void PopulateCardAssetMap() {
+      //WEAPONS
+      CardAssetMap.put("Horse","W_Horse");
+        CardAssetMap.put("Sword","W_Sword");
+        CardAssetMap.put("Excalibur","W_Excalibur");
+        CardAssetMap.put("Lance","W_Lance");
+        CardAssetMap.put("Dagger","W_Dagger");
+        CardAssetMap.put("Battle-Ax","W_Battle_ax");
+        //ALLIES
+        CardAssetMap.put("Sir Gawain","A_Sir_Gawain");
+        CardAssetMap.put("King Pellinore","A_King_Pellinore");
+        CardAssetMap.put("Sir Percival","A_Sir_Percival");
+        CardAssetMap.put("Sir Tristan","A_Sir_Tristan");
+        CardAssetMap.put("King Arthur","A_King_Arthur");
+        CardAssetMap.put("Queen Guinevere","A_Queen_Guinevere");
+        CardAssetMap.put("Merlin","A_Merlin");
+        CardAssetMap.put("Queen Iseult","A_Queen_Iseult");
+        CardAssetMap.put("Sir Lancelot","A_Sir_Lancelot");
+        CardAssetMap.put("Sir Galahad","A_Sir_Galahad");
+        //TESTS
+        CardAssetMap.put("Test of the Questing Beast","T_Test_of_the_Questing_Beast");
+        CardAssetMap.put("Test of Temptation","T_Test_of_Temptation");
+        CardAssetMap.put("Test of Valor","T_Test_of_Valor");
+        CardAssetMap.put("Test of Morgan Le Fey","T_Test_of_Morgan_Le_Fey");
+        //FOES
+        CardAssetMap.put("Thieves","F_Thieves");
+        CardAssetMap.put("Saxon Knight","F_Saxon_Knight");
+        CardAssetMap.put("Robber Knight","F_Robber_Knight");
+        CardAssetMap.put("Evil Knight","F_Evil_Knight");
+        CardAssetMap.put("Saxons","F_Saxons");
+        CardAssetMap.put("Boar","F_Boar");
+        CardAssetMap.put("Mordred","F_Mordred");
+        CardAssetMap.put("Black Knight","F_Black_Knight");
+        CardAssetMap.put("Giant","F_Giant");
+        CardAssetMap.put("Green Knight","F_Green_Knight");
+        CardAssetMap.put("Dragon","F_Dragon");
+        //TOURNEYS
+        /*CardAssetMap.put("Tournament at Camelot","");
+        CardAssetMap.put("Tournament at Orkney","");
+        CardAssetMap.put("Tournament at Tintagel","");
+        CardAssetMap.put("Tournament at York","");*/
+        //EVENTS
+        CardAssetMap.put("King's Recognition","E_Kings_Recognition");
+        CardAssetMap.put("Queen's Favor","E_Queens_Favor");
+        CardAssetMap.put("Court Called to Camelot","E_Court_Called_Camelot");
+        CardAssetMap.put("Pox","E_Pox");
+        CardAssetMap.put("Plague","E_Plague");
+        CardAssetMap.put("Chivalrous Deed","E_Chivalrous_Deed");
+        CardAssetMap.put("Prosperity Throughout the Realms","E_Prosperity_Throughout_the_Realm");
+        CardAssetMap.put("King's Call to Arms","E_Kings_Call_to_Arms");
+        //QUESTS
+        /*CardAssetMap.put("Search for the Holy Grail","");
+        CardAssetMap.put("Test of the Green Knight","");
+        CardAssetMap.put("Search for the Questing Beast","");
+        CardAssetMap.put("Defend the Queen's Honor","");
+        CardAssetMap.put("Rescue the Fair Maiden","");
+        CardAssetMap.put("Journey Through the Enchanted Forest","");
+        CardAssetMap.put("Slay the Dragon","");
+        CardAssetMap.put("Vanquish King Arthur's Enemies","");
+        CardAssetMap.put("Boar Hunt","");
+        CardAssetMap.put("Repel the Saxon Invaders","");*/
+
+
+
+
+
+    }
   	/*public LinkedList<AdventureCard> getCurrentHand(){
       return model.getcurrentTurn().getHand();
     }*/
