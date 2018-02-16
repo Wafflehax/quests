@@ -1,18 +1,10 @@
 package core;
 
-import java.util.LinkedList;
-import java.util.Stack;
-
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureCard.State;
 import com.comp_3004.quest_cards.player.Player;
 import com.comp_3004.quest_cards.player.Player.Rank;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
-import com.comp_3004.quest_cards.cards.AllyCard;
-import com.comp_3004.quest_cards.cards.AmourCard;
-import com.comp_3004.quest_cards.cards.Card;
-import com.comp_3004.quest_cards.cards.FoeCard;
-import com.comp_3004.quest_cards.cards.WeaponCard;
 
 import junit.framework.TestCase;
 
