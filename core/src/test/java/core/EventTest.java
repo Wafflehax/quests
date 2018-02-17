@@ -14,12 +14,14 @@ import com.comp_3004.quest_cards.cards.StoryCard;
 import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.core.GameModel;
+import com.comp_3004.quest_cards.core.GamePresenter;
 import com.comp_3004.quest_cards.player.Player.Rank;
 
 import junit.framework.TestCase;
 
 public class EventTest extends TestCase{
 	CardSpawner spawner = new CardSpawner();
+	
 
 	
 	public void testChivalrousDeed() {
@@ -286,6 +288,7 @@ public class EventTest extends TestCase{
 		
 		//test 1 players have weapons to discard
 		game = new GameModel(2, 0, advDeck, storyDeck);
+		GamePresenter pres = new GamePresenter(game);
 		game.getPlayerAtIndex(0).addShields(0);
 		game.getPlayerAtIndex(0).setHand(hand0);
 		game.getPlayerAtIndex(1).addShields(0);
@@ -293,6 +296,9 @@ public class EventTest extends TestCase{
 		
 		
 		game.eventTest();
+		game.getcurrentTurn().printHand();
+		pres.discardCard(44);
+		
 		assertEquals(2,game.getPlayerAtIndex(0).getHand().size());
 		assertEquals(0,game.getPlayerAtIndex(1).getHand().size());
 		assertEquals(2,game.getAdvDeck().getDiscard().size());
@@ -313,6 +319,7 @@ public class EventTest extends TestCase{
 		game.getPlayerAtIndex(3).addShields(0);
 		
 		game.eventTest();
+		//pres.
 		assertEquals(1,game.getPlayerAtIndex(0).getHand().size());
 		assertEquals(0,game.getPlayerAtIndex(1).getHand().size());
 		assertEquals(0,game.getPlayerAtIndex(2).getHand().size());

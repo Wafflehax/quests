@@ -32,6 +32,8 @@ public class Event {
 	
 	public void runEvent() {
 		log.info(players.current().getName() + " drew event " + evnt.getName());
+		for(Player p : players.getPlayers())
+			p.setState("event");
 		
 		if(evnt.getName() ==  "Chivalrous Deed") {
 			ArrayList<Player> lowestRank = new ArrayList<Player>();
@@ -128,21 +130,15 @@ public class Event {
 			//for each player, get a list of weapon cards they have
 			ArrayList<AdventureCard> discard;
 			for(Player p : highestRank) {
+				players.setCurrent(p);
 				discard = new ArrayList<AdventureCard>();
 				for(AdventureCard card : p.getHand())
 					if(card instanceof WeaponCard)
 						discard.add(card);
-				//player has 1 weapon to discard
-				if(discard.size() == 1) {
-					p.discardCard(discard.get(0), advDeck);
-				}
 				//player has to choose which weapon to discard
-				else if(discard.size() > 1) {
-					Scanner sc = new Scanner(System.in);		//using scanner for user input for now
-					int index;								//when switching to ui control, use cardID
-					System.out.printf("%s please select index of card to discard\n", p.getName());
-					index = sc.nextInt();
-					p.discardCard(discard.get(index), advDeck);
+				if(discard.size() > 1) {
+					log.info(String.format("%s please select a weapon card to discard", p.getName()));
+					return;
 				}
 				//player has no weapon, must discard 2 foes
 				else {
@@ -157,13 +153,8 @@ public class Event {
 					}
 					//player has to choose which foes to discard
 					else if(discard.size() > 2) {
-						for(int i=0; i<2; i++) {
-							Scanner sc = new Scanner(System.in);		//using scanner for user input for now
-							int index;								//when switching to ui control, use cardID
-							System.out.printf("%s please select index of card to discard\n", p.getName());
-							index = sc.nextInt();
-							p.discardCard(discard.get(index), advDeck);
-						}
+							log.info(String.format("%s please select 2  foe cards to discard", p.getName()));
+							return;
 					}
 				}
 			}

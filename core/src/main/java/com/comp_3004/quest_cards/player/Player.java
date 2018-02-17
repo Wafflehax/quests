@@ -85,6 +85,8 @@ public class Player{
 			state_ = new BidState();
 		else if(s == "tooManyCards")
 			state_ = new TooManyCardsState();
+		else if(s == "event")
+			state_ = new EventState();
 		}
 	public String getState() {
 		String state = null;
@@ -98,6 +100,9 @@ public class Player{
 			state = "playQuest";
 		else if(state_ instanceof TooManyCardsState)
 			state = "tooManyCards";
+		else if(state_ instanceof EventState)
+			state = "event";
+		
 		return state;
 	}
 	
