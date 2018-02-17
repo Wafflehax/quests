@@ -219,18 +219,27 @@ public class Quest {
 	}
 	
 	//determines if the player wants to participate in the quest
-	public void questParticipation(Player p) {
-		participants.add(p);
-		log.info(p.getName() + " is participating in the quest");
+	public boolean questParticipation(int input, Player p) {
+		if(input == 1) {
+			participants.add(p);
+			log.info(p.getName() + " is participating in the quest");
+		}
+		else
+			log.info(p.getName() + " declined participating in the quest");
 		if(sponsor == players.peekNext()) {
+			if(participants.isEmpty()) {
+				questCleanup();
+				return true;
+			}
 			players.next();	//move current player forward twice to skip sponsor
 			players.next();
 			for(Player pl : participants)
 				pl.setState("playQuest");
 			startStage(currentStage);
-			return;
+			return true;
 		}
 		players.next();
+		return true;
 	}
 	
 	//starts playing the stage indicated by stageNum
@@ -348,10 +357,19 @@ public class Quest {
 		for(Player p : players.getPlayers())
 			p.setState("normal");
 		
+		//check if sponsor has too many cards
+		if(sponsor.getHand().size() > 12) {
+			log.info(sponsor.getName()+" has "+(sponsor.getHand().size()-12)+" too many cards");
+			sponsor.setState("tooManyCards");
+			players.setCurrent(sponsor);
+			return true;
+		}
+		
 		//set current turn back to player who drew quest
 		players.setCurrent(drewQuest);
 		log.info(players.current().getName()+"'s turn is over.");
 		players.next();
+		
 		
 		//ends turn
 		return false;

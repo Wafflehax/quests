@@ -32,14 +32,6 @@ public class PlayerTest extends TestCase{
 		assertEquals(p, c.getOwner());
 	}
 	
-	public void testDrawOverHandLimit() {		//currently not allowed, better implementation to come...
-		AdventureDeck d = new AdventureDeck();
-		Player p = new Player("Player 1");
-		while(p.getHand().size() < 12)
-			p.drawCard(d);
-		assert(!p.drawCard(d));
-	}
-	
 	public void testPlayCard() {
 		String[] cards = {"tristan"};
 		AdventureDeck d = new AdventureDeck(cards);

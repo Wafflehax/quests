@@ -21,7 +21,7 @@ public class SponsorState extends PlayerState {
 				return true;
 			}else {
 				log.info("Failed to play  " + c.getName());
-				return false; 
+				return true; 
 			}
 		}
 		else {
@@ -31,7 +31,20 @@ public class SponsorState extends PlayerState {
 	}
 	
 	public boolean discardCard(AdventureCard c, AdventureDeck d, Player p) {
-		//handle player discarding cards during quest cleanup after drawing cards
+		if(c.getOwner() == p && c.getState() == State.HAND) {
+			if(p.getHand().contains(c)) {
+				p.getHand().remove(c);
+				log.info(p.getName() + " discarded " + c.getName() + " from hand");
+			}
+			d.discardCard(c);
+			c.setState(State.DISCARD);
+			c.setOwner(null);
+			if(p.getHand().size() > 12)
+				return true;
+			else
+				return false;
+		}
+		log.info(p.getName()+" does not have "+c.getName()+" in their hand");
 		return false;
 	}
 

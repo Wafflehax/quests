@@ -83,6 +83,8 @@ public class Player{
 			state_ = new QuestPlayState();
 		else if(s == "bid")
 			state_ = new BidState();
+		else if(s == "tooManyCards")
+			state_ = new TooManyCardsState();
 		}
 	public String getState() {
 		String state = null;
@@ -94,6 +96,8 @@ public class Player{
 			state = "questParticipant";
 		else if(state_ instanceof QuestPlayState)
 			state = "playQuest";
+		else if(state_ instanceof TooManyCardsState)
+			state = "tooManyCards";
 		return state;
 	}
 	
@@ -133,20 +137,13 @@ public class Player{
 	}
 
 	public boolean drawCard(AdventureDeck d) {
-		// can't have more than 12 cards
-		//TODO: allow player to play cards if player is already at hand limit
-		if(playerHandCards.size() >= 12) {
-			return false;
-		}
-		else {
-			//call drawCard from adventure deck
-			AdventureCard card = d.drawCard();
-			playerHandCards.add(card);
-			card.setOwner(this);
-			card.setState(State.HAND);
-			log.info(name + " drew " + card.getName() + " from adventure deck");
-			return true;
-		}
+		//call drawCard from adventure deck
+		AdventureCard card = d.drawCard();
+		playerHandCards.add(card);
+		card.setOwner(this);
+		card.setState(State.HAND);
+		log.info(name + " drew " + card.getName() + " from adventure deck");
+		return true;
 	}
 	
 	protected AdventureCard getHandCard(int pos) {

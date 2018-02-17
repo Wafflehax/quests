@@ -124,6 +124,10 @@ public class GamePresenter extends Group{
 	  		if(model.getPlayers().current().playCard(cardToPlay, stageNum)) {
 	  			//then update view with what changed in the model
 	  		}
+	  		else {
+	  			log.info(model.getcurrentTurn().getName()+"'s turn begins.");
+	  			model.beginTurn();
+	  		}
   	}
   	
   	//takes cardID as input from view, finds corresponding card in model
