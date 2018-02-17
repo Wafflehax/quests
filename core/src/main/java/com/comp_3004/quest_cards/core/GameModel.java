@@ -139,10 +139,6 @@ public class GameModel{
 		QuestCardSubject questbeat = (QuestCardSubject)find("Search for the Questing Beast", storyDeck);
 		AllyObserver pellin = (AllyObserver) find("King Pellinore", advDeck);	
 		questbeat.register(pellin);
-		
-		
-		
-		
 	}
 	
 	private AdventureCard find(String n, AdventureDeck d) {

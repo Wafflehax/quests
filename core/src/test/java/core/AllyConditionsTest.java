@@ -17,73 +17,158 @@ import com.comp_3004.quest_cards.player.Players;
 import junit.framework.TestCase;
 
 public class AllyConditionsTest extends TestCase {
-
-	/*
+	
 	public void testOne() {
+		//Test behavour of Sir Tristian, Queen Iseult special ability activation
+		
 		GameModel m = new GameModel(4);
 		AdventureDeck ad = m.getAdvDeck();
 		ad.printDeck();
 		AllySubjectObserver qu = (AllySubjectObserver)findCard(107, m.getPlayers(), ad);
 		AllySubjectObserver tris = (AllySubjectObserver)findCard(103, m.getPlayers(), ad);
-		
+		//register cards as observers
 		qu.register(tris);
 		tris.register(qu);
-		
-		//someone plays one of the cards
+		//both cards are in play
 		qu.setState(State.PLAY);
 		tris.setState(State.PLAY);
-		
 		assertEquals(true, qu.isActivated());
 		assertEquals(true, tris.isActivated());
-		
+		//one cards is not in play anymore
 		tris.setState(State.DISCARD);
-		
+		//both cards abilities deactivated
 		assertEquals(false, qu.isActivated());
 		assertEquals(false, tris.isActivated());
-		
+		//card reactivated
 		tris.setState(State.QUEST);
+		//both card activated
 		assertEquals(true, qu.isActivated());
 		assertEquals(true, tris.isActivated());
 		
+		//switching to other inplay state
 		qu.setState(State.HAND);
 		tris.setState(State.HAND);
 		
 		qu.setState(State.PLAY);
 		tris.setState(State.PLAY);
+		//both cards should be active
 		assertEquals(true, qu.isActivated());
 		assertEquals(true, tris.isActivated());
 		
 		//removes tristian as an observer on the queen, queen still observing tristian
 		qu.deregister(tris);
+		//once deregistered both deactivated
+		assertEquals(false, qu.isActivated());
+		assertEquals(false, tris.isActivated());
 		// queen no longer getting tristian updates
 		tris.deregister(qu);
+		assertEquals(false, qu.isActivated());
+		assertEquals(false, tris.isActivated());
+		
 	}
-	*/
 	
 	public void testTwo() {
-		
-		//Stack<StoryCard> d = new Stack<StoryCard>();
+		//testing QuestCard and Ally special ability activation. Quest is subject, Ally observer
+		Stack<StoryCard> d = new Stack<StoryCard>();
 		CardSpawner s = new CardSpawner();
-		//d.add(s.spawnStoryCard("testOfTheGreenKnight"));
+		d.add(s.spawnStoryCard("testOfTheGreenKnight"));
 		
-		StoryDeck sdeck = new StoryDeck();//new StoryDeck(d);
+		StoryDeck sdeck = new StoryDeck();
 		AdventureDeck ad = new AdventureDeck();
-		GameModel m = new GameModel(4, 5, ad, sdeck); //everyone starting with 5 cards
+		GameModel m = new GameModel(4, 0, ad, sdeck); //everyone starting with 0 cards
 		
-		//QuestCardSubject test = (QuestCardSubject)sdeck.getDeck().get(0);
-		//AllyObserver gaw = (AllyObserver)findCard(101, m.getPlayers(), ad);
+		QuestCardSubject testgknight = (QuestCardSubject)find("Test of the Green Knight", sdeck);
+		AllyObserver gawain = (AllyObserver) find("Sir Gawain", ad);	
 		
-		//test.register(gaw);
-		//
-		//ad.printDeck();
-		//sdeck.drawCard();
-		//sdeck.discardCard(test);
+		//Quest was played
+		testgknight.setPlayed(true);
+		//gawain was activated not matter if it was played or not
+		assertEquals(true, gawain.activated());
+		//gawain discarded still active while quest card is active
+		gawain.setState(State.DISCARD);
+		assertEquals(true, gawain.activated());
+		//Quest card discarded to story deck
+		testgknight.setPlayed(false);
+		assertEquals(false, gawain.activated());
+	}
+	
+	public void testThree() {
+		//tests allies have correct ability points, bids and battle points
+		Stack<StoryCard> d = new Stack<StoryCard>();
+		CardSpawner s = new CardSpawner();
+		d.add(s.spawnStoryCard("testOfTheGreenKnight"));
 		
+		StoryDeck sdeck = new StoryDeck();
+		AdventureDeck ad = new AdventureDeck();
+		GameModel m = new GameModel(4, 0, ad, sdeck); //everyone starting with 0 cards
+		
+		AllySubjectObserver qu = (AllySubjectObserver) find("Queen Iseult", ad);
+		AllySubjectObserver tris = (AllySubjectObserver) find("Sir Tristan", ad);	
+		
+		QuestCardSubject testgknight = (QuestCardSubject)find("Test of the Green Knight", sdeck);
+		AllyObserver gawain = (AllyObserver) find("Sir Gawain", ad);	
+		
+		QuestCardSubject dqueenhonor = (QuestCardSubject)find("Defend the Queen's Honor", sdeck);
+		AllyObserver lancelot = (AllyObserver) find("Sir Lancelot", ad);	
+		
+		QuestCardSubject grailho = (QuestCardSubject)find("Search for the Holy Grail", sdeck);
+		AllyObserver perciv = (AllyObserver) find("Sir Percival", ad);	
+		
+		QuestCardSubject questbeat = (QuestCardSubject)find("Search for the Questing Beast", sdeck);
+		AllyObserver pellin = (AllyObserver) find("King Pellinore", ad);	
+		
+		
+		//None are activated Make sure they have correct battle points, bids
+		assertEquals(true, (qu.getBattlePts() == 0 && qu.getBids() == 2));
+		assertEquals(true, (tris.getBattlePts() == 10 && tris.getBids() == 0));
+		
+		qu.setState(State.PLAY);
+		tris.setState(State.PLAY);
+		//Check activated battle points, bids
+		assertEquals(true, (qu.getBattlePts() == 0 && qu.getBids() == 4));
+		assertEquals(true, (tris.getBattlePts() == 20 && tris.getBids() == 0));
+		
+		//Not Active state
+		testgknight.setPlayed(false);
+		assertEquals(true, (gawain.getBattlePts() == 10 && gawain.getBids() == 0));
+		//Active state
+		testgknight.setPlayed(true);
+		assertEquals(true, (gawain.getBattlePts() == 20 && gawain.getBids() == 0));
+		
+		dqueenhonor.setPlayed(false);
+		assertEquals(true, (lancelot.getBattlePts() == 15 && lancelot.getBids() == 0));
+		dqueenhonor.setPlayed(true);
+		assertEquals(true, (lancelot.getBattlePts() == 25 && lancelot.getBids() == 0));
+		
+		grailho.setPlayed(false);
+		assertEquals(true, (perciv.getBattlePts() == 5 && perciv.getBids() == 0));
+		grailho.setPlayed(true);
+		assertEquals(true, (perciv.getBattlePts() == 20 && perciv.getBids() == 0));
+		
+		questbeat.setPlayed(false);
+		assertEquals(true, (pellin.getBattlePts() == 10 && pellin.getBids() == 0));
+		questbeat.setPlayed(true);
+		assertEquals(true, (pellin.getBattlePts() == 10 && pellin.getBids() == 4));
 		
 		
 	}
 	
+	private AdventureCard find(String n, AdventureDeck d) {
+		for(AdventureCard c: d.getDeck()) {
+			if(c.getName().equalsIgnoreCase(n))
+				return c;	
+		}
+		return null;
+	}
 	
+	
+	private StoryCard find(String n, StoryDeck d) {
+		for(StoryCard c: d.getDeck()) {
+			if(c.getName().equalsIgnoreCase(n))
+				return c;	
+		}
+		return null;
+	}
 	
 	
 	public static AdventureCard findCard(int id, Players p, AdventureDeck d) {

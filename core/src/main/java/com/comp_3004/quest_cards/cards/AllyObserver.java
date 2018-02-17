@@ -16,6 +16,8 @@ public class AllyObserver extends AllyCard {
 		this.abp = Abp;
 		this.abids = Abids;
 	}
+
+	public boolean activated() { return this.activated; }
 	
 	public void update() {
 		if(subject.getPlayed())

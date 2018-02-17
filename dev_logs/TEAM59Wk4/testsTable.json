@@ -149,10 +149,30 @@
     "Status": "F5",
     "Date": "2018-02-05"
   },
-{
-    "ID": "T25”,
-    "Description": “Quest testing scenario: tests no sponsor, illegal sponsor, legal sponsor, all illegal quest set up card plays, set up a quest incorrectly, set up a quest correctly, playing a quest, 3-way tie winning condition“,
-    "Status": "F18/F19/F20”,
-    "Date": "2018-02-12”
+  {
+    "ID": "T25",
+    "Description": "Quest testing scenario: tests no sponsor, illegal sponsor, legal sponsor, all illegal quest set up card plays, set up a quest incorrectly, set up a quest correctly, playing a quest, 3-way tie winning condition",
+    "Status": "F18/F19/F20",
+    "Date": "2018-02-12"
+  },
+  
+  {
+    "ID": "T26",
+    "Description": "AllyConditionsTest->testOne,Allies with conditional battle points(Sir Tristian,Queen Iseult), Tests both hands in play ability active, single hand played both ability not active, One in play added other in play both active",
+    "Status": "F21",
+    "Date": "2018-02-17"
+  },
+  
+  {
+    "ID": "T27",
+    "Description": "AllyConditionsTest->testTwo,Allies with conditional battle points(Quests, Allies), Tests card activation based on Quest state played,not played",
+    "Status": "F21",
+    "Date": "2018-02-17"
+  },
+  {
+    "ID": "T28",
+    "Description": "AllyConditionsTest->testThree,Test Correct Bids/Battle points for Conditional Ally Cards",
+    "Status": "F21,F23",
+    "Date": "2018-02-17"
   }
 ]
