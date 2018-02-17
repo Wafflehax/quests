@@ -3,25 +3,23 @@ package com.comp_3004.quest_cards.cards;
 import utils.Observer;
 import utils.Subject;
 
-public class AllyObserver extends AllyCard implements Observer{
-
-	protected QuestCardSubject subject;
-	private int abp, abids;
+public class TestObserver extends TestCard implements Observer{
+	
+	private QuestCardSubject subject;
+	private int abids;
 	private boolean activated;
 	
-	
-	public AllyObserver(String n, int bp, int bd) {
-		super(n, bp, bd);
-	}
+	public boolean activated() { return this.activated; }
 
-	public AllyObserver(String n, int bp, int bd, int Abp, int Abids) {
-		super(n, bp, bd);
-		this.abp = Abp;
+	public TestObserver(String n) {
+		super(n);
+	}
+	
+	public TestObserver(String n, int Abids) {
+		super(n);
 		this.abids = Abids;
 	}
 
-	public boolean activated() { return this.activated; }
-	
 	public void update() {
 		if(subject.getPlayed())
 			activate();
@@ -44,19 +42,18 @@ public class AllyObserver extends AllyCard implements Observer{
 	}
 	
 	private void switchvars() {
-		int tempB = this.battlePts;
-		int tempBids = this.bids;
+		int tempBids = this.mbid;
 		
-		this.battlePts = abp;
-		this.bids = abids;
+		this.mbid = abids;
 		
 		this.abids = tempBids;
-		this.abp = tempB;
 	}
 
 	public void setSubject(Subject s) {
 		if(s instanceof QuestCardSubject)
 			this.subject = (QuestCardSubject)s;
 	}
+
+	
 
 }

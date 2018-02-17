@@ -2,28 +2,31 @@ package com.comp_3004.quest_cards.cards;
 
 import java.util.LinkedList;
 
-public class QuestCardSubject extends QuestCard{
+import utils.Observer;
+import utils.Subject;
+
+public class QuestCardSubject extends QuestCard implements Subject{
 	
 	protected boolean played = false;
-	LinkedList<AllyObserver> obs;
+	LinkedList<Observer> obs;
 	
 	public QuestCardSubject(String n, int s) {
 		super(n, s);
-		obs = new LinkedList<AllyObserver>();
+		obs = new LinkedList<Observer>();
 	}
 	
 	public QuestCardSubject(String n, int s, String f) {
 		super(n, s, f);
-		obs = new LinkedList<AllyObserver>();	
+		obs = new LinkedList<Observer>();	
 	}
 	
-	public void register(AllyObserver ob) {
+	public void register(Observer ob) {
 		obs.add(ob);
-		ob.subject = this;
+		ob.setSubject(this);
 	}
 	
-	private void notifyAllO() {
-		for(AllyObserver ob: obs) {
+	public void notifyAllO() {
+		for(Observer ob: obs) {
 			ob.update();
 		}
 	}
@@ -35,7 +38,6 @@ public class QuestCardSubject extends QuestCard{
 			this.played = b; 
 			notifyAllO();
 		}
-	}
-	
+	}	
 	
 }

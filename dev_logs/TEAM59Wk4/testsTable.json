@@ -174,5 +174,12 @@
     "Description": "AllyConditionsTest->testThree,Test Correct Bids/Battle points for Conditional Ally Cards",
     "Status": "F21,F23",
     "Date": "2018-02-17"
+  },
+  {
+    "ID": "T29",
+    "Description": "AllyConditionsTest->testFour,Tests Correct Minimum bid on Test of the Questing Beast",
+    "Status": "F21",
+    "Date": "2018-02-17"
   }
+  
 ]

@@ -11,6 +11,7 @@ import com.comp_3004.quest_cards.cards.CardSpawner;
 import com.comp_3004.quest_cards.cards.QuestCardSubject;
 import com.comp_3004.quest_cards.cards.StoryCard;
 import com.comp_3004.quest_cards.cards.StoryDeck;
+import com.comp_3004.quest_cards.cards.TestObserver;
 import com.comp_3004.quest_cards.core.GameModel;
 import com.comp_3004.quest_cards.player.Players;
 
@@ -148,8 +149,36 @@ public class AllyConditionsTest extends TestCase {
 		questbeat.setPlayed(false);
 		assertEquals(true, (pellin.getBattlePts() == 10 && pellin.getBids() == 0));
 		questbeat.setPlayed(true);
-		assertEquals(true, (pellin.getBattlePts() == 10 && pellin.getBids() == 4));
+		assertEquals(true, (pellin.getBattlePts() == 10 && pellin.getBids() == 4));	
+	}
+	
+	public void testFour() {
+		//tests  Test of the Questing Beast conditional bids
+		//Test of the Questing Beast has minimum 4 bids on Questing Beast Quest
 		
+		Stack<StoryCard> d = new Stack<StoryCard>();
+		CardSpawner s = new CardSpawner();
+		d.add(s.spawnStoryCard("testOfTheGreenKnight"));
+		
+		StoryDeck sdeck = new StoryDeck();
+		AdventureDeck ad = new AdventureDeck();
+		GameModel m = new GameModel(4, 0, ad, sdeck); //everyone starting with 0 cards
+		QuestCardSubject questbeat = (QuestCardSubject)find("Search for the Questing Beast", sdeck);
+		TestObserver tesbeast = (TestObserver) find("Test of the Questing Beast", ad);	
+		AllyObserver pellin = (AllyObserver) find("King Pellinore", ad);	//already registered
+		
+		//test activated 
+		questbeat.setPlayed(true);
+		assertEquals(true, tesbeast.activated());
+		assertEquals(true, pellin.activated());
+		assertEquals(true, (tesbeast.getBattlePts() == 0 && tesbeast.getBids() == 4));
+		
+		
+		//test deactivated 
+		questbeat.setPlayed(false);
+		assertEquals(false, tesbeast.activated());
+		assertEquals(false, pellin.activated());
+		assertEquals(true, (tesbeast.getBattlePts() == 0 && tesbeast.getBids() == 0));
 		
 	}
 	

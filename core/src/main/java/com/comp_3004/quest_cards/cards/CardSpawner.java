@@ -74,10 +74,10 @@ public class CardSpawner {
 		else if(name == "galahad" ) { return new AllyCard("Sir Galahad", 15, 0); }
 		
 		//test spawners
-		else if(name == "questingBeast") { return new TestCard("Test of the Questing Beast"); }
+		else if(name == "questingBeast") { return new TestObserver("Test of the Questing Beast", 4); }
 		else if(name == "temptation") { return new TestCard("Test of Temptation"); }
 		else if(name == "valor") { return new TestCard("Test of Valor"); }
-		else if(name == "morganLeFey") { return new TestCard("Test of Morgan Le Fey"); }
+		else if(name == "morganLeFey") { return new TestCard("Test of Morgan Le Fey", 3); }
 		
 		//amour spawner
 		else if(name =="amour") { return new AmourCard(); }

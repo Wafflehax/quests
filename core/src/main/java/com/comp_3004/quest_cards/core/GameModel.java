@@ -16,6 +16,7 @@ import com.comp_3004.quest_cards.cards.AllySubjectObserver;
 import com.comp_3004.quest_cards.cards.AmourCard;
 import com.comp_3004.quest_cards.cards.Card;
 import com.comp_3004.quest_cards.cards.StoryDeck;
+import com.comp_3004.quest_cards.cards.TestObserver;
 import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.player.Player;
@@ -138,6 +139,8 @@ public class GameModel{
 		
 		QuestCardSubject questbeat = (QuestCardSubject)find("Search for the Questing Beast", storyDeck);
 		AllyObserver pellin = (AllyObserver) find("King Pellinore", advDeck);	
+		TestObserver tesbeast = (TestObserver) find("Test of the Questing Beast", advDeck);	
+		questbeat.register(tesbeast);
 		questbeat.register(pellin);
 	}
 	
