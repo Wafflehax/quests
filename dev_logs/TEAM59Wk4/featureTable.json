@@ -1,4 +1,4 @@
-[
+﻿[
   {
     "ID": "F1",
     "Description": "Adventure cards",
@@ -71,6 +71,12 @@
     "Status":"planned",
     "Date":""
   },
+{
+    "ID": "F7.2.3",
+    "Description": "Display Current Players Hand",
+    "Status": "Completed",
+    "Date": "2018-02-16"
+  },
 
   {
     "ID":"F7.3",
@@ -112,6 +118,19 @@
     "Status": "Completed",
     "Date": "2018-02-05"
   },
+{
+    "ID": "F8.4",
+    "Description": "ReFactoring-ScreenTransitions",
+    "Status": "Completed",
+    "Date": "2018-02-16"
+  },
+{
+    "ID": "F8.5",
+    "Description": "Drag-and-Drop/Card Listeners",
+    "Status": "In-Progress",
+    "Date": "2018-02-16"
+  },
+
 
   {
     "ID": "F9",

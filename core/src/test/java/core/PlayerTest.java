@@ -56,7 +56,7 @@ public class PlayerTest extends TestCase{
 		assertEquals(State.HAND, c.getState());
 		assertEquals(p, c.getOwner());
 		
-		p.playCard(c);
+		p.playCard(c, -1);
 		
 		AdventureCard c2 = p.getActive().peek();
 		assertEquals(c, c2);
@@ -88,7 +88,7 @@ public class PlayerTest extends TestCase{
 		Player p = new Player("player1");
 		p.drawCard(d);
 		AdventureCard c = p.getHand().peek();
-		p.playCard(c);
+		p.playCard(c, -1);
 		assertEquals(State.PLAY, c.getState());
 		assertEquals(p, c.getOwner());
 		
@@ -108,7 +108,7 @@ public class PlayerTest extends TestCase{
 		assertEquals(State.DECK, c.getState());
 		assertEquals(null, c.getOwner());
 		
-		assert(!p.playCard(c));
+		assert(!p.playCard(c, -1));
 		
 		assertEquals(State.DECK, c.getState());
 		assertEquals(null, c.getOwner());
@@ -165,11 +165,11 @@ public class PlayerTest extends TestCase{
 			p0.drawCard(d);
 			p0.drawCard(d); // order =>Black Knight,Horse,Amour,King Aruthur,Sword
 			
-			p0.playCard(c0);
-			p0.playCard(c1);
-			p0.playCard(c2);
-			p0.playCard(c3);
-			p0.playCard(c4);
+			p0.playCard(c0, -1);
+			p0.playCard(c1, -1);
+			p0.playCard(c2, -1);
+			p0.playCard(c3, -1);
+			p0.playCard(c4, -1);
 			
 			p0.discardWeaponsActive(d);
 			
@@ -204,11 +204,11 @@ public class PlayerTest extends TestCase{
 				p0.drawCard(d);
 				p0.drawCard(d); // order =>Black Knight,Horse,Amour,King Aruthur,Sword
 				
-				p0.playCard(c0);
-				p0.playCard(c1);
-				p0.playCard(c2);
-				p0.playCard(c3);
-				p0.playCard(c4);
+				p0.playCard(c0, -1);
+				p0.playCard(c1, -1);
+				p0.playCard(c2, -1);
+				p0.playCard(c3, -1);
+				p0.playCard(c4, -1);
 				
 				p0.discardAmoursActive(d);
 				
