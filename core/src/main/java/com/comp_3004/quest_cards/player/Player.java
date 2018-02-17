@@ -257,16 +257,6 @@ public class Player{
 		}
 	}
 	
-	public void printHand() {
-		log.info(name+"'s Hand: ");
-		log.info(String.format("%-15s%-15s%s", "Name", "Battle Points", "ID"));
-		log.info("==================================");
-		for(AdventureCard a : this.playerHandCards) {
-			log.info(a.printCard());
-		}
-		log.info("Number of cards: "+this.playerHandCards.size());
-	}
-	
 	private String rankS() {
 		if(this.rank == Rank.SQUIRE)
 			return "Squire";
@@ -277,6 +267,33 @@ public class Player{
 		else if(this.rank == Rank.KNIGHT_OF_THE_ROUND_TABLE)
 			return "Knight of the Round Table";
 		return "";
+	}
+	
+	public int getFreeBids() {
+		int num = 0;
+		for(AdventureCard card : playerActiveCards) {
+			if(card instanceof AllyCard)
+				num += ((AllyCard) card).getBids();
+			if(card instanceof AmourCard)
+				num += ((AmourCard) card).getBids();
+		}
+		return num;
+	}
+	public int numBidsAllowed() {
+		int num = 0;
+		num += getFreeBids();
+		num += playerHandCards.size();	
+		return num;
+	}
+	
+	public void printHand() {
+		log.info(name+"'s Hand: ");
+		log.info(String.format("%-15s%-15s%s", "Name", "Battle Points", "ID"));
+		log.info("==================================");
+		for(AdventureCard a : this.playerHandCards) {
+			log.info(a.printCard());
+		}
+		log.info("Number of cards: "+this.playerHandCards.size());
 	}
 	
 	public void printActive() {
@@ -290,12 +307,12 @@ public class Player{
 	}
 	
 	public void printStage() {
-		System.out.printf("Stage:\n");
-		System.out.printf("%-15s%-15s%s\n", "Name", "Battle Points", "Type");
-		System.out.printf("==================================\n");
+		log.info("Stage: ");
+		log.info(String.format("%-15s%-15s%s", "Name", "Battle Points", "ID"));
+		log.info("==================================");
 		for(AdventureCard a : this.playerStageCards) {
-			a.printCard();
+			log.info(a.printCard());
 		}
-		System.out.printf("Number of cards: %s\n", this.playerStageCards.size());
+		log.info(String.format("Number of cards: %s\n", this.playerStageCards.size()));
 	}
 }

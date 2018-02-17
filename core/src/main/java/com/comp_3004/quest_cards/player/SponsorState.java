@@ -38,7 +38,10 @@ public class SponsorState extends PlayerState {
 	public boolean userInput(int input, Player p) {
 		if(p.getQuest().getSponsor() == p) {
 			//quest set up complete
-			return p.getQuest().checkQuestSetup();
+			if(input == 1)
+				return p.getQuest().checkQuestSetup();
+			if(input == 0)
+				return p.getQuest().questSponsorship(p, input);
 		}
 		return p.getQuest().questSponsorship(p, input);
 

@@ -24,7 +24,7 @@ public class BidState extends PlayerState {
 			d.discardCard(c);
 			c.setState(State.DISCARD);
 			c.setOwner(null);
-			if(p.getQuest().getTest().discardedACard())
+			if(p.getQuest().discardedACard())
 				return true;
 			else
 				return false;
@@ -35,7 +35,8 @@ public class BidState extends PlayerState {
 
 
 	public boolean userInput(int input, Player p) {
-		p.getQuest().getTest().placeBid(input, p);
+		if(!p.getQuest().placeBid(input, p))
+			return false;
 		return true;
 	}
 

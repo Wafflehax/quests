@@ -115,7 +115,6 @@ public class GamePresenter extends Group{
   	 */
   	public void playCard(int cardID, int stageNum) {
 	  	AdventureCard cardToPlay = null;
-	  	System.out.println(model.getPlayers().current().getName());
 	  	for(AdventureCard card : model.getPlayers().current().getHand())
 	  		if(card.getID() == cardID)
 	  			cardToPlay = card;
@@ -138,8 +137,10 @@ public class GamePresenter extends Group{
 	  			int temp;
 	  			//then update view with what changed in the model
 	  		}
-	  		else
+	  		else {
+	  			log.info(model.getcurrentTurn().getName()+"'s turn begins.");
 	  			model.beginTurn();
+	  		}
 	  	}
 	  	else
 	  		log.info(cardID+"  not found in "+model.getPlayers().current().getName()+"'s hand");
