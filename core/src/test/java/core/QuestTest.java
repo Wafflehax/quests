@@ -1,6 +1,9 @@
 package core;
 
 
+import org.apache.log4j.Logger;
+
+import com.comp_3004.quest_cards.Stories.Quest;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.CardSpawner;
 import com.comp_3004.quest_cards.cards.StoryDeck;
@@ -12,9 +15,10 @@ import junit.framework.TestCase;
 
 public class QuestTest extends TestCase{
 	CardSpawner spawner = new CardSpawner();
+	static Logger log = Logger.getLogger(QuestTest.class); //log4j logger
 
 	//no one sponsors quest
-	public void testQuest1() throws InterruptedException {
+	public void testQuest1() {
 		//set up story deck
 		String[] sd = {"boarHunt", "boarHunt", "slayTheDragon"};
 		StoryDeck storyDeck = new StoryDeck(sd);
@@ -45,17 +49,16 @@ public class QuestTest extends TestCase{
 		}
 		
 		//turn 1
-		System.out.println("Sponsor Quest?");
+		assertEquals("Player 0", game.getcurrentTurn().getName());
 		for(int i=0; i<game.getNumPlayers(); i++) {
 			pres.userInput(0);
 		}//no one sponsored quest, turn over
 		
 		//turn 2
-		System.out.println("Sponsor Quest?");
-		for(int i=0; i<game.getNumPlayers(); i++) {
-			//Thread.sleep(1000);
-			pres.userInput(1);
-		}//player 0 sponsored quest
+		assertEquals("Player 1", game.getcurrentTurn().getName());
+		for(int i=0; i<game.getNumPlayers(); i++) 
+			pres.userInput(1); //all players attempt to sponsor, only player 0 has cards to sponsored quest
+		
 		//player 0 set up quest incorrectly
 		pres.playCard(130, 0);	//try to add weapon to stage with no foe
 		pres.playCard(129, 1);	//play thieves in stage 1
@@ -77,21 +80,25 @@ public class QuestTest extends TestCase{
 		pres.userInput(1);
 		pres.userInput(1);
 		pres.userInput(1);
+		for(Player p : game.getQuest().getPlayers()) {
+			if(p != game.getQuest().getSponsor())
+				assert(game.getQuest().getParticipants().contains(p));
+		}
 		
 		//stage 1
-		pres.playCard(133);		//player 1 plays dagger 
+		pres.playCard(133, -1);		//player 1 plays dagger 
 		pres.userInput(1);		//player 1 done playing cards
-		pres.playCard(135);		//player 2 plays dagger
+		pres.playCard(135, -1);		//player 2 plays dagger
 		pres.userInput(1);		//player 2 done playing cards
-		pres.playCard(137);		//player 3 plays dagger
+		pres.playCard(137, -1);		//player 3 plays dagger
 		pres.userInput(1);		//player 3 done playing cards
 		
 		//stage 2
-		pres.playCard(134);		//player 1 plays lance
+		pres.playCard(134, -1);		//player 1 plays lance
 		pres.userInput(1);		//player 1 done playing cards
-		pres.playCard(136);		//player 2 plays lance
+		pres.playCard(136, -1);		//player 2 plays lance
 		pres.userInput(1);		//player 2 done playing cards
-		pres.playCard(138);		//player 3 plays lance
+		pres.playCard(138, -1);		//player 3 plays lance
 		pres.userInput(1);		//player 3 done playing cards
 		
 		assertEquals(9, game.getAdvDeck().getDiscard().size());
@@ -104,9 +111,85 @@ public class QuestTest extends TestCase{
 		for(int i=0; i<game.getNumPlayers(); i++) {
 			assertEquals(0, game.getPlayerAtIndex(i).getActive().size());
 		}
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 		
 		
 		
+	}
+	
+	public void testQuest2() {
+		//set up story deck
+		log.info("QUEST TEST 2");
+		log.info("===================================");
+		
+		String[] sd = {"boarHunt", "boarHunt", "boarHunt"};
+		StoryDeck storyDeck = new StoryDeck(sd);
+		
+		//set up adventure deck
+		AdventureDeck advDeck = new AdventureDeck();
+		advDeck.shuffle();
+		
+		GameModel game;
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		
+		//set up hands
+		String[] hand0 = {"dagger", "lance"};
+		String[] hand1 = {"dagger", "lance"};
+		String[] hand2 = {"thieves", "dagger", "boar", "valor"};
+		String[] hand3 = {"dagger", "lance"};
+		game.getPlayerAtIndex(0).setHand(hand0);
+		game.getPlayerAtIndex(1).setHand(hand1);
+		game.getPlayerAtIndex(2).setHand(hand2);
+		game.getPlayerAtIndex(3).setHand(hand3);
+		
+		GamePresenter pres = new GamePresenter(game);
+		pres.getModel().beginTurn();
+		
+		for(Player p : game.getPlayers().getPlayers()) {
+			System.out.println(p.getName());
+			p.printHand();
+		}
+		
+		//turn 1
+		System.out.println("Sponsor Quest?");
+		pres.userInput(0);
+		pres.userInput(0);
+		pres.userInput(1);		//player 2 sponsors quest
+		
+		//player 2 sets up quest
+		game.getPlayers().current().printHand();
+		pres.playCard(271, 0);
+		pres.playCard(273, 1);
+		pres.userInput(1);
+		
+		//players confirm participation
+		pres.userInput(1);
+		pres.userInput(1);
+		pres.userInput(1);
+		for(Player p : game.getQuest().getPlayers()) {
+			if(p != game.getQuest().getSponsor())
+				assert(game.getQuest().getParticipants().contains(p));
+		}
+			
+		
+		//players play cards for stage 0
+		pres.playCard(275, -1);
+		pres.userInput(1);
+		assertEquals("Dagger", game.getPlayerAtIndex(3).getStage().get(0).getName());
+		assertEquals(275, game.getPlayerAtIndex(3).getStage().get(0).getID());
+		
+		//player 0 and 1 dont play any cards
+		pres.userInput(1);
+		pres.userInput(1);
+		
+		//player 3 plays lance
+		pres.playCard(276, -1);
+		pres.userInput(1);
+		
+		pres.userInput(1);
+		pres.userInput(1);
+		
+		assertEquals("Player 1", game.getcurrentTurn().getName());	
 	}
 	
 	//named foe case - 3 way tie

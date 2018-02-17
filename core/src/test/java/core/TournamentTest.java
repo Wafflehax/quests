@@ -57,7 +57,7 @@ public class TournamentTest extends TestCase{
 				assertEquals(true, game.getTour().getPlayers().getPlayers().contains(game.getPlayerAtIndex(2)));
 				assertEquals(3, game.getTour().getPlayers().size());
 				
-				pres.playCard(130);
+				pres.playCard(130,0 );
 				pres.userInput(1); //done turn
 				
 				

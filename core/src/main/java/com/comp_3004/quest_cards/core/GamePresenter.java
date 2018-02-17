@@ -105,22 +105,12 @@ public class GamePresenter extends Group{
   public void act(float delta) {
     super.act(delta);
   }
-  
-  	//temporary methods to use for model testing
-  	//takes cardID as input from view, finds corresponding card in model
-  	public void playCard(int cardID) {
-	  	AdventureCard cardToPlay = null;
-	  	for(AdventureCard card : model.getPlayers().current().getHand())
-	  		if(card.getID() == cardID)
-	  			cardToPlay = card;
-	  	if(cardToPlay == null)
-	  		System.out.println("Card not found");
-	  	if(cardToPlay != null)
-	  		if(model.getPlayers().current().playCard(cardToPlay)) {
-	  			//then update view with what changed in the model
-	  		}
-  	}
-  //had to overload for sponsoring a quest as you can add cards to different stages :(
+
+  	/* if player is not a sponsor adding a card to a stage during set up, the value passed in
+  	 * to stageNum can be anything. The player class will determine which playCard method to use
+  	 * based on player state. IF the player is a sponsor, pass in the stage number they are playing
+  	 * the card to.
+  	 */
   	public void playCard(int cardID, int stageNum) {
 	  	AdventureCard cardToPlay = null;
 	  	System.out.println(model.getPlayers().current().getName());
@@ -148,6 +138,7 @@ public class GamePresenter extends Group{
 	  		}
   	}
   
+  	//takes user input from clicks on dialog box( 1: yes/OK 0: no )
   	public void userInput(int b) {
   		if(b == 1) {
   			if(!model.getPlayers().current().userInput(true))
@@ -158,81 +149,4 @@ public class GamePresenter extends Group{
   				model.beginTurn();
   		}
   	}
-  	
-  	/*public void userInput(int b) {
-  		if(b == 1) {
-  			//sponsor clicks done while setting up quest
-  			if(model.getQuest().getSponsor() == model.getPlayers().current()) {
-  				if(model.getPlayers().current().userInput(true))
-  					model.getPlayers().next();
-  				return;
-  			}
-  			//player hits yes when asked if sponsoring
-  			else if(model.getPlayers().current().userInput(true)) {
-  				//user input while in sponsor state
-  				if(model.getPlayers().current().getState() == "sponsor")
-  					if(model.getPlayers().peekNext().getState() == "sponsor")
-  						return;
-  			}
-  		}
-  		else if(b == 0)
-  			//user hits no when asked if participating
-  			model.getPlayers().current().userInput(false);
-  		model.getPlayers().next();
-  		
-  		//checks if no one wants to sponsor quest
-  		if(model.getStory() instanceof QuestCard) {
-			if(model.getQuest().getNumDeclines() == model.getNumPlayers())
-				model.noQuestSponsor();
-  		}
-  		
-  		//move to next player if current player is sponsor in quest
-  		//if(model.getPlayers().current() == model.getQuest().getSponsor() )
-  	}*/
 }
-
-
-/*
-    //this is just a rough idea of what a listener may look like...
-    //play card from hand listener
-    view.addListener(new DragListener() {
-      //user clicks on a card and drags it
-      public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				/*if x,y are inside a cards tap square
-					get card ID
-					return true;
-				else x,y are not inside a cards tap square
-        return false;
-}
-
-  //user drags card to play and releases it
-  public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				/*if x,y are inside the play area's tap square
-					if (model.getcurrentTurn().playCard(card)) {
-						card played successfully (card was allowed to be played by model)
-						these next two methods are essentially setters for view attributes
-						view.updateHand(model.getcurrentTurn().getHand());
-						view.updateActive(model.getcurrentTurn().getActive());
-					}
-  }
-});
-    }
-    public playCard(AdventureCard card) {
-    		model.getPlayers().current().playCard(card);
-    }
-    public userInput(boolean b) {
-    		model.getPlayers().current().userInput(b);
-    }
-
-    //won't need these, as the calls to model.getSomething can be placed directly in the listeners
-	/*update view with model data - called when a change in model occurs
-	private Rank updateRank() { return model.getcurrentTurn().getRank(); }
-	private int updateShields() { return model.getcurrentTurn().getShields(); }
-	private LinkedList<AdventureCard> updateHand() { return model.getcurrentTurn().getHand(); }
-	private LinkedList<AdventureCard> updateActive() { return model.getcurrentTurn().getActive(); }
-	private Stack<AdventureCard> updateAdvDeck() { return model.getAdvDeck().getDeck(); }
-	private Stack<AdventureCard> updateAdvDiscard() { return model.getAdvDeck().getDiscard(); }
-	private Stack<StoryCard> updateStoryDeck() { return model.getStoryDeck().getDeck(); }
-	private Stack<StoryCard> updateStoryDiscard() { return model.getStoryDeck().getDiscard(); }
-    }
- */
