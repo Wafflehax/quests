@@ -246,7 +246,10 @@ public class Quest {
 		//if test - implement later (move on to next stage)
 		if(stageCard instanceof TestCard) {
 			log.info("Stage " + stageNum + " contains " + stageCard.getName());
-			minBid = ((TestCard) stageCard).getMinBid();
+			if(quest.getName() == "Search for the Questing Beast")
+				minBid = 4;
+			else
+				minBid = ((TestCard) stageCard).getMinBid();
 			for(Player p : participants)
 				p.setState("bid");
 		}
@@ -256,7 +259,11 @@ public class Quest {
 	
 	public boolean doneAddingCards() {
 		log.info(players.current().getName()+" is done playing cards for stage "+currentStage);
-		if(sponsor == players.peekNext()) {
+		if(participants.size() == 1) {
+			players.next();
+			return revealStage(currentStage);
+		}
+		else if(sponsor == players.peekNext()) {
 			players.next();	//move current player forward twice to skip sponsor
 			players.next();
 			return revealStage(currentStage);

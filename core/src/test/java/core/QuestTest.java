@@ -4,6 +4,7 @@ package core;
 import org.apache.log4j.Logger;
 
 import com.comp_3004.quest_cards.Stories.Quest;
+import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.CardSpawner;
 import com.comp_3004.quest_cards.cards.StoryDeck;
@@ -380,8 +381,8 @@ public class QuestTest extends TestCase{
 		assertEquals("Player 1", game.getcurrentTurn().getName());
 	}
 	
-	/* testing bids: 
-	 * test of the questing beast on search for the questing beast
+	/* testing quests: 
+	 * testing opting out of a quest as sponsor if already accepted sponsorship
 	 */
 	public void testQuest5() {
 		//set up story deck
@@ -417,7 +418,6 @@ public class QuestTest extends TestCase{
 		pres.userInput(1);
 		
 		//quest set up
-		game.getcurrentTurn().printHand();
 		pres.playCard(699, 0);
 		pres.playCard(697, 1);
 		pres.playCard(698, 2);
@@ -427,5 +427,95 @@ public class QuestTest extends TestCase{
 		pres.userInput(0); //player 2 declines sponsoring quest after accepting 
 		pres.userInput(0);
 		
+		assertEquals(0, game.getPlayerAtIndex(0).getShields());
+		assertEquals(0, game.getPlayerAtIndex(1).getShields());
+		assertEquals(0, game.getPlayerAtIndex(2).getShields());
+		assertEquals(0, game.getPlayerAtIndex(3).getShields());
+		assertEquals(2, game.getPlayerAtIndex(0).getHand().size());
+		assertEquals(6, game.getPlayerAtIndex(1).getHand().size());
+		assertEquals(5, game.getPlayerAtIndex(2).getHand().size());
+		assertEquals(2, game.getPlayerAtIndex(3).getHand().size());
+		assertEquals(0, game.getAdvDeck().getDiscard().size());
+		assertEquals("Player 1", game.getcurrentTurn().getName());
+		
+	}
+	
+	/* testing bids: 
+	 * test of the questing beast on search for the questing beast
+	 * testing quests:
+	 * no winner
+	 * single participant in last stage
+	 */
+	public void testQuest6() {
+		//set up story deck
+		log.info("QUEST TEST 6");
+		log.info("===================================");
+		
+		String[] sd = {"boarHunt", "searchForTheQuestingBeast"};
+		StoryDeck storyDeck = new StoryDeck(sd);
+		
+		//set up adventure deck
+		AdventureDeck advDeck = new AdventureDeck();
+		advDeck.shuffle();
+		
+		GameModel game;
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		
+		//set up hands
+		String[] hand0 = {"dagger", "lance"};
+		String[] hand1 = {"dagger", "lance", "tristan", "arthur", "giant", "saxonKnight"};
+		String[] hand2 = {"giant", "dagger", "boar", "questingBeast", "thieves"};
+		String[] hand3 = {"dagger", "lance"};
+		game.getPlayerAtIndex(0).setHand(hand0);
+		game.getPlayerAtIndex(1).setHand(hand1);
+		game.getPlayerAtIndex(2).setHand(hand2);
+		game.getPlayerAtIndex(3).setHand(hand3);
+		
+		GamePresenter pres = new GamePresenter(game);
+		pres.getModel().beginTurn();
+		
+		//sponsorship
+		pres.userInput(0);
+		pres.userInput(0);
+		pres.userInput(1);
+		
+		//quest set up
+		pres.playCard(841, 0);		
+		pres.playCard(839, 1);
+		pres.playCard(838, 1);
+		pres.playCard(840, 2);
+		pres.playCard(837, 3);
+		pres.userInput(1);
+		
+		//participation
+		pres.userInput(1);
+		pres.userInput(1);
+		pres.userInput(1);
+		
+		//stage 0
+		pres.userInput(1);
+		pres.userInput(1);
+		pres.userInput(1);
+		
+		//stage 1
+		pres.playCard(842, -1);
+		pres.userInput(1);
+		pres.playCard(829, -1);
+		pres.userInput(1);
+		pres.playCard(831, -1);
+		pres.userInput(1);
+		
+		//stage 2
+		pres.userInput(1);
+		pres.userInput(4);
+		pres.userInput(-1);
+		pres.userInput(-1);
+		
+		//player 1 discards cards
+		for(int i =0; i<4; i++)
+			pres.discardCard(game.getcurrentTurn().getHand().get(0).getID());
+		
+		//stage 3
+		pres.userInput(0);
 	}
 }
