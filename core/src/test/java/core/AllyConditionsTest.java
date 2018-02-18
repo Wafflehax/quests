@@ -229,13 +229,14 @@ public class AllyConditionsTest extends TestCase {
 		
 		//stage 0
 		pres.playCard(qu.getID(), -1); 	//player 2 plays iseult
-		pres.playCard(618, -1);	//player 2 plays excalibur
+		pres.playCard(157, -1);	//player 2 plays excalibur
 		pres.userInput(1);
 		pres.userInput(1);	//player 3 plays nothing
 		game.getcurrentTurn().printHand();
 		pres.playCard(tris.getID(), -1);	//player 0 plays tristan
 		pres.userInput(1);
 		//Conditional battle points kick in when both cards are put in play state
+		
 		
 		/* player 2 and player 0 should move on to next stage, but the conditional battlepoints
 		 * for tristan do not kick in, so only player 2 is moving on to the next stage, and Queen
