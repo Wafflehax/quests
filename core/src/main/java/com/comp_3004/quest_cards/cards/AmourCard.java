@@ -16,11 +16,8 @@ public class AmourCard extends AdventureCard {
 	public int getBids() { return this.bids; }
 	
 	//methods
-	public void printCard() {				//prints name, battlepoints, bids, type, and ID of the card
-		System.out.printf("%-15s", name);
-		System.out.printf("%-15s", battlePts);
-		System.out.printf("%-20s", getClass().getSimpleName());
-		System.out.printf("%s\n", getID());
+	public String printCard() {				//prints name, battlepoints, bids, type, and ID of the card
+		return String.format("%-15s%-15s%s", name, battlePts+"/"+bids, getID());
 	}
 	
 	

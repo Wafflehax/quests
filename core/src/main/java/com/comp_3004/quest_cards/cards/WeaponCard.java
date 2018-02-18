@@ -9,11 +9,8 @@ public class WeaponCard extends AdventureCard {
 	}
 	
 	//methods
-	public void printCard() {				//prints name, battlepoints, type, and ID of the card
-		System.out.printf("%-15s", name);
-		System.out.printf("%-15s", battlePts);
-		System.out.printf("%-20s", getClass().getSimpleName());
-		System.out.printf("%s\n", getID());
+	public String printCard() {				//prints name, battlepoints, type, and ID of the card
+		return String.format("%-15s%-15s%s", name, battlePts, getID());
 	}
 	
 

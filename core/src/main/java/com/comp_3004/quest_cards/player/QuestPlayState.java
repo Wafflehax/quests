@@ -2,15 +2,18 @@ package com.comp_3004.quest_cards.player;
 
 import org.apache.log4j.Logger;
 
+import com.comp_3004.quest_cards.Stories.Quest;
 import com.comp_3004.quest_cards.cards.AdventureCard;
+import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.AmourCard;
 import com.comp_3004.quest_cards.cards.FoeCard;
 import com.comp_3004.quest_cards.cards.TestCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.cards.AdventureCard.State;
 
-public class QuestParticipantState extends PlayerState {
-	static Logger log = Logger.getLogger(QuestParticipantState.class); //log4j logger
+public class QuestPlayState extends PlayerState {
+	
+	static Logger log = Logger.getLogger(QuestPlayState.class); //log4j logger
 
 	public boolean playCard(AdventureCard c, Player p) {
 		if(p.getHand().contains(c)) {
@@ -54,10 +57,27 @@ public class QuestParticipantState extends PlayerState {
 			return false; 
 		}
 	}
-
-	public boolean userInput() {
-		// TODO Auto-generated method stub
+	
+	public boolean discardCard(AdventureCard c, AdventureDeck d, Player p) {
+		if(c.getOwner() == p && (c.getState() == State.PLAY || c.getState() == State.HAND)) {
+			if(p.getActive().contains(c)){
+				p.getActive().remove(c);
+				log.info(p.getName() + " discarded " + c.getName() + " from active");
+			}
+			else if(p.getHand().contains(c)) {
+				p.getHand().remove(c);
+				log.info(p.getName() + " discarded " + c.getName() + " from hand");
+			}
+			d.discardCard(c);
+			c.setState(State.DISCARD);
+			c.setOwner(null);
+		}
 		return false;
+	}
+
+	//handle user input "done playing cards"
+	public boolean userInput(int input, Player p) {
+		return p.getQuest().doneAddingCards();
 	}
 
 }

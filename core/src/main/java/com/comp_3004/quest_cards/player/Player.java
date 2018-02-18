@@ -5,6 +5,8 @@ import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 
+import com.comp_3004.quest_cards.Stories.Quest;
+import com.comp_3004.quest_cards.Stories.Tour;
 import com.comp_3004.quest_cards.cards.*;
 import com.comp_3004.quest_cards.cards.AdventureCard.State;
 
@@ -38,8 +40,8 @@ public class Player{
 	private LinkedList<AdventureCard> playerHandCards;
 	private LinkedList<AdventureCard> playerActiveCards;
 	private LinkedList<AdventureCard> playerStageCards;
-	private boolean participateQuest;
-	public volatile boolean participateTournament;
+	private Quest currentQuest;
+	private Tour currTour;
 	private PlayerState state_;
 	
 	// constructor
@@ -50,6 +52,8 @@ public class Player{
 		this.playerHandCards = new LinkedList<AdventureCard>();
 		this.playerActiveCards = new LinkedList<AdventureCard>();
 		this.playerStageCards = new LinkedList<AdventureCard>();
+		this.currentQuest = null;
+		this.currTour = null;
 		this.state_ = new NormalState();
 	}
 	
@@ -58,8 +62,6 @@ public class Player{
 	public Rank getRank() { return this.rank; }
 	public String getRankS() { return rankS(); }
 	public int getShields() { return this.shields; }
-	public boolean participantInTournament() { return participateTournament; }
-	public void participateTour(boolean b) { participateTournament = b; }
 	public int numberOfHandCards() { return playerHandCards.size(); }
 	public int numberOfActiveCards() { return playerActiveCards.size(); }
 	public LinkedList<AdventureCard> getHand() { return this.playerHandCards; }
@@ -67,15 +69,55 @@ public class Player{
 	public LinkedList<AdventureCard> getStage() { return this.playerStageCards; }
 	public boolean getKingsRecognitionBonus() { return this.kingsRecognitionBonus; }
 	public void setKingsRecognitionBonus(boolean b) { this.kingsRecognitionBonus = b; }
-	
+	public void setQuest(Quest q) { this.currentQuest = q; }
+	public Quest getQuest() { return this.currentQuest; }
+	public void setTour(Tour t) { this.currTour = t; }
+	public Tour getTour() { return this.currTour; }
 	public void setState(String s) { 
 		if(s == "normal")
 			state_ = new NormalState();
 		else if(s == "sponsor")
 			state_ = new SponsorState();
 		else if(s == "questParticipant")
-			state_ = new QuestParticipantState();
-		}
+			state_ = new QuestParticipationState();
+		else if(s == "playQuest")
+			state_ = new QuestPlayState();
+		else if(s == "bid")
+			state_ = new BidState();
+		else if(s == "tooManyCards")
+			state_ = new TooManyCardsState();
+		else if(s == "event")
+			state_ = new EventState();
+		else if(s == "tourask")
+			state_ = new TourParticipationState();
+		else if(s== "playtour") 
+			state_ = new TourPlayState();
+		else if(s == "tourcomp")
+			state_ = new TourComputerState();
+	}
+
+	public String getState() {
+		String state = null;
+		if(state_ instanceof NormalState)
+			state = "normal";
+		else if(state_ instanceof SponsorState)
+			state = "sponsor";
+		else if(state_ instanceof QuestParticipationState)
+			state = "questParticipant";
+		else if(state_ instanceof QuestPlayState)
+			state = "playQuest";
+		else if(state_ instanceof TooManyCardsState)
+			state = "tooManyCards";
+		else if(state_ instanceof EventState)
+			state = "event";
+		else if(state_ instanceof TourParticipationState)
+			state = "tourask";
+		else if(state_ instanceof TourPlayState)
+			state = "playtour";
+		else if(state_ instanceof TourComputerState)
+			state = "tourcomp";
+		return state;
+	}
 	
 	public void setHand(String[] cards) { 		//used in testing
 		CardSpawner spawner = new CardSpawner();
@@ -100,6 +142,10 @@ public class Player{
 	//used in testing needed due to playing card needs to be same one in hand
 	public void setHand(LinkedList<AdventureCard> l) {
 		this.playerHandCards = l;
+		for(AdventureCard c : l) {
+			c.setState(State.HAND);
+			c.setOwner(this);
+		}
 	}
 	
 	public int getRankBattlePts() {
@@ -113,19 +159,28 @@ public class Player{
 	}
 
 	public boolean drawCard(AdventureDeck d) {
-		// can't have more than 12 cards
-		//TODO: allow player to play cards if player is already at hand limit
-		if(playerHandCards.size() >= 12) {
-			return false;
+		//call drawCard from adventure deck
+		AdventureCard card = d.drawCard();
+		card.setOwner(this);
+		card.setState(State.HAND);
+		playerHandCards.add(card);
+		log.info(name + " drew " + card.getName() + " from adventure deck");
+		return true;
+	}
+	
+	public void pickCard(String card, AdventureDeck d) {
+		AdventureCard target = null;
+		for(AdventureCard c : d.getDeck()) {
+			if(c.getName() == card) {
+				target = c;
+				break;
+			}
 		}
-		else {
-			//call drawCard from adventure deck
-			AdventureCard card = d.drawCard();
-			playerHandCards.add(card);
-			card.setOwner(this);
-			card.setState(State.HAND);
-			log.info(name + " drew " + card.getName() + " from adventure deck");
-			return true;
+		if(target != null) {
+			d.getDeck().remove(target);
+			target.setOwner(this);
+			target.setState(State.HAND);
+			playerHandCards.add(target);
 		}
 	}
 	
@@ -148,9 +203,11 @@ public class Player{
 	}
 	
 	public boolean existsActive(String cardName) {
-		for(int i = 0; i < playerActiveCards.size(); i++) {
-			if(playerActiveCards.get(i).getName().equalsIgnoreCase(cardName))
-				return true;
+		if(playerActiveCards.size() > 0) {
+			for(int i = 0; i < playerActiveCards.size(); i++) {
+				if(playerActiveCards.get(i).getName().equalsIgnoreCase(cardName))
+					return true;
+			}
 		}
 		return false;
 	}
@@ -158,6 +215,23 @@ public class Player{
 	//play card functionality based on current state of the player
 	public boolean playCard(AdventureCard c) {
 		return state_.playCard(c, this);
+	}
+
+	public boolean playCard(AdventureCard c, int stageNum) {
+		if(state_ instanceof SponsorState)
+			return ((SponsorState)state_).playCard(c, this, stageNum);
+		else
+			return state_.playCard(c, this);
+	}
+	
+	//discard a card from hand or play
+	public boolean discardCard(AdventureCard c, AdventureDeck d) {
+		return state_.discardCard(c, d, this);
+	}
+	
+	//do something based on user input (Yes/No/Done)
+	public boolean userInput(int input) {
+		return state_.userInput(input, this);
 	}
 	
 	//during quest, reveals cards played in a stage
@@ -170,27 +244,12 @@ public class Player{
 		playerStageCards.clear();
 	}
 	
-	//discard a card from hand or play
-	public boolean discardCard(AdventureCard c, AdventureDeck d) {
-		if(c.getOwner() == this && (c.getState() == State.PLAY || c.getState() == State.HAND)) {
-			if(playerActiveCards.contains(c)){
-				playerActiveCards.remove(c);
-				log.info(name + " discarded " + c.getName() + " from active");
-			}
-			else if(playerHandCards.contains(c)) {
-				playerHandCards.remove(c);
-				log.info(name + " discarded " + c.getName() + " from hand");
-			}
-			d.discardCard(c);
-			c.setState(State.DISCARD);
-			c.setOwner(null);
-		}
-		return false;
-	}
 	
-	//discards all the players active weapsons
+	
+	//discards all the players active weapons
 	public void discardWeaponsActive(AdventureDeck d) {
-		for(int i = 0; i < playerActiveCards.size(); i++) {
+		int size = playerActiveCards.size() - 1;
+		for(int i = size; i >= 0; i--) {
 			if(playerActiveCards.get(i) instanceof WeaponCard) {
 				discardCard(playerActiveCards.get(i), d);
 			}
@@ -241,16 +300,6 @@ public class Player{
 		}
 	}
 	
-	public void printHand() {
-		System.out.printf("Hand:\n");
-		System.out.printf("%-15s%-15s%s\n", "Name", "Battle Points", "Type");
-		System.out.printf("==================================\n");
-		for(AdventureCard a : this.playerHandCards) {
-			a.printCard();
-		}
-		System.out.printf("Number of cards: %s\n", this.playerHandCards.size());
-	}
-	
 	private String rankS() {
 		if(this.rank == Rank.SQUIRE)
 			return "Squire";
@@ -263,23 +312,50 @@ public class Player{
 		return "";
 	}
 	
-	public void printActive() {
-		System.out.printf("Active:\n");
-		System.out.printf("%-15s%-15s%s\n", "Name", "Battle Points", "Type");
-		System.out.printf("==================================\n");
-		for(AdventureCard a : this.playerActiveCards) {
-			a.printCard();
+	public int getFreeBids() {
+		int num = 0;
+		for(AdventureCard card : playerActiveCards) {
+			if(card instanceof AllyCard)
+				num += ((AllyCard) card).getBids();
+			if(card instanceof AmourCard)
+				num += ((AmourCard) card).getBids();
 		}
-		System.out.printf("Number of cards: %s\n", this.playerActiveCards.size());
+		return num;
+	}
+	public int numBidsAllowed() {
+		int num = 0;
+		num += getFreeBids();
+		num += playerHandCards.size();	
+		return num;
+	}
+	
+	public void printHand() {
+		log.info(name+"'s Hand: ");
+		log.info(String.format("%-15s%-15s%s", "Name", "Battle Points", "ID"));
+		log.info("==================================");
+		for(AdventureCard a : this.playerHandCards) {
+			log.info(a.printCard());
+		}
+		log.info("Number of cards: "+this.playerHandCards.size());
+	}
+	
+	public void printActive() {
+		log.info(name+"'s Active: ");
+		log.info(String.format("%-15s%-15s%s", "Name", "Battle Points", "ID"));
+		log.info("==================================");
+		for(AdventureCard a : this.playerActiveCards) {
+			log.info(a.printCard());
+		}
+		log.info("Number of cards: "+this.playerActiveCards.size());
 	}
 	
 	public void printStage() {
-		System.out.printf("Stage:\n");
-		System.out.printf("%-15s%-15s%s\n", "Name", "Battle Points", "Type");
-		System.out.printf("==================================\n");
+		log.info("Stage: ");
+		log.info(String.format("%-15s%-15s%s", "Name", "Battle Points", "ID"));
+		log.info("==================================");
 		for(AdventureCard a : this.playerStageCards) {
-			a.printCard();
+			log.info(a.printCard());
 		}
-		System.out.printf("Number of cards: %s\n", this.playerStageCards.size());
+		log.info(String.format("Number of cards: %s\n", this.playerStageCards.size()));
 	}
 }

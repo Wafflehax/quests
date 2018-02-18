@@ -3,25 +3,61 @@ package com.comp_3004.quest_cards.player;
 import org.apache.log4j.Logger;
 
 import com.comp_3004.quest_cards.cards.AdventureCard;
+import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.AdventureCard.State;
 
 public class SponsorState extends PlayerState {
 	static Logger log = Logger.getLogger(SponsorState.class); //log4j logger
 
 	public boolean playCard(AdventureCard c, Player p) {
+		return false; //need to fix this later
+	}
+	
+	public boolean playCard(AdventureCard c, Player p, int stageNum) {
 		if(p.getHand().contains(c)) {
-			p.getHand().remove(c);
-			c.setState(State.QUEST);
-			return true;
-		}else {
+			if(p.getQuest().addStageCard(c, stageNum)) {
+				p.getHand().remove(c);
+				c.setState(State.QUEST);
+				return true;
+			}else {
+				log.info("Failed to play  " + c.getName());
+				return true; 
+			}
+		}
+		else {
 			log.info("Error: " + p.getName() + " does not have the card " + c.getName() + " in hand");
-			return false; 
+			return false;
 		}
 	}
-
-	public boolean userInput() {
-		// TODO: handle user input during sponsor state
+	
+	public boolean discardCard(AdventureCard c, AdventureDeck d, Player p) {
+		if(c.getOwner() == p && c.getState() == State.HAND) {
+			if(p.getHand().contains(c)) {
+				p.getHand().remove(c);
+				log.info(p.getName() + " discarded " + c.getName() + " from hand");
+			}
+			d.discardCard(c);
+			c.setState(State.DISCARD);
+			c.setOwner(null);
+			if(p.getHand().size() > 12)
+				return true;
+			else
+				return false;
+		}
+		log.info(p.getName()+" does not have "+c.getName()+" in their hand");
 		return false;
+	}
+
+	public boolean userInput(int input, Player p) {
+		if(p.getQuest().getSponsor() == p) {
+			//quest set up complete
+			if(input == 1)
+				return p.getQuest().checkQuestSetup();
+			if(input == 0)
+				return p.getQuest().questSponsorship(p, input);
+		}
+		return p.getQuest().questSponsorship(p, input);
+
 	}
 
 }

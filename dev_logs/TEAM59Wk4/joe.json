@@ -1,0 +1,13 @@
+{
+  "Code": [
+    "F7.2.3 Fetch ImageAsset via Card.getName()"
+    "F8.4 Changed Menu,Rule,SplashState(s) to Presenters, extending Group, to allow for Homogenous transition to GamePresenter. Memory leaks avoided via proper dispose()"
+    "F8.5 Implemented DragListener() and ClickListener() on cards to allow for easy viewing, and play-manipulation.  In progress, but Cards can now access playCard(int cardID) method, sending its unique ID to the model for processing.  Appropriate reaction to the model still pending."
+ 
+  ],
+  "Research": ["LibGDX Animations and State-Transitions"],
+  "NextWeek": [
+    "Card Reactions to Model, displaying StoryCards, and implementing appropriate view-permissions based on Quest-Stage, current-player and other factors."
+  ],
+  "Hours": 14
+}

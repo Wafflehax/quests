@@ -3,7 +3,7 @@ package com.comp_3004.quest_cards.cards;
 public class QuestCard extends StoryCard {
 	private int stages;
 	private String namedFoe = null;
-
+	
 	//constructors
 	public QuestCard(String n, int s) {
 		this.name = n;
@@ -18,5 +18,6 @@ public class QuestCard extends StoryCard {
 	//getters/setters
 	public int getStages() { return this.stages; }
 	public String getNamedFoe() { return this.namedFoe; }
+	
 
 }
