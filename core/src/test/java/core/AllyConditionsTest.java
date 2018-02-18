@@ -5,6 +5,7 @@ import java.util.Stack;
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureCard.State;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
+import com.comp_3004.quest_cards.cards.AllyCard;
 import com.comp_3004.quest_cards.cards.AllyObserver;
 import com.comp_3004.quest_cards.cards.AllySubjectObserver;
 import com.comp_3004.quest_cards.cards.CardSpawner;
@@ -13,6 +14,7 @@ import com.comp_3004.quest_cards.cards.StoryCard;
 import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.cards.TestObserver;
 import com.comp_3004.quest_cards.core.GameModel;
+import com.comp_3004.quest_cards.core.GamePresenter;
 import com.comp_3004.quest_cards.player.Players;
 
 import junit.framework.TestCase;
@@ -179,6 +181,62 @@ public class AllyConditionsTest extends TestCase {
 		assertEquals(false, tesbeast.activated());
 		assertEquals(false, pellin.activated());
 		assertEquals(true, (tesbeast.getBattlePts() == 0 && tesbeast.getMinBid() == 0));
+		
+	}
+	
+	//testing tristan/iseult in an actual game
+	public void testFive() {	
+		StoryDeck storyDeck = new StoryDeck();
+		storyDeck.setTopCard("Boar Hunt");
+		storyDeck.setTopCard("Boar Hunt");
+		
+		//set up adventure deck
+		AdventureDeck advDeck = new AdventureDeck();
+		advDeck.shuffle();
+		
+		GameModel game;
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		
+		//set up hands
+		String[] hand1 = {"blackKnight", "temptation"};
+		String[] hand2 = {"iseult", "excalibur", "lance"};
+		game.getPlayerAtIndex(0).pickCard("Sir Tristan", advDeck);
+		game.getPlayerAtIndex(1).setHand(hand1);
+		game.getPlayerAtIndex(2).setHand(hand2);
+		game.getPlayerAtIndex(2).pickCard("Queen Iseult", advDeck);
+		
+		GamePresenter pres = new GamePresenter(game);
+		pres.getModel().beginTurn();
+		
+		//sponsorship
+		pres.userInput(0);
+		pres.userInput(1); //player 1 sponsors
+		
+		//set up
+		pres.playCard(615, 0);	//black knight
+		pres.playCard(616, 1);	//test of temptation
+		pres.userInput(1);
+		
+		//participation
+		pres.userInput(1);
+		pres.userInput(1);
+		pres.userInput(1);
+		
+		//stage 0
+		pres.playCard(617, -1); 	//player 2 plays iseult
+		pres.playCard(618, -1);	//player 2 plays excalibur
+		pres.userInput(1);
+		pres.userInput(1);	//player 3 plays nothing
+		game.getcurrentTurn().printHand();
+		pres.playCard(592, -1);	//player 0 plays tristan
+		pres.userInput(1);
+		
+		/* player 2 and player 0 should move on to next stage, but the conditional battlepoints
+		 * for tristan do not kick in, so only player 2 is moving on to the next stage, and Queen
+		 * Iseults bids should be at 4 since Tristan is in play
+		 */
+		assertEquals(4, ((AllyCard)game.getcurrentTurn().getActive().get(0)).getBids());
+		assertEquals(2, game.getQuest().getParticipants().size());
 		
 	}
 	
