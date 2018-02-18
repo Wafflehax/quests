@@ -7,17 +7,22 @@ import org.apache.log4j.Logger;
 
 import com.comp_3004.quest_cards.Stories.Event;
 import com.comp_3004.quest_cards.Stories.Quest;
+import com.comp_3004.quest_cards.Stories.Tour;
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.AllyCard;
+import com.comp_3004.quest_cards.cards.AllyObserver;
+import com.comp_3004.quest_cards.cards.AllySubjectObserver;
 import com.comp_3004.quest_cards.cards.AmourCard;
 import com.comp_3004.quest_cards.cards.Card;
-import com.comp_3004.quest_cards.cards.StoryDeck;	//used for testing
+import com.comp_3004.quest_cards.cards.StoryDeck;
+import com.comp_3004.quest_cards.cards.TestObserver;
+import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
-import com.comp_3004.quest_cards.core.states.State;			//used for testing
 import com.comp_3004.quest_cards.player.Player;
 import com.comp_3004.quest_cards.player.Players;
 import com.comp_3004.quest_cards.cards.QuestCard;
+import com.comp_3004.quest_cards.cards.QuestCardSubject;
 import com.comp_3004.quest_cards.cards.StoryCard;
 
 
@@ -25,10 +30,10 @@ public class GameModel{
 	
 	static Logger log = Logger.getLogger(GameModel.class); //log4j logger
 	public static final byte MAX_HAND_SIZE = 12;
-	public Stack<State> state = new Stack<State>();
 	
 	private Event event;
 	private Quest quest;
+	private Tour tour;
 	private AdventureDeck advDeck;
 	private StoryDeck storyDeck;
 	private int numPlayers;
@@ -36,12 +41,7 @@ public class GameModel{
 	private Card StoryEv; //hold current Story card, Event
 	public Players playersTemp;
 	     
-	private int joiners; // holds the amount of players that initally joined a tournament
-
-	
-	public void resetJoiners() { joiners = 0; }
-	public int getJoiners() { return joiners; }
-	
+		
 	
 	//getters 
 	public Players getPlayers() { return players; }
@@ -52,32 +52,12 @@ public class GameModel{
 	public StoryDeck getStoryDeck() { return this.storyDeck; }
 	public Card getStory() { return StoryEv; }
 	public Quest getQuest() { return this.quest; }
+	public Tour getTour() { return tour; }
 	
 	
-	public State getState() { 
-		if(state == null || state.isEmpty()) {
-			log.info("getState: Error no state");
-			return null;
-		}
-		else
-			return state.peek();
-	}
-	public void StateMsg() {
-		if(getState() != null)
-			getState().msg();
-	}
-	public State sPop() { return state.pop(); }
 	// Setters
 	public void setPlayers(Players p) { players = p; }
 	public void setStory(Card c) {		this.StoryEv = c;	}
-	public void pushSt(State m) { state.push(m); } 
-	
-	//reset position to start
-	public void SetPlayerArrayResetPos(ArrayList<Player> p) {
-		players.setPlayers(p);
-		players.setSize(p.size());
-		players.setPos(0);
-	}
 	
 	// constructor
 	public GameModel() {
@@ -86,6 +66,8 @@ public class GameModel{
 		storyDeck = new StoryDeck();
 		storyDeck.shuffle();
 		StoryEv = null;
+		//init special cards
+		initSpecialAlly();
 		initPlayersStart(4, MAX_HAND_SIZE);
 	}
 
@@ -95,6 +77,7 @@ public class GameModel{
 		storyDeck = new StoryDeck();
 		storyDeck.shuffle();
 		StoryEv = null;
+		initSpecialAlly();
 		initPlayersStart(num, MAX_HAND_SIZE);
 	}
 	
@@ -104,8 +87,8 @@ public class GameModel{
 		this.advDeck = a;
 		this.storyDeck = s;
 		StoryEv = null;
+		initSpecialAlly();
 		initPlayersStart(numPlayers, c); //c is the number of cards the player will start with
-
 	}
 	
 	public void beginTurn() {
@@ -113,6 +96,9 @@ public class GameModel{
 		StoryEv = cardDrawn;
 		if(cardDrawn instanceof QuestCard) {
 			quest = new Quest((QuestCard)cardDrawn, players, advDeck);
+		}
+		else if(cardDrawn instanceof TournamentCard) {
+			tour = new Tour(players, (TournamentCard)cardDrawn, advDeck);
 		}
 	}
 	
@@ -133,31 +119,46 @@ public class GameModel{
 		}
 	}
 	
-	public boolean disCard(Card c) {
-		if(c instanceof AdventureCard) {
-			AdventureCard cw = (AdventureCard)c;
-			return players.current().discardCard(cw, advDeck);		
-		}
-		else
-			return false;
+	private void initSpecialAlly() {
+		AllySubjectObserver qu = (AllySubjectObserver) find("Queen Iseult", advDeck);
+		AllySubjectObserver tris = (AllySubjectObserver) find("Sir Tristan", advDeck);	
+		qu.register(tris);
+		tris.register(qu);
+		
+		QuestCardSubject testgknight = (QuestCardSubject)find("Test of the Green Knight", storyDeck);
+		AllyObserver gawain = (AllyObserver) find("Sir Gawain", advDeck);	
+		testgknight.register(gawain);
+		
+		QuestCardSubject dqueenhonor = (QuestCardSubject)find("Defend the Queen's Honor", storyDeck);
+		AllyObserver lancelot = (AllyObserver) find("Sir Lancelot", advDeck);	
+		dqueenhonor.register(lancelot);
+		
+		QuestCardSubject grailho = (QuestCardSubject)find("Search for the Holy Grail", storyDeck);
+		AllyObserver perciv = (AllyObserver) find("Sir Percival", advDeck);	
+		grailho.register(perciv);
+		
+		QuestCardSubject questbeat = (QuestCardSubject)find("Search for the Questing Beast", storyDeck);
+		AllyObserver pellin = (AllyObserver) find("King Pellinore", advDeck);	
+		TestObserver tesbeast = (TestObserver) find("Test of the Questing Beast", advDeck);	
+		questbeat.register(tesbeast);
+		questbeat.register(pellin);
 	}
 	
-	public void discardAmours() {
-		if(players.size() > 0) {
-			for(int i = 0; i < players.size(); i++) {
-				players.getPlayerAtIndex(i).discardAmoursActive(advDeck);
-			}
+	private AdventureCard find(String n, AdventureDeck d) {
+		for(AdventureCard c: d.getDeck()) {
+			if(c.getName().equalsIgnoreCase(n))
+				return c;	
 		}
+		return null;
 	}
 	
-	public void discardWeapons() {
-		if(players.size() > 0) {
-			for(int i = 0; i < players.size(); i++) {
-				players.getPlayerAtIndex(i).discardWeaponsActive(advDeck);
-			}
+	private StoryCard find(String n, StoryDeck d) {
+		for(StoryCard c: d.getDeck()) {
+			if(c.getName().equalsIgnoreCase(n))
+				return c;	
 		}
+		return null;
 	}
-	
 	
 	public boolean inPlay(String name) {
 		return getPlayers().current().existsActive(name);
@@ -171,27 +172,6 @@ public class GameModel{
 		return players.prev();
 	}
 	
-	public void forceAdventureDraw() {
-		players.current().forceDrawAdventure(advDeck);
-		log.info("Forced " + players.current().getName() + " to draw adventure card");
-	}
-	
-	public void setParticipationTour(boolean b) {
-		if(b) {
-			players.current().participateTournament = true;
-			joiners++;	
-		}else {
-			players.current().participateTournament = false;
-		}		
-	}
-	
-	public boolean enoughTournamentParticipants() {
-		if(players.getTournamentParticipants().size() >= 2) {
-			return true;
-		}
-		else
-			return false;
-	}
 	
 	public void initPlayersStart(int numPlayers, int numCards) {
 		this.numPlayers = numPlayers;

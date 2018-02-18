@@ -13,14 +13,16 @@
     “F18.a Sponsoring/setting up a Quest: implemented”,
     “F18.b Sponsoring/setting up a Quest: handling named foes”,
     “F19 Playing a Quest: implemented”,
-    “F20 Quest end/winning conditions: implemented”
+    “F20 Quest end/winning conditions: implemented”,
+    “F22 Tests/bids: bidding system implemented”,
+    “F22 Tests/bids: winning condition met if only 1 player remains”,
+    “F22 Tests/bids: wining player must discard bidder cards to continue”,
   ],
   "Research": [“Mediator Design Pattern”],
   "NextWeek": [
     "F18-20 Quests - Create additional testing scenarios”,
-    “F21 Allies with conditional battle points”,
-    “F22 Tests/bids”,
-    “F23 Allies with free/conditional bids”
+    “F23 Allies with free/conditional bids”,
+    “F26 AI”
   ],
-  "Hours": 33
+  "Hours": 38
 }

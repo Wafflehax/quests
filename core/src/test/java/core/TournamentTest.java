@@ -1,38 +1,73 @@
 package core;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Stack;
+import com.comp_3004.quest_cards.cards.AdventureDeck;
 
-import javax.naming.spi.DirStateFactory.Result;
-
-import org.apache.log4j.Logger;
-
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
-import com.comp_3004.quest_cards.cards.AdventureCard;
-import com.comp_3004.quest_cards.cards.AllyCard;
-import com.comp_3004.quest_cards.cards.AmourCard;
-import com.comp_3004.quest_cards.cards.Card;
-import com.comp_3004.quest_cards.cards.FoeCard;
-import com.comp_3004.quest_cards.cards.TournamentCard;
-import com.comp_3004.quest_cards.cards.WeaponCard;
-import com.comp_3004.quest_cards.core.GameController;
+import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.core.GameModel;
-import com.comp_3004.quest_cards.core.states.TourAskParticipation;
-import com.comp_3004.quest_cards.core.states.TourInit;
-import com.comp_3004.quest_cards.core.states.TourRoundEndEvaluation;
-import com.comp_3004.quest_cards.core.states.State;
-import com.comp_3004.quest_cards.core.states.TourStartFirstTime;
+import com.comp_3004.quest_cards.core.GamePresenter;
 import com.comp_3004.quest_cards.player.Player;
-import com.comp_3004.quest_cards.player.Players;
-
 import junit.framework.TestCase;
-import utils.IntPlayerPair;
-import utils.utils;
+
 
 public class TournamentTest extends TestCase{
-	public void testTourInit(){			
+	
+	public void testTourPart() {
+		
+				//set up story deck
+				StoryDeck storyDeck = new StoryDeck();
+				storyDeck.setTopCard("Tournament at Orkney");
+				storyDeck.printDeck();
+				
+				//set up adventure deck
+				AdventureDeck advDeck = new AdventureDeck();
+				advDeck.shuffle();
+				
+				GameModel game;
+				game = new GameModel(4, 0, advDeck, storyDeck);
+				
+				//set up hands
+				String[] hand0 = {"thieves", "dagger", "boar", "amour", "amour"};
+				String[] hand1 = {"dagger", "lance"};
+				String[] hand2 = {"dagger", "lance"};
+				String[] hand3 = {"dagger", "lance"};
+				game.getPlayerAtIndex(0).setHand(hand0);
+				
+				game.getPlayerAtIndex(1).setHand(hand1);
+				game.getPlayerAtIndex(2).setHand(hand2);
+				game.getPlayerAtIndex(3).setHand(hand3);
+				
+				GamePresenter pres = new GamePresenter(game);
+				pres.getModel().beginTurn();
+				
+				for(Player p : game.getPlayers().getPlayers()) {
+					System.out.println(p.getName());
+					p.printHand();
+				}
+				//asking players if they want to participate
+				
+				pres.userInput(1); //yes
+				pres.userInput(1); //yes
+				pres.userInput(1); //yes
+				pres.userInput(0); //no
+				
+				//check input registered correctly
+				assertEquals(true, game.getTour().getPlayers().getPlayers().contains(game.getPlayerAtIndex(0)));
+				assertEquals(true, game.getTour().getPlayers().getPlayers().contains(game.getPlayerAtIndex(1)));
+				assertEquals(true, game.getTour().getPlayers().getPlayers().contains(game.getPlayerAtIndex(2)));
+				assertEquals(3, game.getTour().getPlayers().size());
+				
+				pres.playCard(130,0 );
+				pres.userInput(1); //done turn
+				
+				
+				pres.userInput(1); //done turn
+				pres.userInput(1); //done turn
+				
+				
+	}
+	
+	
+	/*public void testTourInit(){			
 		
 		//test TourInit pushes right things on state stack
 		GameModel m = new GameModel(4);   // init with 4 players
@@ -189,15 +224,6 @@ public class TournamentTest extends TestCase{
 		c.no();
 		assertEquals(false, c.handPress(amour1));
 
-		//testing calculation of battle points
-		//no special abilities (dependent cards), Weapons,Ally,Amour
-		TourRoundEndEvaluation ev = new TourRoundEndEvaluation(c); 
-		Player p0 = new Player("Player 0");
-		String cards1[] = {"horse","sword","excalibur","lance","dagger","battleAx","pellinore","merlin"};
-		p0.setActiveHand(cards1);
-	
-		assertEquals(105 ,ev.calcBattlePoints(p0));
-		//testing calculating battle points	
 	}
 	
 	public void testTour3() {
@@ -311,5 +337,5 @@ public class TournamentTest extends TestCase{
 		assertEquals(false, p0.getActive().contains(amour));
 		assertEquals(false, p0.getActive().contains(lance));
 	}
-	
+	*/
 }

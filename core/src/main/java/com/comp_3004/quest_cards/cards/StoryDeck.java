@@ -1,9 +1,7 @@
 package com.comp_3004.quest_cards.cards;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
-
 import org.apache.log4j.Logger;
 
 public class StoryDeck extends Deck {
@@ -54,11 +52,21 @@ public class StoryDeck extends Deck {
 		public Stack<StoryCard> getDiscard() { return this.discard; }
 	
 	//methods
+		
+	public void setTopCard(String card) {
+		StoryCard target = null;
+		for(StoryCard c : deck) {
+			if(c.getName() == card) {
+				target = c;
+				break;
+			}	
+		}
+		deck.remove(target);
+		deck.push(target);
+	}
 	public void shuffle() {							//shuffles the deck
 		Collections.shuffle(deck);
 	}
-	
-	
 	
 	protected void shuffleDiscardIntoDeck() {		//shuffles the discard pile into the deck
 		while(discard.empty() != true) {
@@ -70,13 +78,26 @@ public class StoryDeck extends Deck {
 	public StoryCard drawCard() {					//draws the top card of the story deck
 		if(deck.empty()) {
 			shuffleDiscardIntoDeck();
-			return deck.pop();
+			StoryCard drawn = deck.pop();
+			if(drawn instanceof QuestCardSubject) {
+				QuestCardSubject p = (QuestCardSubject)drawn;
+				p.setPlayed(true);
+			}
+			return drawn;
 		}
-		else
-			return deck.pop();
+		else {
+			StoryCard drawn = deck.pop();
+			if(drawn instanceof QuestCardSubject) {
+				QuestCardSubject p = (QuestCardSubject)drawn;
+				p.setPlayed(true);
+			}
+			return drawn;
+		}
 	}
 	
 	public void discardCard(StoryCard c) {			//moves card to decks discard pile
+		if(c instanceof QuestCardSubject)
+			((QuestCardSubject)c).setPlayed(false);
 		discard.push(c);
 	}
 	
@@ -136,5 +157,4 @@ public class StoryDeck extends Deck {
 			this.deck.add(spawner.spawnStoryCard("repelTheSaxonInvaders"));
 		}
 	}
-
 }

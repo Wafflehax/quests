@@ -23,10 +23,10 @@ public class CardSpawner {
 		else if(name =="kingsCallToArms") { return new EventCard("King's Call to Arms"); }
 		
 		//quest spawners
-		else if(name == "searchForTheHolyGrail") {return new QuestCard("Search for the Holy Grail", 5, "all"); }
-		else if(name == "testOfTheGreenKnight") { return new QuestCard("Test of the Green Knight", 4, "Green Knight"); }
-		else if(name == "searchForTheQuestingBeast") { return new QuestCard("Search for the Questing Beast", 4); }
-		else if(name == "defendTheQueensHonor") { return new QuestCard("Defend the Queen's Honor", 4, "all"); }
+		else if(name == "searchForTheHolyGrail") {return new QuestCardSubject("Search for the Holy Grail", 5, "all"); }
+		else if(name == "testOfTheGreenKnight") { return new QuestCardSubject("Test of the Green Knight", 4, "Green Knight"); }
+		else if(name == "searchForTheQuestingBeast") { return new QuestCardSubject("Search for the Questing Beast", 4); }
+		else if(name == "defendTheQueensHonor") { return new QuestCardSubject("Defend the Queen's Honor", 4, "all"); }
 		else if(name == "rescueTheFairMaiden") { return new QuestCard("Rescue the Fair Maiden", 3, "Black Knight");}
 		else if(name == "journeyThroughTheEnchantedForest") { return new QuestCard("Journey Through the Enchanted Forest", 3, "Evil Knight"); }
 		else if(name == "slayTheDragon") { return new QuestCard("Slay the Dragon", 3, "Dragon"); }
@@ -62,21 +62,21 @@ public class CardSpawner {
 		else if(name == "battleAx") { return new WeaponCard("Battle-Ax", 15); }
 		
 		//ally spawners
-		else if(name == "gawain") { return new AllyCard("Sir Gawain", 10, 0); }
-		else if(name == "pellinore") { return new AllyCard("King Pellinore", 10, 0); }
-		else if(name == "percival") { return new  AllyCard("Sir Percival", 5, 0); }
-		else if(name == "tristan") { return new AllyCard("Sir Tristan", 10, 0); }
+		else if(name == "gawain") { return new AllyObserver("Sir Gawain", 10, 0, 20, 0); }
+		else if(name == "pellinore") { return new AllyObserver("King Pellinore", 10, 0, 10, 4); }
+		else if(name == "percival") { return new  AllyObserver("Sir Percival", 5, 0, 20, 0); }
+		else if(name == "tristan") { return new AllySubjectObserver("Sir Tristan", 10, 0, 20, 0, new String[] {"Queen Iseult"}); }
 		else if(name == "arthur") { return new AllyCard("King Arthur", 10,2); }
 		else if(name == "guinevere") { return new AllyCard("Queen Guinevere", 0, 3); }
 		else if(name == "merlin") { return new AllyCard("Merlin", 0, 0); }
-		else if(name == "iseult") { return new AllyCard("Queen Iseult", 0, 2); }
-		else if(name == "lancelot") { return new AllyCard("Sir Lancelot", 15, 0); }
+		else if(name == "iseult") { return new AllySubjectObserver("Queen Iseult", 0, 2, 0, 4, new String[] {"Sir Tristan"}); }
+		else if(name == "lancelot") { return new AllyObserver("Sir Lancelot", 15, 0, 25, 0); }
 		else if(name == "galahad" ) { return new AllyCard("Sir Galahad", 15, 0); }
 		
 		//test spawners
-		else if(name == "questingBeast") { return new TestCard("Test of the Questing Beast", 0); }
-		else if(name == "temptation") { return new TestCard("Test of Temptation", 0); }
-		else if(name == "valor") { return new TestCard("Test of Valor", 0); }
+		else if(name == "questingBeast") { return new TestObserver("Test of the Questing Beast", 4); }
+		else if(name == "temptation") { return new TestCard("Test of Temptation"); }
+		else if(name == "valor") { return new TestCard("Test of Valor"); }
 		else if(name == "morganLeFey") { return new TestCard("Test of Morgan Le Fey", 3); }
 		
 		//amour spawner

@@ -1,7 +1,10 @@
 package core;
 
+import org.apache.log4j.Logger;
+
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureCard.State;
+import com.comp_3004.quest_cards.player.NormalState;
 import com.comp_3004.quest_cards.player.Player;
 import com.comp_3004.quest_cards.player.Player.Rank;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
@@ -9,6 +12,8 @@ import com.comp_3004.quest_cards.cards.AdventureDeck;
 import junit.framework.TestCase;
 
 public class PlayerTest extends TestCase{
+	
+	static Logger log = Logger.getLogger(PlayerTest.class); //log4j logger
 
 	public void testPlayerInit() {
 		Player p = new Player("player1");
@@ -33,7 +38,7 @@ public class PlayerTest extends TestCase{
 	}
 	
 	public void testPlayCard() {
-		String[] cards = {"tristan"};
+		String[] cards = {"tristan", "dagger"};
 		AdventureDeck d = new AdventureDeck(cards);
 		Player p = new Player("player1");
 		p.drawCard(d);

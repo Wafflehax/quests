@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import org.apache.log4j.Logger;
 
 import com.comp_3004.quest_cards.Stories.Quest;
+import com.comp_3004.quest_cards.Stories.Tour;
 import com.comp_3004.quest_cards.cards.*;
 import com.comp_3004.quest_cards.cards.AdventureCard.State;
 
@@ -40,7 +41,7 @@ public class Player{
 	private LinkedList<AdventureCard> playerActiveCards;
 	private LinkedList<AdventureCard> playerStageCards;
 	private Quest currentQuest;
-	public volatile boolean participateTournament;
+	private Tour currTour;
 	private PlayerState state_;
 	
 	// constructor
@@ -52,6 +53,7 @@ public class Player{
 		this.playerActiveCards = new LinkedList<AdventureCard>();
 		this.playerStageCards = new LinkedList<AdventureCard>();
 		this.currentQuest = null;
+		this.currTour = null;
 		this.state_ = new NormalState();
 	}
 	
@@ -60,8 +62,6 @@ public class Player{
 	public Rank getRank() { return this.rank; }
 	public String getRankS() { return rankS(); }
 	public int getShields() { return this.shields; }
-	public boolean participantInTournament() { return participateTournament; }
-	public void participateTour(boolean b) { participateTournament = b; }
 	public int numberOfHandCards() { return playerHandCards.size(); }
 	public int numberOfActiveCards() { return playerActiveCards.size(); }
 	public LinkedList<AdventureCard> getHand() { return this.playerHandCards; }
@@ -71,7 +71,8 @@ public class Player{
 	public void setKingsRecognitionBonus(boolean b) { this.kingsRecognitionBonus = b; }
 	public void setQuest(Quest q) { this.currentQuest = q; }
 	public Quest getQuest() { return this.currentQuest; }
-	
+	public void setTour(Tour t) { this.currTour = t; }
+	public Tour getTour() { return this.currTour; }
 	public void setState(String s) { 
 		if(s == "normal")
 			state_ = new NormalState();
@@ -87,7 +88,14 @@ public class Player{
 			state_ = new TooManyCardsState();
 		else if(s == "event")
 			state_ = new EventState();
-		}
+		else if(s == "tourask")
+			state_ = new TourParticipationState();
+		else if(s== "playtour") 
+			state_ = new TourPlayState();
+		else if(s == "tourcomp")
+			state_ = new TourComputerState();
+	}
+
 	public String getState() {
 		String state = null;
 		if(state_ instanceof NormalState)
@@ -102,7 +110,12 @@ public class Player{
 			state = "tooManyCards";
 		else if(state_ instanceof EventState)
 			state = "event";
-		
+		else if(state_ instanceof TourParticipationState)
+			state = "tourask";
+		else if(state_ instanceof TourPlayState)
+			state = "playtour";
+		else if(state_ instanceof TourComputerState)
+			state = "tourcomp";
 		return state;
 	}
 	
@@ -129,6 +142,10 @@ public class Player{
 	//used in testing needed due to playing card needs to be same one in hand
 	public void setHand(LinkedList<AdventureCard> l) {
 		this.playerHandCards = l;
+		for(AdventureCard c : l) {
+			c.setState(State.HAND);
+			c.setOwner(this);
+		}
 	}
 	
 	public int getRankBattlePts() {
@@ -144,9 +161,9 @@ public class Player{
 	public boolean drawCard(AdventureDeck d) {
 		//call drawCard from adventure deck
 		AdventureCard card = d.drawCard();
-		playerHandCards.add(card);
 		card.setOwner(this);
 		card.setState(State.HAND);
+		playerHandCards.add(card);
 		log.info(name + " drew " + card.getName() + " from adventure deck");
 		return true;
 	}
@@ -170,13 +187,20 @@ public class Player{
 	}
 	
 	public boolean existsActive(String cardName) {
-		for(int i = 0; i < playerActiveCards.size(); i++) {
-			if(playerActiveCards.get(i).getName().equalsIgnoreCase(cardName))
-				return true;
+		if(playerActiveCards.size() > 0) {
+			for(int i = 0; i < playerActiveCards.size(); i++) {
+				if(playerActiveCards.get(i).getName().equalsIgnoreCase(cardName))
+					return true;
+			}
 		}
 		return false;
 	}
 	
+	//play card functionality based on current state of the player
+	public boolean playCard(AdventureCard c) {
+		return state_.playCard(c, this);
+	}
+
 	public boolean playCard(AdventureCard c, int stageNum) {
 		if(state_ instanceof SponsorState)
 			return ((SponsorState)state_).playCard(c, this, stageNum);
