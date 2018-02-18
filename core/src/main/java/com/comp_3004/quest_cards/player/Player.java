@@ -232,7 +232,8 @@ public class Player{
 	
 	//discards all the players active weapsons
 	public void discardWeaponsActive(AdventureDeck d) {
-		for(int i = 0; i < playerActiveCards.size(); i++) {
+		int size = playerActiveCards.size() - 1;
+		for(int i = size; i >= 0; i--) {
 			if(playerActiveCards.get(i) instanceof WeaponCard) {
 				discardCard(playerActiveCards.get(i), d);
 			}
