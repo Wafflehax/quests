@@ -6,6 +6,8 @@ import org.apache.log4j.Logger;
 import com.comp_3004.quest_cards.Stories.Quest;
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
+import com.comp_3004.quest_cards.cards.AllyCard;
+import com.comp_3004.quest_cards.cards.AllySubjectObserver;
 import com.comp_3004.quest_cards.cards.CardSpawner;
 import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.core.GameModel;
@@ -603,61 +605,5 @@ public class QuestTest extends TestCase{
 		assertEquals(1, game.getPlayerAtIndex(3).getHand().size());
 		assertEquals(3, game.getAdvDeck().getDiscard().size());
 		assertEquals("Player 1", game.getcurrentTurn().getName());
-	}
-	
-	/* testing bids:
-	 * tristan/iseult conditionals
-	 */
-	public void testQuest8() {
-		//set up story deck
-		log.info("QUEST TEST 8");
-		log.info("===================================");
-		
-		StoryDeck storyDeck = new StoryDeck();
-		storyDeck.setTopCard("Boar Hunt");
-		storyDeck.setTopCard("Boar Hunt");
-		
-		//set up adventure deck
-		AdventureDeck advDeck = new AdventureDeck();
-		advDeck.shuffle();
-		
-		GameModel game;
-		game = new GameModel(4, 0, advDeck, storyDeck);
-		
-		//set up hands
-		String[] hand0 = {"tristan"};
-		String[] hand1 = {"giant", "temptation"};
-		String[] hand2 = {"iseult", "excalibur", "lance"};
-		game.getPlayerAtIndex(0).setHand(hand0);
-		game.getPlayerAtIndex(1).setHand(hand1);
-		game.getPlayerAtIndex(2).setHand(hand2);
-		
-		GamePresenter pres = new GamePresenter(game);
-		pres.getModel().beginTurn();
-		
-		//sponsorship
-		pres.userInput(0);
-		pres.userInput(1);
-		
-		//set up
-		pres.playCard(1318, 0);
-		pres.playCard(1319, 1);
-		pres.userInput(1);
-		
-		//participation
-		pres.userInput(1);
-		pres.userInput(1);
-		pres.userInput(1);
-		
-		//stage 0
-		pres.playCard(1320, -1);
-		pres.playCard(1321, -1);
-		pres.playCard(1322, -1);
-		pres.userInput(1);
-		pres.userInput(1);
-		pres.playCard(1317, -1);
-		pres.userInput(1);
-		
-		game.getcurrentTurn().printActive();
 	}
 }

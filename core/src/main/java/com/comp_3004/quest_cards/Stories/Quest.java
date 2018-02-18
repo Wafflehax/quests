@@ -408,6 +408,7 @@ public class Quest {
 	}
 	
 	public boolean placeBid(int bid, Player p) {
+		log.info(p.getName()+" bids "+bid);
 		if(bid == -1) {
 			participants.remove(p);
 			log.info(p.getName()+" declined to bid higher and is no longer participating");
@@ -432,9 +433,21 @@ public class Quest {
 			log.info("Error "+p.getName()+": cannot bid that many cards");
 			return true;
 		}
+		else if(participants.size() == 1 && bid < 3) {
+			log.info("Error "+p.getName()+": must bid at least 3 if they are the only player in the test");
+			return true;
+		}
 		else if(bid > currentBid) {
 			currentBid = bid;
-			log.info(p.getName()+" bids "+bid);
+			log.info(p.getName()+" bid successful");
+			if(participants.size() == 1) {	//last man standing
+				log.info(participants.get(0).getName()+" wins the bidding war");
+				players.setCurrent(participants.get(0));
+				currentBid -= players.current().getFreeBids();
+				log.info("Cards to discard: "+currentBid);
+				players.current().printHand();
+				return true;
+			}
 			if(players.peekNext() == sponsor)
 				players.next();
 			players.next();

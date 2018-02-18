@@ -168,6 +168,22 @@ public class Player{
 		return true;
 	}
 	
+	public void pickCard(String card, AdventureDeck d) {
+		AdventureCard target = null;
+		for(AdventureCard c : d.getDeck()) {
+			if(c.getName() == card) {
+				target = c;
+				break;
+			}
+		}
+		if(target != null) {
+			d.getDeck().remove(target);
+			target.setOwner(this);
+			target.setState(State.HAND);
+			playerHandCards.add(target);
+		}
+	}
+	
 	protected AdventureCard getHandCard(int pos) {
 		return playerHandCards.get(pos);
 	}
@@ -230,7 +246,7 @@ public class Player{
 	
 	
 	
-	//discards all the players active weapsons
+	//discards all the players active weapons
 	public void discardWeaponsActive(AdventureDeck d) {
 		int size = playerActiveCards.size() - 1;
 		for(int i = size; i >= 0; i--) {
