@@ -126,7 +126,6 @@ public class Player{
 		for(AdventureCard card : playerHandCards) {
 			card.setState(State.HAND);
 			card.setOwner(this);
-			System.out.println(card.printCard() + "  " + card.getState());
 		}
 	}     
 	

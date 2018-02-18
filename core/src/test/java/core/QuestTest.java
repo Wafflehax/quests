@@ -395,8 +395,9 @@ public class QuestTest extends TestCase{
 		log.info("QUEST TEST 5");
 		log.info("===================================");
 		
-		String[] sd = {"boarHunt", "searchForTheQuestingBeast"};
-		StoryDeck storyDeck = new StoryDeck(sd);
+		StoryDeck storyDeck = new StoryDeck();
+		storyDeck.setTopCard("Boar Hunt");
+		storyDeck.setTopCard("Search for the Questing Beast");
 		
 		//set up adventure deck
 		AdventureDeck advDeck = new AdventureDeck();
@@ -424,10 +425,10 @@ public class QuestTest extends TestCase{
 		pres.userInput(1);
 		
 		//quest set up
-		pres.playCard(699, 0);
-		pres.playCard(697, 1);
-		pres.playCard(698, 2);
-		pres.playCard(695, 3);
+		pres.playCard(825, 0);
+		pres.playCard(823, 1);
+		pres.playCard(824, 2);
+		pres.playCard(821, 3);
 		pres.userInput(1);
 		
 		pres.userInput(0); //player 2 declines sponsoring quest after accepting 
@@ -457,8 +458,9 @@ public class QuestTest extends TestCase{
 		log.info("QUEST TEST 6");
 		log.info("===================================");
 		
-		String[] sd = {"boarHunt", "searchForTheQuestingBeast"};
-		StoryDeck storyDeck = new StoryDeck(sd);
+		StoryDeck storyDeck = new StoryDeck();
+		storyDeck.setTopCard("Boar Hunt");
+		storyDeck.setTopCard("Search for the Questing Beast");
 		
 		//set up adventure deck
 		AdventureDeck advDeck = new AdventureDeck();
@@ -486,11 +488,11 @@ public class QuestTest extends TestCase{
 		pres.userInput(1);
 		
 		//quest set up
-		pres.playCard(841, 0);		
-		pres.playCard(839, 1);
-		pres.playCard(838, 1);
-		pres.playCard(840, 2);
-		pres.playCard(837, 3);
+		pres.playCard(993, 0);		
+		pres.playCard(991, 1);
+		pres.playCard(990, 1);
+		pres.playCard(992, 2);
+		pres.playCard(989, 3);
 		pres.userInput(1);
 		
 		//participation
@@ -504,11 +506,11 @@ public class QuestTest extends TestCase{
 		pres.userInput(1);
 		
 		//stage 1
-		pres.playCard(842, -1);
+		pres.playCard(995, -1);
 		pres.userInput(1);
-		pres.playCard(829, -1);
+		pres.playCard(982, -1);
 		pres.userInput(1);
-		pres.playCard(831, -1);
+		pres.playCard(984, -1);
 		pres.userInput(1);
 		
 		//stage 2
@@ -546,8 +548,9 @@ public class QuestTest extends TestCase{
 		log.info("QUEST TEST 7");
 		log.info("===================================");
 		
-		String[] sd = {"boarHunt", "boarHunt"};
-		StoryDeck storyDeck = new StoryDeck(sd);
+		StoryDeck storyDeck = new StoryDeck();
+		storyDeck.setTopCard("Boar Hunt");
+		storyDeck.setTopCard("Boar Hunt");
 		
 		//set up adventure deck
 		AdventureDeck advDeck = new AdventureDeck();
@@ -575,9 +578,8 @@ public class QuestTest extends TestCase{
 		pres.userInput(1);
 		
 		//set up
-		game.getcurrentTurn().printHand();
-		pres.playCard(977, 0);
-		pres.playCard(976, 1);
+		pres.playCard(1155, 0);
+		pres.playCard(1154, 1);
 		pres.userInput(1);
 		
 		//participation
@@ -585,9 +587,10 @@ public class QuestTest extends TestCase{
 		pres.userInput(0);
 		pres.userInput(0);
 		
-		pres.discardCard(972);
-		pres.playCard(973, -1);
-		pres.playCard(974, -1);
+		game.getcurrentTurn().printHand();
+		pres.discardCard(1150);
+		pres.playCard(1151, -1);
+		pres.playCard(1152, -1);
 		
 		
 		assertEquals(0, game.getPlayerAtIndex(0).getShields());
