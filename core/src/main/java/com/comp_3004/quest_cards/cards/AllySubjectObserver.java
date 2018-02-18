@@ -70,6 +70,8 @@ public class AllySubjectObserver extends AllyCard {
 			this.state = s;
 			notifyAllO();
 		}
+		else
+			this.state = s;
 	}
 	
 	private boolean inPlay(State s) {

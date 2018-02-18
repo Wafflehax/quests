@@ -306,8 +306,10 @@ public class QuestTest extends TestCase{
 		log.info("QUEST TEST 4");
 		log.info("===================================");
 		
-		String[] sd = {"boarHunt", "boarHunt", "boarHunt"};
-		StoryDeck storyDeck = new StoryDeck(sd);
+		StoryDeck storyDeck = new StoryDeck();
+		storyDeck.setTopCard("Boar Hunt");
+		storyDeck.setTopCard("Boar Hunt");
+		storyDeck.setTopCard("Boar Hunt");
 		
 		//set up adventure deck
 		AdventureDeck advDeck = new AdventureDeck();
@@ -329,16 +331,13 @@ public class QuestTest extends TestCase{
 		GamePresenter pres = new GamePresenter(game);
 		pres.getModel().beginTurn();
 		
-		for(Player p : game.getPlayers().getPlayers())
-			p.printHand();
-		
 		//sponsorship
 		pres.userInput(0);
 		pres.userInput(1);
 		
 		//quest set up
-		pres.playCard(551, 0);
-		pres.playCard(552, 1);
+		pres.playCard(651, 0);
+		pres.playCard(652, 1);
 		pres.userInput(1);
 		
 		//participation
@@ -347,12 +346,12 @@ public class QuestTest extends TestCase{
 		pres.userInput(1);
 		
 		//stage 0: participants play cards
-		pres.playCard(553, -1);
-		pres.playCard(554, -1);
+		pres.playCard(653, -1);
+		pres.playCard(654, -1);
 		pres.userInput(0);
-		pres.playCard(558, -1);
+		pres.playCard(658, -1);
 		pres.userInput(0);
-		pres.playCard(547, -1);
+		pres.playCard(647, -1);
 		pres.userInput(0);
 		
 		assertEquals(4, game.getPlayerAtIndex(0).numBidsAllowed());
@@ -372,9 +371,9 @@ public class QuestTest extends TestCase{
 		pres.userInput(-1);
 		assertEquals(1, game.getQuest().getParticipants().size());
 		
-		pres.discardCard(555);
-		pres.discardCard(556);
-		pres.discardCard(557);
+		pres.discardCard(655);
+		pres.discardCard(656);
+		pres.discardCard(657);
 		
 		assertEquals(0, game.getPlayerAtIndex(0).getShields());
 		assertEquals(0, game.getPlayerAtIndex(1).getShields());
