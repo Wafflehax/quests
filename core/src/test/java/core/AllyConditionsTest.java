@@ -21,7 +21,7 @@ import junit.framework.TestCase;
 
 public class AllyConditionsTest extends TestCase {
 	
-	/*
+	
 	public void testOne() {
 		//Test behavour of Sir Tristian, Queen Iseult special ability activation
 		
@@ -184,7 +184,6 @@ public class AllyConditionsTest extends TestCase {
 		assertEquals(true, (tesbeast.getBattlePts() == 0 && tesbeast.getMinBid() == 0));
 		
 	}
-	*/
 	
 	//testing tristan/iseult in an actual game
 	public void testFive() {	
@@ -218,8 +217,8 @@ public class AllyConditionsTest extends TestCase {
 		pres.userInput(1); //player 1 sponsors
 		
 		//set up
-		pres.playCard(154, 0);	//black knight
-		pres.playCard(155, 1);	//test of temptation
+		pres.playCard(find("black knight", game.getcurrentTurn().getHand()).getID(), 0);	//black knight
+		pres.playCard(find("Test of Temptation", game.getcurrentTurn().getHand()).getID(), 1);	//test of temptation
 		pres.userInput(1);
 		
 		//participation
@@ -229,7 +228,7 @@ public class AllyConditionsTest extends TestCase {
 		
 		//stage 0
 		pres.playCard(qu.getID(), -1); 	//player 2 plays iseult
-		pres.playCard(157, -1);	//player 2 plays excalibur
+		pres.playCard(find("Excalibur", game.getcurrentTurn().getHand()).getID(), -1);	//player 2 plays excalibur
 		pres.userInput(1);
 		pres.userInput(1);	//player 3 plays nothing
 		game.getcurrentTurn().printHand();
@@ -245,6 +244,14 @@ public class AllyConditionsTest extends TestCase {
 		assertEquals(4, ((AllyCard)game.getcurrentTurn().getActive().get(0)).getBids());
 		assertEquals(2, game.getQuest().getParticipants().size());
 		
+	}
+	
+	private AdventureCard find(String n, LinkedList<AdventureCard> d) {
+		for(AdventureCard c: d) {
+			if(c.getName().equalsIgnoreCase(n))
+				return c;	
+		}
+		return null;
 	}
 	
 	private AdventureCard find(String n, AdventureDeck d) {
