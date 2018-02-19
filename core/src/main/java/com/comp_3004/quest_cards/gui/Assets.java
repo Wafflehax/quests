@@ -10,6 +10,7 @@ public class Assets {
 
   public static String GAME_BACKGROUNDS = "sprites/backgrounds.atlas";
   public static String GAME_SPRITES = "sprites/cards.atlas";
+  public static String SKIN = "skins/uiskin.json";
 
   public static class Cards {
 
@@ -28,7 +29,7 @@ public class Assets {
       public static String SIR_TRISTAN = "A_Sir_Tristan";
     }
 
-    public static class Story{
+    public static class Story {
 
       public static String CHIVALROUS_DEED = "E_Chivalrous_Deed";
       public static String COURT_CALLED_CAMELOT = "E_Court_Called_Camelot";
@@ -77,5 +78,15 @@ public class Assets {
       public static String LANCE = "W_Lance";
       public static String SWORD = "W_Sword";
     }
+  }
+
+  public static class Strings {
+
+    public static class Buttons {
+      public static String ACKNOWLEDGE = "Continue";
+      public static String TRUE = "Yes";
+      public static String FALSE = "No";
+    }
+
   }
 }

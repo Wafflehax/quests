@@ -21,6 +21,7 @@ import junit.framework.TestCase;
 
 public class AllyConditionsTest extends TestCase {
 	
+	
 	public void testOne() {
 		//Test behavour of Sir Tristian, Queen Iseult special ability activation
 		
@@ -196,6 +197,9 @@ public class AllyConditionsTest extends TestCase {
 		
 		GameModel game;
 		game = new GameModel(4, 0, advDeck, storyDeck);
+		AllySubjectObserver qu = (AllySubjectObserver) find("Queen Iseult", advDeck);
+		AllySubjectObserver tris = (AllySubjectObserver) find("Sir Tristan", advDeck);
+		advDeck.printDeck();
 		
 		//set up hands
 		String[] hand1 = {"blackKnight", "temptation"};
@@ -213,8 +217,8 @@ public class AllyConditionsTest extends TestCase {
 		pres.userInput(1); //player 1 sponsors
 		
 		//set up
-		pres.playCard(615, 0);	//black knight
-		pres.playCard(616, 1);	//test of temptation
+		pres.playCard(find("black knight", game.getcurrentTurn().getHand()).getID(), 0);	//black knight
+		pres.playCard(find("Test of Temptation", game.getcurrentTurn().getHand()).getID(), 1);	//test of temptation
 		pres.userInput(1);
 		
 		//participation
@@ -223,13 +227,15 @@ public class AllyConditionsTest extends TestCase {
 		pres.userInput(1);
 		
 		//stage 0
-		pres.playCard(617, -1); 	//player 2 plays iseult
-		pres.playCard(618, -1);	//player 2 plays excalibur
+		pres.playCard(qu.getID(), -1); 	//player 2 plays iseult
+		pres.playCard(find("Excalibur", game.getcurrentTurn().getHand()).getID(), -1);	//player 2 plays excalibur
 		pres.userInput(1);
 		pres.userInput(1);	//player 3 plays nothing
 		game.getcurrentTurn().printHand();
-		pres.playCard(592, -1);	//player 0 plays tristan
+		pres.playCard(tris.getID(), -1);	//player 0 plays tristan
 		pres.userInput(1);
+		//Conditional battle points kick in when both cards are put in play state
+		
 		
 		/* player 2 and player 0 should move on to next stage, but the conditional battlepoints
 		 * for tristan do not kick in, so only player 2 is moving on to the next stage, and Queen
@@ -238,6 +244,14 @@ public class AllyConditionsTest extends TestCase {
 		assertEquals(4, ((AllyCard)game.getcurrentTurn().getActive().get(0)).getBids());
 		assertEquals(2, game.getQuest().getParticipants().size());
 		
+	}
+	
+	private AdventureCard find(String n, LinkedList<AdventureCard> d) {
+		for(AdventureCard c: d) {
+			if(c.getName().equalsIgnoreCase(n))
+				return c;	
+		}
+		return null;
 	}
 	
 	private AdventureCard find(String n, AdventureDeck d) {
