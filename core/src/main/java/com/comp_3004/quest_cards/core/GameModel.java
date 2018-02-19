@@ -15,6 +15,7 @@ import com.comp_3004.quest_cards.cards.AllyObserver;
 import com.comp_3004.quest_cards.cards.AllySubjectObserver;
 import com.comp_3004.quest_cards.cards.AmourCard;
 import com.comp_3004.quest_cards.cards.Card;
+import com.comp_3004.quest_cards.cards.EventCard;
 import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.cards.TestObserver;
 import com.comp_3004.quest_cards.cards.TournamentCard;
@@ -96,6 +97,11 @@ public class GameModel{
 		StoryEv = cardDrawn;
 		if(cardDrawn instanceof QuestCard) {
 			quest = new Quest((QuestCard)cardDrawn, players, advDeck);
+		}
+		else if(cardDrawn instanceof EventCard) {
+			event = new Event(cardDrawn, players, advDeck, players.current());
+			if(event.runEvent())
+				players.next();
 		}
 		else if(cardDrawn instanceof TournamentCard) {
 			tour = new Tour(players, (TournamentCard)cardDrawn, advDeck);
@@ -184,16 +190,5 @@ public class GameModel{
 			plyrs.add(newPlayer);
 		}
 		players = new Players(0, numPlayers, plyrs);
-	}
-	
-	//          Tester functions 
-	//Event testing
-	public void eventTest() {
-			StoryCard cardDrawn = storyDeck.drawCard();
-			event = new Event(cardDrawn, players, advDeck);
-			event.runEvent();
-			storyDeck.discardCard(cardDrawn);
-	}
-
-	
+	}	
 }

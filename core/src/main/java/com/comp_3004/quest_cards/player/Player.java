@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 
+import com.comp_3004.quest_cards.Stories.Event;
 import com.comp_3004.quest_cards.Stories.Quest;
 import com.comp_3004.quest_cards.Stories.Tour;
 import com.comp_3004.quest_cards.cards.*;
@@ -41,6 +42,7 @@ public class Player{
 	private LinkedList<AdventureCard> playerActiveCards;
 	private LinkedList<AdventureCard> playerStageCards;
 	private Quest currentQuest;
+	private Event currentEvent;
 	private Tour currTour;
 	private PlayerState state_;
 	
@@ -53,6 +55,7 @@ public class Player{
 		this.playerActiveCards = new LinkedList<AdventureCard>();
 		this.playerStageCards = new LinkedList<AdventureCard>();
 		this.currentQuest = null;
+		this.currentEvent = null;
 		this.currTour = null;
 		this.state_ = new NormalState();
 	}
@@ -71,6 +74,8 @@ public class Player{
 	public void setKingsRecognitionBonus(boolean b) { this.kingsRecognitionBonus = b; }
 	public void setQuest(Quest q) { this.currentQuest = q; }
 	public Quest getQuest() { return this.currentQuest; }
+	public void setEvent(Event e) { this.currentEvent = e; }
+	public Event getEvent() { return this.currentEvent; }
 	public void setTour(Tour t) { this.currTour = t; }
 	public Tour getTour() { return this.currTour; }
 	public void setState(String s) { 

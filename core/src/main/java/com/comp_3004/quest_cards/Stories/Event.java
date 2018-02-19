@@ -1,6 +1,7 @@
 package com.comp_3004.quest_cards.Stories;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
@@ -21,16 +22,27 @@ public class Event {
 	private StoryCard evnt;
 	private Players players;
 	private AdventureDeck advDeck;
+	private HashMap<Player, Integer> cardsToDiscard;
+	private ArrayList<Player> highestRank;
+	private Player drewEvent;
 
 	//constructor
-	public Event(StoryCard e, Players p, AdventureDeck d) {
+	public Event(StoryCard e, Players pls, AdventureDeck d, Player p) {
 		this.evnt = e;
-		this.players = p;
+		this.players = pls;
 		this.advDeck = d;
+		this.highestRank = new ArrayList<Player>();
+		this.cardsToDiscard = new HashMap<Player, Integer>();
+		this.drewEvent = p;
+		for(Player pl : players.getPlayers())
+			pl.setEvent(this);
 	}
 	
+	//getters/setters
+	public ArrayList<Player> getHighestRank() { return this.highestRank; }
+	public HashMap<Player, Integer> getCardsToDiscard() { return this.cardsToDiscard; }
 	
-	public void runEvent() {
+	public boolean runEvent() {
 		log.info(players.current().getName() + " drew event " + evnt.getName());
 		for(Player p : players.getPlayers())
 			p.setState("event");
@@ -115,7 +127,6 @@ public class Event {
 		}
 		else if(evnt.getName() ==  "King's Call to Arms") {
 			//get highest rank players
-			ArrayList<Player> highestRank = new ArrayList<Player>();
 			highestRank.add(0, players.getPlayerAtIndex(0));
 			for(int i=1; i<players.getNumPlayers(); i++) {
 				if(highestRank.get(0).getRank().compareTo(players.getPlayerAtIndex(i).getRank()) == -1) {
@@ -126,38 +137,31 @@ public class Event {
 					highestRank.add(highestRank.size(), players.getPlayerAtIndex(i));
 				}
 			}
-			
-			//for each player, get a list of weapon cards they have
-			ArrayList<AdventureCard> discard;
 			for(Player p : highestRank) {
-				players.setCurrent(p);
-				discard = new ArrayList<AdventureCard>();
-				for(AdventureCard card : p.getHand())
-					if(card instanceof WeaponCard)
-						discard.add(card);
-				//player has to choose which weapon to discard
-				if(discard.size() > 1) {
-					log.info(String.format("%s please select a weapon card to discard", p.getName()));
-					return;
+				log.info(p.getName() +" must discard cards");
+				int numFoes = 0;
+				for(AdventureCard card : p.getHand()) {
+					if(card instanceof FoeCard)
+						numFoes++;
+					if(numFoes == 2)
+						break;
 				}
-				//player has no weapon, must discard 2 foes
-				else {
-					//for each player, get a list of foe cards they have
-					for(AdventureCard card : p.getHand())
-						if(card instanceof FoeCard)
-							discard.add(card);
-					//player has 2 or less foes
-					if(discard.size() <= 2) {
-						for(AdventureCard c : discard)
-							p.discardCard(c, advDeck);
-					}
-					//player has to choose which foes to discard
-					else if(discard.size() > 2) {
-							log.info(String.format("%s please select 2  foe cards to discard", p.getName()));
-							return;
-					}
+				cardsToDiscard.put(p, numFoes);
+			}
+			for(int i=0; i<players.size(); i++) {
+				boolean hasWeapon = false;
+				for(AdventureCard card : players.getPlayerAtIndex(i).getHand()) {
+					if(card instanceof WeaponCard)
+						hasWeapon = true;
+				}
+				if(!hasWeapon) {
+					if(cardsToDiscard.get(players.getPlayerAtIndex(i)) == 0)
+						highestRank.remove(players.getPlayerAtIndex(i));
 				}
 			}
+			
+			players.setCurrent(highestRank.get(0));
+			return false;
 		}
 		else if(evnt.getName() ==  "Prosperity Throughout the Realms") {
 			for(int i=0; i<players.getNumPlayers(); i++) {
@@ -165,6 +169,62 @@ public class Event {
 				players.getPlayerAtIndex(i).drawCard(advDeck);
 			}
 			
+		}
+		log.info("Event Finished");
+		return true;
+	}
+	
+	public boolean discardCard(Player p, AdventureCard c) {
+		boolean hasWeapon = false;
+		for(AdventureCard card : p.getHand()) {
+			if(card instanceof WeaponCard)
+				hasWeapon = true;
+		}
+		if(hasWeapon) 
+			return discardWeapon(p, c);
+		else {
+			log.info(p.getName()+" must discard "+cardsToDiscard.get(p)+" foes");
+			return discardFoe(p, c);
+		}
+	}
+	
+	private boolean discardWeapon(Player p, AdventureCard c) {
+		if(!(c instanceof WeaponCard)) {
+			log.info(p.getName()+" error: hand contains a weapon, must discard a weapon");
+			return true;
+		}
+		else if(c instanceof WeaponCard) {
+			highestRank.remove(p);
+			if(highestRank.size() > 0) {
+				players.setCurrent(highestRank.get(0));
+			}
+			else {
+				players.setCurrent(drewEvent);
+				players.next();
+			}
+			
+		}
+		return true;
+	}
+		
+	public boolean discardFoe(Player p, AdventureCard c) {
+		if(!(c instanceof FoeCard)) {
+			log.info(p.getName()+" error: must discard a foe");
+			return true;
+		}
+		else {
+			cardsToDiscard.put(p, cardsToDiscard.get(p)-1);
+			if(cardsToDiscard.get(p) == 0) {
+				highestRank.remove(p);
+				if(highestRank.size() > 0) {
+					players.setCurrent(highestRank.get(0));
+				}
+				else {
+					players.setCurrent(drewEvent);
+					players.next();
+				}
+			}
+			return true;
 		}
 	}
 }

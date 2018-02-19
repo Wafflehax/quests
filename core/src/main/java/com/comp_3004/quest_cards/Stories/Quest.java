@@ -251,6 +251,9 @@ public class Quest {
 		//reveal if stage contains a foe or a test
 		stageCard =  stages[stageNum].getSponsorCards().get(0);
 		
+		//if only one participant, make them current player
+		if(participants.size() == 1)
+			players.setCurrent(participants.get(0));
 		
 		//if test - implement later (move on to next stage)
 		if(stageCard instanceof TestCard) {
@@ -336,8 +339,14 @@ public class Quest {
 	private boolean questCleanup() {
 		for(Player p : participants)
 			log.info(p.getName()+" has completed the quest!");
-		for(Player p : participants)
+		for(Player p : participants) {
 			p.addShields(quest.getStages());		//all players who completed the quest get shields = numStages
+			if(p.getKingsRecognitionBonus()) {
+				log.info(p.getName()+" gets bonus shields from Kings Recognition");
+				p.addShields(2);
+				p.setKingsRecognitionBonus(false);
+			}
+		}
 		
 		//sponsor draws cards = num used to sponsor + numStages
 		for(int i=0; i<(quest.getStages() + cardsUsedToSponsor); i++) {
