@@ -55,6 +55,8 @@ public class QuestCards implements ApplicationListener {
     camera.position.set(Config.VIRTUAL_WIDTH / 2, Config.VIRTUAL_HEIGHT / 2, 0);
     camera.update();
 
+    Gdx.input.setInputProcessor(stage);
+
     //Init game screen & set as current screen
 
 

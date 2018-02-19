@@ -1,35 +1,22 @@
 package com.comp_3004.quest_cards.core;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.comp_3004.quest_cards.Stories.Quest;
 import com.comp_3004.quest_cards.cards.AdventureCard;
-import com.comp_3004.quest_cards.cards.QuestCard;
-import com.comp_3004.quest_cards.gui.Assets;
-import com.comp_3004.quest_cards.gui.CardView;
-import com.comp_3004.quest_cards.gui.Config;
-import com.comp_3004.quest_cards.gui.GameView;
-import com.sun.corba.se.pept.transport.EventHandler;
+import com.comp_3004.quest_cards.gui.*;
 import org.apache.log4j.Logger;
+
+import java.util.function.Consumer;
 
 public class GamePresenter extends Group {
 
   private QuestCards parent;
   private GameModel model;
-  private GameView view;
+  private final GameView view;
 
   TextureAtlas sprites;
   TextureAtlas backgrounds;
@@ -81,7 +68,7 @@ public class GamePresenter extends Group {
 
   public GameView initGameView() {
 
-    GameView view = new GameView(skin);
+    final GameView view = new GameView(skin);
     view.setShieldsTexture(sprites.findRegion("shield"));
     view.setBackground(backgrounds.findRegion("game_board"));
     view.setPlayerViewBackground(backgrounds.findRegion("player_area"));
@@ -168,4 +155,20 @@ public class GamePresenter extends Group {
     if (!model.getPlayers().current().userInput(input))
       model.beginTurn();
   }
+
+  //temporary methods to use for model testing
+  //takes cardID as input from view, finds corresponding card in model
+  public void playCard(int cardID) {
+    AdventureCard cardToPlay = null;
+    for (AdventureCard card : model.getPlayers().current().getHand())
+      if (card.getID() == cardID)
+        cardToPlay = card;
+    if (cardToPlay == null)
+      System.out.println("Card not found");
+    if (cardToPlay != null)
+      if (model.getPlayers().current().playCard(cardToPlay)) {
+        //then update view with what changed in the model
+      }
+  }
+
 }

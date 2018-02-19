@@ -1,11 +1,13 @@
 package com.comp_3004.quest_cards.gui;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
+import java.util.function.Consumer;
 
 public class GameView extends Group {
 
@@ -18,6 +20,8 @@ public class GameView extends Group {
   public Image storyDeckDiscardPile;
   public Image adventureDeckDiscardPile;
   public Image adventureDeck;
+  public AnnouncementDialog announcementDialog;
+  public BooleanDialog questionDialog;
 
 
   private Skin skin;
@@ -34,6 +38,8 @@ public class GameView extends Group {
     adventureDeck = new Image();
     adventureDeckDiscardPile = new Image();
     playerView = new PlayerView();
+    announcementDialog = new AnnouncementDialog(skin);
+    questionDialog = new BooleanDialog(skin);
 
     //Add widgets to table
 
@@ -43,7 +49,9 @@ public class GameView extends Group {
     addActor(adventureDeck);
     addActor(adventureDeckDiscardPile);
     addActor(playerView);
-    addActor(new Dialog("Hello", skin));
+  }
+
+  public void pack(){
 
   }
 
@@ -56,7 +64,7 @@ public class GameView extends Group {
     background.setBounds(x, y, width, height);
 
     playerView.setBounds(
-        width / 2 - Config.PlayerView.WIDTH / 2,
+        getWidth() / 2 - Config.PlayerView.WIDTH / 2,
         Config.GameView.PADDING_VERTICAL,
         Config.PlayerView.WIDTH,
         Config.PlayerView.HEIGHT);
@@ -84,66 +92,106 @@ public class GameView extends Group {
         storyDeckDiscardPile.getY(),
         Config.CardView.CARD_WIDTH,
         Config.CardView.CARD_HEIGHT);
+
+    announcementDialog.setSize(Config.GameView.Modal.WIDTH, Config.GameView.Modal.HEIGHT);
+    announcementDialog.setCenterPosition(getWidth() / 2, getHeight() / 2);
+    questionDialog.setSize(Config.GameView.Modal.WIDTH, Config.GameView.Modal.HEIGHT);
+    questionDialog.setCenterPosition(getWidth() / 2, getHeight() / 2);
   }
 
-  public GameView displayHero(TextureRegion hero) {
+  public void displayHero(TextureRegion hero) {
     playerView.displayHero(hero);
-    return this;
   }
 
-  public GameView displayPlayerHand(CardView[] cards) {
+  public void displayPlayerHand(CardView[] cards) {
     playerView.displayPlayerHand(cards);
-    return this;
   }
 
-  public GameView displayShieldNumber(int n) {
+  public void displayShieldNumber(int n) {
 
-    return null;
+    return;
   }
 
-  public GameView displayStoryDeck(TextureRegion storyDeck) {
+  public void displayStoryDeck(TextureRegion storyDeck) {
 
     this.storyDeck.setDrawable(new TextureRegionDrawable(storyDeck));
-    return this;
   }
 
-  public GameView displayAdventureDiscardPile(TextureRegion card) {
+  public void displayAdventureDiscardPile(TextureRegion card) {
 
     adventureDeckDiscardPile.setDrawable(new TextureRegionDrawable(card));
-    return this;
   }
 
-  public GameView displayStoryDiscardPile(TextureRegion card) {
+  public void displayStoryDiscardPile(TextureRegion card) {
 
     storyDeckDiscardPile.setDrawable(new TextureRegionDrawable(card));
-    return this;
   }
 
-  public GameView displayDrawCardAnimation(CardView card) {
+  public void displayDrawCardAnimation(CardView card) {
 
 
-    return this;
+    return;
   }
 
   public void displayAdventureDeck(TextureRegion adventureDeck) {
     this.adventureDeck.setDrawable(new TextureRegionDrawable(adventureDeck));
   }
 
-  public GameView setBackground(TextureRegion background) {
+  public void setBackground(TextureRegion background) {
 
     this.background.setDrawable(new TextureRegionDrawable(background));
-    return this;
   }
 
-  public GameView setPlayerViewBackground(TextureRegion background) {
+  public void setPlayerViewBackground(TextureRegion background) {
 
     playerView.setBackground(background);
-    return this;
   }
 
-  public GameView setShieldsTexture(TextureRegion texture) {
+  public void setShieldsTexture(TextureRegion texture) {
     playerView.setShieldsTexture(texture);
-    return this;
+  }
+
+  public void displayAnnouncementDialog(String title, String message, final Consumer<Boolean> action) {
+
+    announcementDialog.setTitle(title);
+    announcementDialog.setMessage(message);
+    announcementDialog.setActionListener(new ClickListener() {
+
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        action.accept(true);
+        announcementDialog.remove();
+      }
+    });
+
+    addActor(announcementDialog);
+
+  }
+
+  public void displayQuestionDialog(String title, String message, final Consumer<Boolean> action) {
+
+    questionDialog.setTitle(title);
+    questionDialog.setMessage(message);
+
+    questionDialog.setActionTrue(new ClickListener() {
+
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        questionDialog.remove();
+        action.accept(true);
+      }
+    });
+
+    questionDialog.setActionTrue(new ClickListener() {
+
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        questionDialog.remove();
+        action.accept(false);
+      }
+    });
+
+    addActor(questionDialog);
   }
 
 }
