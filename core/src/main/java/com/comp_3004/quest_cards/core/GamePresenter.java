@@ -92,6 +92,21 @@ public class GamePresenter extends Group {
     view.displayAdventureDeck(sprites.findRegion(Assets.Cards.CARD_BACK));
     view.displayAdventureDiscardPile(sprites.findRegion(Assets.Cards.Allies.KING_PELLINORE));
 
+
+    //Dialog example
+
+    view.displayQuestionDialog("Question title", "Question message", result -> {
+      if (result) {
+        //Player says yes
+      } else {
+        //Player says no
+      }
+
+      view.displayAnnouncementDialog("Announcement title", "Announcement body", result_2 -> {
+        //Do stuff after announcement
+      });
+    });
+
     return view;
   }
 
