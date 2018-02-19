@@ -55,7 +55,7 @@ public class Tour {
 		joiners = 0;
 		log.info(players.current().getName() + " Participate in Tour " + players.current().getTour().getCurTour().getName() + " ?");
 	}
-	
+
 	
 	
 	public void tourParticipate(Player p, boolean b) {

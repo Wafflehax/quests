@@ -1,7 +1,8 @@
 package core;
 
+import com.comp_3004.quest_cards.Stories.Tour;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
-
+import com.comp_3004.quest_cards.cards.CardSpawner;
 import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.core.GameModel;
 import com.comp_3004.quest_cards.core.GamePresenter;
@@ -11,331 +12,186 @@ import junit.framework.TestCase;
 
 public class TournamentTest extends TestCase{
 	
-	public void testTourPart() {
-		
-				//set up story deck
-				StoryDeck storyDeck = new StoryDeck();
-				storyDeck.setTopCard("Tournament at Orkney");
-				storyDeck.printDeck();
-				
-				//set up adventure deck
-				AdventureDeck advDeck = new AdventureDeck();
-				advDeck.shuffle();
-				
-				GameModel game;
-				game = new GameModel(4, 0, advDeck, storyDeck);
-				
-				//set up hands
-				String[] hand0 = {"thieves", "dagger", "boar", "amour", "amour"};
-				String[] hand1 = {"dagger", "lance"};
-				String[] hand2 = {"dagger", "lance"};
-				String[] hand3 = {"dagger", "lance"};
-				game.getPlayerAtIndex(0).setHand(hand0);
-				
-				game.getPlayerAtIndex(1).setHand(hand1);
-				game.getPlayerAtIndex(2).setHand(hand2);
-				game.getPlayerAtIndex(3).setHand(hand3);
-				
-				GamePresenter pres = new GamePresenter(game);
-				pres.getModel().beginTurn();
-				
-				for(Player p : game.getPlayers().getPlayers()) {
-					System.out.println(p.getName());
-					p.printHand();
-				}
-				//asking players if they want to participate
-				
-				pres.userInput(1); //yes
-				pres.userInput(1); //yes
-				pres.userInput(1); //yes
-				pres.userInput(0); //no
-				
-				//check input registered correctly
-				assertEquals(true, game.getTour().getPlayers().getPlayers().contains(game.getPlayerAtIndex(0)));
-				assertEquals(true, game.getTour().getPlayers().getPlayers().contains(game.getPlayerAtIndex(1)));
-				assertEquals(true, game.getTour().getPlayers().getPlayers().contains(game.getPlayerAtIndex(2)));
-				assertEquals(3, game.getTour().getPlayers().size());
-				
-				pres.playCard(130,0 );
-				pres.userInput(1); //done turn
-				
-				
-				pres.userInput(1); //done turn
-				pres.userInput(1); //done turn
-				
-				
-	}
 	
-	
-	/*public void testTourInit(){			
-		
-		//test TourInit pushes right things on state stack
-		GameModel m = new GameModel(4);   // init with 4 players
-	    GameController c = new GameController(m);
-		TournamentCard t = new TournamentCard("Tournament at Camelot", 3);
-		m.setStory(t);
-		
-		
-		//test that TourInit pushed correct AskPartic states 4 Ask P, Start Tour First Time
-		m.pushSt(new TourInit(c));
-		m.StateMsg();
-		String askp = "com.comp_3004.quest_cards.core.states.TourAskParticipation";
-		Stack<State> act = m.state;
-		String ac = act.pop().getClass().getName(); // ask Tour
-		assertEquals(ac, askp); 
-		ac = act.pop().getClass().getName(); // ask Tour
-		assertEquals(ac, askp); 
-		ac = act.pop().getClass().getName(); // ask Tour
-		assertEquals(ac, askp); 
-		ac = act.pop().getClass().getName(); // ask Tour
-		assertEquals(ac, askp); 
-		ac = act.pop().getClass().getName(); // ask Tour
-		assertEquals(ac, "com.comp_3004.quest_cards.core.states.TourStartFirstTime"); // startTour state
-		
-		
-		//testing Tourjoiners counter right amount of joiners
-		m = new GameModel(4);
-		c = new GameController(m);
-		m.pushSt(new TourInit(c));
-		m.setStory(t);
-		m.StateMsg();
-		assertEquals(c.m.getJoiners(), 0);
-		c.yes();  //joins
-		assertEquals(c.m.getJoiners(), 1);
-		c.disCardPress(m.getPlayers().current().getHand().getFirst());
-		c.doneTurn(); // p0 partic and done turn
-		c.no(); // didn't join
-		assertEquals(c.m.getJoiners(), 1); // didnt join
-		c.doneTurn();
-		c.yes(); //joins
-		c.disCardPress(m.getPlayers().current().getHand().getFirst());
-		assertEquals(c.m.getJoiners(), 2);
-		c.doneTurn();
-		c.no();
-		assertEquals(c.m.getJoiners(), 2);
-		
-		//check TourStartFirstTime proceeds when have required amount of players
-		//have 2 players wanting to play
-		ac = m.state.pop().getClass().getName(); // player turn
-		assertEquals(ac,"com.comp_3004.quest_cards.core.states.TourPlayerTurn");
-		ac = m.state.pop().getClass().getName(); // player turn
-		assertEquals(ac,"com.comp_3004.quest_cards.core.states.TourPlayerTurn");
-		ac = m.state.pop().getClass().getName(); // player turn
-		assertEquals(ac,"com.comp_3004.quest_cards.core.states.TourRoundEndEvaluation");
-		
-		//check TourStartFirstTime does not proceed, does not have required amount of players
-		//have 1 player wanting to play
-		m = new GameModel(4);
-		c = new GameController(m);
-		m.pushSt(new TourInit(c));
-		m.setStory(t);
-		m.StateMsg();
-		c.no();
-		c.no();
-		c.no();
-		c.yes();
-		c.disCardPress(m.getPlayers().current().getHand().getFirst());
-		assertEquals(c.m.getJoiners(), 1);
-		c.doneTurn();
-		assertEquals(m.state.isEmpty(), true);
-		
-		
-		
-		//static cards
-		AdventureCard sword1 = new WeaponCard("Sword", 10);
-		AdventureCard amour1 = new AmourCard();
-		AdventureCard amour2 = new AmourCard();
-		AdventureCard Theives1 = new FoeCard("Thieves", 5);
-		
-		//test handPress(Card c) during PlayerTurn valid hand, invalid
-		//test playing Two of same weapons, amours, test playing a card that is not Weapons,Ally,Amour
-		m = new GameModel(4);
-		c = new GameController(m);
-		m.pushSt(new TourInit(c));
-		m.setStory(t);
-		m.StateMsg();
-		c.no();
-		c.no();
-		c.yes();
-		c.disCardPress(m.getPlayers().current().getHand().getFirst());
-		c.doneTurn();
-		c.yes();
-		c.disCardPress(m.getPlayers().current().getHand().getFirst());
-		c.doneTurn();
-		assertEquals(c.m.getJoiners(), 2);
-		//two players p2,p3
-		
-		//test playing two of same weapons
-		Player p2 = m.getcurrentTurn();
-		LinkedList<AdventureCard> cardsp2 = new LinkedList<AdventureCard>();
-		sword1.setOwner(p2);
-		cardsp2.add(sword1);
-		String sw[] = {"sword"};
-		p2.setActiveHand(sw);
-		assertEquals(false, c.handPress(sword1)); //can't play Sword already have it
-		
-		//test playing two amours
-		LinkedList<AdventureCard> cardsp2g = new LinkedList<AdventureCard>();
-		amour1.setOwner(p2);
-		amour2.setOwner(p2);
-		cardsp2g.remove(sword1);
-		cardsp2g.add(amour1);
-		cardsp2g.add(amour2);
-		p2.setHand(cardsp2g);		
-		assertEquals(true, c.handPress(amour1)); //can't play Sword already have it
-		assertEquals(false, c.handPress(amour2)); //can't play Sword already have it
-		c.doneTurn();	
-		
-		
-		//test playing a Foe card
-		Player p3 = c.m.getcurrentTurn();
-		LinkedList<AdventureCard> cardsp3 = new LinkedList<AdventureCard>();
-		cardsp3.add(Theives1);
-		Theives1.setOwner(p3);
-		p3.setHand(cardsp3);
-		assertEquals(false, c.handPress(Theives1));
-		
-		
-		//Test player doneTurn with a hand over 12
-		String ammour[] = {"amour","amour","amour","amour","amour","amour","amour","amour","amour","amour","amour","amour","amour"};
-		p3.setActiveHand(ammour);
-		assertEquals(false, c.doneTurn());
-	}	
-	
-	public void testTour2() {			
-		GameModel m = new GameModel(4);   // init with 4 players
-	    GameController c = new GameController(m);
-		TournamentCard t = new TournamentCard("Tournament at Camelot", 3);
-		m.setStory(t);
-		m.pushSt(new TourInit(c));
-		m.StateMsg();
-		
-		
-		//test playing card you don't own
-		AdventureCard amour1 = new AmourCard();
-		
-		c.yes();
-		c.disCardPress(m.getPlayers().current().getHand().getFirst());
-		c.doneTurn();
-		c.yes();
-		c.disCardPress(m.getPlayers().current().getHand().getFirst());
-		c.doneTurn();
-		c.no();
-		c.no();
-		assertEquals(false, c.handPress(amour1));
+	public void testTourOne() {
+		//test participation gathering of tournament and check joiners get a card
 
+		StoryDeck storyDeck = new StoryDeck();		//set up story deck		
+		storyDeck.setTopCard("Tournament at Orkney");
+		storyDeck.printDeck();
+		
+		//set up adventure deck
+		AdventureDeck advDeck = new AdventureDeck();
+		advDeck.shuffle();
+		
+		GameModel game;
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		
+		GamePresenter pres = new GamePresenter(game);
+		pres.getModel().beginTurn();
+		
+		for(Player p : game.getPlayers().getPlayers()) {
+			System.out.println(p.getName());
+			p.printHand();
+		}
+		
+		//asking players if they want to participate
+		Player p0p = pres.getModel().getcurrentTurn();
+		int p0 = pres.getModel().getcurrentTurn().getHand().size();
+		pres.userInput(1); //yes
+		
+		Player p1p = pres.getModel().getcurrentTurn();
+		int p1 = pres.getModel().getcurrentTurn().getHand().size();
+		pres.userInput(1); //yes
+		
+		Player p2p = pres.getModel().getcurrentTurn();
+		int p2 = pres.getModel().getcurrentTurn().getHand().size();
+		pres.userInput(1); //yes
+		
+		Player p3p = pres.getModel().getcurrentTurn();
+		int p3 = pres.getModel().getcurrentTurn().getHand().size();
+		pres.userInput(0); //no
+		
+		//check input registered correctly
+		assertEquals(true, game.getTour().getPlayers().getPlayers().contains(game.getPlayerAtIndex(0)));
+		assertEquals(true, game.getTour().getPlayers().getPlayers().contains(game.getPlayerAtIndex(1)));
+		assertEquals(true, game.getTour().getPlayers().getPlayers().contains(game.getPlayerAtIndex(2)));
+		assertEquals(3, game.getTour().getPlayers().size());
+		
+		//check everyone has one more card than before
+		assertEquals(p0+1, p0p.getHand().size());
+		assertEquals(p1+1, p1p.getHand().size());
+		assertEquals(p2+1, p2p.getHand().size());
+		assertEquals(p3, p3p.getHand().size()); //didn't play didn't get card
 	}
 	
-	public void testTour3() {
-		//tests both weapons and amours and discarded at the end of a tournament with a single winer at 1 round
-		GameModel m = new GameModel(4);   // init with 4 players
-	    GameController c = new GameController(m);
-		TournamentCard t = new TournamentCard("Tournament at Camelot", 3);
-		m.setStory(t);
-		m.pushSt(new TourInit(c));
-		m.StateMsg();
+	public void testTourTwo() {
 		
-		Player p0 = c.m.getcurrentTurn();  
-		WeaponCard horse = new WeaponCard("Horse", 10);
-		AmourCard amour = new AmourCard();
-		LinkedList<AdventureCard> cardsp0 = new LinkedList<AdventureCard>();
-		cardsp0.add(horse);
-		cardsp0.add(amour);
-		amour.setOwner(p0);
-		horse.setOwner(p0);
-		p0.setHand(cardsp0);
+		//Test joiners having too many cards when trying to leave their player turn, block moving on
+		StoryDeck storyDeck = new StoryDeck();		//set up story deck		
+		storyDeck.setTopCard("Tournament at Orkney");
+		storyDeck.printDeck();
 		
-		c.yes();
-		c.doneTurn();
-		c.yes();
-		c.disCardPress(m.getPlayers().current().getHand().getFirst());
-		c.doneTurn();
-		c.no();
-		c.no();
+		//set up adventure deck
+		AdventureDeck advDeck = new AdventureDeck();
+		advDeck.shuffle();
 		
-		//p0,p1 playing Tour
-		c.handPress(horse);
-		c.doneTurn();
-		//p1 plays nothing
-		c.doneTurn();
-		assertEquals(false, p0.getActive().contains(horse));
-		assertEquals(false, p0.getActive().contains(amour));		
+		GameModel game;
+		game = new GameModel(2, 12, advDeck, storyDeck); //start with 2 players, both with 12 cards
+		
+		GamePresenter pres = new GamePresenter(game);
+		pres.getModel().beginTurn();
+		
+		for(Player p : game.getPlayers().getPlayers()) {
+			System.out.println(p.getName());
+			p.printHand();
+		}
+		
+		//asking players if they want to participate
+		
+		//Player 0
+		Player p0p = pres.getModel().getcurrentTurn();
+		int p0 = pres.getModel().getcurrentTurn().getHand().size();
+		pres.userInput(1); //yes
+		
+		//Player 1
+		Player p1p = pres.getModel().getcurrentTurn();
+		int p1 = pres.getModel().getcurrentTurn().getHand().size();
+		pres.userInput(1); //yes
+		
+		//check input registered correctly
+		assertEquals(true, game.getTour().getPlayers().getPlayers().contains(game.getPlayerAtIndex(0)));
+		assertEquals(true, game.getTour().getPlayers().getPlayers().contains(game.getPlayerAtIndex(1)));
+		assertEquals(2, game.getTour().getPlayers().size());
+		
+		//check everyone has one more card than before
+		assertEquals(p0+1, p0p.getHand().size());
+		assertEquals(p1+1, p1p.getHand().size());
+		
+		//Player 0 turn
+		pres.userInput(1); //done turn
+		//check player didn't move on
+		assertEquals(game.getcurrentTurn(), p0p); //check still player 0
+		
+		
+		pres.discardCard(p0p.getHand().get(0).getID());
+		pres.userInput(1); // try to finish turn now
+		assertEquals(game.getcurrentTurn(), p1p); //check moved on to next player
+	}
+	public void testThree() {
+		//Test player trying to discard a card they played, block it
+		StoryDeck storyDeck = new StoryDeck();		//set up story deck		
+		storyDeck.setTopCard("Tournament at Orkney");
+		storyDeck.printDeck();
+		
+		//set up adventure deck
+		AdventureDeck advDeck = new AdventureDeck();
+		advDeck.shuffle();
+		
+		GameModel game;
+		game = new GameModel(2, 10, advDeck, storyDeck); //start with 2 players, both with 12 cards
+		
+		GamePresenter pres = new GamePresenter(game);
+		pres.getModel().beginTurn();
+		
+		for(Player p : game.getPlayers().getPlayers()) {
+			System.out.println(p.getName());
+			p.printHand();
+		}
+		
+		//asking players if they want to participate
+		
+		//Player 0
+		Player p0p = pres.getModel().getcurrentTurn();
+		int p0 = pres.getModel().getcurrentTurn().getHand().size();
+		pres.userInput(1); //yes
+		
+		//Player 1
+		Player p1p = pres.getModel().getcurrentTurn();
+		int p1 = pres.getModel().getcurrentTurn().getHand().size();
+		pres.userInput(1); //yes
+		
+		//check input registered correctly
+		assertEquals(true, game.getTour().getPlayers().getPlayers().contains(game.getPlayerAtIndex(0)));
+		assertEquals(true, game.getTour().getPlayers().getPlayers().contains(game.getPlayerAtIndex(1)));
+		assertEquals(2, game.getTour().getPlayers().size());
+		
+		//check everyone has one more card than before
+		assertEquals(p0+1, p0p.getHand().size());
+		assertEquals(p1+1, p1p.getHand().size());
+		
+		//Player 0 turn
+		int played = game.getcurrentTurn().getHand().get(0).getID();
+		pres.playCard(played); //played card
+		int nact = p0p.getActive().size(); //number active
+		
+		//attempt to discard a played card
+		pres.discardCard(played);
+		assertEquals(nact, p0p.getActive().size()); // number of active cards same as before, discard failed
 	}
 	
-	public void testTour4() {
-		//tests only weapons discarded at a tie during round 1 and not amours
-		//tests both weapons,amours discarded at round 2, round 2 is end of tournament no matter tie, single winner
+	
+	public void testFour() {
+		//Test basic calculation of battle points for single player, ally,weapons,amour//calcBattlePoints
+		AdventureDeck ad = new AdventureDeck();
+		String story[] = {"camelot"};
+		StoryDeck d = new StoryDeck(story);
+		GameModel m = new GameModel(2, 4, ad, d); // 2 player 4 cards each
+		//did not init special allies
+		m.beginTurn();
 		
+		CardSpawner sp = new CardSpawner();
+		Player p = new Player("Player 0");
+		//try weapons, ally, amour
+		int bp = 10 + 5 + 10 + 0 + 10;
+		String[] cards = {"horse","dagger", "gawain", 
+				"iseult", "amour"};
+		p.setActiveHand(cards);
 		
-		//testing tie first stage only weapons discarded not amours
-		GameModel m = new GameModel(4);   // init with 4 players
-	    GameController c = new GameController(m);
-		TournamentCard t = new TournamentCard("Tournament at Camelot", 3);
-		m.setStory(t);
-		m.pushSt(new TourInit(c));
-		m.StateMsg();
-		
-		Player p0 = c.m.getcurrentTurn();  
-		Player p1;
-		WeaponCard axe = new WeaponCard("Battle-Ax", 15);
-		WeaponCard dagger = new WeaponCard("Dagger", 5);		
-		AmourCard amour = new AmourCard();
-		WeaponCard lance = new WeaponCard("Lance", 20);
-		LinkedList<AdventureCard> cardsp0 = new LinkedList<AdventureCard>();
-		LinkedList<AdventureCard> cardsp1 = new LinkedList<AdventureCard>();
-		
-		dagger.setOwner(p0);
-		amour.setOwner(p0);
-		lance.setOwner(p0);
-		cardsp0.add(dagger);
-		cardsp0.add(amour);
-		cardsp0.add(lance);
-		p0.setHand(cardsp0);
-		
-		//set p0 to play amour, dagger
-		//p1 plays battle-axe , which ties them and check right cards discarded
-		
-		
-		c.yes();
-		c.doneTurn();
-		
-		p1 = m.getcurrentTurn();
-		axe.setOwner(p1);
-		cardsp1.add(axe);
-		p1.setHand(cardsp1);
-		
-		
-		c.yes();
-		c.disCardPress(m.getPlayers().current().getHand().getFirst());
-		c.doneTurn();
-		c.no();
-		c.no();
-		
-		//p0,p1 playing Tour
-		
-		//make tie
-		c.handPress(amour);
-		c.handPress(dagger);
-		c.doneTurn();
-		c.handPress(axe);
-		c.doneTurn();
-		
-		//test amour stays and weapons gone
-		assertEquals(true, p0.getActive().contains(amour));
-		assertEquals(false, p0.getActive().contains(dagger));
-		assertEquals(false, p1.getActive().contains(axe));
-		
-		//p0 plays lance and still has amour
-		c.handPress(lance);
-		c.doneTurn();
-		
-		//p1 plays nothing
-		c.doneTurn();
-		
-		
-		//test amours and weapons are gone
-		assertEquals(false, p0.getActive().contains(amour));
-		assertEquals(false, p0.getActive().contains(lance));
+		//player is squire
+		bp += 5;
+		assertEquals(p.getRank(), Player.Rank.SQUIRE);
+		assertEquals(bp, m.getTour().calcBattlePoints(p));		
 	}
-	*/
+	
 }

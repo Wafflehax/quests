@@ -88,7 +88,7 @@ public class GameModel{
 		this.advDeck = a;
 		this.storyDeck = s;
 		StoryEv = null;
-		initSpecialAlly();
+		//initSpecialAlly(); 
 		initPlayersStart(numPlayers, c); //c is the number of cards the player will start with
 	}
 	
@@ -125,7 +125,7 @@ public class GameModel{
 		}
 	}
 	
-	private void initSpecialAlly() {
+	public void initSpecialAlly() {
 		AllySubjectObserver qu = (AllySubjectObserver) find("Queen Iseult", advDeck);
 		AllySubjectObserver tris = (AllySubjectObserver) find("Sir Tristan", advDeck);	
 		qu.register(tris);

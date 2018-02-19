@@ -40,19 +40,12 @@ public class TourPlayState extends PlayerState{
 
 	@Override
 	public boolean discardCard(AdventureCard c, AdventureDeck d, Player p) {
-		//discards card from either hand or active hand
+		//user can only discard from their hand, not active
 		if(p.getHand().contains(c)) {
 			p.getHand().remove(c);
 			d.discardCard(c);
 			c.setState(State.DISCARD);
 			log.info(p.getName() + " discarded their hand" + c.getName());
-			return true;
-		}
-		else if(p.getActive().contains(c)) {
-			p.getActive().remove(c);
-			d.discardCard(c);
-			c.setState(State.DISCARD);
-			log.info(p.getName() + " discarded from active" + c.getName());
 			return true;
 		}
 		log.info(p.getName() + " can't discard a card they don't own :=>" + c.getName() + " kept");

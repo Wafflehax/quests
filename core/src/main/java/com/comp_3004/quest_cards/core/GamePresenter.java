@@ -165,10 +165,17 @@ public class GamePresenter extends Group {
    * if in BidState, input is the number the player is bidding
    * if in sponsor/participate state, 1:yes 0: no
    * if in QuestPlay state, 1: Done playing cards
+   * if in TourPlayState, any input attempts to end turn
    */
   public void userInput(int input) {
-    if (!model.getPlayers().current().userInput(input))
-      model.beginTurn();
+    if (!model.getPlayers().current().userInput(input)) {
+    	if(model.getcurrentTurn().getState().equalsIgnoreCase("playtour")) {
+    		//player couldn't leave turn too many cards
+    	}
+    	else
+    		model.beginTurn();
+    }
+      
   }
 
   //temporary methods to use for model testing

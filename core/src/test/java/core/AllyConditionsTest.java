@@ -26,6 +26,7 @@ public class AllyConditionsTest extends TestCase {
 		//Test behavour of Sir Tristian, Queen Iseult special ability activation
 		
 		GameModel m = new GameModel(4);
+		
 		AdventureDeck ad = m.getAdvDeck();
 		ad.printDeck();
 		AllySubjectObserver qu = (AllySubjectObserver)findCard(107, m.getPlayers(), ad);
@@ -80,6 +81,7 @@ public class AllyConditionsTest extends TestCase {
 		StoryDeck sdeck = new StoryDeck();
 		AdventureDeck ad = new AdventureDeck();
 		GameModel m = new GameModel(4, 0, ad, sdeck); //everyone starting with 0 cards
+		m.initSpecialAlly();
 		
 		QuestCardSubject testgknight = (QuestCardSubject)find("Test of the Green Knight", sdeck);
 		AllyObserver gawain = (AllyObserver) find("Sir Gawain", ad);	
@@ -105,7 +107,8 @@ public class AllyConditionsTest extends TestCase {
 		StoryDeck sdeck = new StoryDeck();
 		AdventureDeck ad = new AdventureDeck();
 		GameModel m = new GameModel(4, 0, ad, sdeck); //everyone starting with 0 cards
-		
+		m.initSpecialAlly();
+
 		AllySubjectObserver qu = (AllySubjectObserver) find("Queen Iseult", ad);
 		AllySubjectObserver tris = (AllySubjectObserver) find("Sir Tristan", ad);	
 		
@@ -166,6 +169,7 @@ public class AllyConditionsTest extends TestCase {
 		StoryDeck sdeck = new StoryDeck();
 		AdventureDeck ad = new AdventureDeck();
 		GameModel m = new GameModel(4, 0, ad, sdeck); //everyone starting with 0 cards
+		m.initSpecialAlly();
 		QuestCardSubject questbeat = (QuestCardSubject)find("Search for the Questing Beast", sdeck);
 		TestObserver tesbeast = (TestObserver) find("Test of the Questing Beast", ad);	
 		AllyObserver pellin = (AllyObserver) find("King Pellinore", ad);	//already registered
@@ -197,6 +201,7 @@ public class AllyConditionsTest extends TestCase {
 		
 		GameModel game;
 		game = new GameModel(4, 0, advDeck, storyDeck);
+		game.initSpecialAlly();
 		AllySubjectObserver qu = (AllySubjectObserver) find("Queen Iseult", advDeck);
 		AllySubjectObserver tris = (AllySubjectObserver) find("Sir Tristan", advDeck);
 		advDeck.printDeck();

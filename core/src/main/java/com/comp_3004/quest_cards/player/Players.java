@@ -19,7 +19,10 @@ public class Players{
 	public Players(int position, int size, ArrayList<Player> players){
 		this.players = players;
 		this.position = position;
-		this.endIndex = size-1;
+		if(size == 0)
+			this.endIndex = 0;
+		else
+			this.endIndex = size-1;
 	}
 	public Players(Players p) {
 		this.position = p.position;
