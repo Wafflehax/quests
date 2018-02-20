@@ -13,7 +13,7 @@ import com.comp_3004.quest_cards.cards.AdventureCard.State;
 
 public class QuestPlayState extends PlayerState {
 	
-	static Logger log = Logger.getLogger(Quest.class); //log4j logger
+	static Logger log = Logger.getLogger(QuestPlayState.class); //log4j logger
 
 	public boolean playCard(AdventureCard c, Player p) {
 		if(p.getHand().contains(c)) {
@@ -76,7 +76,7 @@ public class QuestPlayState extends PlayerState {
 	}
 
 	//handle user input "done playing cards"
-	public boolean userInput(boolean b, Player p) {
+	public boolean userInput(int input, Player p) {
 		return p.getQuest().doneAddingCards();
 	}
 

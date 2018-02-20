@@ -1,8 +1,8 @@
 package com.comp_3004.quest_cards.cards;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
+import org.apache.log4j.Logger;
 
 public class StoryDeck extends Deck {
 	
@@ -10,6 +10,7 @@ public class StoryDeck extends Deck {
 	private Stack<StoryCard> deck;				//deck of cards
 	private Stack<StoryCard> discard;			//discard pile
 	private CardSpawner spawner;					//spawns cards
+	static Logger log = Logger.getLogger(StoryDeck.class); //log4j logger
 	
 	//constructors
 	public StoryDeck() {							//default constructor
@@ -51,11 +52,21 @@ public class StoryDeck extends Deck {
 		public Stack<StoryCard> getDiscard() { return this.discard; }
 	
 	//methods
+		
+	public void setTopCard(String card) {
+		StoryCard target = null;
+		for(StoryCard c : deck) {
+			if(c.getName() == card) {
+				target = c;
+				break;
+			}	
+		}
+		deck.remove(target);
+		deck.push(target);
+	}
 	public void shuffle() {							//shuffles the deck
 		Collections.shuffle(deck);
 	}
-	
-	
 	
 	protected void shuffleDiscardIntoDeck() {		//shuffles the discard pile into the deck
 		while(discard.empty() != true) {
@@ -67,34 +78,47 @@ public class StoryDeck extends Deck {
 	public StoryCard drawCard() {					//draws the top card of the story deck
 		if(deck.empty()) {
 			shuffleDiscardIntoDeck();
-			return deck.pop();
+			StoryCard drawn = deck.pop();
+			if(drawn instanceof QuestCardSubject) {
+				QuestCardSubject p = (QuestCardSubject)drawn;
+				p.setPlayed(true);
+			}
+			return drawn;
 		}
-		else
-			return deck.pop();
+		else {
+			StoryCard drawn = deck.pop();
+			if(drawn instanceof QuestCardSubject) {
+				QuestCardSubject p = (QuestCardSubject)drawn;
+				p.setPlayed(true);
+			}
+			return drawn;
+		}
 	}
 	
 	public void discardCard(StoryCard c) {			//moves card to decks discard pile
+		if(c instanceof QuestCardSubject)
+			((QuestCardSubject)c).setPlayed(false);
 		discard.push(c);
 	}
 	
 	public void printDeck() {						//prints cards in the deck
-		System.out.printf("Story Deck:\n");
-		System.out.printf("%-40s%-20s%s\n", "Name", "Type", "ID");
-		System.out.printf("================================================================\n");
+		log.info("Story Deck: ");
+		log.info(String.format("%-40s%s", "Name", "ID"));
+		log.info("=============================================");
 		for(StoryCard s : deck) {
-			s.printCard();
+			log.info(s.printCard());
 		}
-		System.out.printf("Number of cards: %s\n", deck.size());
+		log.info("Number of cards: "+deck.size());
 	}
 	
 	public void printDiscard() {						//prints cards in the discard
-		System.out.printf("Story Discard:\n");
-		System.out.printf("%-40s%s\n", "Name", "Type");
-		System.out.printf("==================================\n");
+		log.info("Story Discard: ");
+		log.info(String.format("%-40s%s", "Name", "ID"));
+		log.info("=============================================");
 		for(StoryCard s : discard) {
-			s.printCard();
+			log.info(s.printCard());
 		}
-		System.out.printf("Number of cards: %s\n", discard.size());
+		log.info("Number of cards: "+discard.size());
 		
 	}
 	
@@ -133,5 +157,4 @@ public class StoryDeck extends Deck {
 			this.deck.add(spawner.spawnStoryCard("repelTheSaxonInvaders"));
 		}
 	}
-
 }

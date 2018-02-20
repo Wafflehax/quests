@@ -19,7 +19,10 @@ public class Players{
 	public Players(int position, int size, ArrayList<Player> players){
 		this.players = players;
 		this.position = position;
-		this.endIndex = size-1;
+		if(size == 0)
+			this.endIndex = 0;
+		else
+			this.endIndex = size-1;
 	}
 	public Players(Players p) {
 		this.position = p.position;
@@ -32,12 +35,13 @@ public class Players{
 	public int size() {	return players.size(); }
 	public int getNumPlayers() { return this.players.size(); }
 	public ArrayList<Player> getPlayers() { return this.players; }
-	public void setPlayers(ArrayList<Player> p) { this.players = p; }
+	public void setPlayers(ArrayList<Player> p) { this.players = p;	this.endIndex = players.size()-1; }
 	public Player getPlayerAtIndex(int i) { return players.get(i); }
 	
 	//setter
 	public void setArray(ArrayList<Player> p) {
 		this.players = p;
+		this.endIndex = p.size()-1;
 	}
 	public void setSize(int s) {
 		if(s > 0) {
@@ -97,6 +101,14 @@ public class Players{
 		return players.get(position);
 	}
 	
+	public void setCurrent(Player p) {
+		for(int i=0; i<players.size() ; i++) {
+			if(players.get(i) == p)
+				position = i;
+		}
+			
+	}
+	
 	public void discardAllWeapons(AdventureDeck d) {
 		for(int i = 0; i < players.size(); i++) {
 			players.get(i).discardWeaponsActive(d);
@@ -108,19 +120,5 @@ public class Players{
 			players.get(i).discardAmoursActive(d);
 		}
 	}
-	
-	public Players getTournamentParticipants() {
-		//TODO: TESTING FUNCTIONALITY
-		ArrayList<Player> playing = new ArrayList<Player>();
-		for(int i = 0; i < players.size(); i++) {
-			if(players.get(i).participateTournament) {
-				playing.add(players.get(i));
-			}
-		}
-		Players partic = new Players(0, playing.size(), playing);
-		// can return with no participants 
-		return partic;
-	}
-	
 	
 }

@@ -24,35 +24,6 @@ public class GameController extends Actor{
 		
 	}
 	
-	public void tourTest() {
-	}
-	
-	public void yes() {
-		m.getState().yes();
-	}
-	
-	public void no() {
-		m.getState().no();
-	}
-	
-	
-	//When player pulls from hand to table (playing card)
-	// returns true if card played to table
-	public boolean handPress(Card c) {
-		return m.getState().handPress(c);
-	}
-	// Card dragged to discard pile
-	// returns true if successful
-	public boolean disCardPress(Card c) {
-		return m.getState().disCardPress(c);
-	}
-	//when user finishes their turn
-	// move to next player draw their view
-	public boolean doneTurn() {
-		return m.getState().doneTurn();
-	}
-	
-	
 	private Rank getRank(int i) { return m.getPlayerAtIndex(i).getRank();	}
 	private int getShields(int i) { return m.getPlayerAtIndex(i).getShields(); }
 	private LinkedList<AdventureCard> getHand(int i) { return m.getPlayerAtIndex(i).getHand(); }

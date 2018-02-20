@@ -1,16 +1,8 @@
 {
-  "Code": [
-    "test players setting their participation, setTournamentParticupation, Test 1, F6 2018-02-02",
-	"test having too many cards joining tournament, and discarding a card to have valid hand, Test 2. F6 2018-02-02",
-	"test Tournament->playCard tested Playing a Weapon Card during turn, check was added correctly to right player, Test 3, F6 2018-02-02",
-	"test Tournament->playCard() Playing a card you do not own during your turn, check was not added to hand, Test 4, F6 2018-02-02",
-	"test Tournament->calcBattlePoints() calculation of battle points of a player no special abilities (dependent cards), Weapons,Ally,Amour, Test 5, F6 2018-02-03",
-	"test Tournament->determinewin() one winner, tied(first time stage = tie), tie again(stage = double_tie), right players won, tied, Test 6, F6 2018-02-03",
-	"test player discarding amours they played, F5 2018-02-03",
-	"test player discarding weapons they played, F5 2018-02-03"
+  "Code": [ "F18 Allies (conditional battle points), F6 Tournaments"
   ],
-  "Research": ["MVC Design Pattern", "State Pattern"],
+  "Research": [""],
   "NextWeek": [
-    "F18 Allies (conditional battle points)", "F6 Retractor Tournaments To be UI integrable"],
-  "Hours": 12
+    "Testing Scenarios For tournament", "strategies"],
+  "Hours": 17
 }

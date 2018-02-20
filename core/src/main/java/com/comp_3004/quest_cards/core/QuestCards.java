@@ -51,6 +51,7 @@ public class QuestCards implements ApplicationListener {
     batch = new SpriteBatch();
     stage = new Stage();
 
+
     //Load UI skin: Todo: Make this useful. It does nothing at the moment
 
     manager.load("skins/uiskin.json", Skin.class);
@@ -60,6 +61,7 @@ public class QuestCards implements ApplicationListener {
     uiSkin = manager.get("skins/uiskin.json", Skin.class);
     _menuSong = manager.get("music/MainMenu.wav",Music.class);
 
+
     //Stage & camera set up
 
     camera = new OrthographicCamera();
@@ -67,6 +69,8 @@ public class QuestCards implements ApplicationListener {
     stage.setViewport(viewport);
     camera.position.set(Config.VIRTUAL_WIDTH / 2, Config.VIRTUAL_HEIGHT / 2, 0);
     camera.update();
+
+    Gdx.input.setInputProcessor(stage);
 
     //Init game screen & set as current screen
 

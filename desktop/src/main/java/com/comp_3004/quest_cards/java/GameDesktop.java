@@ -15,5 +15,6 @@ public class GameDesktop {
     config.title = "Quests of the Round Table";
     new LwjglApplication(new QuestCards(), config);
 
+
   }
 }

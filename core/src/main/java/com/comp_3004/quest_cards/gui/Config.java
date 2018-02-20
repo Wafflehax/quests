@@ -10,6 +10,11 @@ public class Config {
     public static final int PADDING_HORIZONTAL = 25;
     public static final int PADDING_VERTICAL = 10;
     public static final int DISCARD_PILE_WIDTH = 278;
+
+    public static class Modal {
+      public static final int WIDTH = 1000;
+      public static final int HEIGHT = 600;
+    }
   }
 
   public static class CardView {

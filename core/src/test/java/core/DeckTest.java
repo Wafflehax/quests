@@ -48,7 +48,6 @@ public class DeckTest extends TestCase {
 		for(Entry<String, Integer> s : cardCounts.entrySet()) {
 		    String key = s.getKey();
 		    int value = s.getValue();
-		    System.out.printf("%-20s %s\n", key, value);
 		    
 		    if(twos.contains(key)) {
 		    		assertEquals(2, value);
@@ -183,5 +182,27 @@ public class DeckTest extends TestCase {
 		String card2 = d.getDiscard().peek().getName();
 		assertEquals(card1, card2);
 	}
+	
+	/*
+	public void testPrintAdvDeck() {
+		AdventureDeck d = new AdventureDeck();
+		d.printDeck();
+		for(int i =0; i<125; i++) {
+			d.discardCard(d.drawCard());
+		}
+		d.printDiscard();
+			
+	}
+	
+	public void testPrintStoryDeck() {
+		StoryDeck d = new StoryDeck();
+		d.printDeck();
+		for(int i =0; i<28; i++) {
+			d.discardCard(d.drawCard());
+		}
+		d.printDiscard();
+	}
+	*/
+
 
 }

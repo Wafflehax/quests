@@ -1,13 +1,17 @@
 package com.comp_3004.quest_cards.core;
 
 import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+
+
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -26,6 +30,12 @@ import com.comp_3004.quest_cards.gui.GameView;
 import com.sun.corba.se.pept.transport.EventHandler;
 import org.apache.log4j.Logger;
 
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
+import com.comp_3004.quest_cards.gui.*;
+
+import java.util.function.Consumer;
 import javax.smartcardio.Card;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -36,14 +46,17 @@ public class GamePresenter extends Group{
 
   private QuestCards parent;
   private GameModel model;
-  private GameView view;
-  private DragAndDrop dnd;
+  private final GameView view;
   public Map<String,String> CardAssetMap;
 
   TextureAtlas sprites;
   TextureAtlas backgrounds;
 
   private AssetManager manager;
+  private Skin skin;
+
+
+  static Logger log = Logger.getLogger(GamePresenter.class); //log4j logger
 
   //used in JUnit tests
   public GamePresenter(GameModel m) {
@@ -57,7 +70,8 @@ public class GamePresenter extends Group{
 	  }
   public GameModel getModel() { return this.model; }
 
-  
+
+
   public GamePresenter(QuestCards parent) {
 
     this.parent = parent;
@@ -75,23 +89,24 @@ public class GamePresenter extends Group{
   }
 
 
+  public void loadAssets() {
 
-
-    public void loadAssets(){
 
     AssetManager manager = parent.getAssetManager();
     manager.load(Assets.GAME_BACKGROUNDS, TextureAtlas.class);
     manager.load(Assets.GAME_SPRITES, TextureAtlas.class);
+    manager.load(Assets.SKIN, Skin.class);
     manager.finishLoading();
 
+    skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
     sprites = manager.get(Assets.GAME_SPRITES, TextureAtlas.class);
     backgrounds = manager.get(Assets.GAME_BACKGROUNDS, TextureAtlas.class);
   }
 
 
-  public GameView initGameView(){
+  public GameView initGameView() {
 
-    GameView view = new GameView();
+    final GameView view = new GameView(skin);
     view.setShieldsTexture(sprites.findRegion("shield"));
     view.setBackground(backgrounds.findRegion("game_board"));
     view.setPlayerViewBackground(backgrounds.findRegion("player_area"));
@@ -99,17 +114,19 @@ public class GamePresenter extends Group{
    LinkedList<AdventureCard> temp = model.getcurrentTurn().getHand();
 
     CardView [] cards = new CardView[12];
-    for(int i = 0; i < temp.size(); i++){
+    for(int i = 0; i < temp.size(); i++) {
         String spriteGet = temp.get(i).getName();
 
         //if(spriteGet.compareTo("Amour")==0) spriteGet = "Thieves"; //TODO: HAVE THIS PLACEDHOLDER RECTIFIED!!
 
-        System.out.println("spriteGet = "+spriteGet+"\nCardAssetMap.get(spriteGet) = "+CardAssetMap.get(spriteGet));
-      cards[i] = new CardView(sprites.findRegion(CardAssetMap.get(spriteGet)),temp.get(i).getID());
-      cards[i].setDropZoneBounds(view.CDZ.getBounds());
-      cards[i].setGamePresenter(this);
-
+        System.out.println("spriteGet = " + spriteGet + "\nCardAssetMap.get(spriteGet) = " + CardAssetMap.get(spriteGet));
+        cards[i] = new CardView(sprites.findRegion(CardAssetMap.get(spriteGet)), temp.get(i).getID());
+        cards[i].setDropZoneBounds(view.CDZ.getBounds());
+        cards[i].setGamePresenter(this);
     }
+    view.setBounds(0, 0, Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
+
+
     //DragConfig(cards);
 
     //Hero area
@@ -122,6 +139,21 @@ public class GamePresenter extends Group{
     view.displayStoryDiscardPile(sprites.findRegion(Assets.Cards.Story.KINGS_RECOGNITION));
     view.displayAdventureDeck(sprites.findRegion(Assets.Cards.CARD_BACK));
     view.displayAdventureDiscardPile(sprites.findRegion(Assets.Cards.Allies.KING_PELLINORE));
+
+
+    //Dialog example
+
+    view.displayQuestionDialog("Question title", "Question message", result -> {
+      if (result) {
+        //Player says yes
+      } else {
+        //Player says no
+      }
+
+      view.displayAnnouncementDialog("Announcement title", "Announcement body", result_2 -> {
+        //Do stuff after announcement
+      });
+    });
 
     return view;
   }
@@ -136,69 +168,83 @@ public class GamePresenter extends Group{
   public void act(float delta) {
     super.act(delta);
   }
-  
-  	//temporary methods to use for model testing
-  	//takes cardID as input from view, finds corresponding card in model
-  	public boolean playCard(int cardID) {
-	  	AdventureCard cardToPlay = null;
-	  	for(AdventureCard card : model.getPlayers().current().getHand())
-	  		if(card.getID() == cardID)
-	  			cardToPlay = card;
-	  	if(cardToPlay == null)
-        {System.out.println("Card not found");
-        return false;}
-	  	if(cardToPlay != null)
-	  		if(model.getPlayers().current().playCard(cardToPlay)) {
-	  	    Gdx.app.log("Playing Card (ID,NAME):","("+cardToPlay.getID()+","+cardToPlay.getName()+")");
-	  			//then update view with what changed in the model
-                return true;
-	  		}
-	  		return false;
-  	}
 
-  //had to overload for sponsoring a quest as you can add cards to different stages :(
-  	public void playCard(int cardID, int stageNum) {
-	  	AdventureCard cardToPlay = null;
-	  	System.out.println(model.getPlayers().current().getName());
-	  	for(AdventureCard card : model.getPlayers().current().getHand())
-	  		if(card.getID() == cardID)
-	  			cardToPlay = card;
-	  	if(cardToPlay == null)
-	  		System.out.println("Card ID not found");
-	  	if(cardToPlay != null)
-	  		if(model.getPlayers().current().playCard(cardToPlay, stageNum)) {
-	  			//then update view with what changed in the model
-                //card.goto(playPlace)
-	  		}
-  	}
-  	
-  	//takes cardID as input from view, finds corresponding card in model
-  	public void discardCard(int cardID) {
-  		AdventureCard cardToDiscard = null;
-	  	for(AdventureCard card : model.getPlayers().current().getHand())
-	  		if(card.getID() == cardID)
-	  			cardToDiscard = card;
-	  	if(cardToDiscard != null)
-	  		if(model.getPlayers().current().discardCard(cardToDiscard, model.getAdvDeck())) {
-	  			int temp;
-	  			//then update view with what changed in the model
-	  		}
-  	}
-  
-  	public void userInput(int b) {
-  		if(b == 1) {
-  			if(!model.getPlayers().current().userInput(true))
-  				model.beginTurn();
-  		}
-  		else if(b == 0) {
-  			if(!model.getPlayers().current().userInput(false))
-  				model.beginTurn();
-  		}
-  	}
+
+  /* if player is not a sponsor adding a card to a stage during set up, the value passed in
+   * to stageNum can be anything. The player class will determine which playCard method to use
+   * based on player state. IF the player is a sponsor, pass in the stage number they are playing
+   * the card to.
+   */
+  public void playCard(int cardID, int stageNum) {
+    AdventureCard cardToPlay = null;
+    for (AdventureCard card : model.getPlayers().current().getHand())
+      if (card.getID() == cardID)
+        cardToPlay = card;
+    if (cardToPlay == null)
+      System.out.println("Card ID not found");
+    if (cardToPlay != null)
+      if (model.getPlayers().current().playCard(cardToPlay, stageNum)) {
+        //then update view with what changed in the model
+      } else {
+        log.info(model.getcurrentTurn().getName() + "'s turn begins.");
+        model.beginTurn();
+      }
+  }
+
+  //takes cardID as input from view, finds corresponding card in model
+  public void discardCard(int cardID) {
+    AdventureCard cardToDiscard = null;
+    for (AdventureCard card : model.getPlayers().current().getHand())
+      if (card.getID() == cardID)
+        cardToDiscard = card;
+    if (cardToDiscard != null) {
+      if (model.getPlayers().current().discardCard(cardToDiscard, model.getAdvDeck())) {
+        int temp;
+        //then update view with what changed in the model
+      } else {
+        log.info(model.getcurrentTurn().getName() + "'s turn begins.");
+        model.beginTurn();
+      }
+    } else
+      log.info(cardID + "  not found in " + model.getPlayers().current().getName() + "'s hand");
+  }
+
+  /* takes user input from clicks on dialog box
+   * result of input depends on player state
+   * if in BidState, input is the number the player is bidding
+   * if in sponsor/participate state, 1:yes 0: no
+   * if in QuestPlay state, 1: Done playing cards
+   * if in TourPlayState, any input attempts to end turn
+   */
+  public void userInput(int input) {
+    if (!model.getPlayers().current().userInput(input)) {
+    	if(model.getcurrentTurn().getState().equalsIgnoreCase("playtour")) {
+    		//player couldn't leave turn too many cards
+    	}
+    	else
+    		model.beginTurn();
+    }
+      
+  }
+
+  //temporary methods to use for model testing
+  //takes cardID as input from view, finds corresponding card in model
+  public void playCard(int cardID) {
+    AdventureCard cardToPlay = null;
+    for (AdventureCard card : model.getPlayers().current().getHand())
+      if (card.getID() == cardID)
+        cardToPlay = card;
+    if (cardToPlay == null)
+      System.out.println("Card not found");
+    if (cardToPlay != null)
+      if (model.getPlayers().current().playCard(cardToPlay)) {
+        //then update view with what changed in the model
+      }
+  }
 
     private void PopulateCardAssetMap() {
-      //WEAPONS
-      CardAssetMap.put("Horse","W_Horse");
+        //WEAPONS
+        CardAssetMap.put("Horse","W_Horse");
         CardAssetMap.put("Sword","W_Sword");
         CardAssetMap.put("Excalibur","W_Excalibur");
         CardAssetMap.put("Lance","W_Lance");
@@ -264,85 +310,5 @@ public class GamePresenter extends Group{
 
 
     }
-  	/*public LinkedList<AdventureCard> getCurrentHand(){
-      return model.getcurrentTurn().getHand();
-    }*/
 
-  	
-  	/*public void userInput(int b) {
-  		if(b == 1) {
-  			//sponsor clicks done while setting up quest
-  			if(model.getQuest().getSponsor() == model.getPlayers().current()) {
-  				if(model.getPlayers().current().userInput(true))
-  					model.getPlayers().next();
-  				return;
-  			}
-  			//player hits yes when asked if sponsoring
-  			else if(model.getPlayers().current().userInput(true)) {
-  				//user input while in sponsor state
-  				if(model.getPlayers().current().getState() == "sponsor")
-  					if(model.getPlayers().peekNext().getState() == "sponsor")
-  						return;
-  			}
-  		}
-  		else if(b == 0)
-  			//user hits no when asked if participating
-  			model.getPlayers().current().userInput(false);
-  		model.getPlayers().next();
-  		
-  		//checks if no one wants to sponsor quest
-  		if(model.getStory() instanceof QuestCard) {
-			if(model.getQuest().getNumDeclines() == model.getNumPlayers())
-				model.noQuestSponsor();
-  		}
-  		
-  		//move to next player if current player is sponsor in quest
-  		//if(model.getPlayers().current() == model.getQuest().getSponsor() )
-  	}*/
 }
-
-
-/*
-    //this is just a rough idea of what a listener may look like...
-    //play card from hand listener
-    view.addListener(new DragListener() {
-      //user clicks on a card and drags it
-      public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				/*if x,y are inside a cards tap square
-					get card ID
-					return true;
-				else x,y are not inside a cards tap square
-        return false;
-}
-
-  //user drags card to play and releases it
-  public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				/*if x,y are inside the play area's tap square
-					if (model.getcurrentTurn().playCard(card)) {
-						card played successfully (card was allowed to be played by model)
-						these next two methods are essentially setters for view attributes
-						view.updateHand(model.getcurrentTurn().getHand());
-						view.updateActive(model.getcurrentTurn().getActive());
-					}
-  }
-});
-    }
-    public playCard(AdventureCard card) {
-    		model.getPlayers().current().playCard(card);
-    }
-    public userInput(boolean b) {
-    		model.getPlayers().current().userInput(b);
-    }
-
-    //won't need these, as the calls to model.getSomething can be placed directly in the listeners
-	/*update view with model data - called when a change in model occurs
-	private Rank updateRank() { return model.getcurrentTurn().getRank(); }
-	private int updateShields() { return model.getcurrentTurn().getShields(); }
-	private LinkedList<AdventureCard> updateHand() { return model.getcurrentTurn().getHand(); }
-	private LinkedList<AdventureCard> updateActive() { return model.getcurrentTurn().getActive(); }
-	private Stack<AdventureCard> updateAdvDeck() { return model.getAdvDeck().getDeck(); }
-	private Stack<AdventureCard> updateAdvDiscard() { return model.getAdvDeck().getDiscard(); }
-	private Stack<StoryCard> updateStoryDeck() { return model.getStoryDeck().getDeck(); }
-	private Stack<StoryCard> updateStoryDiscard() { return model.getStoryDeck().getDiscard(); }
-    }
- */
