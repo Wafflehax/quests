@@ -10,7 +10,7 @@ import java.util.Map;
 public class Assets {
 
   public static String GAME_BACKGROUNDS = "sprites/backgrounds.atlas";
-  public static String GAME_SPRITES = "sprites/cards.atlas";
+  public static String GAME_SPRITES = "sprites/gameSprites.atlas";
   public static String SKIN = "skins/uiskin.json";
 
   public static class Cards {
@@ -21,6 +21,7 @@ public class Assets {
     //CardSpawnerMap.
 
     public static class Allies {
+      public static String AMOUR = "Amour";
       public static String KING_ARTHUR = "A_King_Arthur";
       public static String KING_PELLINORE = "A_King_Pellinore";
       public static String MERLIN = "A_Merlin";
