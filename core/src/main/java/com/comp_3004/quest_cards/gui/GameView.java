@@ -23,7 +23,10 @@ public class GameView extends Group {
   public Image storyDeckDiscardPile;
   public Image adventureDeckDiscardPile;
   public Image adventureDeck;
-  public CardDropZone CDZ;
+  public CardDropZone SponsorCDZ;
+  public CardDropZone DiscardCDZ;
+  public CardDropZone InPlayCDZ;
+
   public AnnouncementDialog announcementDialog;
   public BooleanDialog questionDialog;
 
@@ -35,7 +38,6 @@ public class GameView extends Group {
     this.skin = skin;
 
     //Set up layout
-    CDZ = new CardDropZone(new Sprite(new Texture("WHITE.png")));
     background = new Image();
     storyDeck = new Image();
     storyDeckDiscardPile = new Image();
@@ -45,14 +47,26 @@ public class GameView extends Group {
     announcementDialog = new AnnouncementDialog(skin);
     questionDialog = new BooleanDialog(skin);
 
+    //Init and Orient the CDZs
+    SponsorCDZ = new CardDropZone(new Sprite(new Texture("DropZones/SponsorCDZ.png")));
+    DiscardCDZ = new CardDropZone(new Sprite(new Texture("DropZones/SponsorCDZ.png")));
+    InPlayCDZ = new CardDropZone(new Sprite (new Texture("DropZones/InPlayCDZ.png")));
+
+
+
+
+
     //Add widgets to table
 
     addActor(background);
+    addActor(SponsorCDZ);
+    addActor(DiscardCDZ);
     addActor(storyDeck);
     addActor(storyDeckDiscardPile);
     addActor(adventureDeck);
     addActor(adventureDeckDiscardPile);
     addActor(playerView);
+    playerView.addActorAt(1,InPlayCDZ);
   }
 
   public void pack(){
@@ -98,16 +112,22 @@ public class GameView extends Group {
         Config.CardView.CARD_HEIGHT
     );
 
-    CDZ = new CardDropZone(new Sprite(new Texture("WHITE.png")));
+    DiscardCDZ.setDropZoneBounds((int)adventureDeck.getX() + Config.CardView.CARD_WIDTH + Config.GameView.PADDING_HORIZONTAL+70,
+            (int)storyDeckDiscardPile.getY()+150,
+            10,
+            50);
+
+    InPlayCDZ.setDropZoneBounds(Config.VIRTUAL_WIDTH/2+40,20,Config.CardView.CARD_WIDTH*3-20,Config.CardView.CARD_HEIGHT);
+
 
     //Add widgets to table
 
-    addActor(storyDeck);
-    addActor(storyDeckDiscardPile);
-    addActor(adventureDeck);
-    addActor(adventureDeckDiscardPile);
-    addActor(CDZ); //CDZ = CARDDROPZONE
-    addActor(playerView);
+//    addActor(storyDeck);
+//    addActor(storyDeckDiscardPile);
+//    addActor(adventureDeck);
+//    addActor(adventureDeckDiscardPile);
+//    addActor(SponsorCDZ); //CDZ = CARDDROPZONE
+//    addActor(playerView);
     //addActor(cardDropZone);
   }
 

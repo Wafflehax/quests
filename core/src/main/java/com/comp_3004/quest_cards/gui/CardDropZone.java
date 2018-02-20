@@ -9,9 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 public class CardDropZone extends Image {
     private Rectangle bounds;
     public static int X = 50;
-    public static int Y = Config.CardView.CARD_HEIGHT+150;
+    public static int Y = Config.CardView.CARD_HEIGHT+100;
     public static int WIDTH = 1500;
     public static int HEIGHT = Config.CardView.CARD_HEIGHT;
+    //STATICS ARE DEFAULT FOR SPONSOR-CDZ
 
 
     public CardDropZone(Sprite sprite)
@@ -22,4 +23,6 @@ public class CardDropZone extends Image {
     }
 
     public Rectangle getBounds(){return bounds;}
+
+    public void setDropZoneBounds(int x, int y, int w, int h){bounds.set(x,y,w,h); this.setBounds(x,y,w,h);}
 }

@@ -69,6 +69,7 @@ public class GamePresenter extends Group{
 
 	  }
   public GameModel getModel() { return this.model; }
+  public GameView getView() { return this.view; }
 
 
 
@@ -121,7 +122,9 @@ public class GamePresenter extends Group{
 
         System.out.println("spriteGet = " + spriteGet + "\nCardAssetMap.get(spriteGet) = " + CardAssetMap.get(spriteGet));
         cards[i] = new CardView(sprites.findRegion(CardAssetMap.get(spriteGet)), temp.get(i).getID());
-        cards[i].setDropZoneBounds(view.CDZ.getBounds());
+        cards[i].setDiscardCDZ(view.DiscardCDZ.getBounds());
+        cards[i].setInPlayCDZ(view.InPlayCDZ.getBounds());
+        cards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());
         cards[i].setGamePresenter(this);
     }
     view.setBounds(0, 0, Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
