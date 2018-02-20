@@ -1,43 +1,11 @@
 {
   com.badlogic.gdx.graphics.g2d.BitmapFont: { default-font: { file: fonts/supermarket.fnt } },
   com.badlogic.gdx.graphics.Color: {
-<<<<<<< HEAD
-    green: {
-      a: 1,
-      b: 0,
-      g: 1,
-      r: 0
-    },
-    white: {
-      a: 1,
-      b: 1,
-      g: 1,
-      r: 1
-    },
-    grey: {
-      a: 0.7,
-      b: 1,
-      g: 1,
-      r: 1
-    },
-    red: {
-      a: 1,
-      b: 0,
-      g: 0,
-      r: 1
-    },
-    black: {
-      a: 1,
-      b: 0,
-      g: 0,
-      r: 0
-    }
-=======
     green: { a: 1, b: 0, g: 1, r: 0 },
     white: { a: 1, b: 1, g: 1, r: 1 },
     red: { a: 1, b: 0, g: 0, r: 1 },
     black: { a: 1, b: 0, g: 0, r: 0 },
->>>>>>> development
+
   },
   com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
     dialogDim: { name: white, color: { r: 0, g: 0, b: 0, a: 0.45 } },
@@ -47,22 +15,7 @@
     toggle: { down: default-round-down, checked: default-round-down, up: default-round }
   },
   com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
-<<<<<<< HEAD
-    default: {
-      down: default-round-down,
-      up: default-round,
-      font: default-font,
-      fontColor: white
-    },
-    toggle: {
-      down: default-round-down,
-      up: default-round,
-      checked: default-round-down,
-      font: default-font,
-      fontColor: red,
-      downFontColor: red
-    }
-=======
+
     default: { down: default-round-down, up: default-round, font: default-font, fontColor: white },
     toggle: { down: default-round-down, up: default-round, checked: default-round-down, font: default-font, fontColor: white, downFontColor: red }
   },
@@ -102,16 +55,9 @@
     default: { checkboxOn: check-on, checkboxOff: check-off, font: default-font, fontColor: white }
   },
   com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
-<<<<<<< HEAD
-    default: {
-      fontColorUnselected: white,
-      selection: selection,
-      fontColorSelected: grey,
-      font: default-font
-    }
-=======
+
     default: { fontColorUnselected: white, selection: selection, fontColorSelected: white, font: default-font }
->>>>>>> development
+
   },
   com.badlogic.gdx.scenes.scene2d.ui.Touchpad$TouchpadStyle: {
     default: { background: default-pane, knob: default-round-large }

@@ -101,7 +101,7 @@ public class CardView extends Image {
       {card.setX(getX());
        card.setY(getY());
        //card.scaleBy(-0.5f);
-       System.out.println("PlayCard = " + gamePresenter.playCard(card.cardID) +"; CardID = "+card.cardID);
+       System.out.println("CardID = "+card.cardID);
       }
 
       else
