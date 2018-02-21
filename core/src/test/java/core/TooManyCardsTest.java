@@ -106,7 +106,6 @@ public class TooManyCardsTest extends TestCase{
 		pres.userInput(0);
 		pres.userInput(0);
 		
-		game.getcurrentTurn().printHand();
 		pres.discardCard(161);
 		pres.playCard(166, -1);
 		
@@ -121,6 +120,83 @@ public class TooManyCardsTest extends TestCase{
 		assertEquals(1, game.getPlayerAtIndex(2).getHand().size());
 		assertEquals(1, game.getPlayerAtIndex(3).getHand().size());
 		assertEquals(3, game.getAdvDeck().getDiscard().size());
+		assertEquals("Player 1", game.getcurrentTurn().getName());
+	}
+	
+	//participants draw over hand limit
+	public void testQuest2() {
+		//set up story deck
+		log.info("QUEST TEST 2");
+		log.info("===================================");
+		
+		StoryDeck storyDeck = new StoryDeck();
+		storyDeck.setTopCard("Boar Hunt");
+		storyDeck.setTopCard("Boar Hunt");
+		
+		//set up adventure deck
+		AdventureDeck advDeck = new AdventureDeck();
+		advDeck.shuffle();
+		
+		GameModel game;
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		
+		//set up hands
+		String[] hand0 = {"dagger", "lance", "tristan", "arthur", "giant", "saxonKnight", 
+				"horse", "excalibur", "lance", "sword", "battleAx", "sword"};
+		String[] hand1 = {"thieves", "boar"};
+		String[] hand2 = {"giant"};
+		String[] hand3 = {"dagger", "lance", "tristan", "arthur", "giant", "saxonKnight", 
+				"horse", "excalibur", "lance", "sword", "battleAx", "sword"};
+		game.getPlayerAtIndex(0).setHand(hand0);
+		game.getPlayerAtIndex(1).setHand(hand1);
+		game.getPlayerAtIndex(2).setHand(hand2);
+		game.getPlayerAtIndex(3).setHand(hand3);
+		
+		GamePresenter pres = new GamePresenter(game);
+		pres.getModel().beginTurn();
+		
+		//sponsorship
+		pres.userInput(0);
+		pres.userInput(1);
+		
+		game.getcurrentTurn().printHand();
+		pres.playCard(487,0);
+		pres.playCard(488,1);
+		pres.userInput(1);
+		
+		//participation
+		pres.userInput(1);
+		pres.userInput(1);
+		pres.userInput(1);
+		
+		//discard/play to reduce hand size
+		pres.playCard(490,-1);
+		pres.discardCard(475);
+		
+		//stage 0
+		pres.userInput(0);
+		pres.userInput(0);
+		pres.userInput(0);
+		
+		//discard/play to reduce hand size
+		pres.discardCard(491);
+		pres.playCard(476, -1);
+		
+		//stage 1
+		pres.userInput(0);
+		pres.userInput(0);
+		pres.userInput(0);
+		
+		assertEquals(2, game.getPlayerAtIndex(0).getShields());
+		assertEquals(0, game.getPlayerAtIndex(1).getShields());
+		assertEquals(0, game.getPlayerAtIndex(2).getShields());
+		assertEquals(0, game.getPlayerAtIndex(3).getShields());
+		assertEquals(12, game.getPlayerAtIndex(0).getHand().size());
+		assertEquals(4, game.getPlayerAtIndex(1).getHand().size());
+		assertEquals(0, game.getPlayerAtIndex(1).getActive().size());
+		assertEquals(3, game.getPlayerAtIndex(2).getHand().size());
+		assertEquals(12, game.getPlayerAtIndex(3).getHand().size());
+		assertEquals(6, game.getAdvDeck().getDiscard().size());
 		assertEquals("Player 1", game.getcurrentTurn().getName());
 	}
 
