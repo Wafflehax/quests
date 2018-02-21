@@ -1,20 +1,23 @@
 package core;
 
+import java.util.ArrayList;
+
 import com.comp_3004.quest_cards.Stories.Tour;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.Card;
 import com.comp_3004.quest_cards.cards.CardSpawner;
 import com.comp_3004.quest_cards.cards.StoryDeck;
+import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.core.GameModel;
 import com.comp_3004.quest_cards.core.GamePresenter;
 import com.comp_3004.quest_cards.player.Player;
+import com.comp_3004.quest_cards.player.Players;
 import com.comp_3004.quest_cards.player.Player.Rank;
 
 import junit.framework.TestCase;
 
 
 public class TournamentTest extends TestCase{
-	
 	public void testTourOne() {
 		//test participation gathering of tournament and check joiners get a card
 
@@ -292,6 +295,78 @@ public class TournamentTest extends TestCase{
 		//check that both plays have nothing active, since amour and weapons are discarded
 		assertEquals(p0.getActive().size(), 0);
 		assertEquals(p1.getActive().size(), 0);
+	}
+	
+	public void testSeven() {
+		//test Game winning tournament single winner 
+		
+		AdventureDeck ad = new AdventureDeck();
+		StoryDeck d = new StoryDeck();
+		GameModel m = new GameModel(2, 0, ad, d); // 2 player 4 cards each
+		GamePresenter pres = new GamePresenter(m);
+		
+		Player p0 = m.getPlayerAtIndex(0);
+		Player p1 = m.getPlayerAtIndex(1);
+		p0.addShields(22);
+		p1.addShields(22);
+		
+		String cardp0[] = {"amour"};
+		p0.setHand(cardp0);
+		
+		String cardp1[] = {"sword"};
+		p1.setHand(cardp1);
+		
+		m.playGameWinningTour();
+		
+		pres.userInput(1); //yes
+		pres.userInput(1); //yes
+		
+		//p0 turn
+		pres.playCard(AllyConditionsTest.find("amour",p0.getHand()).getID());
+		pres.userInput(0); //done turn
+		
+		//p1
+		pres.userInput(0); //done turn 
+		
+		//check winner
+		assertEquals(true, m.getPlayers().getPlayerAtIndex(0).getWon());
+	}
+	
+	public void testEight() {
+		//test Game winning tournament more than one winner
+		AdventureDeck ad = new AdventureDeck();
+		StoryDeck d = new StoryDeck();
+		GameModel m = new GameModel(2, 0, ad, d); // 2 player 4 cards each
+		GamePresenter pres = new GamePresenter(m);
+		
+		Player p0 = m.getPlayerAtIndex(0);
+		Player p1 = m.getPlayerAtIndex(1);
+		p0.addShields(22);
+		p1.addShields(22);
+		
+		String cardp0[] = {"amour"};
+		p0.setHand(cardp0);
+		
+		String cardp1[] = {"sword"};
+		p1.setHand(cardp1);
+		
+		m.playGameWinningTour();
+		
+		pres.userInput(1); //yes
+		pres.userInput(1); //yes
+		
+		//p0 turn
+		pres.playCard(AllyConditionsTest.find("amour",p0.getHand()).getID());
+		pres.userInput(0); //done turn
+		
+		//p1
+		pres.playCard(AllyConditionsTest.find("sword",p1.getHand()).getID());
+		pres.userInput(0); //done turn
+		
+		//check winners
+		assertEquals(true, m.getPlayers().getPlayerAtIndex(0).getWon());
+		assertEquals(true, m.getPlayers().getPlayerAtIndex(1).getWon());
+		
 	}
 	
 }

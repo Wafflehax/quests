@@ -109,8 +109,20 @@ public class GameModel{
 			
 		}
 		else if(cardDrawn instanceof TournamentCard) {
-			tour = new Tour(players, (TournamentCard)cardDrawn, advDeck);
+			//plays tour not game winning tour
+			tour = new Tour(players, (TournamentCard)cardDrawn, advDeck, false);
 		}
+	}
+	
+	public void playGameWinningTour() {
+		log.info("Model: In game winning tour");
+		for(Player p : players.getPlayers()) {
+			p.setEvent(null);
+			p.setQuest(null);
+		}
+		StoryCard cardDrawn = storyDeck.drawTournament();
+		tour = new Tour(players, (TournamentCard)cardDrawn, advDeck, true);
+		
 	}
 	
 	public boolean checkForTooManyCards() {

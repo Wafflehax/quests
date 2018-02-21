@@ -224,6 +224,20 @@
     "Date": "2018-02-20"
   },
   
+  {
+    "ID": "T35",
+    "Description": "TournamentTest->testSeven, test Game winning tournament single winner ",
+    "Status": "F6.1",
+    "Date": "2018-02-21"
+  },
+  
+  {
+    "ID": "T36",
+    "Description": "TournamentTest->testEight, test Game winning tournament more than one winner",
+    "Status": "F6.1",
+    "Date": "2018-02-21"
+  },
+  
   
   
   

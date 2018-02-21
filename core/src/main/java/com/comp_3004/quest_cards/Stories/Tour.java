@@ -14,6 +14,7 @@ import com.comp_3004.quest_cards.cards.QuestCard;
 import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.player.Player;
+import com.comp_3004.quest_cards.player.Player.Rank;
 import com.comp_3004.quest_cards.player.Players;
 
 import utils.IntPlayerPair;
@@ -43,23 +44,61 @@ public class Tour {
 	
 	
 	//constructor
-	public Tour(Players p, TournamentCard c, AdventureDeck d) {
+	/*	input players at the table
+	 * 	input Tournament Card that was drawn from storydeck
+	 * 	input AdventureDeck 
+	 * 	input boolean fina, if this is the game winning tournament due to multiple knights of round table
+	 */
+	public Tour(Players p, TournamentCard c, AdventureDeck d, boolean fina) {
 		players = p;
 		tour = c;
 		this.d = d;
-		//set everyone to TourPatricipationState
-		for(Player pl : players.getPlayers()) {
-			pl.setTour(this);
-			pl.setState("tourask");
+		this.gameWinMatch = fina;
+		if(fina) { //assuming called with more than one champion
+			
+			//make deep copy of players and store in tempPl if need to return to old turns
+			ArrayList<Player> old = new ArrayList<Player>();
+			for(Player pl: players.getPlayers()) {
+				old.add(pl);
+			}
+			Players te = new Players(players.getPos(), old.size(), old);
+			tempPl = te;
+			
+			
+			
+			participants = new ArrayList<Player>();
+			for(Player pl: players.getPlayers()) { //reduce players to only knight of table	
+				if(pl.getRank() != Rank.KNIGHT_OF_THE_ROUND_TABLE) {
+					players.getPlayers().remove(pl);
+				}
+			}
+			leftAsk = players.getNumPlayers();
+			joiners = 0;
+			//ask knights if they want to play
+			for(Player pl : players.getPlayers()) {
+				pl.setTour(this);
+				pl.setState("tourask");
+			}
+			if(players.size() == 0) {
+				log.info("Error not asking participation due to no players");
+			}
+			else
+				log.info(players.current().getName() + " Participate in one final Game Winning Tour " + players.current().getTour().getCurTour().getName() + " ?");
 		}
-		leftAsk = p.getNumPlayers();
-		participants = new ArrayList<Player>();
-		joiners = 0;
-		log.info(players.current().getName() + " Participate in Tour " + players.current().getTour().getCurTour().getName() + " ?");
+		else if(!fina){
+			//set everyone to TourPatricipationState
+			for(Player pl : players.getPlayers()) {
+				pl.setTour(this);
+				pl.setState("tourask");
+			}
+			leftAsk = p.getNumPlayers();
+			participants = new ArrayList<Player>();
+			joiners = 0;
+			log.info(players.current().getName() + " Participate in Tour " + players.current().getTour().getCurTour().getName() + " ?");
+		}
+			
 	}
 
-	
-	
 	public void tourParticipate(Player p, boolean b) {
 		leftAsk--;
 		if(b) {
@@ -76,14 +115,28 @@ public class Tour {
 			if(joiners >= 2) {
 				for(Player ps: participants)
 					ps.setState("playtour");
-				startTour();
+				if(gameWinMatch)
+					startGameWinningTour();
+				else
+					startTour();
 			}
 			else
 				log.info("Can't start Tournament Need atleast 2 players");	
 		}
 	}	
 	
-	public void startTour() {
+	private void startGameWinningTour() {
+		round = 1;
+		leftToPlayCard = joiners;
+		log.info("Game Winning Tournament Starting............adding card to joiners from adventure deck");
+		for(Player ps: participants)
+			ps.forceDrawAdventure(d);
+		players.setPlayers(participants);
+		log.info(players.current().getName() + " Its your turn press done when finished");
+	}
+	
+	
+	private void startTour() {
 		round = 1;
 		leftToPlayCard = joiners;
 		log.info("Tournament Starting............adding card to joiners from adventure deck");
@@ -138,7 +191,22 @@ public class Tour {
 			}
 			String out = "";
 			if(gameWinMatch == true) {
-				
+				if(pairs.size() == 1) {
+					pairs.get(0).player.setWon(true);
+					log.info(pairs.get(0).player.getName() + " is the sole winner of the Game!");
+					log.info("Game Over");
+					players = tempPl; //return to full player list
+				}
+				//more than one winner
+				else if(pairs.size() > 1){
+					log.info("Here are the final winners of the Game!");
+					for(IntPlayerPair p: pairs) {
+						p.player.setWon(true);
+						p.player.getName();
+					}
+					log.info("Game Over");
+					players = tempPl; //return to full player list
+				}
 			}
 			else
 			{

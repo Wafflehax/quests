@@ -1,5 +1,6 @@
 package com.comp_3004.quest_cards.player;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import com.comp_3004.quest_cards.cards.AdventureDeck;
@@ -37,6 +38,7 @@ public class Players{
 	public ArrayList<Player> getPlayers() { return this.players; }
 	public void setPlayers(ArrayList<Player> p) { this.players = p;	this.endIndex = players.size()-1; }
 	public Player getPlayerAtIndex(int i) { return players.get(i); }
+	public int getPos() { return position; }
 	
 	//setter
 	public void setArray(ArrayList<Player> p) {
@@ -98,7 +100,7 @@ public class Players{
 	}
 	
 	public Player current() {
-		return players.get(position);
+		 return players.get(position);
 	}
 	
 	public void setCurrent(Player p) {

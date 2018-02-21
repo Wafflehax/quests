@@ -45,6 +45,7 @@ public class Player{
 	private Event currentEvent;
 	private Tour currTour;
 	private PlayerState state_;
+	private boolean WonGame;
 	
 	// constructor
 	public Player(String name) {
@@ -58,6 +59,7 @@ public class Player{
 		this.currentEvent = null;
 		this.currTour = null;
 		this.state_ = new NormalState();
+		this.WonGame = false;
 	}
 	
 	// getters/setters
@@ -78,6 +80,8 @@ public class Player{
 	public Event getEvent() { return this.currentEvent; }
 	public void setTour(Tour t) { this.currTour = t; }
 	public Tour getTour() { return this.currTour; }
+	public boolean getWon() { return this.WonGame; }
+	public void setWon(boolean b) { this.WonGame = b; }
 	public void setState(String s) { 
 		if(s == "normal")
 			state_ = new NormalState();
@@ -292,6 +296,7 @@ public class Player{
 			rank = Rank.KNIGHT_OF_THE_ROUND_TABLE;
 			log.info(name + " ranked up to " + rank + ".");
 			//triggers winning condition
+			//if two KNIGHT OF ROUND TABLE or more, plays final tour
 		}
 	}
 	
