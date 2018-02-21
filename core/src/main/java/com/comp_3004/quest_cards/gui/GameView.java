@@ -1,5 +1,7 @@
 package com.comp_3004.quest_cards.gui;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -9,7 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.comp_3004.quest_cards.Stories.Quest;
+import com.comp_3004.quest_cards.cards.AdventureCard;
 
+import java.util.LinkedList;
 import java.util.function.Consumer;
 
 public class GameView extends Group {
@@ -18,14 +23,19 @@ public class GameView extends Group {
   //Widgets
 
   public PlayerView playerView;
+  public TweenManager tweenManager; //NOT YET IN USE
   public Image background;
   public Image storyDeck;
   public Image storyDeckDiscardPile;
   public Image adventureDeckDiscardPile;
   public Image adventureDeck;
+  public Image hoverDraw;
   public CardDropZone SponsorCDZ;
   public CardDropZone DiscardCDZ;
   public CardDropZone InPlayCDZ;
+
+  public LinkedList<CardView> InPlay;
+  public LinkedList<CardView> QuestStages;
 
   public AnnouncementDialog announcementDialog;
   public BooleanDialog questionDialog;
@@ -36,6 +46,7 @@ public class GameView extends Group {
   public GameView(Skin skin) {
 
     this.skin = skin;
+    tweenManager = new TweenManager(); //NOT YET IN USE
 
     //Set up layout
     background = new Image();
@@ -43,6 +54,7 @@ public class GameView extends Group {
     storyDeckDiscardPile = new Image();
     adventureDeck = new Image();
     adventureDeckDiscardPile = new Image();
+    hoverDraw = new Image();
     playerView = new PlayerView();
     announcementDialog = new AnnouncementDialog(skin);
     questionDialog = new BooleanDialog(skin);
@@ -51,6 +63,11 @@ public class GameView extends Group {
     SponsorCDZ = new CardDropZone(new Sprite(new Texture("DropZones/SponsorCDZ.png")));
     DiscardCDZ = new CardDropZone(new Sprite(new Texture("DropZones/SponsorCDZ.png")));
     InPlayCDZ = new CardDropZone(new Sprite (new Texture("DropZones/InPlayCDZ.png")));
+
+    InPlay = new LinkedList<>();
+    QuestStages = new LinkedList<>();
+
+
 
 
 
@@ -65,6 +82,7 @@ public class GameView extends Group {
     addActor(storyDeckDiscardPile);
     addActor(adventureDeck);
     addActor(adventureDeckDiscardPile);
+    addActor(hoverDraw);
     addActor(playerView);
     playerView.addActorAt(1,InPlayCDZ);
   }
@@ -112,6 +130,7 @@ public class GameView extends Group {
         Config.CardView.CARD_HEIGHT
     );
 
+
     DiscardCDZ.setDropZoneBounds((int)adventureDeck.getX() + Config.CardView.CARD_WIDTH + Config.GameView.PADDING_HORIZONTAL+70,
             (int)storyDeckDiscardPile.getY()+150,
             10,
@@ -119,6 +138,12 @@ public class GameView extends Group {
 
     InPlayCDZ.setDropZoneBounds(Config.VIRTUAL_WIDTH/2+40,20,Config.CardView.CARD_WIDTH*3-20,Config.CardView.CARD_HEIGHT);
 
+    hoverDraw.setBounds(
+            Config.VIRTUAL_WIDTH - Config.CardView.CARD_WIDTH-150,
+            storyDeckDiscardPile.getY()-50,
+            Config.CardView.CARD_WIDTH,
+            Config.CardView.CARD_HEIGHT
+    );
 
     //Add widgets to table
 
@@ -175,6 +200,88 @@ return this;
   public void displayAdventureDeck(TextureRegion adventureDeck) {
     this.adventureDeck.setDrawable(new TextureRegionDrawable(adventureDeck));
   }
+
+
+  //ADDED METHODS
+  //There might be a cleaner way to do this, but this works fairly well
+  //The following methods work in conjunction with the CardView class in order to allow the user
+  //To represent their different card placements with appropriate visual reactions.
+
+  public void discardCard(CardView card){
+    displayAdventureDiscardPile(card.getPicDisplay());
+    card.remove(); //Removes CardView from its parent
+  }
+
+  public void addToPlay(CardView card){
+    card.clear();//Kill listeners
+    card.scaleBy(-0.5f);
+    InPlay.add(card);
+    card.HoverDrawConfig(card);
+    displayCardsInPlay(InPlay);
+  }
+
+  public void addToQuestStages(CardView card){
+    card.clear();
+    card.scaleBy(-0.5f);
+    QuestStages.add(card);
+    card.HoverDrawConfig(card);
+    displayCardsQuestStages(QuestStages);
+    //
+  }
+
+  public void displayCardsInPlay(LinkedList<CardView> InPlay) {
+    float x0 = InPlayCDZ.getX();
+    float y0 = InPlayCDZ.getY() + InPlayCDZ.getHeight() / 2 - 30;
+
+    for (int i = 0; i < InPlay.size(); i++) {
+      CardView setThis = InPlay.get(i);
+      setThis.setY(y0);
+      setThis.setDeckY(y0);
+      setThis.setDeckZ(i);
+      setThis.setZIndex(i);
+      setThis.setX(x0);
+      setThis.setDeckX(x0);
+      x0 = (x0 + 50);
+
+      if (i == 10) {
+        y0 = y0 - InPlayCDZ.getHeight() / 2;
+        x0 = InPlayCDZ.getX();
+      }
+    }
+  }
+
+  public void displayCardsQuestStages(LinkedList<CardView> QuestStages){
+    float x0 = SponsorCDZ.getX();
+    float y0 = SponsorCDZ.getY() + SponsorCDZ.getHeight() / 2 - 40;
+
+    for (int i = 0; i < QuestStages.size(); i++) {
+      CardView setThis = QuestStages.get(i);
+      setThis.setY(y0);
+      setThis.setDeckY(y0);
+      setThis.setDeckZ(i);
+      setThis.setZIndex(i);
+      setThis.setX(x0);
+      setThis.setDeckX(x0);
+      x0 = (x0 + 100);
+
+      if (i == 10) {
+        y0 = y0 - SponsorCDZ.getHeight() / 2;
+        x0 = SponsorCDZ.getX();
+      }
+    }
+  }
+  public void displayHoverDraw(CardView card){
+    hoverDraw.setDrawable(new TextureRegionDrawable(card.getPicDisplay()));
+    hoverDraw.setVisible(true);
+  }
+
+  public void hideHoverDraw(){
+    hoverDraw.setVisible(false);
+  }
+
+
+
+  //ENDOF ADDED
 
   public void setBackground(TextureRegion background) {
 

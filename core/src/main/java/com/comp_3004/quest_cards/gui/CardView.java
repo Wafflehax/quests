@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.core.GamePresenter;
 
 public class CardView extends Image {
@@ -44,9 +45,23 @@ public class CardView extends Image {
     CardBounds=new Rectangle((int)getDeckX(), (int)getDeckY(), (int)getWidth(), (int)getHeight());
   }
 
-  public void InPlayConfig(final CardView Card){}
+  public void HoverDrawConfig(final CardView card){
 
-  public void StoryConfig(final CardView card){}
+    card.addListener(new ClickListener() {
+    @Override
+    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+      gamePresenter.getView().displayHoverDraw(card);
+
+
+    }
+
+    @Override
+    public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+      gamePresenter.getView().hideHoverDraw();
+    }
+
+  });}
+
 
   public void dragConfig(final CardView card)
   {card.addListener(new ClickListener() {
@@ -117,31 +132,25 @@ public class CardView extends Image {
       setColor(1,1,1,1);
 
       if(CardBounds.overlaps(InPlayCDZ))
-      {//TODO: gamePresenter.getView().displayInPlay(card)
-        //TODO: gamePresenter.getModel().playCard(int CardID)
-        card.clear();
+      {//TODO: gamePresenter.getModel().playCard(int CardID)
+        gamePresenter.getView().addToPlay(card);
         Gdx.app.log("PlayCard CardID ",""+card.cardID);
       }
 
       else if(CardBounds.overlaps(SponsorCDZ))
-      {//TODO: Implement Sponsor-PlayCard
-        //TODO: Also Implement Bounds Based on Conditions... Omit SponsorCDZ if model.getcurrentTurn() != Sponsor
-        card.setX(getX());
-       card.setY(getY());
-       //card.scaleBy(-0.5f);
+      {//TODO: Also Implement Bounds Based on Conditions... Omit SponsorCDZ if model.getcurrentTurn() != Sponsor
+        gamePresenter.getView().addToQuestStages(card);
        System.out.println("CardID = "+card.cardID);
       }
 
       else if(CardBounds.overlaps(DiscardCDZ))
-      {gamePresenter.getView().displayAdventureDiscardPile(card.picDisplay);
-        Gdx.app.log("Discard CardID ",""+card.cardID);
-      card.clear();//Kill all Card-Listeners
-      card.scaleBy(-1); //Hides Card: There Must be a better way of doing this...
+      {gamePresenter.getView().discardCard(card);
       }
 
       else
       {card.setX(card.getDeckX());
         card.setY(card.getDeckY());}
+
 
     }
 
@@ -162,6 +171,7 @@ public int getCardID() {return cardID;}
 public boolean getInPlay(){return inPlay;}
 public Rectangle getCardBounds() {return CardBounds;}
 public Rectangle getSponsorCDZ() {return SponsorCDZ;}
+public TextureRegion getPicDisplay(){return picDisplay;}
 
 //SETTERS
 public void setDeckX(float x){deckX=x;}
