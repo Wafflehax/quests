@@ -251,7 +251,7 @@ public class AllyConditionsTest extends TestCase {
 		
 	}
 	
-	private AdventureCard find(String n, LinkedList<AdventureCard> d) {
+	public static AdventureCard find(String n, LinkedList<AdventureCard> d) {
 		for(AdventureCard c: d) {
 			if(c.getName().equalsIgnoreCase(n))
 				return c;	

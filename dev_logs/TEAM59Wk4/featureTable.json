@@ -32,7 +32,13 @@
   {
     "ID": "F6",
     "Description": "Tournaments",
-    "Status": "Planned",
+    "Status": "Completed",
+    "Date": "2018-02-20"
+  },
+  {
+    "ID": "F6.1",
+    "Description": "Game Winning Tournament",
+    "Status": "planned",
     "Date": ""
   },
   {
@@ -165,14 +171,14 @@
   {
     "ID": "F14",
     "Description": "Tournament ties",
-    "Status": "Planned",
-    "Date": ""
+    "Status": "Completed",
+    "Date": "2018-02-20"
   },
   {
     "ID": "F15",
     "Description": "Tournament double ties",
-    "Status": "Planned",
-    "Date": ""
+    "Status": "Completed",
+    "Date": "2018-02-20"
   },
   {
     "ID": "F16",

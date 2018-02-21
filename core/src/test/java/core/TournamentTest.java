@@ -2,16 +2,18 @@ package core;
 
 import com.comp_3004.quest_cards.Stories.Tour;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
+import com.comp_3004.quest_cards.cards.Card;
 import com.comp_3004.quest_cards.cards.CardSpawner;
 import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.core.GameModel;
 import com.comp_3004.quest_cards.core.GamePresenter;
 import com.comp_3004.quest_cards.player.Player;
+import com.comp_3004.quest_cards.player.Player.Rank;
+
 import junit.framework.TestCase;
 
 
 public class TournamentTest extends TestCase{
-	
 	
 	public void testTourOne() {
 		//test participation gathering of tournament and check joiners get a card
@@ -172,7 +174,7 @@ public class TournamentTest extends TestCase{
 	
 	
 	public void testFour() {
-		//Test basic calculation of battle points for single player, ally,weapons,amour//calcBattlePoints
+		//Test basic calculation of battle points for single player, ally,weapons,amour
 		AdventureDeck ad = new AdventureDeck();
 		String story[] = {"camelot"};
 		StoryDeck d = new StoryDeck(story);
@@ -192,6 +194,104 @@ public class TournamentTest extends TestCase{
 		bp += 5;
 		assertEquals(p.getRank(), Player.Rank.SQUIRE);
 		assertEquals(bp, m.getTour().calcBattlePoints(p));		
+	}
+	
+	public void testFive() {
+		//Test single winner outcome and proper discarding weapons, amours
+		
+		AdventureDeck ad = new AdventureDeck();
+		String story[] = {"camelot"};
+		StoryDeck d = new StoryDeck(story);
+		GameModel m = new GameModel(2, 4, ad, d); // 2 player 4 cards each
+		GamePresenter pres = new GamePresenter(m);
+		
+		Player p1 = m.getPlayerAtIndex(1);
+		String cardsp1[] = {"horse", "dagger"};
+		p1.setHand(cardsp1);
+		
+		Player p0 = m.getPlayerAtIndex(0);
+		Rank before = p1.getRank();
+		String cardp0[] = {"amour"};
+		p0.setHand(cardp0);
+		
+		m.beginTurn();
+		
+		pres.userInput(1); //p0 yes
+		pres.userInput(1); //p1 yes
+		
+		pres.playCard(AllyConditionsTest.find("amour",p0.getHand()).getID());
+		pres.userInput(0); //p0 done turn
+		
+		pres.playCard(AllyConditionsTest.find("horse",p1.getHand()).getID());
+		pres.playCard(AllyConditionsTest.find("dagger",p1.getHand()).getID());
+		pres.userInput(0); //p1 done turn
+		
+		//check the weapons and amours are gone
+		assertEquals(p0.getActive().size(), 0);
+		assertEquals(p1.getActive().size(), 0);
+		
+		//check p0 won, leveled up to knight
+		Rank after = p1.getRank();
+		assertEquals(true, before == Rank.SQUIRE);
+		assertEquals(true, after == Rank.KNIGHT);
+	}
+	
+	public void testSix() {
+		//PART ONE
+		//Test tie of two players in tournament, check goes to next round, and that amours stay but weapons discarded
+		AdventureDeck ad = new AdventureDeck();
+		String story[] = {"camelot"};
+		StoryDeck d = new StoryDeck(story);
+		GameModel m = new GameModel(2, 0, ad, d); // 2 player 4 cards each
+		GamePresenter pres = new GamePresenter(m);
+		
+		Player p1 = m.getPlayerAtIndex(1);
+		String cardsp1[] = {"horse", "sword"};
+		p1.setHand(cardsp1);
+		
+		Player p0 = m.getPlayerAtIndex(0);
+		String cardp0[] = {"amour"};
+		p0.setHand(cardp0);
+		
+		m.beginTurn();
+		
+		//Participate?
+		pres.userInput(1); //p0 yes
+		pres.userInput(1); //p1 yes
+		
+		//Plays amour and done
+		pres.playCard(AllyConditionsTest.find("amour",p0.getHand()).getID());
+		pres.userInput(0);
+		
+		//Plays horse and done
+		pres.playCard(AllyConditionsTest.find("horse",p1.getHand()).getID());
+		pres.userInput(0);
+		
+		//PLayers should have tied and gone to next round
+		
+		//check moved to next round
+		assertEquals(2, m.getTour().getRound());
+		
+		//check only weapons are discarded.
+		
+		//check card still in p0's active
+		assertEquals(false, AllyConditionsTest.find("amour",p0.getActive()) == null);
+		
+		//p1 only played one weapon check its gone
+		assertEquals(p1.getActive().size(), 0);
+		
+		
+		//PART TWO OF TEST
+		////Test two players win tie breaker, both get shields, and amours, weapons are discarded
+		
+		pres.userInput(0);
+		
+		pres.playCard(AllyConditionsTest.find("sword",p1.getHand()).getID());
+		pres.userInput(0);
+		
+		//check that both plays have nothing active, since amour and weapons are discarded
+		assertEquals(p0.getActive().size(), 0);
+		assertEquals(p1.getActive().size(), 0);
 	}
 	
 }
