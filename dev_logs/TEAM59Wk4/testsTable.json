@@ -180,6 +180,57 @@
     "Description": "AllyConditionsTest->testFour,Tests Correct Minimum bid on Test of the Questing Beast",
     "Status": "F21",
     "Date": "2018-02-17"
-  }
+  },
+  
+  {
+    "ID": "T30",
+    "Description": "TournamentTest->testTourOne, test participation gathering of tournament and check joiners get a card",
+    "Status": "F6",
+    "Date": "2018-02-20"
+  },
+  
+  {
+    "ID": "T31",
+    "Description": "TournamentTest->testTourTwo, Test joiners having too many cards when trying to leave their player turn, block moving on",
+    "Status": "F6",
+    "Date": "2018-02-20"
+  },
+  
+  {
+    "ID": "T32",
+    "Description": "TournamentTest->testThree, Test player trying to discard a card they played, block it",
+    "Status": "F6",
+    "Date": "2018-02-20"
+  },
+  
+  {
+    "ID": "T33",
+    "Description": "TournamentTest->testFour, Test basic calculation of battle points for single player, ally,weapons,amour",
+    "Status": "F6",
+    "Date": "2018-02-20"
+  },
+  
+  {
+    "ID": "T34",
+    "Description": "TournamentTest->testFive, Test single winner outcome and proper discarding weapons, amours",
+    "Status": "F6",
+    "Date": "2018-02-20"
+  },
+  
+  {
+    "ID": "T34",
+    "Description": "TournamentTest->testSix, Test tie of two players in tournament, check goes to next round, and that amours stay but weapons discarded, and Test two players win tie breaker, both get shields, and amours, weapons are discarded",
+    "Status": "F6",
+    "Date": "2018-02-20"
+  },
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
 ]

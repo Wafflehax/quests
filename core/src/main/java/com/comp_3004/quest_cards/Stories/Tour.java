@@ -31,6 +31,7 @@ public class Tour {
 	private int round;
 	private int leftAsk;
 	private int leftToPlayCard;
+	private boolean gameWinMatch = false;
 	
 	public TournamentCard getCurTour() { return tour; }
 	
@@ -38,6 +39,7 @@ public class Tour {
 	//getters setters 
 	public int getleftToPlayCard() { return leftToPlayCard; }
 	public Players getPlayers() { return players; }
+	public int getRound() { return round; }
 	
 	
 	//constructor
@@ -115,7 +117,7 @@ public class Tour {
 	}
 	
 	public void determineRoundOutCome() {
-		String msg = "Calculating Player battle points and outcome of stage " + round;
+		String msg = "Calculating Player battle points and outcome of round " + round;
 		log.info(msg);
 		//calculate battle points
 		int pl = players.getNumPlayers();
@@ -135,56 +137,67 @@ public class Tour {
 				}
 			}
 			String out = "";
-			if(pairs.size() == 1) {
-				// one winner display and tour ends, resets turns to regular sequence before Tour
-				out += pairs.get(0).player.getName() + " won the tournament! Gained Sheilds: " + joiners + " + bonus(" + bonus + ") = " + (joiners+bonus);
-				log.info(out);
-				pairs.get(0).player.addShields(joiners + bonus);
-				// discard amours, weapons
-				discardAmours();
-				discardWeapons();
-				//set turn to regular before tour
-				players = tempPl;
-				tempPl = null;
+			if(gameWinMatch == true) {
+				
 			}
-			else if(pairs.size() >= 2) {
-				if(round == 1) {
-					round++;
-					out += "Tied. Here are the tied players going to the Tie Breaker(Round " + round +  ") :\n";
-					//discard of everyone's weapons
-					discardWeapons();
-					//set players to those tied					
-					players.setArray(winners);
-					for(int i = 0; i < players.size(); i++) {
-						out += "Player : " + players.getPlayerAtIndex(i).getName() + "\n";
-					}
+			else
+			{
+				if(pairs.size() == 1) {
+					// one winner display and tour ends, resets turns to regular sequence before Tour
+					out += pairs.get(0).player.getName() + " won the tournament! Gained Sheilds: " + joiners + " + bonus(" + bonus + ") = " + (joiners+bonus);
 					log.info(out);
-					leftToPlayCard = pairs.size();
-					log.info(players.current().getName() + " Its your turn press done when finished");					
-				}
-				else if(round == 2) { //over Tied players win
-					round++;
-					out += "Tied again. Tied players win " + (bonus+joiners) + " battle points:\n";
-					//tied but this was the last round discard weapons,amours
+					pairs.get(0).player.addShields(joiners + bonus);
+					// discard amours, weapons
 					discardAmours();
 					discardWeapons();
-					for(int i = 0; i < players.size(); i++) {
-						out += "Player : " + players.getPlayerAtIndex(i).getName() + " With Rank ";
-						players.getPlayerAtIndex(i).addShields(bonus+joiners);
-						out += players.getPlayerAtIndex(i).getRankS();
-						out += " and shields " + players.getPlayerAtIndex(i).getShields() + "\n";
-					}
-					log.info(out);
+					log.info("Tournament is OVER.");
 					//set turn to regular before tour
 					players = tempPl;
 					tempPl = null;
+					//set states to normal
+					setStatePlayers("normal");
+				}
+				else if(pairs.size() >= 2) {
+					if(round == 1) {
+						round++;
+						out += "Tied. Here are the tied players going to the Tie Breaker(Round " + round +  ") :\n";
+						//discard of everyone's weapons
+						discardWeapons();
+						//set players to those tied					
+						players.setArray(winners);
+						for(int i = 0; i < players.size(); i++) {
+							out += "Player : " + players.getPlayerAtIndex(i).getName() + "\n";
+						}
+						log.info(out);
+						leftToPlayCard = pairs.size();
+						log.info(players.current().getName() + " Its your turn press done when finished");					
+					}
+					else if(round == 2) { //over Tied players win
+						round++;
+						log.info("Tied again. Tied players win " + (bonus+joiners) + " shields:\n");
+						for(int i = 0; i < players.size(); i++) {
+							String o = players.getPlayerAtIndex(i).getName() + " With Rank ";
+							players.getPlayerAtIndex(i).addShields(bonus+joiners);
+							o += players.getPlayerAtIndex(i).getRankS();
+							o += " and shields " + players.getPlayerAtIndex(i).getShields() + "\n";
+							log.info(o);
+						}
+						//tied but this was the last round discard weapons,amours
+						discardAmours();
+						discardWeapons();
+						//set turn to regular before tour
+						players = tempPl;
+						tempPl = null;
+						//set states to normal
+						setStatePlayers("normal");
+					}
+					else {
+						log.info("Error stage greater than 2. Can't play more than two rounds start,tie breaker");
+					}
 				}
 				else {
-					log.info("Error stage greater than 2. Can't play more than two rounds start,tie breaker");
+					log.info("Error calc winners");
 				}
-			}
-			else {
-				log.info("Error calc winners");
 			}
 		}
 		else
@@ -194,7 +207,7 @@ public class Tour {
 	public int calcBattlePoints(Player p) {
 		int bp = p.getRankBattlePts();
 		String out = "";
-		out += "Player : " + p.getName() + " has rank: "	+ p.getRankBattlePts() + "\nbattlepoints: ";
+		out += "------->" + p.getName() + ": has rank: "	+ p.getRankBattlePts() + " battlepoints: ";
 		for(int w = 0; w < p.getActive().size(); w++) {
 			AdventureCard c = p.getActive().get(w);
 			if(c instanceof WeaponCard) {
@@ -209,6 +222,7 @@ public class Tour {
 			}
 		}
 		out += " ==>total : " + bp;
+		//logged, returns battle points
 		log.info(out);
 		return bp;
 	}
