@@ -186,7 +186,10 @@ public class Player{
 			target.setOwner(this);
 			target.setState(State.HAND);
 			playerHandCards.add(target);
+			log.info("Added "+target.getName()+" to "+name+"'s hand");
 		}
+		if(target == null)
+			log.info("Could not find "+card+" in the adventure deck");
 	}
 	
 	protected AdventureCard getHandCard(int pos) {
@@ -332,6 +335,15 @@ public class Player{
 		num += getFreeBids();
 		num += playerHandCards.size();	
 		return num;
+	}
+	
+	public boolean checkForTooManyCards() {
+		if(currentEvent != null)
+			return currentEvent.checkForTooManyCards();
+		else if(currentQuest != null)
+			return currentQuest.checkForTooManyCards();
+		else
+			return false;
 	}
 	
 	public void printHand() {

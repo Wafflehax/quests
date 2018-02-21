@@ -482,7 +482,18 @@ public class Quest {
 				return questCleanup();
 		}
 		return true;
-		
+	}
+	
+	public boolean checkForTooManyCards() {
+		for(int i=0; i<players.getNumPlayers(); i++) {
+			if(players.current().getState() == "tooManyCards") {
+				return true;
+			}
+			players.next();
+		}
+		players.setCurrent(drewQuest);
+		players.next();
+		return false;
 	}
 
 }

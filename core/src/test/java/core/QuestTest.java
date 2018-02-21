@@ -592,7 +592,6 @@ public class QuestTest extends TestCase{
 		game.getcurrentTurn().printHand();
 		pres.discardCard(1150);
 		pres.playCard(1151, -1);
-		pres.playCard(1152, -1);
 		
 		
 		assertEquals(0, game.getPlayerAtIndex(0).getShields());
@@ -601,6 +600,7 @@ public class QuestTest extends TestCase{
 		assertEquals(0, game.getPlayerAtIndex(3).getShields());
 		assertEquals(1, game.getPlayerAtIndex(0).getHand().size());
 		assertEquals(12, game.getPlayerAtIndex(1).getHand().size());
+		assertEquals(1, game.getPlayerAtIndex(1).getActive().size());
 		assertEquals(1, game.getPlayerAtIndex(2).getHand().size());
 		assertEquals(1, game.getPlayerAtIndex(3).getHand().size());
 		assertEquals(3, game.getAdvDeck().getDiscard().size());

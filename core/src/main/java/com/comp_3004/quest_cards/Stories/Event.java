@@ -41,6 +41,8 @@ public class Event {
 	//getters/setters
 	public ArrayList<Player> getHighestRank() { return this.highestRank; }
 	public HashMap<Player, Integer> getCardsToDiscard() { return this.cardsToDiscard; }
+	public Players getPlayers() { return this.players; }
+	public Player getDrewEvent() { return this.drewEvent; }
 	
 	public boolean runEvent() {
 		log.info(players.current().getName() + " drew event " + evnt.getName());
@@ -171,7 +173,25 @@ public class Event {
 			
 		}
 		log.info("Event Finished");
+		for(int i=0; i<players.getNumPlayers(); i++) {
+			if(players.getPlayerAtIndex(i).getHand().size() > 12) {
+				players.getPlayerAtIndex(i).setState("tooManyCards");
+			}
+		}
+		
 		return true;
+	}
+	
+	public boolean checkForTooManyCards() {
+		for(int i=0; i<players.getNumPlayers(); i++) {
+			if(players.current().getState() == "tooManyCards") {
+				return true;
+			}
+			players.next();
+		}
+		players.setCurrent(drewEvent);
+		players.next();
+		return false;
 	}
 	
 	public boolean discardCard(Player p, AdventureCard c) {
