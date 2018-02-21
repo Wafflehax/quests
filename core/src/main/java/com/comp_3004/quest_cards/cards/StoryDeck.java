@@ -75,6 +75,20 @@ public class StoryDeck extends Deck {
 		shuffle();
 	}
 	
+	public TournamentCard drawTournament() {
+		StoryCard t;
+		while(true) {
+			t = drawCard();
+			if(t instanceof TournamentCard) {
+				return (TournamentCard)t;
+			}
+			else {
+				// not a tour card put in discard and draw again
+				discardCard(t);
+			}
+		}
+	}
+	
 	public StoryCard drawCard() {					//draws the top card of the story deck
 		if(deck.empty()) {
 			shuffleDiscardIntoDeck();
