@@ -46,9 +46,4 @@ public class Config {
     public static final int SHIELD_HEIGHT = 200;
 
   }
-
-  public static class Assets {
-    public static final String BACKGROUND_ATLAS = "sprites/backgrounds.atlas";
-    public static final String SPRITE_ATLAS = "sprites/cards.atlas";
-  }
 }

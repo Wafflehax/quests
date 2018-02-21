@@ -1,3 +1,37 @@
+name=gameSprites
+filename=
+output=../../assets/sprites
+
+alias=true
+alphaThreshold=0
+debug=false
+duplicatePadding=false
+edgePadding=true
+fast=false
+filterMag=Nearest
+filterMin=Nearest
+ignoreBlankImages=true
+maxHeight=2048
+maxWidth=2048
+minHeight=16
+minWidth=16
+paddingX=2
+paddingY=2
+pot=true
+rotation=false
+stripWhitespaceX=false
+stripWhitespaceY=false
+wrapX=ClampToEdge
+wrapY=ClampToEdge
+premultiplyAlpha=false
+grid=false
+square=false
+bleed=true
+limitMemory=true
+useIndexes=true
+
+scaleFactors=[{suffix:"",factor:1}]
+inputFiles=[{path:../images/other/blue.png,type:Input,regionName:null},{path:../images/other/card_back.png,type:Input,regionName:null},{path:../images/other/deck_icon.png,type:Input,regionName:null},{path:../images/other/flag_arrow.png,type:Input,regionName:null},{path:../images/other/flag_body.png,type:Input,regionName:null},{path:../images/other/green.png,type:Input,regionName:null},{path:../images/other/red.png,type:Input,regionName:null},{path:../images/other/shield.png,type:Input,regionName:null},{path:../images/processed_cards/A_King_Arthur.png,type:Input,regionName:null},{path:../images/processed_cards/A_King_Pellinore.png,type:Input,regionName:null},{path:../images/processed_cards/A_Merlin.png,type:Input,regionName:null},{path:../images/processed_cards/Amour.png,type:Input,regionName:null},{path:../images/processed_cards/A_Queen_Guinevere.png,type:Input,regionName:null},{path:../images/processed_cards/A_Queen_Iseult.png,type:Input,regionName:null},{path:../images/processed_cards/A_Sir_Galahad.png,type:Input,regionName:null},{path:../images/processed_cards/A_Sir_Gawain.png,type:Input,regionName:null},{path:../images/processed_cards/A_Sir_Lancelot.png,type:Input,regionName:null},{path:../images/processed_cards/A_Sir_Percival.png,type:Input,regionName:null},{path:../images/processed_cards/A_Sir_Tristan.png,type:Input,regionName:null},{path:../images/processed_cards/E_Chivalrous_Deed.png,type:Input,regionName:null},{path:../images/processed_cards/E_Court_Called_Camelot.png,type:Input,regionName:null},{path:../images/processed_cards/E_King's_Call_to_Arms.png,type:Input,regionName:null},{path:../images/processed_cards/E_King's_Recognition.png,type:Input,regionName:null},{path:../images/processed_cards/E_Plague.png,type:Input,regionName:null},{path:../images/processed_cards/E_Pox.png,type:Input,regionName:null},{path:../images/processed_cards/E_Prosperity_Throughout_the_Realm.png,type:Input,regionName:null},{path:../images/processed_cards/E_Queen's_Favor.png,type:Input,regionName:null},{path:../images/processed_cards/F_Black_Knight.png,type:Input,regionName:null},{path:../images/processed_cards/F_Boar.png,type:Input,regionName:null},{path:../images/processed_cards/F_Dragon.png,type:Input,regionName:null},{path:../images/processed_cards/F_Evil_Knight.png,type:Input,regionName:null},{path:../images/processed_cards/F_Giant.png,type:Input,regionName:null},{path:../images/processed_cards/F_Green_Knight.png,type:Input,regionName:null},{path:../images/processed_cards/F_Mordred.png,type:Input,regionName:null},{path:../images/processed_cards/F_Robber_Knight.png,type:Input,regionName:null},{path:../images/processed_cards/F_Saxon_Knight.png,type:Input,regionName:null},{path:../images/processed_cards/F_Saxons.png,type:Input,regionName:null},{path:../images/processed_cards/F_Thieves.png,type:Input,regionName:null},{path:../images/processed_cards/out.png,type:Input,regionName:null},{path:../images/processed_cards/R_Champion_Knight.png,type:Input,regionName:null},{path:../images/processed_cards/R_Knight.png,type:Input,regionName:null},{path:../images/processed_cards/R_Squire.png,type:Input,regionName:null},{path:../images/processed_cards/T_Test_of_Morgan_Le_Fey.png,type:Input,regionName:null},{path:../images/processed_cards/T_Test_of_Temptation.png,type:Input,regionName:null},{path:../images/processed_cards/T_Test_of_the_Questing_Beast.png,type:Input,regionName:null},{path:../images/processed_cards/T_Test_of_Valor.png,type:Input,regionName:null},{path:../images/processed_cards/W_Battle-ax.png,type:Input,regionName:null},{path:../images/processed_cards/W_Dagger.png,type:Input,regionName:null},{path:../images/processed_cards/W_Excalibur.png,type:Input,regionName:null},{path:../images/processed_cards/W_Horse.png,type:Input,regionName:null},{path:../images/processed_cards/W_Lance.png,type:Input,regionName:null},{path:../images/processed_cards/W_Sword.png,type:Input,regionName:null}]
 
 
 -PROJ-
