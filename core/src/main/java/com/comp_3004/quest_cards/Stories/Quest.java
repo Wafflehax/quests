@@ -35,6 +35,7 @@ public class Quest {
 	private int currentStage;
 	private int currentBid;
 	private int minBid;
+	private boolean questComplete;
 
 	//constructor
 	public Quest(QuestCard q, Players p, AdventureDeck d) {
@@ -58,6 +59,7 @@ public class Quest {
 		this.currentStage = 0;
 		this.currentBid = 0;
 		this.minBid = 0;
+		this.questComplete = false;
 		log.info(players.current().getName() + " drew quest " + quest.getName());
 	}
 	
@@ -244,9 +246,36 @@ public class Quest {
 	
 	//starts playing the stage indicated by stageNum
 	private void startStage(int stageNum) {
+		boolean tooManyCards = false;
 		//each participating player draws a card from the adventure deck
-		for(Player p : participants)
+		for(Player p : participants) {
 			p.drawCard(advDeck);
+			if(p.getHand().size() > 12) {
+				p.setState("tooManyCards");
+				log.info(p.getName()+" has too many cards");
+				tooManyCards = true;
+				
+			}
+		}
+		if(tooManyCards)
+			tooManyCards();
+		else
+			runStage(stageNum);
+	}
+	
+	private void tooManyCards() {
+		for(int i=0; i<participants.size(); i++) {
+			if(players.current().getHand().size() <= 12) {
+				if(players.peekNext() == sponsor)
+					players.next();
+				players.next();
+			}
+		}
+	}
+		
+	private void runStage(int stageNum) {
+		for(Player pl : participants)
+			pl.setState("playQuest");
 		
 		//reveal if stage contains a foe or a test
 		stageCard =  stages[stageNum].getSponsorCards().get(0);
@@ -366,6 +395,8 @@ public class Quest {
 		for(Player p : players.getPlayers())
 			p.setState("normal");
 		
+		questComplete = true;
+		
 		//check if sponsor has too many cards
 		if(sponsor.getHand().size() > 12) {
 			log.info(sponsor.getName()+" has "+(sponsor.getHand().size()-12)+" too many cards");
@@ -482,7 +513,26 @@ public class Quest {
 				return questCleanup();
 		}
 		return true;
-		
+	}
+	
+	public boolean checkForTooManyCards() {
+		for(int i=0; i<players.getNumPlayers(); i++) {
+			if(players.current().getState() == "tooManyCards") {
+				return true;
+			}
+			players.next();
+		}
+		if(questComplete) {
+			players.setCurrent(drewQuest);
+			players.next();
+			return false;
+		}
+		else {
+			players.setCurrent(sponsor);
+			players.next();
+			runStage(currentStage);
+			return true;
+		}
 	}
 
 }

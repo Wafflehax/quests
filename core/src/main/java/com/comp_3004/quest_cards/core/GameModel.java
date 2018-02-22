@@ -93,6 +93,10 @@ public class GameModel{
 	}
 	
 	public void beginTurn() {
+		for(Player p : players.getPlayers()) {
+			p.setEvent(null);
+			p.setQuest(null);
+		}
 		StoryCard cardDrawn = storyDeck.drawCard();
 		StoryEv = cardDrawn;
 		if(cardDrawn instanceof QuestCard) {
@@ -102,10 +106,32 @@ public class GameModel{
 			event = new Event(cardDrawn, players, advDeck, players.current());
 			if(event.runEvent())
 				players.next();
+			
 		}
 		else if(cardDrawn instanceof TournamentCard) {
-			tour = new Tour(players, (TournamentCard)cardDrawn, advDeck);
+			//plays tour not game winning tour
+			tour = new Tour(players, (TournamentCard)cardDrawn, advDeck, false);
 		}
+	}
+	
+	public void playGameWinningTour() {
+		log.info("Model: In game winning tour");
+		for(Player p : players.getPlayers()) {
+			p.setEvent(null);
+			p.setQuest(null);
+		}
+		StoryCard cardDrawn = storyDeck.drawTournament();
+		tour = new Tour(players, (TournamentCard)cardDrawn, advDeck, true);
+		
+	}
+	
+	public boolean checkForTooManyCards() {
+		for(int i=0; i<players.getNumPlayers(); i++) {
+			if(players.current().getState() == "tooManyCards")
+				return true;
+			players.next();
+		}
+		return false;
 	}
 	
 	public void addPlayer(Player p) {

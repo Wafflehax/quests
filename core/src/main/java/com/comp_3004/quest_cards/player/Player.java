@@ -45,6 +45,7 @@ public class Player{
 	private Event currentEvent;
 	private Tour currTour;
 	private PlayerState state_;
+	private boolean WonGame;
 	
 	// constructor
 	public Player(String name) {
@@ -58,6 +59,7 @@ public class Player{
 		this.currentEvent = null;
 		this.currTour = null;
 		this.state_ = new NormalState();
+		this.WonGame = false;
 	}
 	
 	// getters/setters
@@ -78,6 +80,8 @@ public class Player{
 	public Event getEvent() { return this.currentEvent; }
 	public void setTour(Tour t) { this.currTour = t; }
 	public Tour getTour() { return this.currTour; }
+	public boolean getWon() { return this.WonGame; }
+	public void setWon(boolean b) { this.WonGame = b; }
 	public void setState(String s) { 
 		if(s == "normal")
 			state_ = new NormalState();
@@ -186,7 +190,10 @@ public class Player{
 			target.setOwner(this);
 			target.setState(State.HAND);
 			playerHandCards.add(target);
+			log.info("Added "+target.getName()+" to "+name+"'s hand");
 		}
+		if(target == null)
+			log.info("Could not find "+card+" in the adventure deck");
 	}
 	
 	protected AdventureCard getHandCard(int pos) {
@@ -289,6 +296,7 @@ public class Player{
 			rank = Rank.KNIGHT_OF_THE_ROUND_TABLE;
 			log.info(name + " ranked up to " + rank + ".");
 			//triggers winning condition
+			//if two KNIGHT OF ROUND TABLE or more, plays final tour
 		}
 	}
 	
@@ -332,6 +340,15 @@ public class Player{
 		num += getFreeBids();
 		num += playerHandCards.size();	
 		return num;
+	}
+	
+	public boolean checkForTooManyCards() {
+		if(currentEvent != null)
+			return currentEvent.checkForTooManyCards();
+		else if(currentQuest != null)
+			return currentQuest.checkForTooManyCards();
+		else
+			return false;
 	}
 	
 	public void printHand() {

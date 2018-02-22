@@ -1,20 +1,9 @@
 package core;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Stack;
-
 import org.apache.log4j.Logger;
-
-import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
-import com.comp_3004.quest_cards.cards.AllyCard;
 import com.comp_3004.quest_cards.cards.CardSpawner;
-import com.comp_3004.quest_cards.cards.EventCard;
-import com.comp_3004.quest_cards.cards.StoryCard;
 import com.comp_3004.quest_cards.cards.StoryDeck;
-import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.core.GameModel;
 import com.comp_3004.quest_cards.core.GamePresenter;
 import com.comp_3004.quest_cards.player.Player.Rank;
@@ -341,7 +330,7 @@ public class EventTest extends TestCase{
 		assertEquals("Player 1", game.getcurrentTurn().getName());
 	}
 		
-	public void testProsperityThroughoutTheRealms() {
+	public void testProsperityThroughoutTheRealms1() {
 		log.info("Prosperity Throughout the Realms: Test 1");
 		log.info("=======================");
 		//set up story deck
@@ -546,5 +535,4 @@ public class EventTest extends TestCase{
 		assertEquals(5,game.getAdvDeck().getDiscard().size());
 		assertEquals("Player 1", game.getcurrentTurn().getName());
 	} 
-	
 }

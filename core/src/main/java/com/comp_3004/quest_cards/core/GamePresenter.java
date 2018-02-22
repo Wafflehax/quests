@@ -201,7 +201,8 @@ public class GamePresenter extends Group {
     if (!model.getPlayers().current().userInput(input)) {
       if (model.getcurrentTurn().getState().equalsIgnoreCase("playtour")) {
         //player couldn't leave turn too many cards
-      } else
+      }
+      else
         model.beginTurn();
     }
 
