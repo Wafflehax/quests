@@ -13,6 +13,14 @@ public class Assets {
   public static final String GAME_SPRITES = "sprites/gameSprites.atlas";
   public static final String SKIN = "skins/uiskin.json";
 
+  public static class MiscSprites {
+
+    public static final String FLAG_ARROW = "flag_arrow";
+    public static final String FLAG_BODY = "flag_body";
+    public static final String DECK_ICON = "deck_icon";
+    public static final String SHIELD = "shield";
+  }
+
   public static class Cards {
 
 
@@ -94,6 +102,5 @@ public class Assets {
       public static final String TRUE = "Yes";
       public static final String FALSE = "No";
     }
-
   }
 }

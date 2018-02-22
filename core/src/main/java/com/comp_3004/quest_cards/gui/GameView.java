@@ -1,8 +1,9 @@
 package com.comp_3004.quest_cards.gui;
 
-import com.badlogic.gdx.Game;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -26,16 +27,19 @@ public class GameView extends Group {
   public CardDropZone SponsorCDZ;
   public CardDropZone DiscardCDZ;
   public CardDropZone InPlayCDZ;
+  public PlayerStatView player;
 
   public AnnouncementDialog announcementDialog;
   public BooleanDialog questionDialog;
 
 
   private Skin skin;
+  private TextureAtlas sprites;
 
-  public GameView(Skin skin) {
+  public GameView(AssetManager manager) {
 
-    this.skin = skin;
+    this.skin = manager.get(Assets.SKIN);
+    this.sprites = manager.get(Assets.GAME_SPRITES, TextureAtlas.class);
 
     //Set up layout
     background = new Image();
@@ -46,15 +50,12 @@ public class GameView extends Group {
     playerView = new PlayerView();
     announcementDialog = new AnnouncementDialog(skin);
     questionDialog = new BooleanDialog(skin);
+    player = new PlayerStatView(sprites, skin);
 
     //Init and Orient the CDZs
     SponsorCDZ = new CardDropZone(new Sprite(new Texture("DropZones/SponsorCDZ.png")));
     DiscardCDZ = new CardDropZone(new Sprite(new Texture("DropZones/SponsorCDZ.png")));
     InPlayCDZ = new CardDropZone(new Sprite (new Texture("DropZones/InPlayCDZ.png")));
-
-
-
-
 
     //Add widgets to table
 
@@ -66,6 +67,7 @@ public class GameView extends Group {
     addActor(adventureDeck);
     addActor(adventureDeckDiscardPile);
     addActor(playerView);
+    addActor(player);
     playerView.addActorAt(1,InPlayCDZ);
   }
 

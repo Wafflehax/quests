@@ -81,7 +81,7 @@ public class GamePresenter extends Group {
 
   public GameView initGameView() {
 
-    final GameView view = new GameView(skin);
+    final GameView view = new GameView(manager);
     view.setShieldsTexture(sprites.findRegion("shield"));
     view.setBackground(backgrounds.findRegion("game_board"));
     view.setPlayerViewBackground(backgrounds.findRegion("player_area"));

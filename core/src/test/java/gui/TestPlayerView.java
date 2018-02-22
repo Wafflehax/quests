@@ -13,7 +13,7 @@ public class TestPlayerView extends TestCase {
   @Test
   public void testSelfBounds() {
 
-    GameView gameView = new GameView(new Skin());
+    GameView gameView = new GameView(null);
     PlayerView playerView = gameView.playerView;
 
     assertEquals(playerView.getWidth(), 1900);
