@@ -13,7 +13,6 @@ public class PlayerView extends Group {
 
   public DeckView playerAdventureCards;
   public Image hero;
-  public Image shields;
   public Image background;
 
   public PlayerView() {
@@ -28,13 +27,6 @@ public class PlayerView extends Group {
     System.out.printf("Player view y: %f\n", getY());
 
     //Init widgets
-
-    shields = new Image();
-    shields.setBounds(
-        Config.PlayerView.WIDTH - Config.PlayerView.PADDING_HORIZONTAL - Config.PlayerView.SHIELD_WIDTH,
-        Config.PlayerView.HEIGHT + Config.PlayerView.PADDING_VERTICAL,
-        Config.PlayerView.SHIELD_WIDTH,
-        Config.PlayerView.SHIELD_HEIGHT);
 
     //Init hero
 
@@ -62,7 +54,6 @@ public class PlayerView extends Group {
 
     addActor(background);
     addActor(playerAdventureCards);
-    addActor(shields);
     addActor(hero);
   }
 
@@ -87,12 +78,6 @@ public class PlayerView extends Group {
   }
    */
 
-  public PlayerView setShieldsTexture(TextureRegion shieldTexture) {
-
-    shields.setDrawable(new TextureRegionDrawable(shieldTexture));
-    return this;
-  }
-
   public PlayerView displayHero(TextureRegion heroDrawable) {
 
     this.hero.setDrawable(new TextureRegionDrawable(heroDrawable));
@@ -102,11 +87,6 @@ public class PlayerView extends Group {
   public PlayerView displayPlayerHand(CardView[] cards) {
     playerAdventureCards.setCards(cards);
     return this;
-  }
-
-  public PlayerView displayShieldNumber(int n){
-
-    return null;
   }
 
   public PlayerView setBackground(TextureRegion textureRegion){

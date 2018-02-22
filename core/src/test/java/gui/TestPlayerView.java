@@ -13,7 +13,7 @@ public class TestPlayerView extends TestCase {
   @Test
   public void testSelfBounds() {
 
-    GameView gameView = new GameView(new Skin());
+    GameView gameView = new GameView(null);
     PlayerView playerView = gameView.playerView;
 
     assertEquals(playerView.getWidth(), 1900);
@@ -34,19 +34,5 @@ public class TestPlayerView extends TestCase {
     assertNotSame(playerAdventureCards.getZIndex(), -1);
     assertEquals(playerAdventureCards.getOriginX(), 25);
     assertEquals(playerAdventureCards.getOriginY(), 25);
-  }
-
-  @Test
-  public void testShieldsBounds(){
-
-    PlayerView playerView = new PlayerView();
-    Image playerAdventureCards = playerView.shields;
-
-    assertEquals(playerAdventureCards.getWidth(), 200);
-    assertEquals(playerAdventureCards.getHeight(), 300);
-    assertNotSame(playerAdventureCards.getZIndex(), -1);
-    assertEquals(playerAdventureCards.getOriginX(), 1800);
-    assertEquals(playerAdventureCards.getOriginY(), 360);
-
   }
 }

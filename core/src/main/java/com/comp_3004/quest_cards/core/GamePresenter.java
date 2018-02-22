@@ -86,8 +86,7 @@ public class GamePresenter extends Group {
 
   public GameView initGameView() {
 
-    final GameView view = new GameView(skin);
-    view.setShieldsTexture(sprites.findRegion("shield"));
+    final GameView view = new GameView(manager);
     view.setBackground(backgrounds.findRegion("game_board"));
     view.setPlayerViewBackground(backgrounds.findRegion("player_area"));
 
@@ -107,6 +106,7 @@ public class GamePresenter extends Group {
       cards[i].setColor(1,1,1,0);
 
     }
+
     view.setBounds(0, 0, Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
 
 

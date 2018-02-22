@@ -3,20 +3,19 @@ package com.comp_3004.quest_cards.gui;
 import aurelienribon.tweenengine.Timeline;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.comp_3004.quest_cards.Stories.Quest;
-import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.core.CardViewAccessor;
-import com.comp_3004.quest_cards.core.ImageAccessor;
 import com.comp_3004.quest_cards.core.ImageAccessor;
 
 import java.util.LinkedList;
@@ -24,6 +23,22 @@ import java.util.function.Consumer;
 
 public class GameView extends Group {
 
+  public enum PlayerColor {
+    player1(Color.YELLOW),
+    Player2(Color.BLUE),
+    player3(Color.RED),
+    player4(Color.GREEN);
+
+    Color color;
+
+    PlayerColor(Color color) {
+      this.color = color;
+    }
+
+    public Color color() {
+      return color;
+    }
+  }
 
   //Widgets
 
@@ -38,6 +53,7 @@ public class GameView extends Group {
   public CardDropZone SponsorCDZ;
   public CardDropZone DiscardCDZ;
   public CardDropZone InPlayCDZ;
+  public PlayerStatView[] players;
 
   public LinkedList<CardView> InPlay;
   public LinkedList<CardView> QuestStages;
@@ -47,11 +63,14 @@ public class GameView extends Group {
 
 
   private Skin skin;
+  private TextureAtlas sprites;
 
-  public GameView(Skin skin) {
+  public GameView(AssetManager manager) {
 
     this.skin = skin;
     AnimationManager = new TweenManager(); //NOT YET IN USE
+    this.skin = manager.get(Assets.SKIN);
+    this.sprites = manager.get(Assets.GAME_SPRITES, TextureAtlas.class);
 
     //Set up layout
     background = new Image();
@@ -63,20 +82,15 @@ public class GameView extends Group {
     playerView = new PlayerView();
     announcementDialog = new AnnouncementDialog(skin);
     questionDialog = new BooleanDialog(skin);
+    players = new PlayerStatView[4];
 
     //Init and Orient the CDZs
     SponsorCDZ = new CardDropZone(new Sprite(new Texture("DropZones/SponsorCDZ.png")));
     DiscardCDZ = new CardDropZone(new Sprite(new Texture("DropZones/SponsorCDZ.png")));
-    InPlayCDZ = new CardDropZone(new Sprite (new Texture("DropZones/InPlayCDZ.png")));
+    InPlayCDZ = new CardDropZone(new Sprite(new Texture("DropZones/InPlayCDZ.png")));
 
     InPlay = new LinkedList<>();
     QuestStages = new LinkedList<>();
-
-
-
-
-
-
 
     //Add widgets to table
 
@@ -89,11 +103,7 @@ public class GameView extends Group {
     addActor(adventureDeckDiscardPile);
     addActor(hoverDraw);
     addActor(playerView);
-    playerView.addActorAt(1,InPlayCDZ);
-  }
-
-  public void pack(){
-
+    playerView.addActorAt(1, InPlayCDZ);
   }
 
   @Override
@@ -135,41 +145,41 @@ public class GameView extends Group {
         Config.CardView.CARD_HEIGHT
     );
 
-
-    DiscardCDZ.setDropZoneBounds((int)adventureDeck.getX() + Config.CardView.CARD_WIDTH + Config.GameView.PADDING_HORIZONTAL+70,
-            (int)storyDeckDiscardPile.getY()+150,
-            10,
-            50);
-
-    InPlayCDZ.setDropZoneBounds(Config.VIRTUAL_WIDTH/2+40,20,Config.CardView.CARD_WIDTH*3-20,Config.CardView.CARD_HEIGHT);
+    InPlayCDZ.setDropZoneBounds(Config.VIRTUAL_WIDTH / 2 + 40, 20, Config.CardView.CARD_WIDTH * 3 - 20, Config.CardView.CARD_HEIGHT);
 
     hoverDraw.setBounds(
-            Config.VIRTUAL_WIDTH - Config.CardView.CARD_WIDTH-150,
-            storyDeckDiscardPile.getY()-50,
-            Config.CardView.CARD_WIDTH,
-            Config.CardView.CARD_HEIGHT
+        Config.VIRTUAL_WIDTH - Config.CardView.CARD_WIDTH - 150,
+        storyDeckDiscardPile.getY() - 50,
+        Config.CardView.CARD_WIDTH,
+        Config.CardView.CARD_HEIGHT
     );
 
-    //Add widgets to table
+    DiscardCDZ.setDropZoneBounds((int) adventureDeck.getX() + Config.CardView.CARD_WIDTH + Config.GameView.PADDING_HORIZONTAL + 70,
+        (int) storyDeckDiscardPile.getY() + 150,
+        10,
+        50);
 
-//    addActor(storyDeck);
-//    addActor(storyDeckDiscardPile);
-//    addActor(adventureDeck);
-//    addActor(adventureDeckDiscardPile);
-//    addActor(SponsorCDZ); //CDZ = CARDDROPZONE
-//    addActor(playerView);
-    //addActor(cardDropZone);
+    InPlayCDZ.setDropZoneBounds(Config.VIRTUAL_WIDTH / 2 + 40, 20, Config.CardView.CARD_WIDTH * 3 - 20, Config.CardView.CARD_HEIGHT);
+
+    PlayerColor[] colors = PlayerColor.values();
+    for (int i = 0; i < players.length; i++) {
+
+      PlayerStatView currentPlayer = players[i] = new PlayerStatView(sprites, skin);
+      addActor(currentPlayer);
+      currentPlayer.setColor(colors[i].color());
+      currentPlayer.setPosition(Config.PlayerStatView.X, Config.PlayerStatView.Y + i * (100 + Config.GameView.PADDING_VERTICAL));
+    }
   }
 
 
-
   public GameView displayHero(TextureRegion hero) {
+
     playerView.displayHero(hero);
     announcementDialog.setSize(Config.GameView.Modal.WIDTH, Config.GameView.Modal.HEIGHT);
     announcementDialog.setCenterPosition(getWidth() / 2, getHeight() / 2);
     questionDialog.setSize(Config.GameView.Modal.WIDTH, Config.GameView.Modal.HEIGHT);
     questionDialog.setCenterPosition(getWidth() / 2, getHeight() / 2);
-return this;
+    return this;
   }
 
   public void displayPlayerHand(CardView[] cards) {
@@ -200,24 +210,22 @@ return this;
     Tween.registerAccessor(CardView.class, new CardViewAccessor());
 
     Timeline.createSequence()
-            .push(Tween.set(card,CardViewAccessor.FADE).target(0))
-            //.push(Tween.set(card,CardViewAccessor.TRANSLATE).target((storyDeckDiscardPile.getX() + Config.CardView.CARD_WIDTH + Config.GameView.PADDING_HORIZONTAL),
-            //        storyDeckDiscardPile.getY())) TODO: Figure out why Y is being set to 0 after update
-            .push(Tween.set(card,CardViewAccessor.TRANSLATE).target(0,0))
+        .push(Tween.set(card, CardViewAccessor.FADE).target(0))
+        //.push(Tween.set(card,CardViewAccessor.TRANSLATE).target((storyDeckDiscardPile.getX() + Config.CardView.CARD_WIDTH + Config.GameView.PADDING_HORIZONTAL),
+        //        storyDeckDiscardPile.getY())) TODO: Figure out why Y is being set to 0 after update
+        .push(Tween.set(card, CardViewAccessor.TRANSLATE).target(0, 0))
 
-            .pushPause(0.5f)
+        .pushPause(0.5f)
 
-            .push(Tween.to(card,CardViewAccessor.FADE,0.5f).target(1))
-            .pushPause(0.5f)
-            .push(Tween.to(card, CardViewAccessor.TRANSLATE,0.75f).target(card.getDeckX(), card.getDeckY()).delay(0.2f))
-            .start(AnimationManager);
-
-
+        .push(Tween.to(card, CardViewAccessor.FADE, 0.5f).target(1))
+        .pushPause(0.5f)
+        .push(Tween.to(card, CardViewAccessor.TRANSLATE, 0.75f).target(card.getDeckX(), card.getDeckY()).delay(0.2f))
+        .start(AnimationManager);
 
 
     System.out.println(storyDeckDiscardPile);
 
-   // Tween.to(card, CardViewAccessor.FLIP,0.2f).target(Config.CardView.CARD_WIDTH).start(AnimationManager);
+    // Tween.to(card, CardViewAccessor.FLIP,0.2f).target(Config.CardView.CARD_WIDTH).start(AnimationManager);
 
     //AnimationManager.update(Gdx.graphics.getDeltaTime());
 
@@ -234,12 +242,12 @@ return this;
   //The following methods work in conjunction with the CardView class in order to allow the user
   //To represent their different card placements with appropriate visual reactions.
 
-  public void discardCard(CardView card){
+  public void discardCard(CardView card) {
     displayAdventureDiscardPile(card.getPicDisplay());
     card.remove(); //Removes CardView from its parent
   }
 
-  public void addToPlay(CardView card){
+  public void addToPlay(CardView card) {
     card.clear();//Kill listeners
     card.scaleBy(-0.5f);
     InPlay.add(card);
@@ -247,7 +255,7 @@ return this;
     displayCardsInPlay(InPlay);
   }
 
-  public void addToQuestStages(CardView card){
+  public void addToQuestStages(CardView card) {
     card.clear();
     card.scaleBy(-0.5f);
     QuestStages.add(card);
@@ -277,7 +285,7 @@ return this;
     }
   }
 
-  public void displayCardsQuestStages(LinkedList<CardView> QuestStages){
+  public void displayCardsQuestStages(LinkedList<CardView> QuestStages) {
     float x0 = SponsorCDZ.getX();
     float y0 = SponsorCDZ.getY() + SponsorCDZ.getHeight() / 2 - 40;
 
@@ -297,33 +305,29 @@ return this;
       }
     }
   }
-  public void displayHoverDraw(CardView card){
+
+  public void displayHoverDraw(CardView card) {
     hoverDraw.setDrawable(new TextureRegionDrawable(card.getPicDisplay()));
     Tween.registerAccessor(Image.class, new ImageAccessor());
-    Tween.set(hoverDraw,ImageAccessor.FADE).target(0).start(this.AnimationManager);
-    Tween.to(hoverDraw,ImageAccessor.FADE,0.2f).target(1).start(this.AnimationManager);
+    Tween.set(hoverDraw, ImageAccessor.FADE).target(0).start(this.AnimationManager);
+    Tween.to(hoverDraw, ImageAccessor.FADE, 0.2f).target(1).start(this.AnimationManager);
 
 
   }
 
-  public void hideHoverDraw(){
+  public void hideHoverDraw() {
     Tween.registerAccessor(Image.class, new ImageAccessor());
-    Tween.to(hoverDraw,ImageAccessor.FADE,0.2f).target(0).start(this.AnimationManager);
+    Tween.to(hoverDraw, ImageAccessor.FADE, 0.2f).target(0).start(this.AnimationManager);
     //hoverDraw.setVisible(false);
   }
 
-  public void showSponsorDropZone(){
-    SponsorCDZ.setDropZoneBounds(CardDropZone.SponsorX,CardDropZone.SponsorY,CardDropZone.SponsorWIDTH,CardDropZone.SponsorHEIGHT);
+  public void showSponsorDropZone() {
+    SponsorCDZ.setDropZoneBounds(CardDropZone.SponsorX, CardDropZone.SponsorY, CardDropZone.SponsorWIDTH, CardDropZone.SponsorHEIGHT);
   }
 
-  public void hideSponsorDropZone(){
-   SponsorCDZ.setDropZoneBounds(0,0,0,0);
+  public void hideSponsorDropZone() {
+    SponsorCDZ.setDropZoneBounds(0, 0, 0, 0);
   }
-
-
-
-
-
 
 
   //ENDOF ADDED
@@ -336,10 +340,6 @@ return this;
   public void setPlayerViewBackground(TextureRegion background) {
 
     playerView.setBackground(background);
-  }
-
-  public void setShieldsTexture(TextureRegion texture) {
-    playerView.setShieldsTexture(texture);
   }
 
   public void displayAnnouncementDialog(String title, String message, final Consumer<Boolean> action) {
@@ -385,4 +385,11 @@ return this;
     addActor(questionDialog);
   }
 
+  public void setPlayerShields(int playerNumber, int shields) {
+    players[playerNumber].setShields(shields);
+  }
+
+  public void setPlayerCards(int playerNumber, int cards) {
+    players[playerNumber].setCards(cards);
+  }
 }
