@@ -46,4 +46,11 @@ public class Config {
     public static final int SHIELD_HEIGHT = 200;
 
   }
+
+  public static class PlayerStatView {
+
+    public static final int X = 1920 - 350;
+    public static final int Y = 360 + 10;
+
+  }
 }

@@ -35,18 +35,4 @@ public class TestPlayerView extends TestCase {
     assertEquals(playerAdventureCards.getOriginX(), 25);
     assertEquals(playerAdventureCards.getOriginY(), 25);
   }
-
-  @Test
-  public void testShieldsBounds(){
-
-    PlayerView playerView = new PlayerView();
-    Image playerAdventureCards = playerView.shields;
-
-    assertEquals(playerAdventureCards.getWidth(), 200);
-    assertEquals(playerAdventureCards.getHeight(), 300);
-    assertNotSame(playerAdventureCards.getZIndex(), -1);
-    assertEquals(playerAdventureCards.getOriginX(), 1800);
-    assertEquals(playerAdventureCards.getOriginY(), 360);
-
-  }
 }

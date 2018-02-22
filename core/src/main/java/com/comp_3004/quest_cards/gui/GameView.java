@@ -1,6 +1,7 @@
 package com.comp_3004.quest_cards.gui;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
@@ -15,6 +17,22 @@ import java.util.function.Consumer;
 
 public class GameView extends Group {
 
+  public enum PlayerColor {
+    player1(Color.YELLOW),
+    Player2(Color.BLUE),
+    player3(Color.RED),
+    player4(Color.GREEN);
+
+    Color color;
+
+    PlayerColor(Color color) {
+      this.color = color;
+    }
+
+    public Color color() {
+      return color;
+    }
+  }
 
   //Widgets
 
@@ -27,7 +45,7 @@ public class GameView extends Group {
   public CardDropZone SponsorCDZ;
   public CardDropZone DiscardCDZ;
   public CardDropZone InPlayCDZ;
-  public PlayerStatView player;
+  public PlayerStatView[] players;
 
   public AnnouncementDialog announcementDialog;
   public BooleanDialog questionDialog;
@@ -50,12 +68,12 @@ public class GameView extends Group {
     playerView = new PlayerView();
     announcementDialog = new AnnouncementDialog(skin);
     questionDialog = new BooleanDialog(skin);
-    player = new PlayerStatView(sprites, skin);
+    players = new PlayerStatView[4];
 
     //Init and Orient the CDZs
     SponsorCDZ = new CardDropZone(new Sprite(new Texture("DropZones/SponsorCDZ.png")));
     DiscardCDZ = new CardDropZone(new Sprite(new Texture("DropZones/SponsorCDZ.png")));
-    InPlayCDZ = new CardDropZone(new Sprite (new Texture("DropZones/InPlayCDZ.png")));
+    InPlayCDZ = new CardDropZone(new Sprite(new Texture("DropZones/InPlayCDZ.png")));
 
     //Add widgets to table
 
@@ -67,12 +85,7 @@ public class GameView extends Group {
     addActor(adventureDeck);
     addActor(adventureDeckDiscardPile);
     addActor(playerView);
-    addActor(player);
-    playerView.addActorAt(1,InPlayCDZ);
-  }
-
-  public void pack(){
-
+    playerView.addActorAt(1, InPlayCDZ);
   }
 
   @Override
@@ -114,34 +127,32 @@ public class GameView extends Group {
         Config.CardView.CARD_HEIGHT
     );
 
-    DiscardCDZ.setDropZoneBounds((int)adventureDeck.getX() + Config.CardView.CARD_WIDTH + Config.GameView.PADDING_HORIZONTAL+70,
-            (int)storyDeckDiscardPile.getY()+150,
-            10,
-            50);
+    DiscardCDZ.setDropZoneBounds((int) adventureDeck.getX() + Config.CardView.CARD_WIDTH + Config.GameView.PADDING_HORIZONTAL + 70,
+        (int) storyDeckDiscardPile.getY() + 150,
+        10,
+        50);
 
-    InPlayCDZ.setDropZoneBounds(Config.VIRTUAL_WIDTH/2+40,20,Config.CardView.CARD_WIDTH*3-20,Config.CardView.CARD_HEIGHT);
+    InPlayCDZ.setDropZoneBounds(Config.VIRTUAL_WIDTH / 2 + 40, 20, Config.CardView.CARD_WIDTH * 3 - 20, Config.CardView.CARD_HEIGHT);
 
+    PlayerColor[] colors = PlayerColor.values();
+    for (int i = 0; i < players.length; i++) {
 
-    //Add widgets to table
-
-//    addActor(storyDeck);
-//    addActor(storyDeckDiscardPile);
-//    addActor(adventureDeck);
-//    addActor(adventureDeckDiscardPile);
-//    addActor(SponsorCDZ); //CDZ = CARDDROPZONE
-//    addActor(playerView);
-    //addActor(cardDropZone);
+      PlayerStatView currentPlayer = players[i] = new PlayerStatView(sprites, skin);
+      addActor(currentPlayer);
+      currentPlayer.setColor(colors[i].color());
+      currentPlayer.setPosition(Config.PlayerStatView.X, Config.PlayerStatView.Y + i * (100 + Config.GameView.PADDING_VERTICAL));
+    }
   }
 
 
-
   public GameView displayHero(TextureRegion hero) {
+
     playerView.displayHero(hero);
     announcementDialog.setSize(Config.GameView.Modal.WIDTH, Config.GameView.Modal.HEIGHT);
     announcementDialog.setCenterPosition(getWidth() / 2, getHeight() / 2);
     questionDialog.setSize(Config.GameView.Modal.WIDTH, Config.GameView.Modal.HEIGHT);
     questionDialog.setCenterPosition(getWidth() / 2, getHeight() / 2);
-return this;
+    return this;
   }
 
   public void displayPlayerHand(CardView[] cards) {
@@ -188,10 +199,6 @@ return this;
     playerView.setBackground(background);
   }
 
-  public void setShieldsTexture(TextureRegion texture) {
-    playerView.setShieldsTexture(texture);
-  }
-
   public void displayAnnouncementDialog(String title, String message, final Consumer<Boolean> action) {
 
     announcementDialog.setTitle(title);
@@ -235,4 +242,11 @@ return this;
     addActor(questionDialog);
   }
 
+  public void setPlayerShields(int playerNumber, int shields) {
+    players[playerNumber].setShields(shields);
+  }
+
+  public void setPlayerCards(int playerNumber, int cards) {
+    players[playerNumber].setCards(cards);
+  }
 }

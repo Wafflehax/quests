@@ -82,7 +82,6 @@ public class GamePresenter extends Group {
   public GameView initGameView() {
 
     final GameView view = new GameView(manager);
-    view.setShieldsTexture(sprites.findRegion("shield"));
     view.setBackground(backgrounds.findRegion("game_board"));
     view.setPlayerViewBackground(backgrounds.findRegion("player_area"));
 
@@ -101,6 +100,7 @@ public class GamePresenter extends Group {
       cards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());
       cards[i].setGamePresenter(this);
     }
+
     view.setBounds(0, 0, Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
 
 
