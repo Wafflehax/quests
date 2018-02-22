@@ -42,7 +42,7 @@ public class SpillingDeckStrategy implements DeckView.DisplayStrategy {
       float x = i * card.getWidth() * (1 - computedOverlap);
       float y = 0;
 
-      card.setPosition(x, y);
+     // card.setPosition(x, y);
       card.setDeckY(y);
       card.setDeckX(x);
       card.setDeckZ(i);

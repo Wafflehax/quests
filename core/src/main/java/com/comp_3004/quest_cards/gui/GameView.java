@@ -1,8 +1,10 @@
 package com.comp_3004.quest_cards.gui;
 
+import aurelienribon.tweenengine.Timeline;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -13,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.comp_3004.quest_cards.Stories.Quest;
 import com.comp_3004.quest_cards.cards.AdventureCard;
+import com.comp_3004.quest_cards.core.CardViewAccessor;
 import com.comp_3004.quest_cards.core.ImageAccessor;
 import com.comp_3004.quest_cards.core.ImageAccessor;
 
@@ -25,7 +28,7 @@ public class GameView extends Group {
   //Widgets
 
   public PlayerView playerView;
-  public TweenManager imageAnimationManager;//NOT YET IN USE
+  public TweenManager AnimationManager;
   public Image background;
   public Image storyDeck;
   public Image storyDeckDiscardPile;
@@ -48,8 +51,7 @@ public class GameView extends Group {
   public GameView(Skin skin) {
 
     this.skin = skin;
-    imageAnimationManager = new TweenManager(); //NOT YET IN USE
-    Tween.registerAccessor(Image.class, new ImageAccessor());
+    AnimationManager = new TweenManager(); //NOT YET IN USE
 
     //Set up layout
     background = new Image();
@@ -195,7 +197,29 @@ return this;
   }
 
   public void displayDrawCardAnimation(CardView card) {
+    Tween.registerAccessor(CardView.class, new CardViewAccessor());
 
+    Timeline.createSequence()
+            .push(Tween.set(card,CardViewAccessor.FADE).target(0))
+            //.push(Tween.set(card,CardViewAccessor.TRANSLATE).target((storyDeckDiscardPile.getX() + Config.CardView.CARD_WIDTH + Config.GameView.PADDING_HORIZONTAL),
+            //        storyDeckDiscardPile.getY())) TODO: Figure out why Y is being set to 0 after update
+            .push(Tween.set(card,CardViewAccessor.TRANSLATE).target(0,0))
+
+            .pushPause(0.5f)
+
+            .push(Tween.to(card,CardViewAccessor.FADE,0.5f).target(1))
+            .pushPause(0.5f)
+            .push(Tween.to(card, CardViewAccessor.TRANSLATE,0.75f).target(card.getDeckX(), card.getDeckY()).delay(0.2f))
+            .start(AnimationManager);
+
+
+
+
+    System.out.println(storyDeckDiscardPile);
+
+   // Tween.to(card, CardViewAccessor.FLIP,0.2f).target(Config.CardView.CARD_WIDTH).start(AnimationManager);
+
+    //AnimationManager.update(Gdx.graphics.getDeltaTime());
 
     return;
   }
@@ -275,14 +299,16 @@ return this;
   }
   public void displayHoverDraw(CardView card){
     hoverDraw.setDrawable(new TextureRegionDrawable(card.getPicDisplay()));
-    Tween.set(hoverDraw,ImageAccessor.FADE).target(0).start(this.imageAnimationManager);
-    Tween.to(hoverDraw,ImageAccessor.FADE,0.2f).target(1).start(this.imageAnimationManager);
+    Tween.registerAccessor(Image.class, new ImageAccessor());
+    Tween.set(hoverDraw,ImageAccessor.FADE).target(0).start(this.AnimationManager);
+    Tween.to(hoverDraw,ImageAccessor.FADE,0.2f).target(1).start(this.AnimationManager);
 
 
   }
 
   public void hideHoverDraw(){
-    Tween.to(hoverDraw,ImageAccessor.FADE,0.2f).target(0).start(this.imageAnimationManager);
+    Tween.registerAccessor(Image.class, new ImageAccessor());
+    Tween.to(hoverDraw,ImageAccessor.FADE,0.2f).target(0).start(this.AnimationManager);
     //hoverDraw.setVisible(false);
   }
 
