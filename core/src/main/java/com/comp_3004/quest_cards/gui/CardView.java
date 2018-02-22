@@ -26,7 +26,6 @@ public class CardView extends Image {
   private int deckZ;
   private GamePresenter gamePresenter;
   private int cardID;
-  private boolean inPlay;
   private TextureRegion picDisplay;
 
   //ADD AN ID PARAMETER SO THE VIEW CARRIES THE ID WITH IT
@@ -168,7 +167,6 @@ public float getDeckX(){return deckX;}
 public float getDeckY(){return deckY;}
 public int getDeckZ(){return deckZ;}
 public int getCardID() {return cardID;}
-public boolean getInPlay(){return inPlay;}
 public Rectangle getCardBounds() {return CardBounds;}
 public Rectangle getSponsorCDZ() {return SponsorCDZ;}
 public TextureRegion getPicDisplay(){return picDisplay;}
@@ -177,7 +175,6 @@ public TextureRegion getPicDisplay(){return picDisplay;}
 public void setDeckX(float x){deckX=x;}
 public void setDeckY(float y){deckY=y;}
 public void setDeckZ(int z){deckZ = z;}
-public void setInPlay(boolean inPlaySet){inPlay=inPlaySet;}
 
 public void setGamePresenter(GamePresenter gamePresenter_in){gamePresenter=gamePresenter_in;}
 public void setSponsorCDZ(Rectangle CDZ){SponsorCDZ = CDZ;}

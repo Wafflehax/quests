@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.comp_3004.quest_cards.Stories.Quest;
 import com.comp_3004.quest_cards.cards.AdventureCard;
+import com.comp_3004.quest_cards.core.ImageAccessor;
+import com.comp_3004.quest_cards.core.ImageAccessor;
 
 import java.util.LinkedList;
 import java.util.function.Consumer;
@@ -23,7 +25,7 @@ public class GameView extends Group {
   //Widgets
 
   public PlayerView playerView;
-  public TweenManager tweenManager; //NOT YET IN USE
+  public TweenManager imageAnimationManager;//NOT YET IN USE
   public Image background;
   public Image storyDeck;
   public Image storyDeckDiscardPile;
@@ -46,7 +48,8 @@ public class GameView extends Group {
   public GameView(Skin skin) {
 
     this.skin = skin;
-    tweenManager = new TweenManager(); //NOT YET IN USE
+    imageAnimationManager = new TweenManager(); //NOT YET IN USE
+    Tween.registerAccessor(Image.class, new ImageAccessor());
 
     //Set up layout
     background = new Image();
@@ -243,7 +246,7 @@ return this;
       setThis.setDeckX(x0);
       x0 = (x0 + 50);
 
-      if (i == 10) {
+      if (i == 13) {
         y0 = y0 - InPlayCDZ.getHeight() / 2;
         x0 = InPlayCDZ.getX();
       }
@@ -272,12 +275,28 @@ return this;
   }
   public void displayHoverDraw(CardView card){
     hoverDraw.setDrawable(new TextureRegionDrawable(card.getPicDisplay()));
-    hoverDraw.setVisible(true);
+    Tween.set(hoverDraw,ImageAccessor.FADE).target(0).start(this.imageAnimationManager);
+    Tween.to(hoverDraw,ImageAccessor.FADE,0.2f).target(1).start(this.imageAnimationManager);
+
+
   }
 
   public void hideHoverDraw(){
-    hoverDraw.setVisible(false);
+    Tween.to(hoverDraw,ImageAccessor.FADE,0.2f).target(0).start(this.imageAnimationManager);
+    //hoverDraw.setVisible(false);
   }
+
+  public void showSponsorDropZone(){
+    SponsorCDZ.setDropZoneBounds(CardDropZone.SponsorX,CardDropZone.SponsorY,CardDropZone.SponsorWIDTH,CardDropZone.SponsorHEIGHT);
+  }
+
+  public void hideSponsorDropZone(){
+   SponsorCDZ.setDropZoneBounds(0,0,0,0);
+  }
+
+
+
+
 
 
 

@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.gui.Assets;
 import com.comp_3004.quest_cards.gui.CardView;
@@ -100,6 +102,7 @@ public class GamePresenter extends Group {
       cards[i].setInPlayCDZ(view.InPlayCDZ.getBounds());
       cards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());
       cards[i].setGamePresenter(this);
+
     }
     view.setBounds(0, 0, Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
 
@@ -137,6 +140,7 @@ public class GamePresenter extends Group {
 
   @Override
   public void draw(Batch batch, float alpha) {
+    view.imageAnimationManager.update(Gdx.graphics.getDeltaTime());
     drawChildren(batch, alpha);
   }
 
@@ -283,5 +287,8 @@ public class GamePresenter extends Group {
 
 
   }
+
+  public void flipDown(CardView card){card.setDrawable(new TextureRegionDrawable(new TextureRegion(sprites.findRegion(Assets.Cards.CARD_BACK))));}
+  public void flipUp(CardView card){card.setDrawable(new TextureRegionDrawable(card.getPicDisplay()));}
 
 }

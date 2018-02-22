@@ -7,6 +7,8 @@ public class SpriteAccessor implements TweenAccessor<Sprite> {
 
     public static final int Alpha = 0;
 
+
+
     @Override
     public int getValues(Sprite target, int tweenType, float[] returnValues) {
         switch (tweenType){
@@ -31,6 +33,8 @@ public class SpriteAccessor implements TweenAccessor<Sprite> {
 
         }
     }
+
+
 
 
 }

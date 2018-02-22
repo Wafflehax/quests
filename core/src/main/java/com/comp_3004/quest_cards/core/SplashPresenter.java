@@ -26,7 +26,7 @@ public class SplashPresenter extends Group {
         splash.setSize(Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT);
 
         tweenManager = new TweenManager();
-        Tween.registerAccessor(Sprite.class,new SpriteAccessor());
+        Tween.registerAccessor(Sprite.class, new SpriteAccessor());
         Tween.set(splash,SpriteAccessor.Alpha).target(0).start(tweenManager);
         Tween.to(splash,SpriteAccessor.Alpha, 4).target(1).repeatYoyo(1,2).setCallback(new TweenCallback() {
             @Override
