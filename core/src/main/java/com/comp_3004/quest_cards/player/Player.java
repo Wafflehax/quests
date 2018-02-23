@@ -174,6 +174,8 @@ public class Player{
 		card.setState(State.HAND);
 		playerHandCards.add(card);
 		log.info(name + " drew " + card.getName() + " from adventure deck");
+		if(playerHandCards.size() > 12)
+			log.info(name+" has too many cards");
 		return true;
 	}
 	

@@ -167,15 +167,25 @@ public class Event {
 		}
 		else if(evnt.getName() ==  "Prosperity Throughout the Realms") {
 			for(int i=0; i<players.getNumPlayers(); i++) {
-				players.getPlayerAtIndex(i).drawCard(advDeck);
-				players.getPlayerAtIndex(i).drawCard(advDeck);
+				players.current().drawCard(advDeck);
+				players.current().drawCard(advDeck);
+				players.next();
 			}
-			
 		}
 		log.info("Event Finished");
+		boolean tooManyCards = false;
 		for(int i=0; i<players.getNumPlayers(); i++) {
 			if(players.getPlayerAtIndex(i).getHand().size() > 12) {
 				players.getPlayerAtIndex(i).setState("tooManyCards");
+				tooManyCards = true;
+			}
+		}
+		if(tooManyCards) {
+			for(int i=0; i<players.getNumPlayers(); i++) {
+				if(players.current().getState() != "tooManyCards")
+					players.next();
+				else
+					return false;
 			}
 		}
 		

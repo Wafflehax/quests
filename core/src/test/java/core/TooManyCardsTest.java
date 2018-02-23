@@ -41,6 +41,7 @@ public class TooManyCardsTest extends TestCase{
 		GamePresenter pres = new GamePresenter(game);
 		pres.getModel().beginTurn();
 		
+		game.getcurrentTurn().printHand();
 		pres.playCard(197, -1);
 		pres.playCard(277, -1);
 		pres.discardCard(247);
