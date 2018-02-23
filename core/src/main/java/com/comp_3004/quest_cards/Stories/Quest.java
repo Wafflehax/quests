@@ -462,7 +462,6 @@ public class Quest {
 				players.setCurrent(participants.get(0));
 				currentBid -= players.current().getFreeBids();
 				log.info("Cards to discard: "+currentBid);
-				players.current().printHand();
 				
 			}
 			return true;
@@ -487,7 +486,6 @@ public class Quest {
 				players.setCurrent(participants.get(0));
 				currentBid -= players.current().getFreeBids();
 				log.info("Cards to discard: "+currentBid);
-				players.current().printHand();
 				return true;
 			}
 			if(players.peekNext() == sponsor)

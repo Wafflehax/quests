@@ -90,10 +90,12 @@ public class QuestStage {
 				battlePoints += ((FoeCard) card).getAltBattlePts();
 		}
 		else if(namedFoe == "all") {
-			if(((FoeCard) card).getAltBattlePts() != 0)
-				battlePoints += ((FoeCard) card).getAltBattlePts();
-			else
-				battlePoints += card.getBattlePts();
+			if(card instanceof FoeCard) {
+				if(((FoeCard) card).getAltBattlePts() != 0)
+					battlePoints += ((FoeCard) card).getAltBattlePts();
+				else
+					battlePoints += card.getBattlePts();
+			}
 		}
 		else
 			battlePoints += card.getBattlePts();
