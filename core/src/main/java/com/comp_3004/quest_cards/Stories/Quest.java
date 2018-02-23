@@ -252,7 +252,6 @@ public class Quest {
 			p.drawCard(advDeck);
 			if(p.getHand().size() > 12) {
 				p.setState("tooManyCards");
-				log.info(p.getName()+" has too many cards");
 				tooManyCards = true;
 				
 			}
@@ -283,6 +282,9 @@ public class Quest {
 		//if only one participant, make them current player
 		if(participants.size() == 1)
 			players.setCurrent(participants.get(0));
+		//make sure current player is participating
+		while(!participants.contains(players.current()))
+			players.next();
 		
 		//if test - implement later (move on to next stage)
 		if(stageCard instanceof TestCard) {

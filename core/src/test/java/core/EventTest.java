@@ -36,7 +36,7 @@ public class EventTest extends TestCase{
 		assertEquals(3, game.getPlayerAtIndex(1).getShields());
 		assertEquals(3, game.getPlayerAtIndex(2).getShields());
 		assertEquals(3, game.getPlayerAtIndex(3).getShields());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	}
 		
 	//test 2 - 2 way rank tie, 2 way shields tie
@@ -63,7 +63,7 @@ public class EventTest extends TestCase{
 		assertEquals(0, game.getPlayerAtIndex(1).getShields());
 		assertEquals(3, game.getPlayerAtIndex(2).getShields());
 		assertEquals(3, game.getPlayerAtIndex(3).getShields());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	}
 	
 		
@@ -93,7 +93,7 @@ public class EventTest extends TestCase{
 		assertEquals(4, game.getPlayerAtIndex(2).getShields());
 		assertEquals(0, game.getPlayerAtIndex(3).getShields());
 		assertEquals(Rank.KNIGHT, game.getPlayerAtIndex(3).getRank());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	}
 	
 	//test 1 - players unable to lose shields
@@ -119,7 +119,7 @@ public class EventTest extends TestCase{
 		assertEquals(0, game.getPlayerAtIndex(1).getShields());
 		assertEquals(0, game.getPlayerAtIndex(2).getShields());
 		assertEquals(0, game.getPlayerAtIndex(3).getShields());
-		assertEquals("Player 1", game.getcurrentTurn().getName());	
+		assertEquals("Player 2", game.getcurrentTurn().getName());	
 	}
 	
 	//test 2 - normal case
@@ -148,7 +148,7 @@ public class EventTest extends TestCase{
 		assertEquals(1, game.getPlayerAtIndex(1).getShields());
 		assertEquals(2, game.getPlayerAtIndex(2).getShields());
 		assertEquals(0, game.getPlayerAtIndex(3).getShields());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	}
 	
 	//test 1 - players unable to lose shields
@@ -170,7 +170,7 @@ public class EventTest extends TestCase{
 		pres.getModel().beginTurn();
 		
 		assertEquals(0, game.getPlayerAtIndex(0).getShields());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	}
 	
 	//test 2 - edge case
@@ -192,7 +192,7 @@ public class EventTest extends TestCase{
 		pres.getModel().beginTurn();
 		
 		assertEquals(0, game.getPlayerAtIndex(0).getShields());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	}
 		
 	//test 3 - normal case
@@ -215,7 +215,7 @@ public class EventTest extends TestCase{
 		pres.getModel().beginTurn();
 
 		assertEquals(2, game.getPlayerAtIndex(0).getShields());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	}
 	
 	//test 1 - 4 way tie
@@ -242,7 +242,7 @@ public class EventTest extends TestCase{
 		
 		for(int i=0; i<4; i++)
 			assertEquals(2, game.getPlayerAtIndex(i).getHand().size());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	}
 
 	//test 2 - 2 way tie
@@ -271,7 +271,7 @@ public class EventTest extends TestCase{
 		assertEquals(2, game.getPlayerAtIndex(1).getHand().size());
 		assertEquals(0, game.getPlayerAtIndex(2).getHand().size());
 		assertEquals(0, game.getPlayerAtIndex(3).getHand().size());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	}
 	
 	//test 2 - normal case
@@ -300,7 +300,7 @@ public class EventTest extends TestCase{
 		assertEquals(0, game.getPlayerAtIndex(1).getHand().size());
 		assertEquals(0, game.getPlayerAtIndex(2).getHand().size());
 		assertEquals(0, game.getPlayerAtIndex(3).getHand().size());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	}
 	
 	
@@ -327,7 +327,7 @@ public class EventTest extends TestCase{
 		assertEquals(0, game.getPlayerAtIndex(0).getActive().size());
 		assertEquals(0, game.getPlayerAtIndex(1).getActive().size());
 		assertEquals(3, game.getAdvDeck().getDiscard().size());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	}
 		
 	public void testProsperityThroughoutTheRealms1() {
@@ -348,7 +348,7 @@ public class EventTest extends TestCase{
 		
 		for(int i=0; i<4; i++)
 			assertEquals(2, game.getPlayerAtIndex(i).getHand().size());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	}
 	
 	//test 1 normal case
@@ -427,7 +427,7 @@ public class EventTest extends TestCase{
 		
 		assertEquals(1, game.getPlayerAtIndex(0).getShields());
 		assertEquals(Rank.KNIGHT, game.getPlayerAtIndex(0).getRank());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	}
 		
 	//test already has kings recognition
@@ -454,7 +454,7 @@ public class EventTest extends TestCase{
 		
 		assert(game.getPlayerAtIndex(0).getKingsRecognitionBonus());
 		assert(!game.getPlayerAtIndex(1).getKingsRecognitionBonus());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	}
 	
 	//test 1 players have weapons to discard
@@ -489,7 +489,7 @@ public class EventTest extends TestCase{
 		assertEquals(2,game.getPlayerAtIndex(0).getHand().size());
 		assertEquals(0,game.getPlayerAtIndex(1).getHand().size());
 		assertEquals(2,game.getAdvDeck().getDiscard().size());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 		
 	}
 	
@@ -533,6 +533,6 @@ public class EventTest extends TestCase{
 		assertEquals(0,game.getPlayerAtIndex(2).getHand().size());
 		assertEquals(0,game.getPlayerAtIndex(3).getHand().size());
 		assertEquals(5,game.getAdvDeck().getDiscard().size());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	} 
 }
