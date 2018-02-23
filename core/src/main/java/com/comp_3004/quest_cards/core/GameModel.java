@@ -210,7 +210,7 @@ public class GameModel{
 		//TODO: Add players choosing their own name
 		ArrayList<Player> plyrs = new ArrayList<Player>(numPlayers);
 		for(int i = 0; i < numPlayers; i++) {
-			Player newPlayer = new Player("Player " + i);
+			Player newPlayer = new Player("Player " + (i+1));
 			for(int q = 0; q < numCards; q++)
 				newPlayer.drawCard(advDeck);
 			plyrs.add(newPlayer);

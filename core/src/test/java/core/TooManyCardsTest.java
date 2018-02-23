@@ -54,7 +54,7 @@ public class TooManyCardsTest extends TestCase{
 		assertEquals(12, game.getPlayerAtIndex(1).getHand().size());
 		assertEquals(11, game.getPlayerAtIndex(2).getHand().size());
 		assertEquals(12, game.getPlayerAtIndex(3).getHand().size());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	}
 		
 	/* testing quests:
@@ -121,7 +121,7 @@ public class TooManyCardsTest extends TestCase{
 		assertEquals(1, game.getPlayerAtIndex(2).getHand().size());
 		assertEquals(1, game.getPlayerAtIndex(3).getHand().size());
 		assertEquals(3, game.getAdvDeck().getDiscard().size());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	}
 	
 	//participants draw over hand limit
@@ -198,7 +198,7 @@ public class TooManyCardsTest extends TestCase{
 		assertEquals(3, game.getPlayerAtIndex(2).getHand().size());
 		assertEquals(12, game.getPlayerAtIndex(3).getHand().size());
 		assertEquals(6, game.getAdvDeck().getDiscard().size());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	}
 
 }

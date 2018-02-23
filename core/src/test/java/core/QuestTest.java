@@ -58,13 +58,13 @@ public class QuestTest extends TestCase{
 		pres.getModel().beginTurn();
 		
 		//turn 1
-		assertEquals("Player 0", game.getcurrentTurn().getName());
+		assertEquals("Player 1", game.getcurrentTurn().getName());
 		for(int i=0; i<game.getNumPlayers(); i++) {
 			pres.userInput(0);
 		}//no one sponsored quest, turn over
 		
 		//turn 2
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 		for(int i=0; i<game.getNumPlayers(); i++) 
 			pres.userInput(1); //all players attempt to sponsor, only player 0 has cards to sponsored quest
 		
@@ -122,7 +122,7 @@ public class QuestTest extends TestCase{
 		for(int i=0; i<game.getNumPlayers(); i++) {
 			assertEquals(0, game.getPlayerAtIndex(i).getActive().size());
 		}
-		assertEquals("Player 2", game.getcurrentTurn().getName());
+		assertEquals("Player 3", game.getcurrentTurn().getName());
 		
 		
 		
@@ -209,7 +209,7 @@ public class QuestTest extends TestCase{
 		assertEquals(6, game.getPlayerAtIndex(2).getHand().size());
 		assertEquals(2, game.getPlayerAtIndex(3).getHand().size());
 		assertEquals(4, game.getAdvDeck().getDiscard().size());
-		assertEquals("Player 1", game.getcurrentTurn().getName());	
+		assertEquals("Player 2", game.getcurrentTurn().getName());	
 	}
 	
 	/* testing bids: 
@@ -295,7 +295,7 @@ public class QuestTest extends TestCase{
 		assertEquals(6, game.getPlayerAtIndex(2).getHand().size());
 		assertEquals(3, game.getPlayerAtIndex(3).getHand().size());
 		assertEquals(8, game.getAdvDeck().getDiscard().size());
-		assertEquals("Player 1", game.getcurrentTurn().getName());	
+		assertEquals("Player 2", game.getcurrentTurn().getName());	
 	}
 	
 	/* testing bids: 
@@ -386,7 +386,7 @@ public class QuestTest extends TestCase{
 		assertEquals(2, game.getPlayerAtIndex(2).getHand().size());
 		assertEquals(3, game.getPlayerAtIndex(3).getHand().size());
 		assertEquals(7, game.getAdvDeck().getDiscard().size());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	}
 	
 	/* testing quests: 
@@ -445,7 +445,7 @@ public class QuestTest extends TestCase{
 		assertEquals(5, game.getPlayerAtIndex(2).getHand().size());
 		assertEquals(2, game.getPlayerAtIndex(3).getHand().size());
 		assertEquals(0, game.getAdvDeck().getDiscard().size());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 		
 	}
 	
@@ -537,6 +537,6 @@ public class QuestTest extends TestCase{
 		assertEquals(9, game.getPlayerAtIndex(2).getHand().size());
 		assertEquals(1, game.getPlayerAtIndex(3).getHand().size());
 		assertEquals(12, game.getAdvDeck().getDiscard().size());
-		assertEquals("Player 1", game.getcurrentTurn().getName());
+		assertEquals("Player 2", game.getcurrentTurn().getName());
 	}
 }
