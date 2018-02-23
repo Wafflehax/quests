@@ -167,7 +167,7 @@ public class GameView extends Group {
       PlayerStatView currentPlayer = players[i] = new PlayerStatView(sprites, skin);
       addActor(currentPlayer);
       currentPlayer.setColor(colors[i].color());
-      currentPlayer.setPosition(Config.PlayerStatView.X, Config.PlayerStatView.Y + i * (100 + Config.GameView.PADDING_VERTICAL));
+      currentPlayer.setPosition(Config.VIRTUAL_WIDTH - currentPlayer.getWidth(), Config.PlayerStatView.Y + i * (currentPlayer.getHeight() + Config.GameView.PADDING_VERTICAL));
     }
   }
 

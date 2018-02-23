@@ -20,12 +20,17 @@ public class PlayerStatView extends Group {
   private Label shield_label;
   private Label deck_label;
 
+  private static final int IMG_WIDTH = 50;
+  private static final int IMG_HEIGHT = 50;
+  private static final int LABEL_WIDTH = 40;
+  private static final int BODY_WIDTH = 2*IMG_WIDTH + 2*IMG_HEIGHT;
+
   PlayerStatView(TextureAtlas atlas, Skin skin) {
 
     deck = new Image(atlas.findRegion(Assets.MiscSprites.DECK_ICON));
-    deck_label = new Label("0x", skin);
+    deck_label = new Label("x 0", skin);
     shield = new Image(atlas.findRegion(Assets.MiscSprites.SHIELD));
-    shield_label = new Label("0x", skin);
+    shield_label = new Label("x 0", skin);
     flag_arrow = new Image(atlas.findRegion(Assets.MiscSprites.FLAG_ARROW));
     flag_body = new Image(atlas.findRegion(Assets.MiscSprites.FLAG_BODY));
 
@@ -48,17 +53,11 @@ public class PlayerStatView extends Group {
   @Override
   public void setPosition(float x, float y) {
     super.setPosition(x, y);
-    Gdx.app.log("PlayerStatView position", "x: " + getX() + " y: " + getY());
   }
 
   private void pack() {
 
-    final int IMG_WIDTH = 100;
-    final int IMG_HEIGHT = 100;
-    final int LABEL_WIDTH = 50;
-    final int BODY_WIDTH = 300;
-
-    setSize(500, 100);
+    setSize(BODY_WIDTH, IMG_HEIGHT);
     flag_arrow.setBounds(0, 0, 50, IMG_HEIGHT);
     flag_body.setBounds(50, 0, BODY_WIDTH, IMG_HEIGHT);
 
