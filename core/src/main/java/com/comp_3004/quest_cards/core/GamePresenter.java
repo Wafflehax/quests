@@ -90,8 +90,7 @@ public class GamePresenter extends Group {
 
     LinkedList<AdventureCard> temp = model.getcurrentTurn().getHand();
 
-    //THIS PORTION WILL BE A METHOD EVENTUALLY ie. dealHand()
-    cards = new CardView[12];
+    cards = new CardView[temp.size()];
     for (int i = 0; i < temp.size(); i++) {
       String spriteGet = temp.get(i).getName();
 
@@ -135,11 +134,36 @@ public class GamePresenter extends Group {
       drawCards();
     });
     view.displayNextTurnButton(() -> {
-        //Do something
+        model.nextPlayer();
+        assignHand();
     }, false);
     // });
 
     return view;
+  }
+
+  private void assignHand() {
+    LinkedList<AdventureCard> temp = model.getcurrentTurn().getHand();
+    view.playerView.wipePlayerHand(cards);
+
+    cards = new CardView[temp.size()];
+    for (int i = 0; i < temp.size(); i++) {
+      String spriteGet = temp.get(i).getName();
+
+      System.out.println("spriteGet = " + spriteGet + "\nCardAssetMap.get(spriteGet) = " + CardAssetMap.get(spriteGet));
+      cards[i] = new CardView(sprites.findRegion(CardAssetMap.get(spriteGet)), temp.get(i).getID());
+      cards[i].setDiscardCDZ(view.DiscardCDZ.getBounds());
+      cards[i].setInPlayCDZ(view.InPlayCDZ.getBounds());
+      cards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());
+      cards[i].setGamePresenter(this);
+      cards[i].setColor(1, 1, 1, 0);
+
+    }
+    view.displayPlayerHand(cards); //CHECK IT OUT
+
+    view.displayAnnouncementDialog("Begin Turn", "" + model.getcurrentTurn().getName() + "... begin!", result_2 -> {
+      drawCards();
+    });
   }
 
   @Override

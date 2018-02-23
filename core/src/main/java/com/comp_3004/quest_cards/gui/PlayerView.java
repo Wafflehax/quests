@@ -89,6 +89,13 @@ public class PlayerView extends Group {
     return this;
   }
 
+  public PlayerView wipePlayerHand(CardView[] cards){
+    for(int i=0; i<cards.length;i++)
+      cards[i].remove();
+
+    return this;
+  }
+
   public PlayerView setBackground(TextureRegion textureRegion){
     this.background.setDrawable(new TextureRegionDrawable(textureRegion));
     return this;

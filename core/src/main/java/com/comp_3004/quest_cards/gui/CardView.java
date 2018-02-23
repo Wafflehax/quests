@@ -44,7 +44,7 @@ public class CardView extends Image {
     CardBounds=new Rectangle((int)getDeckX(), (int)getDeckY(), (int)getWidth(), (int)getHeight());
   }
 
-  public void HoverDrawConfig(final CardView card){
+  public void HoverDrawConfig(CardView card){
 
     card.addListener(new ClickListener() {
     @Override
@@ -62,7 +62,7 @@ public class CardView extends Image {
   });}
 
 
-  public void dragConfig(final CardView card)
+  public void dragConfig(CardView card)
   {card.addListener(new ClickListener() {
                       @Override
                       public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
