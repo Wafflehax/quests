@@ -25,7 +25,7 @@ public class GamePresenter extends Group {
   static Logger log = Logger.getLogger(GamePresenter.class); //log4j logger
   private final GameView view;
   public Map<String, String> CardAssetMap;
-  public CardView [] cards;
+  public CardView[] cards;
   TextureAtlas sprites;
   TextureAtlas backgrounds;
   private QuestCards parent;
@@ -55,8 +55,6 @@ public class GamePresenter extends Group {
     model = new GameModel();
     view = initGameView();
     addActor(view);
-
-
 
 
   }
@@ -103,7 +101,7 @@ public class GamePresenter extends Group {
       cards[i].setInPlayCDZ(view.InPlayCDZ.getBounds());
       cards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());
       cards[i].setGamePresenter(this);
-      cards[i].setColor(1,1,1,0);
+      cards[i].setColor(1, 1, 1, 0);
 
     }
 
@@ -133,10 +131,13 @@ public class GamePresenter extends Group {
         //Player says no
       }*/
 
-      view.displayAnnouncementDialog("Begin Turn", ""+model.getcurrentTurn().getName()+"... begin!", result_2 -> {
-        drawCards();
-      });
-   // });
+    view.displayAnnouncementDialog("Begin Turn", "" + model.getcurrentTurn().getName() + "... begin!", result_2 -> {
+      drawCards();
+    });
+    view.displayNextTurnButton(() -> {
+        //Do something
+    }, false);
+    // });
 
     return view;
   }
@@ -205,8 +206,7 @@ public class GamePresenter extends Group {
     if (!model.getPlayers().current().userInput(input)) {
       if (model.getcurrentTurn().getState().equalsIgnoreCase("playtour")) {
         //player couldn't leave turn too many cards
-      }
-      else
+      } else
         model.beginTurn();
     }
 
@@ -293,10 +293,18 @@ public class GamePresenter extends Group {
 
   }
 
-  public void flipDown(CardView card){card.setDrawable(new TextureRegionDrawable(new TextureRegion(sprites.findRegion(Assets.Cards.CARD_BACK))));}
-  public void flipUp(CardView card){card.setDrawable(new TextureRegionDrawable(card.getPicDisplay()));}
+  public void flipDown(CardView card) {
+    card.setDrawable(new TextureRegionDrawable(new TextureRegion(sprites.findRegion(Assets.Cards.CARD_BACK))));
+  }
 
-  public void drawCards(){  for (int i = 0; i < cards.length; i++){view.displayDrawCardAnimation(cards[i]);
-  }}
+  public void flipUp(CardView card) {
+    card.setDrawable(new TextureRegionDrawable(card.getPicDisplay()));
+  }
+
+  public void drawCards() {
+    for (int i = 0; i < cards.length; i++) {
+      view.displayDrawCardAnimation(cards[i]);
+    }
+  }
 
 }

@@ -21,6 +21,8 @@ import com.comp_3004.quest_cards.core.ImageAccessor;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 
+import static com.comp_3004.quest_cards.gui.Assets.Strings.Buttons.NEXT_TURN;
+
 public class GameView extends Group {
 
   public enum PlayerColor {
@@ -53,6 +55,7 @@ public class GameView extends Group {
   public CardDropZone SponsorCDZ;
   public CardDropZone DiscardCDZ;
   public CardDropZone InPlayCDZ;
+  public TextButton nextTurnButton;
   public PlayerStatView[] players;
 
   public LinkedList<CardView> InPlay;
@@ -67,7 +70,6 @@ public class GameView extends Group {
 
   public GameView(AssetManager manager) {
 
-    this.skin = skin;
     AnimationManager = new TweenManager(); //NOT YET IN USE
     this.skin = manager.get(Assets.SKIN);
     this.sprites = manager.get(Assets.GAME_SPRITES, TextureAtlas.class);
@@ -82,6 +84,7 @@ public class GameView extends Group {
     playerView = new PlayerView();
     announcementDialog = new AnnouncementDialog(skin);
     questionDialog = new BooleanDialog(skin);
+    nextTurnButton = new TextButton(NEXT_TURN, skin);
     players = new PlayerStatView[4];
 
     //Init and Orient the CDZs
@@ -103,6 +106,8 @@ public class GameView extends Group {
     addActor(adventureDeckDiscardPile);
     addActor(hoverDraw);
     addActor(playerView);
+
+
     playerView.addActorAt(1, InPlayCDZ);
   }
 
@@ -160,6 +165,8 @@ public class GameView extends Group {
         50);
 
     InPlayCDZ.setDropZoneBounds(Config.VIRTUAL_WIDTH / 2 + 40, 20, Config.CardView.CARD_WIDTH * 3 - 20, Config.CardView.CARD_HEIGHT);
+
+    nextTurnButton.setBounds(Config.VIRTUAL_WIDTH - 200, 360 + 10, 200, 50);
 
     PlayerColor[] colors = PlayerColor.values();
     for (int i = 0; i < players.length; i++) {
@@ -283,6 +290,26 @@ public class GameView extends Group {
         x0 = InPlayCDZ.getX();
       }
     }
+  }
+
+  public void displayNextTurnButton(final Runnable action, boolean hideAfter) {
+
+    if (nextTurnButton.getListeners().size > 1) {
+      nextTurnButton.getListeners().pop();
+    }
+
+    nextTurnButton.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        action.run();
+        if (hideAfter) {
+          nextTurnButton.remove();
+        }
+      }
+    });
+
+
+    addActor(nextTurnButton);
   }
 
   public void displayCardsQuestStages(LinkedList<CardView> QuestStages) {

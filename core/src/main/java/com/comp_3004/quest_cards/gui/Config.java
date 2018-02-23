@@ -49,8 +49,14 @@ public class Config {
 
   public static class PlayerStatView {
 
+    public static final int FLAG_ARROW_WIDTH = 50;
     public static final int X = 1920 - 350;
-    public static final int Y = 360 + 10;
+    public static final int Y = 360 + 20 + 100;
 
+  }
+
+  public static class NextTurnButton {
+
+    public static final int Y = 360 + 10;
   }
 }

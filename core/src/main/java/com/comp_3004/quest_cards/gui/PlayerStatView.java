@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+import static com.comp_3004.quest_cards.gui.Config.PlayerStatView.FLAG_ARROW_WIDTH;
+
 public class PlayerStatView extends Group {
 
   private Image flag_arrow;
@@ -28,9 +30,9 @@ public class PlayerStatView extends Group {
   PlayerStatView(TextureAtlas atlas, Skin skin) {
 
     deck = new Image(atlas.findRegion(Assets.MiscSprites.DECK_ICON));
-    deck_label = new Label("x 0", skin);
+    deck_label = new Label("x0", skin);
     shield = new Image(atlas.findRegion(Assets.MiscSprites.SHIELD));
-    shield_label = new Label("x 0", skin);
+    shield_label = new Label("x0", skin);
     flag_arrow = new Image(atlas.findRegion(Assets.MiscSprites.FLAG_ARROW));
     flag_body = new Image(atlas.findRegion(Assets.MiscSprites.FLAG_BODY));
 
@@ -57,9 +59,9 @@ public class PlayerStatView extends Group {
 
   private void pack() {
 
-    setSize(BODY_WIDTH, IMG_HEIGHT);
-    flag_arrow.setBounds(0, 0, 50, IMG_HEIGHT);
-    flag_body.setBounds(50, 0, BODY_WIDTH, IMG_HEIGHT);
+    setSize(FLAG_ARROW_WIDTH + BODY_WIDTH, IMG_HEIGHT);
+    flag_arrow.setBounds(0, 0, FLAG_ARROW_WIDTH, IMG_HEIGHT);
+    flag_body.setBounds(FLAG_ARROW_WIDTH, 0, BODY_WIDTH, IMG_HEIGHT);
 
     deck.setSize(IMG_WIDTH, IMG_HEIGHT);
     deck.setPosition(flag_arrow.getWidth(), getHeight() / 2 - deck.getHeight() / 2);

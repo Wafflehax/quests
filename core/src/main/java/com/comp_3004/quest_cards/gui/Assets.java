@@ -101,6 +101,7 @@ public class Assets {
       public static final String ACKNOWLEDGE = "Continue";
       public static final String TRUE = "Yes";
       public static final String FALSE = "No";
+      public static final String NEXT_TURN = "End Turn";
     }
   }
 }
