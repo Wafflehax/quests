@@ -6,7 +6,6 @@ import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.core.GameModel;
 import com.comp_3004.quest_cards.core.GamePresenter;
-import com.comp_3004.quest_cards.player.Player;
 
 import junit.framework.TestCase;
 

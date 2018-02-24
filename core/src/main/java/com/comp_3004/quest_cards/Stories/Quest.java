@@ -71,6 +71,7 @@ public class Quest {
 	public int getNumDeclines() { return this.numDeclines; }
 	public ArrayList<Player> getPlayers() { return this.players.getPlayers(); }
 	public ArrayList<Player> getParticipants() { return this.participants; }
+	public AdventureDeck getAdvDeck() { return this.advDeck; }
 	
 	//methods
 	public void increaseNumDeclines() {

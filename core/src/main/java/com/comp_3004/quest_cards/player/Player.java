@@ -109,6 +109,8 @@ public class Player{
 			state_ = new TourComputerState();
 		else if(s == "merlin")
 			state_ = new MerlinState();
+		else if(s == "mordred")
+			state_ = new MordredState();
 	}
 
 	public String getState() {
@@ -133,6 +135,8 @@ public class Player{
 			state = "tourcomp";
 		else if(state_ instanceof MerlinState)
 			state = "merlin";
+		else if(state_ instanceof MordredState)
+			state = "mordred";
 		return state;
 	}
 	
