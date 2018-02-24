@@ -94,7 +94,14 @@ public class Tour {
 			leftAsk = p.getNumPlayers();
 			participants = new ArrayList<Player>();
 			joiners = 0;
-			log.info(players.current().getName() + " Participate in Tour " + players.current().getTour().getCurTour().getName() + " ?");
+			
+			if(players.current().isAi()) {
+				players.current().notifyTurn();
+			}
+			else {
+				log.info(players.current().getName() + " Participate in Tour " + players.current().getTour().getCurTour().getName() + " ?");
+			}
+		
 		}
 			
 	}
@@ -108,7 +115,6 @@ public class Tour {
 		}
 		else
 			log.info(p.getName() + " is NOT participating in the tournament"); //left on ask
-		players.next();
 		
 		//none left to ask
 		if(leftAsk == 0) {
@@ -116,13 +122,24 @@ public class Tour {
 				for(Player ps: participants)
 					ps.setState("playtour");
 				if(gameWinMatch)
-					startGameWinningTour();
+					startGameWinningTour();  //:TODO Test ai players in gamewinning tour
 				else
 					startTour();
 			}
 			else
 				log.info("Can't start Tournament Need atleast 2 players");	
 		}
+		else {
+			Player nextpl = players.next();
+			if(nextpl.isAi() && leftAsk > 0) {
+				nextpl.notifyTurn(); //do ai work
+			}
+			else {
+				log.info(nextpl.getName() + " Participate in Tour " + nextpl.getTour().getCurTour().getName() + " ?");
+			}
+		}
+			
+		
 	}	
 	
 	private void startGameWinningTour() {
@@ -145,12 +162,35 @@ public class Tour {
 		//set players to participants
 		tempPl = players; //stored all players
 		players.setPlayers(participants);
-		log.info(players.current().getName() + " Its your turn press done when finished");
+		players.setPos(0);
+		//start first turn of tour
+		if(players.current().isAi()) {
+			players.current().notifyTurn(); //do ai work
+		}
+		else {
+			log.info(players.current().getName() + " Its your turn press done when finished");
+		}
+		
 	}
 	
+	/*
+	 * returns true when turn is done
+	 * not used for participation, only player turns that involve playing cards
+	 */
 	public boolean doneTurn() {
 		if(players.current().tooManyHandCards()) {
-			log.info("You have too many cards discard a card, then press done turn");
+			//if ai player discard until enough
+			if(players.current().isAi()) {
+				log.info("Ai player too many cards discarding till enough");
+				while(players.current().tooManyHandCards()) {
+					String prevState = players.current().getState();
+					players.current().setState("tourcomp");
+					players.current().discardCard(players.current().getHand().getLast(), d);
+					players.current().setState(prevState);
+				}
+			}
+			else
+				log.info("You have too many cards discard a card, then press done turn");
 		}
 		else {
 			leftToPlayCard--;
@@ -161,8 +201,14 @@ public class Tour {
 				determineRoundOutCome();			
 			}
 			else {
-				players.next();
-				log.info(players.current().getName() + " Its your turn press done when finished");
+				if(players.next().isAi()) {
+					//complete ai work
+					players.current().notifyTurn(); // ai plays turn
+				}
+				else {
+					log.info(players.current().getName() + " Its your turn press done when finished");
+				}
+					
 			}
 			return true;	
 		}
@@ -238,7 +284,8 @@ public class Tour {
 						}
 						log.info(out);
 						leftToPlayCard = pairs.size();
-						log.info(players.current().getName() + " Its your turn press done when finished");					
+						log.info(players.current().getName() + " Its your turn press done when finished");
+						players.next();
 					}
 					else if(round == 2) { //over Tied players win
 						round++;

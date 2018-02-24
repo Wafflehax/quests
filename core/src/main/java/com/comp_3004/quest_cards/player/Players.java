@@ -65,7 +65,7 @@ public class Players{
 	
 	public void addPlayer(Player p) {
 		this.players.add(p);
-		endIndex++;
+		this.endIndex = players.size()-1;
 	}
 	
 	// moves to next position and returns it

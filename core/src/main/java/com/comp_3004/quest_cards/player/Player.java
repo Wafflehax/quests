@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 
+import com.comp_3004.quest_cards.Stories.AI;
 import com.comp_3004.quest_cards.Stories.Event;
 import com.comp_3004.quest_cards.Stories.Quest;
 import com.comp_3004.quest_cards.Stories.Tour;
@@ -46,6 +47,8 @@ public class Player{
 	private Tour currTour;
 	private PlayerState state_;
 	private boolean WonGame;
+	private boolean aiPlayer;
+	private AI ai;
 	
 	// constructor
 	public Player(String name) {
@@ -60,6 +63,23 @@ public class Player{
 		this.currTour = null;
 		this.state_ = new NormalState();
 		this.WonGame = false;
+	}
+	
+	//ai player
+	public Player(String name, AI ai) {
+		this.name = name;
+		this.rank = Rank.SQUIRE;
+		this.shields = 0;
+		this.playerHandCards = new LinkedList<AdventureCard>();
+		this.playerActiveCards = new LinkedList<AdventureCard>();
+		this.playerStageCards = new LinkedList<AdventureCard>();
+		this.currentQuest = null;
+		this.currentEvent = null;
+		this.currTour = null;
+		this.state_ = new NormalState();
+		this.WonGame = false;
+		this.aiPlayer = true;
+		this.ai = ai;
 	}
 	
 	// getters/setters
@@ -82,6 +102,8 @@ public class Player{
 	public Tour getTour() { return this.currTour; }
 	public boolean getWon() { return this.WonGame; }
 	public void setWon(boolean b) { this.WonGame = b; }
+	public boolean isAi() { return this.aiPlayer; }
+	public AI getAI() { return this.ai; }
 	public void setState(String s) { 
 		if(s == "normal")
 			state_ = new NormalState();
@@ -126,6 +148,27 @@ public class Player{
 		else if(state_ instanceof TourComputerState)
 			state = "tourcomp";
 		return state;
+	}
+	
+	
+	//used to let ai player know its their turn and to act based on type of turn
+	public void notifyTurn() {
+		if(isAi()) {
+			
+			//if asking for TourParticipation
+			if(this.getState().equals("tourask")) {
+				if(this.getAI().DoIParticipateInTournament()) {
+					log.info(getName() + " Participate in Tour " + getTour().getCurTour().getName() + " ?");
+					this.userInput(1); //participate then move to next player
+				}	
+			}
+			else if(this.getState().equals("playtour")) {
+				log.info(getName() + " Its your turn press done when finished");
+				this.getAI().TournamentPlayTurn();
+				this.getTour().doneTurn();
+			}
+		}
+		
 	}
 	
 	public void setHand(String[] cards) { 		//used in testing
