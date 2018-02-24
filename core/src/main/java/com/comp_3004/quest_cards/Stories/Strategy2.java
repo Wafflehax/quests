@@ -13,7 +13,7 @@ import com.comp_3004.quest_cards.cards.AmourCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.player.Player;
 
-public class Strategy2 extends AI{
+public class Strategy2 extends AbstractAI{
 	
 	private static Logger log = Logger.getLogger(Strategy2.class); //log4j logger
 	
@@ -64,8 +64,8 @@ public class Strategy2 extends AI{
 			LinkedList<AdventureCard> active = this.pl.getActive();
 			LinkedList<AdventureCard> hand = this.pl.getHand();
 			if(active != null && hand != null && this.pl.getTour() != null) {
+				//calculate current battle points from active cards
 				int bp = this.pl.getTour().calcBattlePoints(this.pl);
-				
 				if(bp < 50) {
 					log.info("Playing card untill 50 battlepoints or out of cards");
 					Collections.sort(hand, new Comparator<AdventureCard>() {

@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 
-import com.comp_3004.quest_cards.Stories.AI;
+import com.comp_3004.quest_cards.Stories.AbstractAI;
 import com.comp_3004.quest_cards.Stories.Event;
 import com.comp_3004.quest_cards.Stories.Quest;
 import com.comp_3004.quest_cards.Stories.Tour;
@@ -48,7 +48,7 @@ public class Player{
 	private PlayerState state_;
 	private boolean WonGame;
 	private boolean aiPlayer;
-	private AI ai;
+	private AbstractAI ai;
 	
 	// constructor
 	public Player(String name) {
@@ -66,7 +66,7 @@ public class Player{
 	}
 	
 	//ai player
-	public Player(String name, AI ai) {
+	public Player(String name, AbstractAI ai) {
 		this.name = name;
 		this.rank = Rank.SQUIRE;
 		this.shields = 0;
@@ -103,7 +103,7 @@ public class Player{
 	public boolean getWon() { return this.WonGame; }
 	public void setWon(boolean b) { this.WonGame = b; }
 	public boolean isAi() { return this.aiPlayer; }
-	public AI getAI() { return this.ai; }
+	public AbstractAI getAI() { return this.ai; }
 	public void setState(String s) { 
 		if(s == "normal")
 			state_ = new NormalState();
@@ -158,8 +158,14 @@ public class Player{
 			//if asking for TourParticipation
 			if(this.getState().equals("tourask")) {
 				if(this.getAI().DoIParticipateInTournament()) {
-					log.info(getName() + " Participate in Tour " + getTour().getCurTour().getName() + " ?");
-					this.userInput(1); //participate then move to next player
+					if(getTour().isGameWinTour()) {
+						log.info(getName() + " Participate in one final Game Winning Tour " + getTour().getCurTour().getName() + " ?");
+						this.userInput(1); //participate then move to next player	
+					}
+					else {
+						log.info(getName() + " Participate in Tour " + getTour().getCurTour().getName() + " ?");
+						this.userInput(1); //participate then move to next player	
+					}					
 				}	
 			}
 			else if(this.getState().equals("playtour")) {
@@ -341,6 +347,21 @@ public class Player{
 			//triggers winning condition
 			//if two KNIGHT OF ROUND TABLE or more, plays final tour
 		}
+	}
+	
+	//get the number of shields needed to rank up
+	public int sheildsToRank() {
+		int num = 0;
+		if(rank == Rank.SQUIRE) {
+			return (5-shields);	
+		}
+		if(rank == Rank.KNIGHT) {
+			return (7-shields);
+		}
+		if(rank == Rank.CHAMPION_KNIGHT) {
+			return (10-shields);
+		}
+		return num;
 	}
 	
 	

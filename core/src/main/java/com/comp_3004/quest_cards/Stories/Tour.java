@@ -41,6 +41,9 @@ public class Tour {
 	public int getleftToPlayCard() { return leftToPlayCard; }
 	public Players getPlayers() { return players; }
 	public int getRound() { return round; }
+	public boolean isGameWinTour() { return this.gameWinMatch; }
+	public int getJoiners() { return this.joiners; }
+	public ArrayList<Player> getParticipants() { return this.participants; }
 	
 	
 	//constructor
@@ -82,8 +85,14 @@ public class Tour {
 			if(players.size() == 0) {
 				log.info("Error not asking participation due to no players");
 			}
-			else
-				log.info(players.current().getName() + " Participate in one final Game Winning Tour " + players.current().getTour().getCurTour().getName() + " ?");
+			else {
+				if(players.current().isAi()) {
+					players.current().notifyTurn();
+				}
+				else {
+					log.info(players.current().getName() + " Participate in one final Game Winning Tour " + players.current().getTour().getCurTour().getName() + " ?");
+				}
+			}
 		}
 		else if(!fina){
 			//set everyone to TourPatricipationState
@@ -126,6 +135,9 @@ public class Tour {
 				else
 					startTour();
 			}
+			else if(joiners == 1 && gameWinMatch) {
+				startGameWinningTour();
+			}
 			else
 				log.info("Can't start Tournament Need atleast 2 players");	
 		}
@@ -145,11 +157,24 @@ public class Tour {
 	private void startGameWinningTour() {
 		round = 1;
 		leftToPlayCard = joiners;
+		if(leftToPlayCard == 1) {
+			//already have winner
+			log.info("Only one player participated in game winning tournament. ");
+			determineRoundOutCome();
+		}
+		
 		log.info("Game Winning Tournament Starting............adding card to joiners from adventure deck");
 		for(Player ps: participants)
 			ps.forceDrawAdventure(d);
 		players.setPlayers(participants);
-		log.info(players.current().getName() + " Its your turn press done when finished");
+		players.setPos(0);
+		//start first turn of tour
+		if(players.current().isAi()) {
+			players.current().notifyTurn(); //do ai work
+		}
+		else {
+			log.info(players.current().getName() + " Its your turn press done when finished");
+		}
 	}
 	
 	
@@ -248,7 +273,7 @@ public class Tour {
 					log.info("Here are the final winners of the Game!");
 					for(IntPlayerPair p: pairs) {
 						p.player.setWon(true);
-						p.player.getName();
+						log.info(p.player.getName());
 					}
 					log.info("Game Over");
 					players = tempPl; //return to full player list

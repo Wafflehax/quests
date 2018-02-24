@@ -1,6 +1,6 @@
 package core;
 
-import com.comp_3004.quest_cards.Stories.AI;
+import com.comp_3004.quest_cards.Stories.AbstractAI;
 import com.comp_3004.quest_cards.Stories.Strategy2;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.StoryDeck;
@@ -8,13 +8,14 @@ import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.core.GameModel;
 import com.comp_3004.quest_cards.core.GamePresenter;
 import com.comp_3004.quest_cards.player.Player;
+import com.comp_3004.quest_cards.player.Player.Rank;
 
 import junit.framework.TestCase;
 
 public class AIStrategyTest extends TestCase{
 
 	public void testOne() {
-		//testing functionality
+		//testing ai players play during tour tournaments strategy 2
 		StoryDeck storyDeck = new StoryDeck();		//set up story deck		
 		storyDeck.setTopCard("Tournament at Orkney");
 		storyDeck.printDeck();
@@ -22,12 +23,11 @@ public class AIStrategyTest extends TestCase{
 		AdventureDeck advDeck = new AdventureDeck();
 		advDeck.shuffle();
 		GameModel game;
-		int ncards = 10;
+		int ncards = 0;
 		game = new GameModel(0, ncards, advDeck, storyDeck); //start with 1 players, with 10 cards
 		
-		
 		//p0 ai
-		AI ai = new Strategy2();
+		AbstractAI ai = new Strategy2();
 		Player aiplayer = new Player("p0-ai", ai);
 		ai.setPlayer(aiplayer);
 		
@@ -35,9 +35,8 @@ public class AIStrategyTest extends TestCase{
 			aiplayer.drawCard(game.getAdvDeck());
 		}
 		
-		
 		// p1 second ai player
-		AI ai2 = new Strategy2();
+		AbstractAI ai2 = new Strategy2();
 		Player aiplayer2 = new Player("p2-ai", ai2);
 		ai2.setPlayer(aiplayer2);
 		
@@ -55,23 +54,32 @@ public class AIStrategyTest extends TestCase{
 		}
 		
 		//p2 human
-				Player p3 = new Player("p3human");
-				String cards3[] = {"sword"};
-				p3.setHand(cards3);
-				WeaponCard swo3 = (WeaponCard) AllyConditionsTest.find("sword", p3.getHand());
-				for(int i = 0; i < ncards; i++) {
-					p3.drawCard(game.getAdvDeck());
-				}
-		
+		Player p3 = new Player("p3human");
+		String cards3[] = {"sword"};
+		p3.setHand(cards3);
+		WeaponCard swo3 = (WeaponCard) AllyConditionsTest.find("sword", p3.getHand());
+		for(int i = 0; i < ncards; i++) {
+			p3.drawCard(game.getAdvDeck());
+		}
+
 		game.addPlayer(aiplayer);
 		game.addPlayer(p2);
 		game.addPlayer(aiplayer2);
 		game.addPlayer(p3);
 		
+		//set both human players 50 to test
+		//test human and ai in tie breaker
+		String cards50[] = {"sword", "horse", "excalibur"};
+		p2.setHand(cards50);
+		p3.setHand(cards50);
+		
+		//set ais to have 50 bp active
+		aiplayer.setActiveHand(cards50);
+		aiplayer2.setActiveHand(cards50);
+		
+		
 		//The game does not assign strategies to AI players. It the initial player setting up the game that chooses
 		//so atleast one player is not an ai
-		
-		
 		
 		GamePresenter pres = new GamePresenter(game);
 		//what if first player is an ai player?
@@ -85,16 +93,77 @@ public class AIStrategyTest extends TestCase{
 		pres.userInput(1); 
 		
 		//p1 human turn
+		pres.playCard(AllyConditionsTest.find("sword", p2.getHand()).getID());
+		pres.playCard(AllyConditionsTest.find("horse", p2.getHand()).getID());
+		pres.playCard(AllyConditionsTest.find("excalibur", p2.getHand()).getID());
 		pres.userInput(1); //done turn
+		
+		//set ai0 to have hand of 50bp 
+		String aicards[] = {"lance","excalibur"};
+		aiplayer.setHand(aicards);
+		aiplayer2.setHand(aicards);
 		
 		//p3 human
+		pres.playCard(AllyConditionsTest.find("sword", p3.getHand()).getID());
+		pres.playCard(AllyConditionsTest.find("horse", p3.getHand()).getID());
+		pres.playCard(AllyConditionsTest.find("excalibur", p3.getHand()).getID());
 		pres.userInput(1); //done turn
 		
+		//ais play lance and excalibur to get 50 bp
 		
+		//tied, round 2 
+		pres.userInput(1); //done turn p1human
+		pres.userInput(1); //done turn p3human
 		
-		
-		
-		
+		//both ai's won check they Ranked up
+		assertEquals(true, aiplayer.getRank() == Rank.KNIGHT);
+		assertEquals(true, aiplayer2.getRank() == Rank.KNIGHT);
 	}
+	
+	public void testTwo() {
+		//test strategy 2 on game winning tour
+		//test Game winning tournament with ai players strategy 2
+		AdventureDeck ad = new AdventureDeck();
+		StoryDeck d = new StoryDeck();
+		int ncards = 0;
+		GameModel m = new GameModel(0, ncards, ad, d); // 0 players 0 cards
+		GamePresenter pres = new GamePresenter(m);
+		
+		//test player and ai player
+		//p0 ai
+		AbstractAI ai = new Strategy2();
+		Player aiplayer = new Player("p0-ai", ai);
+		ai.setPlayer(aiplayer);
+		
+		//p1 human
+		Player p1 = new Player("p1human");
+		//make players Knights of table		
+		aiplayer.addShields(22);
+		p1.addShields(22);
+		
+		String cards[] = {"dagger"};
+		aiplayer.setHand(cards);
+		p1.setHand(cards);
+		
+		m.addPlayer(aiplayer);
+		m.addPlayer(p1);
+		m.playGameWinningTour();
+		
+		//p0 ai participates
+		
+		//p1 human participates
+		pres.userInput(1); //yes
+		
+		//p1 turn
+		pres.playCard(AllyConditionsTest.find("dagger",p1.getHand()).getID());
+		pres.userInput(0); //done turn
+			
+		//check winners
+		assertEquals(true, m.getPlayers().getPlayerAtIndex(0).getWon());
+		assertEquals(true, m.getPlayers().getPlayerAtIndex(1).getWon());
+	}
+	
+	
+	
 	
 }

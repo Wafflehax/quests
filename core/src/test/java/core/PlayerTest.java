@@ -184,4 +184,23 @@ public class PlayerTest extends TestCase{
 				assertEquals("King Arthur", p0.getActive().get(2).getName());
 				assertEquals("Sword", p0.getActive().get(3).getName());
 		}
+		
+	public void testsheildsToRank() {
+		Player p0 = new Player("Player 0"); // rank is SQUIRE = 5 bp
+		assertEquals(p0.sheildsToRank(), 5);
+		p0.addShields(4);
+		assertEquals(p0.sheildsToRank(), 1);
+		p0.addShields(1);
+		//now knight
+		assertEquals(p0.sheildsToRank(), 7);
+		p0.addShields(5);
+		assertEquals(p0.sheildsToRank(), 2);
+		p0.addShields(2);
+		//now champion knight
+		assertEquals(p0.sheildsToRank(), 10);
+		p0.addShields(10);
+		//no more shields to rank max rank
+		assertEquals(p0.sheildsToRank(), 0);
+	}
+	
 }
