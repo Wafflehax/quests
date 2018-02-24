@@ -118,6 +118,10 @@ public class MerlinTest extends TestCase {
 	}
 	
 	/* player3 uses merlins ability in stage 0 when played (tries to see non existant stage, then sees stage 1)
+	 * merlins ability will no longer be available in stage 1
+	 * player3 and 4 complete quest
+	 * player3 uses merlins ability in stage 1
+	 * player2 and 3 complete quest
 	 */
 	public void testMerlin2() {
 		//set up story deck
@@ -156,7 +160,7 @@ public class MerlinTest extends TestCase {
 		game.getPlayerAtIndex(3).pickCard("Lance", advDeck);
 		game.getPlayerAtIndex(3).pickCard("Thieves", advDeck);
 		game.getPlayerAtIndex(3).pickCard("Horse", advDeck);
-		game.getPlayerAtIndex(3).pickCard("Dagger", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Robber Knight", advDeck);
 		
 		game.getAdvDeck().shuffle();
 		pres.getModel().beginTurn();
@@ -178,9 +182,57 @@ public class MerlinTest extends TestCase {
 		//stage 0
 		pres.userInput(1);
 		pres.playCard(287, -1);
-		pres.userInput(2);
+		pres.userInput(2); //player 3 tries to see stage 3, but only 2 stages in quest
+		pres.userInput(1); //player3 uses merlin to see stage 2
+		pres.playCard(284, -1);
 		pres.userInput(1);
-		game.getcurrentTurn().printHand();
+		pres.playCard(274, -1);
+		pres.userInput(1);
+		
+		//stage 1
+		pres.playCard(233, -1);
+		pres.userInput(1);
+		pres.playCard(261, -1);
+		pres.userInput(1);
+		
+		//quest2
+		pres.userInput(0);
+		pres.userInput(0);
+		pres.userInput(1);
+		
+		//set up
+		pres.playCard(186, 0);
+		pres.playCard(198, 1);
+		pres.userInput(1);
+		
+		//participation
+		pres.userInput(1);
+		pres.userInput(1);
+		pres.userInput(1);
+		
+		//stage 0
+		pres.playCard(243, -1);
+		pres.userInput(1);
+		pres.playCard(262, -1);
+		pres.userInput(1);
+		pres.userInput(-1); //p3 declines using merlin
+		pres.userInput(1);
+		
+		//stage 1
+		pres.playCard(258, -1);
+		pres.userInput(1);
+		pres.playCard(232, -1);
+		pres.userInput(1);
+		pres.userInput(1); //p3 uses merlins ability to see stage 2
+		pres.userInput(1);
+		
+		assertEquals("Player 3", game.getcurrentTurn().getName());
+		assertEquals(2, game.getPlayerAtIndex(2).getActive().size());
+		assertEquals(10, game.getAdvDeck().getDiscard().size());
+		assertEquals(0, game.getPlayerAtIndex(0).getShields());
+		assertEquals(2, game.getPlayerAtIndex(1).getShields());
+		assertEquals(4, game.getPlayerAtIndex(2).getShields());
+		assertEquals(2, game.getPlayerAtIndex(3).getShields());
 	}
 
 }

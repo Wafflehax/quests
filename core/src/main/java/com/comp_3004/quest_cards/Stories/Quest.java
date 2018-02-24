@@ -140,7 +140,7 @@ public class Quest {
 		else {
 			if(c instanceof TestCard) {
 				if(stages[stageNum].addCard(c, quest.getNamedFoe())) {
-						log.info(sponsor.getName()+" played "+c.getName()+" to stage "+stageNum);
+						log.info(sponsor.getName()+" played "+c.getName()+" to stage "+(stageNum+1));
 						cardsUsedToSponsor++;
 						testAdded = true;
 						printStage(stageNum);
@@ -151,7 +151,7 @@ public class Quest {
 			}
 			else {
 				if(stages[stageNum].addCard(c, quest.getNamedFoe())) {
-					log.info(sponsor.getName()+" played "+c.getName()+" to stage "+stageNum);
+					log.info(sponsor.getName()+" played "+c.getName()+" to stage "+(stageNum+1));
 					cardsUsedToSponsor++;
 					printStage(stageNum);
 					return true;
@@ -201,7 +201,7 @@ public class Quest {
 		if(increasingBPs && stagesComplete) {
 			log.info("Quest set up complete.");
 			for(int i=0; i<quest.getStages(); i++) {
-				log.info("Stage "+i+": "+stageBPs[i]+" battlepoints");
+				log.info("Stage "+(i+1)+": "+stageBPs[i]+" battlepoints");
 			}
 			players.next();
 			for(Player p : players.getPlayers()) {
@@ -276,7 +276,7 @@ public class Quest {
 		for(Player pl : participants) {
 			pl.setState("playQuest");
 			for(AdventureCard c : pl.getActive()) {
-				if(c.getName() == "Merlin")
+				if(c.getName() == "Merlin" && pl.getMerlinUsed() == false)
 					pl.setState("merlin");
 			}
 		}
@@ -302,11 +302,11 @@ public class Quest {
 				p.setState("bid");
 		}
 		else
-			log.info("Stage " + stageNum + " contains a " + stageCard.getClass().getSimpleName());
+			log.info("Stage " + (stageNum+1) + " contains a " + stageCard.getClass().getSimpleName());
 	}
 	
 	public boolean doneAddingCards() {
-		log.info(players.current().getName()+" is done playing cards for stage "+currentStage);
+		log.info(players.current().getName()+" is done playing cards for stage "+(currentStage+1));
 		if(participants.size() == 1) {
 			players.next();
 			return revealStage(currentStage);
@@ -323,7 +323,7 @@ public class Quest {
 	//reveals to the participants what cards are in the stage and resolves stage
 	public boolean revealStage(int stageNum) {
 		//reveal foe+weapons for stage
-		log.info(sponsor.getName() + " reveals stage " + stageNum);
+		log.info(sponsor.getName() + " reveals stage " + (stageNum+1));
 		printStage(stageNum);
 		
 		//players reveal cards played for stage (cards go from hidden to players active)
@@ -402,6 +402,13 @@ public class Quest {
 		for(Player p : players.getPlayers())
 			p.setState("normal");
 		
+		//reset merlins ability
+		for(Player p : players.getPlayers()) {
+			for(AdventureCard c : p.getActive()) {
+				if(c.getName() == "Merlin")
+					p.setMerlinUsed(false);
+			}
+		}
 		questComplete = true;
 		
 		//check if sponsor has too many cards
@@ -424,7 +431,7 @@ public class Quest {
 	
 	//used to print stage cards to console
 	public void printStage(int i) {
-		log.info("Stage: "+i);
+		log.info("Stage: "+(i+1));
 		log.info(String.format("%-15s%-15s%s", "Name", "Battle Points", "ID"));
 		log.info("==================================");
 		for(AdventureCard card : stages[i].getSponsorCards())
