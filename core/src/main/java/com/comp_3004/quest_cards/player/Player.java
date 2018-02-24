@@ -123,6 +123,8 @@ public class Player{
 			state = "questParticipant";
 		else if(state_ instanceof QuestPlayState)
 			state = "playQuest";
+		else if(state_ instanceof BidState)
+			state = "bid";
 		else if(state_ instanceof TooManyCardsState)
 			state = "tooManyCards";
 		else if(state_ instanceof EventState)

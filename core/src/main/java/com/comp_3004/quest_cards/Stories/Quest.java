@@ -65,6 +65,7 @@ public class Quest {
 	
 	//getters/setters
 	public QuestStage getStage(int i) { return this.stages[i]; }
+	public QuestStage getCurrentStage() { return this.stages[currentStage]; }
 	public QuestCard getQuest() { return this.quest; }
 	public void setSponsor(Player p) { this.sponsor = p; }
 	public Player getSponsor() { return this.sponsor; }

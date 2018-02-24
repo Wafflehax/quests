@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
+import com.comp_3004.quest_cards.cards.TestCard;
 import com.comp_3004.quest_cards.cards.AdventureCard.State;
 
 public class MordredState extends PlayerState {
@@ -45,7 +46,12 @@ public class MordredState extends PlayerState {
 					log.info("Mordred kills "+c.getName());
 					pl.discardCard(c, p.getQuest().getAdvDeck());
 					p.discardCard(mordred, p.getQuest().getAdvDeck());
-					p.setState("playQuest");
+					//reset players state
+					if(p.getQuest().getCurrentStage().getSponsorCards().get(0) instanceof TestCard) {
+						p.setState("bid");
+					}
+					else
+						p.setState("playQuest");
 				}
 			}
 		}

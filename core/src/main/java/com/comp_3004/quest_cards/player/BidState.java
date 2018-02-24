@@ -11,23 +11,32 @@ public class BidState extends PlayerState {
 	static Logger log = Logger.getLogger(BidState.class); //log4j logger
 
 	public boolean playCard(AdventureCard c, Player p) {
-		//player does not play any cards during this state
-		return false;
+		//player can only play mordred in this state
+		if(c.getName() == "Mordred") {
+			p.setState("mordred");
+		}
+		return true;
 	}
 	
 	public boolean discardCard(AdventureCard c, AdventureDeck d, Player p) {
-		if(c.getOwner() == p && c.getState() == State.HAND) {
+		if(c.getOwner() == p && (c.getState() == State.HAND || c.getState() == State.PLAY)) {
 			if(p.getHand().contains(c)) {
 				p.getHand().remove(c);
 				log.info(p.getName() + " discarded " + c.getName() + " from hand");
 			}
+			else if(p.getActive().contains(c)) {
+				p.getActive().remove(c);
+				log.info(p.getName() + " discarded " + c.getName() + " from active");
+			}
 			d.discardCard(c);
 			c.setState(State.DISCARD);
 			c.setOwner(null);
-			if(p.getQuest().discardedACard())
-				return true;
-			else
-				return false;
+			if(p.getQuest().getParticipants().size() == 1) {
+				if(p.getQuest().discardedACard())
+					return true;
+				else
+					return false;
+			}
 		}
 		log.info(p.getName()+" does not have "+c.getName()+" in their hand");
 		return false;
