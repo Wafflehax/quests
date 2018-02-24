@@ -284,12 +284,19 @@ public class Tour {
 						}
 						log.info(out);
 						leftToPlayCard = pairs.size();
-						log.info(players.current().getName() + " Its your turn press done when finished");
-						players.next();
+						
+						//notify of next turn
+						if(players.current().isAi()) {
+							players.current().notifyTurn();
+						}
+						else {
+							log.info(players.current().getName() + " Its your turn press done when finished");	
+						}
 					}
 					else if(round == 2) { //over Tied players win
 						round++;
 						log.info("Tied again. Tied players win " + (bonus+joiners) + " shields:\n");
+						players.setArray(winners);
 						for(int i = 0; i < players.size(); i++) {
 							String o = players.getPlayerAtIndex(i).getName() + " With Rank ";
 							players.getPlayerAtIndex(i).addShields(bonus+joiners);
