@@ -117,7 +117,7 @@ public class MerlinTest extends TestCase {
 		assertEquals(2, game.getPlayerAtIndex(1).getShields());
 	}
 	
-	/* player3 uses merlins ability in stage 0 when played
+	/* player3 uses merlins ability in stage 0 when played (tries to see non existant stage, then sees stage 1)
 	 */
 	public void testMerlin2() {
 		//set up story deck
@@ -168,6 +168,17 @@ public class MerlinTest extends TestCase {
 		//set up
 		pres.playCard(211, 0);
 		pres.playCard(216, 1);
+		pres.userInput(1);
+		
+		//participation
+		pres.userInput(1);
+		pres.userInput(1);
+		pres.userInput(1);
+		
+		//stage 0
+		pres.userInput(1);
+		pres.playCard(287, -1);
+		pres.userInput(2);
 		pres.userInput(1);
 		game.getcurrentTurn().printHand();
 	}

@@ -20,6 +20,11 @@ public class MerlinState extends PlayerState {
 	}
 
 	public boolean userInput(int input, Player p) {
+		if(input > (p.getQuest().getQuest().getStages()) - 1) {
+			log.info(p.getName()+" tried to view stage "+input+" but the current quest only has "+
+					p.getQuest().getQuest().getStages()+" stages");
+			return true;
+		}
 		if(input > -1) {
 			log.info(p.getName()+" uses merlins ability to see stage "+input);
 			p.getQuest().merlinRevealsStage(input);
