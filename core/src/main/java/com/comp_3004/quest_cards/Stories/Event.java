@@ -2,7 +2,6 @@ package com.comp_3004.quest_cards.Stories;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 

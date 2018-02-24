@@ -45,6 +45,7 @@ public class Player{
 	private Event currentEvent;
 	private Tour currTour;
 	private PlayerState state_;
+	private boolean merlinUsed;
 	private boolean WonGame;
 	
 	// constructor
@@ -59,6 +60,7 @@ public class Player{
 		this.currentEvent = null;
 		this.currTour = null;
 		this.state_ = new NormalState();
+		this.merlinUsed = true;
 		this.WonGame = false;
 	}
 	
@@ -82,6 +84,8 @@ public class Player{
 	public Tour getTour() { return this.currTour; }
 	public boolean getWon() { return this.WonGame; }
 	public void setWon(boolean b) { this.WonGame = b; }
+	public boolean getMerlinUsed() { return this.merlinUsed; }
+	public void setMerlinUsed(boolean b) { this.merlinUsed = b; }
 	public void setState(String s) { 
 		if(s == "normal")
 			state_ = new NormalState();
@@ -103,6 +107,8 @@ public class Player{
 			state_ = new TourPlayState();
 		else if(s == "tourcomp")
 			state_ = new TourComputerState();
+		else if(s == "merlin")
+			state_ = new MerlinState();
 	}
 
 	public String getState() {
@@ -125,6 +131,8 @@ public class Player{
 			state = "playtour";
 		else if(state_ instanceof TourComputerState)
 			state = "tourcomp";
+		else if(state_ instanceof MerlinState)
+			state = "merlin";
 		return state;
 	}
 	

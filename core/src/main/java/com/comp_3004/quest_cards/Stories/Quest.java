@@ -273,8 +273,13 @@ public class Quest {
 	}
 		
 	private void runStage(int stageNum) {
-		for(Player pl : participants)
+		for(Player pl : participants) {
 			pl.setState("playQuest");
+			for(AdventureCard c : pl.getActive()) {
+				if(c.getName() == "Merlin")
+					pl.setState("merlin");
+			}
+		}
 		
 		//reveal if stage contains a foe or a test
 		stageCard =  stages[stageNum].getSponsorCards().get(0);
@@ -286,7 +291,7 @@ public class Quest {
 		while(!participants.contains(players.current()))
 			players.next();
 		
-		//if test - implement later (move on to next stage)
+		//if stage contains a test
 		if(stageCard instanceof TestCard) {
 			log.info("Stage " + stageNum + " contains " + stageCard.getName());
 			if(quest.getName() == "Search for the Questing Beast")
@@ -532,6 +537,15 @@ public class Quest {
 			players.next();
 			runStage(currentStage);
 			return true;
+		}
+	}
+	
+	public void merlinRevealsStage(int stage) {
+		log.info("Stage: ");
+		log.info(String.format("%-15s%-15s%s", "Name", "Battle Points", "ID"));
+		log.info("==================================");
+		for(AdventureCard a : stages[stage].getSponsorCards()) {
+			log.info(a.printCard());
 		}
 	}
 

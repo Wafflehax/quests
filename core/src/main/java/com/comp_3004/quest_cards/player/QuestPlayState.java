@@ -50,6 +50,10 @@ public class QuestPlayState extends PlayerState {
 			p.getHand().remove(c);
 			c.setState(State.STAGE);
 			log.info(p.getName() + " played card " + c.getName());
+			if(c.getName() == "Merlin") {
+				p.setState("merlin");
+				p.setMerlinUsed(false);
+			}
 			return true;
 		}
 		else {
