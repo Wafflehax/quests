@@ -238,6 +238,27 @@
     "Date": "2018-02-21"
   },
   
+  {
+    "ID": "T37",
+    "Description": "PlayerTest->testsheildsToRank",
+    "Status": "F26,F5",
+    "Date": "2018-02-24"
+  },
+  
+   {
+    "ID": "T38",
+    "Description": "AIStrategyTest->testParticipation, testing when Ai strategy 1 participation Tournaments",
+    "Status": "F26",
+    "Date": "2018-02-24"
+  },
+  
+   {
+    "ID": "T39",
+    "Description": "AIStrategyTest->testFour,testThree, testing To decide what to play Strategy 1 Tournaments",
+    "Status": "F26",
+    "Date": "2018-02-24"
+  }
+  
   
   
   
