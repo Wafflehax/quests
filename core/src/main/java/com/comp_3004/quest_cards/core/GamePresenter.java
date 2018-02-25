@@ -134,10 +134,25 @@ public class GamePresenter extends Group {
       drawCards();
     });
     view.displayNextTurnButton(() -> {
-        model.nextPlayer();
-        assignHand();
+
+      view.displayEventAnnouncement(new CardView(sprites.findRegion(Assets.Cards.Story.KINGS_RECOGNITION), 0), res_2 -> {
+      });
+
+      view.displayJoinEventDialog("Event",
+          "Event body",
+          new CardView(sprites.findRegion(Assets.Cards.Tournament.CAMELOT), 0), result -> {
+
+          });
+
+
+
+
+
+      model.nextPlayer();
+      assignHand();
     }, false);
     // });
+
 
     return view;
   }
@@ -253,55 +268,55 @@ public class GamePresenter extends Group {
 
   private void PopulateCardAssetMap() {
     //WEAPONS
-    CardAssetMap.put("Horse", "W_Horse");
-    CardAssetMap.put("Sword", "W_Sword");
-    CardAssetMap.put("Excalibur", "W_Excalibur");
-    CardAssetMap.put("Lance", "W_Lance");
-    CardAssetMap.put("Dagger", "W_Dagger");
-    CardAssetMap.put("Battle-Ax", "W_Battle_ax");
+    CardAssetMap.put("Horse", Assets.Cards.Weapon.HORSE);
+    CardAssetMap.put("Sword", Assets.Cards.Weapon.SWORD);
+    CardAssetMap.put("Excalibur", Assets.Cards.Weapon.EXCALIBUR);
+    CardAssetMap.put("Lance", Assets.Cards.Weapon.LANCE);
+    CardAssetMap.put("Dagger", Assets.Cards.Weapon.DAGGER);
+    CardAssetMap.put("Battle-Ax", Assets.Cards.Weapon.BATTLE_AX);
     //ALLIES
-    CardAssetMap.put("Sir Gawain", "A_Sir_Gawain");
-    CardAssetMap.put("King Pellinore", "A_King_Pellinore");
-    CardAssetMap.put("Sir Percival", "A_Sir_Percival");
-    CardAssetMap.put("Sir Tristan", "A_Sir_Tristan");
-    CardAssetMap.put("King Arthur", "A_King_Arthur");
-    CardAssetMap.put("Queen Guinevere", "A_Queen_Guinevere");
-    CardAssetMap.put("Merlin", "A_Merlin");
-    CardAssetMap.put("Queen Iseult", "A_Queen_Iseult");
-    CardAssetMap.put("Sir Lancelot", "A_Sir_Lancelot");
-    CardAssetMap.put("Sir Galahad", "A_Sir_Galahad");
+    CardAssetMap.put("Sir Gawain", Assets.Cards.Allies.SIR_GAWAIN);
+    CardAssetMap.put("King Pellinore", Assets.Cards.Allies.KING_PELLINORE);
+    CardAssetMap.put("Sir Percival", Assets.Cards.Allies.SIR_PERCIVAL);
+    CardAssetMap.put("Sir Tristan", Assets.Cards.Allies.SIR_TRISTAN);
+    CardAssetMap.put("King Arthur", Assets.Cards.Allies.KING_ARTHUR);
+    CardAssetMap.put("Queen Guinevere", Assets.Cards.Allies.QUEEN_GUINEVERE);
+    CardAssetMap.put("Merlin", Assets.Cards.Allies.MERLIN);
+    CardAssetMap.put("Queen Iseult", Assets.Cards.Allies.QUEEN_ISEULT);
+    CardAssetMap.put("Sir Lancelot", Assets.Cards.Allies.SIR_LANCELOT);
+    CardAssetMap.put("Sir Galahad", Assets.Cards.Allies.SIR_GALAHAD);
     //TESTS
-    CardAssetMap.put("Test of the Questing Beast", "T_Test_of_the_Questing_Beast");
-    CardAssetMap.put("Test of Temptation", "T_Test_of_Temptation");
-    CardAssetMap.put("Test of Valor", "T_Test_of_Valor");
-    CardAssetMap.put("Test of Morgan Le Fey", "T_Test_of_Morgan_Le_Fey");
+    CardAssetMap.put("Test of the Questing Beast", Assets.Cards.Test.TEST_OF_THE_QUESTING_BEAST);
+    CardAssetMap.put("Test of Temptation", Assets.Cards.Test.TEST_OF_TEMPTATION);
+    CardAssetMap.put("Test of Valor", Assets.Cards.Test.TEST_OF_VALOR);
+    CardAssetMap.put("Test of Morgan Le Fey", Assets.Cards.Test.TEST_OF_MORGAN_LE_FEY);
     //FOES
-    CardAssetMap.put("Thieves", "F_Thieves");
-    CardAssetMap.put("Saxon Knight", "F_Saxon_Knight");
-    CardAssetMap.put("Robber Knight", "F_Robber_Knight");
-    CardAssetMap.put("Evil Knight", "F_Evil_Knight");
-    CardAssetMap.put("Saxons", "F_Saxons");
-    CardAssetMap.put("Boar", "F_Boar");
-    CardAssetMap.put("Mordred", "F_Mordred");
-    CardAssetMap.put("Black Knight", "F_Black_Knight");
-    CardAssetMap.put("Giant", "F_Giant");
-    CardAssetMap.put("Green Knight", "F_Green_Knight");
-    CardAssetMap.put("Dragon", "F_Dragon");
+    CardAssetMap.put("Thieves", Assets.Cards.Foe.THIEVES);
+    CardAssetMap.put("Saxon Knight", Assets.Cards.Foe.SAXON_KNIGHT);
+    CardAssetMap.put("Robber Knight", Assets.Cards.Foe.ROBBER_KNIGHT);
+    CardAssetMap.put("Evil Knight", Assets.Cards.Foe.EVIL_KNIGHT);
+    CardAssetMap.put("Saxons", Assets.Cards.Foe.SAXONS);
+    CardAssetMap.put("Boar", Assets.Cards.Foe.BOAR);
+    CardAssetMap.put("Mordred", Assets.Cards.Foe.MORDRED);
+    CardAssetMap.put("Black Knight", Assets.Cards.Foe.BLACK_KNIGHT);
+    CardAssetMap.put("Giant", Assets.Cards.Foe.GIANT);
+    CardAssetMap.put("Green Knight", Assets.Cards.Foe.GREEN_KNIGHT);
+    CardAssetMap.put("Dragon", Assets.Cards.Foe.DRAGON);
     //TOURNEYS
-        /*CardAssetMap.put("Tournament at Camelot","");
-        CardAssetMap.put("Tournament at Orkney","");
-        CardAssetMap.put("Tournament at Tintagel","");
-        CardAssetMap.put("Tournament at York","");*/
+    CardAssetMap.put("Tournament at Camelot", "");
+    CardAssetMap.put("Tournament at Orkney", "");
+    CardAssetMap.put("Tournament at Tintagel", "");
+    CardAssetMap.put("Tournament at York", "");
     //EVENTS
-    CardAssetMap.put("King's Recognition", "E_Kings_Recognition");
-    CardAssetMap.put("Queen's Favor", "E_Queens_Favor");
-    CardAssetMap.put("Court Called to Camelot", "E_Court_Called_Camelot");
-    CardAssetMap.put("Pox", "E_Pox");
-    CardAssetMap.put("Plague", "E_Plague");
-    CardAssetMap.put("Chivalrous Deed", "E_Chivalrous_Deed");
-    CardAssetMap.put("Prosperity Throughout the Realms", "E_Prosperity_Throughout_the_Realm");
-    CardAssetMap.put("King's Call to Arms", "E_Kings_Call_to_Arms");
-    CardAssetMap.put("Amour", "Amour");
+    CardAssetMap.put("King's Recognition", Assets.Cards.Story.KINGS_RECOGNITION);
+    CardAssetMap.put("Queen's Favor", Assets.Cards.Story.QUEENS_FAVOR);
+    CardAssetMap.put("Court Called to Camelot", Assets.Cards.Story.COURT_CALLED_CAMELOT);
+    CardAssetMap.put("Pox", Assets.Cards.Story.POX);
+    CardAssetMap.put("Plague", Assets.Cards.Story.PLAGUE);
+    CardAssetMap.put("Chivalrous Deed", Assets.Cards.Story.CHIVALROUS_DEED);
+    CardAssetMap.put("Prosperity Throughout the Realms", Assets.Cards.Story.PROSPERITY_THROUGHOUT_THE_REALM);
+    CardAssetMap.put("King's Call to Arms", Assets.Cards.Story.KINGS_CALL_TO_ARMS);
+    CardAssetMap.put("Amour", Assets.Cards.Allies.AMOUR);
     //QUESTS
         /*CardAssetMap.put("Search for the Holy Grail","");
         CardAssetMap.put("Test of the Green Knight","");

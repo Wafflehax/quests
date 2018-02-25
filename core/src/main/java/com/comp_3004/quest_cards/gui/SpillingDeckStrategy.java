@@ -26,10 +26,8 @@ public class SpillingDeckStrategy implements DeckView.DisplayStrategy {
     //Remove previous cards
     client.clearChildren();
 
-    System.out.printf("Discard pile x: %f width: %f\n", client.getX(), client.getWidth());
 
     float computedOverlap = computeOverlap(cards[0].getWidth(), cards.length, client.getWidth());
-    System.out.printf("Computed overlap: %f\n", computedOverlap);
     computedOverlap = computedOverlap < minOverlap ? minOverlap : computedOverlap;
     computedOverlap = computedOverlap > maxOverlap ? maxOverlap : computedOverlap;
 
@@ -42,13 +40,12 @@ public class SpillingDeckStrategy implements DeckView.DisplayStrategy {
       float x = i * card.getWidth() * (1 - computedOverlap);
       float y = 0;
 
-     // card.setPosition(x, y);
+      // card.setPosition(x, y);
       card.setDeckY(y);
       card.setDeckX(x);
       card.setDeckZ(i);
       card.setZIndex(i);
 
-      System.out.printf("Placing adventure card at (%f, %f)\n", card.getX(), card.getY());
 
       client.addActor(card);
     }
@@ -56,17 +53,8 @@ public class SpillingDeckStrategy implements DeckView.DisplayStrategy {
 
   private float computeOverlap(float cardWidth, int n, float maxWidth) {
 
-    System.out.printf("CardWidth: %f. Card #: %d. MaxWidth: %f\n", cardWidth, n, maxWidth);
 
     return maxWidth / (cardWidth * n);
-  }
-
-  private static class CardBehavior extends ClickListener{
-
-    @Override
-    public void enter(InputEvent event, float x, float y, int pointer, Actor actor){
-      //actor.;
-    }
   }
 
   public float getMinOverlap() {
@@ -83,5 +71,13 @@ public class SpillingDeckStrategy implements DeckView.DisplayStrategy {
 
   public void setMaxOverlap(float maxOverlap) {
     this.maxOverlap = maxOverlap;
+  }
+
+  private static class CardBehavior extends ClickListener {
+
+    @Override
+    public void enter(InputEvent event, float x, float y, int pointer, Actor actor) {
+      //actor.;
+    }
   }
 }

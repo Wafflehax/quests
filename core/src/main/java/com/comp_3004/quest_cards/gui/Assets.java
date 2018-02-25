@@ -1,12 +1,5 @@
 package com.comp_3004.quest_cards.gui;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import utils.Pair;
-
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.Map;
-
 public class Assets {
 
   public static final String GAME_BACKGROUNDS = "sprites/backgrounds.atlas";
@@ -29,7 +22,7 @@ public class Assets {
     //CardSpawnerMap.
 
     public static class Allies {
-      public static final String AMOUR = "Amour";
+      public static final String AMOUR = "A_Amour";
       public static final String KING_ARTHUR = "A_King_Arthur";
       public static final String KING_PELLINORE = "A_King_Pellinore";
       public static final String MERLIN = "A_Merlin";
@@ -46,7 +39,7 @@ public class Assets {
 
       public static final String CHIVALROUS_DEED = "E_Chivalrous_Deed";
       public static final String COURT_CALLED_CAMELOT = "E_Court_Called_Camelot";
-      public static final String KINGS_CALL_TO_ARMS = "E_Kings_Call_to_Arms";
+      public static final String KINGS_CALL_TO_ARMS = "E_Kings_Call_To_Arms";
       public static final String KINGS_RECOGNITION = "E_Kings_Recognition";
       public static final String PLAGUE = "E_Plague";
       public static final String POX = "E_Pox";
@@ -71,10 +64,30 @@ public class Assets {
     }
 
     public static class Test {
-      public static final String TEST_OF_MORGAN_LE_FEY = "T_Test_of_Morgan_Le_Fey";
-      public static final String TEST_OF_TEMPTATION = "T_Test_of_Temptation";
-      public static final String TEST_OF_THE_QUESTING_BEAST = "T_Test_of_the_Questing_Beast";
-      public static final String TEST_OF_VALOR = "T_Test_of_Valor";
+      public static final String TEST_OF_MORGAN_LE_FEY = "T_Test_Of_Morgan_Le_Fey";
+      public static final String TEST_OF_TEMPTATION = "T_Test_Of_Temptation";
+      public static final String TEST_OF_THE_QUESTING_BEAST = "T_Test_Of_The_Questing_Beast";
+      public static final String TEST_OF_VALOR = "T_Test_Of_Valor";
+    }
+
+    public static class Quest {
+      public static final String BOAR_HUNT = "Q_Boar_Hunt";
+      public static final String DEFEND_THE_QUEENS_HONOR = "Q_Defend_The_Queens_Honor";
+      public static final String JOURNEY_THROUGH_THE_ENCHANTED_FOREST = "Q_Journey_Through_The_Enchanted_Forest";
+      public static final String REPEL_THE_SAXON_RAIDERS = "Q_Repel_The_Saxon_Raiders";
+      public static final String RESCUE_THE_FAIR_MAIDEN = "Q_Rescue_The_Fair_Maiden";
+      public static final String SEARCH_FOR_THE_HOLY_GRAIL = "Q_Search_For_The_Holy_Grail";
+      public static final String SEARCH_FOR_THE_QUESTING_BEAST = "Q_Search_For_The_Questing_Beast";
+      public static final String SLAY_THE_DRAGON = "Q_Slay_The_Dragon";
+      public static final String TEST_OF_THE_GREEN_KNIGHT = "Q_Test_Of_The_Green_Knight";
+      public static final String VANQUISH_KING_ARTHURS_ENEMIES = "Q_Vanquish_King_Arthurs_Enemies";
+    }
+
+    public static class Tournament {
+      public static final String TINTAGEL = "T_Tintagel";
+      public static final String YORK = "T_York";
+      public static final String CAMELOT = "T_Camelot";
+      public static final String ORKNEY = "T_Orkney";
     }
 
     public static class Hero {
@@ -84,7 +97,7 @@ public class Assets {
     }
 
     public static class Weapon {
-      public static final String BATTLE_AX = "W_Battle_ax";
+      public static final String BATTLE_AX = "W_Battle_Ax";
       public static final String DAGGER = "W_Dagger";
       public static final String EXCALIBUR = "W_Excalibur";
       public static final String HORSE = "W_Horse";

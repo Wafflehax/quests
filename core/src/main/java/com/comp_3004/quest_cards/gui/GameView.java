@@ -11,8 +11,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.comp_3004.quest_cards.core.CardViewAccessor;
@@ -25,26 +26,10 @@ import static com.comp_3004.quest_cards.gui.Assets.Strings.Buttons.NEXT_TURN;
 
 public class GameView extends Group {
 
-  public enum PlayerColor {
-    player1(Color.YELLOW),
-    Player2(Color.BLUE),
-    player3(Color.RED),
-    player4(Color.GREEN);
-
-    Color color;
-
-    PlayerColor(Color color) {
-      this.color = color;
-    }
-
-    public Color color() {
-      return color;
-    }
-  }
-
-  //Widgets
 
   public PlayerView playerView;
+
+  //Widgets
   public TweenManager AnimationManager;
   public Image background;
   public Image storyDeck;
@@ -57,14 +42,12 @@ public class GameView extends Group {
   public CardDropZone InPlayCDZ;
   public TextButton nextTurnButton;
   public PlayerStatView[] players;
-
   public LinkedList<CardView> InPlay;
   public LinkedList<CardView> QuestStages;
-
-  public AnnouncementDialog announcementDialog;
-  public BooleanDialog questionDialog;
-
-
+  private AnnouncementDialog announcementDialog;
+  private BooleanDialog questionDialog;
+  private JoinEventDialog joinEventDialog;
+  private EventAnnouncementDialog eventAnnouncementDialog;
   private Skin skin;
   private TextureAtlas sprites;
 
@@ -84,6 +67,8 @@ public class GameView extends Group {
     playerView = new PlayerView();
     announcementDialog = new AnnouncementDialog(skin);
     questionDialog = new BooleanDialog(skin);
+    eventAnnouncementDialog = new EventAnnouncementDialog(skin);
+    joinEventDialog = new JoinEventDialog(skin);
     nextTurnButton = new TextButton(NEXT_TURN, skin);
     players = new PlayerStatView[4];
 
@@ -178,7 +163,6 @@ public class GameView extends Group {
     }
   }
 
-
   public GameView displayHero(TextureRegion hero) {
 
     playerView.displayHero(hero);
@@ -243,16 +227,16 @@ public class GameView extends Group {
     this.adventureDeck.setDrawable(new TextureRegionDrawable(adventureDeck));
   }
 
+  public void discardCard(CardView card) {
+    displayAdventureDiscardPile(card.getPicDisplay());
+    card.remove(); //Removes CardView from its parent
+  }
+
 
   //ADDED METHODS
   //There might be a cleaner way to do this, but this works fairly well
   //The following methods work in conjunction with the CardView class in order to allow the user
   //To represent their different card placements with appropriate visual reactions.
-
-  public void discardCard(CardView card) {
-    displayAdventureDiscardPile(card.getPicDisplay());
-    card.remove(); //Removes CardView from its parent
-  }
 
   public void addToPlay(CardView card) {
     card.clear();//Kill listeners
@@ -356,13 +340,13 @@ public class GameView extends Group {
     SponsorCDZ.setDropZoneBounds(0, 0, 0, 0);
   }
 
-
-  //ENDOF ADDED
-
   public void setBackground(TextureRegion background) {
 
     this.background.setDrawable(new TextureRegionDrawable(background));
   }
+
+
+  //ENDOF ADDED
 
   public void setPlayerViewBackground(TextureRegion background) {
 
@@ -412,11 +396,69 @@ public class GameView extends Group {
     addActor(questionDialog);
   }
 
+  public void displayEventAnnouncement(CardView event, Consumer<Boolean> action) {
+
+    eventAnnouncementDialog.setCardView(event);
+    eventAnnouncementDialog.setActionListener(new ClickListener() {
+
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        action.accept(true);
+        eventAnnouncementDialog.remove();
+      }
+    });
+
+    addActor(eventAnnouncementDialog);
+
+  }
+
+  public void displayJoinEventDialog(String title, String message, CardView cardView, Consumer<Boolean> action) {
+
+    joinEventDialog.setTitle(title);
+    joinEventDialog.setMessage(message);
+    joinEventDialog.setCardView(cardView);
+    joinEventDialog.setActionTrue(new ClickListener() {
+
+      @Override
+      public void clicked(InputEvent e, float x, float y) {
+        action.accept(true);
+        joinEventDialog.remove();
+      }
+    });
+
+    joinEventDialog.setActionFalse(new ClickListener() {
+      @Override
+      public void clicked(InputEvent e, float x, float y) {
+        action.accept(false);
+        joinEventDialog.remove();
+      }
+    });
+
+    addActor(joinEventDialog);
+  }
+
   public void setPlayerShields(int playerNumber, int shields) {
     players[playerNumber].setShields(shields);
   }
 
   public void setPlayerCards(int playerNumber, int cards) {
     players[playerNumber].setCards(cards);
+  }
+
+  public enum PlayerColor {
+    player1(Color.YELLOW),
+    Player2(Color.BLUE),
+    player3(Color.RED),
+    player4(Color.GREEN);
+
+    Color color;
+
+    PlayerColor(Color color) {
+      this.color = color;
+    }
+
+    public Color color() {
+      return color;
+    }
   }
 }

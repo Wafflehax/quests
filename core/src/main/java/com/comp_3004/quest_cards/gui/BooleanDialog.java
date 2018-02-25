@@ -4,8 +4,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class BooleanDialog extends Dialog {
-  Button button_true;
-  Button button_false;
+  TextButton button_true;
+  TextButton button_false;
   Label text;
 
 
