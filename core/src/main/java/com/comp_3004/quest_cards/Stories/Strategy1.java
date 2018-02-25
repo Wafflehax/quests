@@ -87,7 +87,7 @@ public class Strategy1 extends AbstractAI{
 		To decide what to play:
 		If another player who can win/evolve by winning this tournament does participate
 		OR If I can win/evolve myself
-		Then: I play the strongest possible hand!(including amour and allies)
+		Then: I play the strongest possible hand(including amour and allies)
 		Else: I play only weapons I have two or more instances of
 		 */
 		

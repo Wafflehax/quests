@@ -214,6 +214,74 @@ public class AIStrategyTest extends TestCase{
 		assertEquals(true, p1.getHand().size() == 7 + 1); //plus one for Morgan de fay
 	}
 	
-	
+	public void testParticipation() {
+		//test Participation strat 1
+		AdventureDeck ad = new AdventureDeck();
+		String scards[] = {"tintagel"};
+		StoryDeck d = new StoryDeck(scards);
+		int ncards = 0;
+		GameModel m = new GameModel(0, ncards, ad, d); // 0 players 0 cards
+		GamePresenter pres = new GamePresenter(m);
+		
+		
+		Player p0 = new Player("p0");
+		
+		AbstractAI ai = new Strategy1();
+		Player p1 = new Player("p1-ai", ai);
+		ai.setPlayer(p1);
+		
+		m.addPlayer(p0);
+		m.addPlayer(p1);
+		m.beginTurn();
+		
+		//someone else can Rank
+		pres.userInput(1); //p0 participates
+		p0.addShields(4);
+		
+		assertEquals(true, p1.getAI().DoIParticipateInTournament());
+		
+		//I can rank
+		
+		//new game
+		ad = new AdventureDeck();
+		d = new StoryDeck(scards);
+		m = new GameModel(0, ncards, ad, d);
+		pres = new GamePresenter(m);
+		
+		p0 = new Player("p0");
+		ai = new Strategy1();
+		p1 = new Player("p1-ai", ai);
+		ai.setPlayer(p1);
+		m.addPlayer(p0);
+		m.addPlayer(p1);
+		
+		//ai has 3 shields, avail = 1 joiner + 1 bonus
+		p1.addShields(3);
+		
+		m.beginTurn();
+		pres.userInput(1); //p0 participates
+		
+		assertEquals(true, p1.getAI().DoIParticipateInTournament());
+		
+		
+		//No on can rank no participation
+		System.out.println("-------------------------------------------------");
+		ad = new AdventureDeck();
+		d = new StoryDeck(scards);
+		m = new GameModel(0, ncards, ad, d);
+		pres = new GamePresenter(m);
+		
+		p0 = new Player("p0");
+		ai = new Strategy1();
+		p1 = new Player("p1-ai", ai);
+		ai.setPlayer(p1);
+		m.addPlayer(p0);
+		m.addPlayer(p1);
+		
+		m.beginTurn();
+		pres.userInput(1); //p0 participates
+		
+		assertEquals(false, p1.getAI().DoIParticipateInTournament());
+	}
 	
 }
