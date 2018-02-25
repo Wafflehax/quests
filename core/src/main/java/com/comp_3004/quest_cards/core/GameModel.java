@@ -136,6 +136,7 @@ public class GameModel{
 	
 	public void addPlayer(Player p) {
 		players.addPlayer(p);
+		this.numPlayers++;
 	}
 	
 	public boolean playCard(Card c) {
