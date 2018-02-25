@@ -1,0 +1,66 @@
+
+A_Amour
+A_King_Arthur
+A_King_Pellinore
+A_Merlin
+A_Queen_Guinevere
+A_Queen_Iseult
+A_Sir_Galahad
+A_Sir_Gawain
+A_Sir_Lancelot
+A_Sir_Percival
+E_Chivalrous_Deed
+E_Court_Called_To_Camelot
+E_Kings_Call_To_Arms
+E_Kings_Recognition
+E_Pox
+E_Prosperity_Throughout_Realm
+E_Queens_Favor
+F_Black_Knight
+F_Boar
+F_Dragon
+F_Evil_Knight
+F_Giant
+F_Green_Knight
+F_Mordred
+F_Robber_Knight
+F_Saxon_Knight
+F_Saxons
+F_Thieves
+Q_Boar_Hunt
+Q_Defend_The_Queens_Honor
+Q_Journey_Through_The_Enchanted_Forest
+Q_Repel_The_Saxon_Raiders
+Q_Rescue_The_Fair_Maiden
+Q_Search_For_The_Holy_Grail
+Q_Search_For_The_Questing_Beast
+Q_Slay_The_Dragon
+Q_Test_Of_The_Green_Knight
+Q_Vanquish_King_Arthurs_Enemies
+R_Champion_Knight
+R_Knight
+R_Squire
+public static final String CAMELOT = "T_Camelot";
+public static final String ORKNEY = "T_Orkney";
+public static final String TEST_OF_MORGAN_LE_FEY = "T_Test_Of_Morgan_Le_Fey";
+public static final String TEST_OF_THE_QUESTING_BEAST = "T_Test_Of_The_Questing_Beast";
+public static final String TEST_OF_VALOR = "T_Test_Of_Valor";
+public static final String TINTAGEL = "T_Tintagel";
+public static final String YORK = "T_York";
+W_Battle_Ax
+W_Excalibur
+W_Horse
+W_Lance
+W_Sword
+blue
+card_back
+deck_icon
+flag_arrow
+flag_body
+green
+red
+shield
+A_Sir_Tristan
+E_Plague
+public static final String TEST_OF_TEMPTATION = "T_Test_Of_Temptation";
+W_Dagger
