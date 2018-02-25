@@ -88,7 +88,6 @@ public class GameModel{
 		this.advDeck = a;
 		this.storyDeck = s;
 		StoryEv = null;
-		//initSpecialAlly(); 
 		initPlayersStart(numPlayers, c); //c is the number of cards the player will start with
 	}
 	

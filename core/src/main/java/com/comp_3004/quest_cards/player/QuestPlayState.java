@@ -19,6 +19,11 @@ public class QuestPlayState extends PlayerState {
 		if(p.getHand().contains(c)) {
 			//cannot play test or foe cards
 			if((c instanceof TestCard) || (c instanceof FoeCard)) {
+				if(c.getName() == "Mordred") {
+					p.setState("mordred");
+					log.info(p.getName() + " played card " + c.getName());
+					return true;
+				}
 				log.info(p.getName() + " Error: cant play foe or test cards when participating in a quest");
 				return false;
 			}
@@ -50,6 +55,10 @@ public class QuestPlayState extends PlayerState {
 			p.getHand().remove(c);
 			c.setState(State.STAGE);
 			log.info(p.getName() + " played card " + c.getName());
+			if(c.getName() == "Merlin") {
+				p.setState("merlin");
+				p.setMerlinUsed(false);
+			}
 			return true;
 		}
 		else {

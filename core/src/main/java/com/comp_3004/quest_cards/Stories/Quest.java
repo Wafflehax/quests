@@ -2,6 +2,8 @@ package com.comp_3004.quest_cards.Stories;
 
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
@@ -33,7 +35,8 @@ public class Quest {
 	private int numDeclines;
 	private AdventureCard stageCard;
 	private int currentStage;
-	private int currentBid;
+	private LinkedHashMap<Player, Integer> currentBids;
+	private int highestBid;
 	private int minBid;
 	private boolean questComplete;
 
@@ -57,7 +60,9 @@ public class Quest {
 		this.advDeck = d;
 		this.numDeclines = 0;
 		this.currentStage = 0;
-		this.currentBid = 0;
+		this.currentBids = new LinkedHashMap<Player, Integer>();
+		this.highestBid = 0;
+		this.currentBids.put(null, 0);
 		this.minBid = 0;
 		this.questComplete = false;
 		log.info(players.current().getName() + " drew quest " + quest.getName());
@@ -65,12 +70,14 @@ public class Quest {
 	
 	//getters/setters
 	public QuestStage getStage(int i) { return this.stages[i]; }
+	public QuestStage getCurrentStage() { return this.stages[currentStage]; }
 	public QuestCard getQuest() { return this.quest; }
 	public void setSponsor(Player p) { this.sponsor = p; }
 	public Player getSponsor() { return this.sponsor; }
 	public int getNumDeclines() { return this.numDeclines; }
 	public ArrayList<Player> getPlayers() { return this.players.getPlayers(); }
 	public ArrayList<Player> getParticipants() { return this.participants; }
+	public AdventureDeck getAdvDeck() { return this.advDeck; }
 	
 	//methods
 	public void increaseNumDeclines() {
@@ -140,7 +147,7 @@ public class Quest {
 		else {
 			if(c instanceof TestCard) {
 				if(stages[stageNum].addCard(c, quest.getNamedFoe())) {
-						log.info(sponsor.getName()+" played "+c.getName()+" to stage "+stageNum);
+						log.info(sponsor.getName()+" played "+c.getName()+" to stage "+(stageNum+1));
 						cardsUsedToSponsor++;
 						testAdded = true;
 						printStage(stageNum);
@@ -151,7 +158,7 @@ public class Quest {
 			}
 			else {
 				if(stages[stageNum].addCard(c, quest.getNamedFoe())) {
-					log.info(sponsor.getName()+" played "+c.getName()+" to stage "+stageNum);
+					log.info(sponsor.getName()+" played "+c.getName()+" to stage "+(stageNum+1));
 					cardsUsedToSponsor++;
 					printStage(stageNum);
 					return true;
@@ -201,7 +208,7 @@ public class Quest {
 		if(increasingBPs && stagesComplete) {
 			log.info("Quest set up complete.");
 			for(int i=0; i<quest.getStages(); i++) {
-				log.info("Stage "+i+": "+stageBPs[i]+" battlepoints");
+				log.info("Stage "+(i+1)+": "+stageBPs[i]+" battlepoints");
 			}
 			players.next();
 			for(Player p : players.getPlayers()) {
@@ -273,8 +280,13 @@ public class Quest {
 	}
 		
 	private void runStage(int stageNum) {
-		for(Player pl : participants)
+		for(Player pl : participants) {
 			pl.setState("playQuest");
+			for(AdventureCard c : pl.getActive()) {
+				if(c.getName() == "Merlin" && pl.getMerlinUsed() == false)
+					pl.setState("merlin");
+			}
+		}
 		
 		//reveal if stage contains a foe or a test
 		stageCard =  stages[stageNum].getSponsorCards().get(0);
@@ -286,7 +298,7 @@ public class Quest {
 		while(!participants.contains(players.current()))
 			players.next();
 		
-		//if test - implement later (move on to next stage)
+		//if stage contains a test
 		if(stageCard instanceof TestCard) {
 			log.info("Stage " + stageNum + " contains " + stageCard.getName());
 			if(quest.getName() == "Search for the Questing Beast")
@@ -297,11 +309,11 @@ public class Quest {
 				p.setState("bid");
 		}
 		else
-			log.info("Stage " + stageNum + " contains a " + stageCard.getClass().getSimpleName());
+			log.info("Stage " + (stageNum+1) + " contains a " + stageCard.getClass().getSimpleName());
 	}
 	
 	public boolean doneAddingCards() {
-		log.info(players.current().getName()+" is done playing cards for stage "+currentStage);
+		log.info(players.current().getName()+" is done playing cards for stage "+(currentStage+1));
 		if(participants.size() == 1) {
 			players.next();
 			return revealStage(currentStage);
@@ -318,7 +330,7 @@ public class Quest {
 	//reveals to the participants what cards are in the stage and resolves stage
 	public boolean revealStage(int stageNum) {
 		//reveal foe+weapons for stage
-		log.info(sponsor.getName() + " reveals stage " + stageNum);
+		log.info(sponsor.getName() + " reveals stage " + (stageNum+1));
 		printStage(stageNum);
 		
 		//players reveal cards played for stage (cards go from hidden to players active)
@@ -397,6 +409,13 @@ public class Quest {
 		for(Player p : players.getPlayers())
 			p.setState("normal");
 		
+		//reset merlins ability
+		for(Player p : players.getPlayers()) {
+			for(AdventureCard c : p.getActive()) {
+				if(c.getName() == "Merlin")
+					p.setMerlinUsed(false);
+			}
+		}
 		questComplete = true;
 		
 		//check if sponsor has too many cards
@@ -419,7 +438,7 @@ public class Quest {
 	
 	//used to print stage cards to console
 	public void printStage(int i) {
-		log.info("Stage: "+i);
+		log.info("Stage: "+(i+1));
 		log.info(String.format("%-15s%-15s%s", "Name", "Battle Points", "ID"));
 		log.info("==================================");
 		for(AdventureCard card : stages[i].getSponsorCards())
@@ -460,8 +479,10 @@ public class Quest {
 			if(participants.size() == 1) {	//last man standing
 				log.info(participants.get(0).getName()+" wins the bidding war");
 				players.setCurrent(participants.get(0));
-				currentBid -= players.current().getFreeBids();
-				log.info("Cards to discard: "+currentBid);
+				//currentBids.push(currentBids.pop() - players.current().getFreeBids());
+				int curBid = currentBids.get(players.current()) - players.current().getFreeBids();
+				currentBids.put(players.current(), curBid);
+				log.info("Cards to discard: "+currentBids.get(players.current()));
 				
 			}
 			return true;
@@ -478,19 +499,22 @@ public class Quest {
 			log.info("Error "+p.getName()+": must bid at least 3 if they are the only player in the test");
 			return true;
 		}
-		else if(bid > currentBid) {
-			currentBid = bid;
+		else if(bid > highestBid) {
+			highestBid = bid;
+			currentBids.put(players.current(), bid);
 			log.info(p.getName()+" bid successful");
 			if(participants.size() == 1) {	//last man standing
 				log.info(participants.get(0).getName()+" wins the bidding war");
 				players.setCurrent(participants.get(0));
-				currentBid -= players.current().getFreeBids();
-				log.info("Cards to discard: "+currentBid);
+				//currentBids.push(currentBids.pop() - players.current().getFreeBids());
+				int curBid = currentBids.get(players.current()) - players.current().getFreeBids();
+				currentBids.put(players.current(), curBid);
+				log.info("Cards to discard: "+currentBids.get(players.current()));
 				return true;
 			}
-			if(players.peekNext() == sponsor)
-				players.next();
 			players.next();
+			while(!participants.contains(players.current()))
+				players.next();
 			return true;
 		}
 		else {
@@ -500,9 +524,9 @@ public class Quest {
 	}
 	
 	public boolean discardedACard() {
-		currentBid--;
-		log.info(currentBid+" cards left to discard");
-		if(currentBid == 0) {
+		currentBids.put(players.current(), currentBids.get(players.current()) - 1);
+		log.info(currentBids.get(players.current())+" cards left to discard");
+		if(currentBids.get(players.current()) == 0) {
 			for(Player p : players.getPlayers()) {
 				if(p != sponsor)
 					p.setState("playQuest");
@@ -533,6 +557,58 @@ public class Quest {
 			runStage(currentStage);
 			return true;
 		}
+	}
+	
+	public void merlinRevealsStage(int stage) {
+		log.info("Stage: ");
+		log.info(String.format("%-15s%-15s%s", "Name", "Battle Points", "ID"));
+		log.info("==================================");
+		for(AdventureCard a : stages[stage].getSponsorCards()) {
+			log.info(a.printCard());
+		}
+	}
+	
+	public void checkBidStack() {
+		log.info("Checking participants latest bids for invalid bids");
+		Player currentTurn = players.current();
+		//iterate through players, check for invalid bids
+		for(int i=0; i<players.size(); i++) {
+			players.next();
+			if(!participants.contains(players.current())) {		//skips any players not currently participating
+				continue;
+			}
+			int lastBid;
+			if(currentBids.containsKey(players.current()))
+				lastBid = currentBids.get(players.current());
+			else
+				lastBid = 0;
+			int highestBidAllowed = players.current().getFreeBids()+players.current().getHand().size();
+			if(lastBid > highestBidAllowed) {
+				log.info(players.current().getName()+"'s bid of "+lastBid+" is no longer valid.");
+				currentBids.put(players.current(), 0);
+				int newHighestBid = 0;
+				for(Player p : participants) {
+					if(currentBids.containsKey(p) && currentBids.get(p) > newHighestBid) {
+						log.info(p.getName()+" has the new highest bid: "+currentBids.get(p));
+						newHighestBid = currentBids.get(p);
+					}
+				}
+				highestBid = newHighestBid;
+				log.info("Highest bid is now "+highestBid);
+				break;
+			}
+		}
+
+		if(currentBids.containsKey(currentTurn) && currentBids.get(currentTurn) == highestBid) {
+			log.info("Since "+currentTurn.getName()+"'s bid is the current highest, they do not need to bid again");
+			players.setCurrent(currentTurn);
+			players.next();
+			while(!participants.contains(players.current())) {
+				players.next();
+			}
+		}
+		else if(!currentBids.containsKey(currentTurn))
+			players.setCurrent(currentTurn);
 	}
 
 }

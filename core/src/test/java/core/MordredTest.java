@@ -1,0 +1,468 @@
+package core;
+
+import org.apache.log4j.Logger;
+
+import com.comp_3004.quest_cards.cards.AdventureDeck;
+import com.comp_3004.quest_cards.cards.AllyCard;
+import com.comp_3004.quest_cards.cards.StoryDeck;
+import com.comp_3004.quest_cards.core.GameModel;
+import com.comp_3004.quest_cards.core.GamePresenter;
+
+import junit.framework.TestCase;
+
+public class MordredTest extends TestCase {
+
+	static Logger log = Logger.getLogger(MordredTest.class); //log4j logger
+	
+	//p1 uses mordred as foe in quest set up
+	public void testMordred1() {
+		//set up story deck
+		StoryDeck storyDeck = new StoryDeck();
+		storyDeck.setTopCard("Boar Hunt");
+		
+		//set up adventure deck 
+		AdventureDeck advDeck = new AdventureDeck();
+		
+		GameModel game;
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		game.initSpecialAlly();
+		GamePresenter pres = new GamePresenter(game);
+		assertEquals(125, advDeck.getDeck().size());
+		
+		//set up hands
+		game.getPlayerAtIndex(0).pickCard("Mordred", advDeck); 
+		game.getPlayerAtIndex(0).pickCard("Boar", advDeck);
+		game.getPlayerAtIndex(0).pickCard("Sword", advDeck);
+
+		game.getPlayerAtIndex(1).pickCard("Dagger", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Thieves", advDeck); 
+		game.getPlayerAtIndex(1).pickCard("Giant", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Merlin", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Sir Tristan", advDeck);	
+
+		game.getPlayerAtIndex(2).pickCard("Thieves", advDeck); 
+		game.getPlayerAtIndex(2).pickCard("Horse", advDeck);
+		game.getPlayerAtIndex(2).pickCard("Excalibur", advDeck);
+		game.getPlayerAtIndex(2).pickCard("Amour", advDeck);
+		game.getPlayerAtIndex(2).pickCard("Battle-Ax", advDeck);
+		game.getPlayerAtIndex(2).pickCard("Green Knight", advDeck);	
+
+		game.getPlayerAtIndex(3).pickCard("Thieves", advDeck); 
+		game.getPlayerAtIndex(3).pickCard("Battle-Ax", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Lance", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Thieves", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Horse", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Dagger", advDeck);
+		
+		game.getAdvDeck().shuffle();
+		pres.getModel().beginTurn();
+		
+		//sponsorship
+		pres.userInput(1);
+		
+		//set up
+		pres.playCard(63, 0);
+		pres.playCard(64, 1);
+		pres.userInput(1);
+		
+		//participation
+		pres.userInput(1);
+		pres.userInput(1);
+		pres.userInput(1);
+		
+		//stage 0
+		pres.playCard(109, -1);
+		pres.userInput(1);
+		pres.playCard(138, -1);
+		pres.userInput(1);
+		pres.playCard(121, -1);
+		pres.userInput(1);
+		
+		//stage 1
+		pres.playCard(106, -1);
+		pres.userInput(1);
+		pres.playCard(108, -1);
+		pres.userInput(1);
+		
+		assertEquals("Player 2", game.getcurrentTurn().getName());
+		assertEquals(7, game.getAdvDeck().getDiscard().size());
+		assertEquals(0, game.getPlayerAtIndex(0).getShields());
+		assertEquals(0, game.getPlayerAtIndex(1).getShields());
+		assertEquals(2, game.getPlayerAtIndex(2).getShields());
+		assertEquals(0, game.getPlayerAtIndex(3).getShields());
+	}
+	
+	//p1 uses mordred to kill p2's tristan during second stage preventing p2 from completing quest
+	public void testMordred2() {
+		//set up story deck
+		StoryDeck storyDeck = new StoryDeck();
+		storyDeck.setTopCard("Boar Hunt");
+		
+		//set up adventure deck 
+		AdventureDeck advDeck = new AdventureDeck();
+		
+		GameModel game;
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		game.initSpecialAlly();
+		GamePresenter pres = new GamePresenter(game);
+		assertEquals(125, advDeck.getDeck().size());
+		
+		//set up hands
+		game.getPlayerAtIndex(0).pickCard("Mordred", advDeck); 
+		game.getPlayerAtIndex(0).pickCard("Boar", advDeck);
+		game.getPlayerAtIndex(0).pickCard("Sword", advDeck);
+
+		game.getPlayerAtIndex(1).pickCard("Dagger", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Thieves", advDeck); 
+		game.getPlayerAtIndex(1).pickCard("Giant", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Queen Iseult", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Sir Tristan", advDeck);	
+
+		game.getPlayerAtIndex(2).pickCard("Thieves", advDeck); 
+		game.getPlayerAtIndex(2).pickCard("Horse", advDeck);
+		game.getPlayerAtIndex(2).pickCard("Excalibur", advDeck);
+		game.getPlayerAtIndex(2).pickCard("Amour", advDeck);
+		game.getPlayerAtIndex(2).pickCard("Battle-Ax", advDeck);
+		game.getPlayerAtIndex(2).pickCard("Green Knight", advDeck);	
+
+		game.getPlayerAtIndex(3).pickCard("Thieves", advDeck); 
+		game.getPlayerAtIndex(3).pickCard("Battle-Ax", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Lance", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Thieves", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Horse", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Dagger", advDeck);
+		
+		game.getAdvDeck().shuffle();
+		pres.getModel().beginTurn();
+		
+		//sponsorship
+		pres.userInput(0);
+		pres.userInput(0);
+		pres.userInput(1);
+		
+		//set up
+		pres.playCard(184, 0);
+		pres.playCard(228, 1);
+		pres.userInput(1);
+		
+		//participation
+		pres.userInput(1);
+		pres.userInput(1);
+		pres.userInput(1);
+		
+		//stage 0
+		pres.playCard(274, -1);
+		pres.userInput(1);
+		pres.playCard(243, -1);
+		pres.userInput(1);
+		pres.playCard(284, -1);
+		pres.playCard(288, -1);
+		pres.userInput(1);
+		
+		//stage 1
+		pres.playCard(261, -1);
+		pres.userInput(1);
+		pres.playCard(217, -1);
+		pres.userInput(284);
+		assertEquals("Sir Tristan", game.getAdvDeck().getDiscard().get(2).getName());
+		assertEquals("Mordred", game.getAdvDeck().getDiscard().get(3).getName());
+		assertEquals(1, game.getPlayerAtIndex(1).getActive().size());
+		pres.userInput(1);
+		pres.playCard(262, -1);
+		pres.userInput(1);
+		
+		assertEquals("Player 2", game.getcurrentTurn().getName());
+		assertEquals(8, game.getAdvDeck().getDiscard().size());
+		assertEquals(0, game.getPlayerAtIndex(0).getShields());
+		assertEquals(0, game.getPlayerAtIndex(1).getShields());
+		assertEquals(0, game.getPlayerAtIndex(2).getShields());
+		assertEquals(2, game.getPlayerAtIndex(3).getShields());
+		
+		
+	}
+	
+	//p1 uses mordred to kill p2's ally providing free bids during test to invalidate players last bid
+	//p1 becomes current highest bidder and does not need to bid again
+	public void testMordred3() {
+		//set up story deck
+		StoryDeck storyDeck = new StoryDeck();
+		storyDeck.setTopCard("Boar Hunt");
+		
+		//set up adventure deck 
+		AdventureDeck advDeck = new AdventureDeck();
+		
+		GameModel game;
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		game.initSpecialAlly();
+		GamePresenter pres = new GamePresenter(game);
+		assertEquals(125, advDeck.getDeck().size());
+		
+		//set up hands
+		game.getPlayerAtIndex(0).pickCard("Mordred", advDeck); 
+		game.getPlayerAtIndex(0).pickCard("Boar", advDeck);
+		game.getPlayerAtIndex(0).pickCard("Sword", advDeck);
+
+		game.getPlayerAtIndex(1).pickCard("Dagger", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Thieves", advDeck); 
+		game.getPlayerAtIndex(1).pickCard("Giant", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Queen Iseult", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Sir Tristan", advDeck);	
+
+		game.getPlayerAtIndex(2).pickCard("Thieves", advDeck); 
+		game.getPlayerAtIndex(2).pickCard("Horse", advDeck);
+		game.getPlayerAtIndex(2).pickCard("Excalibur", advDeck);
+		game.getPlayerAtIndex(2).pickCard("Amour", advDeck);
+		game.getPlayerAtIndex(2).pickCard("Battle-Ax", advDeck);
+		game.getPlayerAtIndex(2).pickCard("Test of Valor", advDeck);	
+
+		game.getPlayerAtIndex(3).pickCard("Thieves", advDeck); 
+		game.getPlayerAtIndex(3).pickCard("Battle-Ax", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Lance", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Thieves", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Horse", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Dagger", advDeck);
+		
+		game.getAdvDeck().shuffle();
+		pres.getModel().beginTurn();
+		
+		//sponsorship
+		pres.userInput(0);
+		pres.userInput(0);
+		pres.userInput(1);
+		
+		//set up
+		pres.playCard(337, 0);
+		pres.playCard(454, 1);
+		pres.userInput(1);
+		
+		//participation
+		pres.userInput(1);
+		pres.userInput(1);
+		pres.userInput(1);
+		
+		//stage 0
+		pres.userInput(1);
+		pres.userInput(1);
+		pres.playCard(437, -1);
+		pres.playCard(441, -1);
+		System.out.println(game.getcurrentTurn().getStage().get(0).getName());
+		System.out.println(game.getcurrentTurn().getStage().get(0).getBattlePts());
+		System.out.println(game.getcurrentTurn().getStage().get(1).getName());
+		System.out.println(((AllyCard)game.getcurrentTurn().getStage().get(1)).getBids());
+		pres.userInput(1);
+		
+		//stage 1
+		pres.userInput(1);
+		pres.userInput(2);
+		pres.userInput(7); 	//p2 bids 7 (5 + 2 free)
+		pres.userInput(-1);	//p4 drops out
+		pres.playCard(370, -1);
+		pres.userInput(441);
+		pres.userInput(5);
+		pres.userInput(-1);
+		
+		//player 2 discards 5 cards
+		for(int i=0; i<5; i++) {
+			pres.discardCard(game.getcurrentTurn().getHand().get(0).getID());
+		}
+		
+		assertEquals("Player 2", game.getcurrentTurn().getName());
+		assertEquals(9, game.getAdvDeck().getDiscard().size());
+		assertEquals(0, game.getPlayerAtIndex(0).getShields());
+		assertEquals(2, game.getPlayerAtIndex(1).getShields());
+		assertEquals(0, game.getPlayerAtIndex(2).getShields());
+		assertEquals(0, game.getPlayerAtIndex(3).getShields());
+		assertEquals(4, game.getPlayerAtIndex(0).getHand().size());
+		assertEquals(0, game.getPlayerAtIndex(1).getHand().size());
+		assertEquals(8, game.getPlayerAtIndex(2).getHand().size());
+		assertEquals(8, game.getPlayerAtIndex(3).getHand().size());
+	}
+	
+	//p4 uses mordered to kill iseult, but does not invalidate any previous bids
+	//p4 cannot bid enough and drops out
+	public void testMordred4() {
+		//set up story deck
+		StoryDeck storyDeck = new StoryDeck();
+		storyDeck.setTopCard("Boar Hunt");
+		
+		//set up adventure deck 
+		AdventureDeck advDeck = new AdventureDeck();
+		
+		GameModel game;
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		game.initSpecialAlly();
+		GamePresenter pres = new GamePresenter(game);
+		assertEquals(125, advDeck.getDeck().size());
+		
+		//set up hands
+		game.getPlayerAtIndex(0).pickCard("Boar", advDeck); 
+		game.getPlayerAtIndex(0).pickCard("Horse", advDeck);
+		game.getPlayerAtIndex(0).pickCard("Excalibur", advDeck);
+		game.getPlayerAtIndex(0).pickCard("Amour", advDeck);
+		game.getPlayerAtIndex(0).pickCard("Battle-Ax", advDeck);
+		game.getPlayerAtIndex(0).pickCard("Test of Valor", advDeck);
+		
+		game.getPlayerAtIndex(1).pickCard("Thieves", advDeck); 
+		game.getPlayerAtIndex(1).pickCard("Battle-Ax", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Lance", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Thieves", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Horse", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Queen Iseult", advDeck);	
+		
+		game.getPlayerAtIndex(2).pickCard("Dagger", advDeck);
+		game.getPlayerAtIndex(2).pickCard("Thieves", advDeck); 
+		game.getPlayerAtIndex(2).pickCard("Giant", advDeck);
+		game.getPlayerAtIndex(2).pickCard("Sword", advDeck);
+		game.getPlayerAtIndex(2).pickCard("Sir Tristan", advDeck);
+
+		game.getPlayerAtIndex(3).pickCard("Mordred", advDeck); 
+		game.getPlayerAtIndex(3).pickCard("Boar", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Sword", advDeck);
+		
+		game.getAdvDeck().shuffle();
+		pres.getModel().beginTurn();
+		
+		//sponsorship
+		pres.userInput(1);
+		
+		//set up
+		pres.playCard(522, 0);
+		pres.playCard(607, 1);
+		pres.userInput(1);
+		
+		//participation
+		pres.userInput(1);
+		pres.userInput(1);
+		pres.userInput(1);
+		
+		//stage 0
+		pres.playCard(594, -1);
+		pres.playCard(567, -1);
+		pres.userInput(1);
+		pres.playCard(590, -1);
+		pres.userInput(1);
+		pres.playCard(550, -1);
+		pres.userInput(1);
+		
+		
+		//stage 1
+		pres.userInput(5);
+		pres.userInput(6);
+		pres.playCard(523, -1);
+		pres.userInput(594);
+		pres.userInput(-1);
+		pres.userInput(-1);
+		
+		//player 3 discards 5 cards
+		for(int i=0; i<6; i++) {
+			pres.discardCard(game.getcurrentTurn().getHand().get(0).getID());
+		}
+		
+		assertEquals("Player 2", game.getcurrentTurn().getName());
+		assertEquals(12, game.getAdvDeck().getDiscard().size());
+		assertEquals(0, game.getPlayerAtIndex(0).getShields());
+		assertEquals(0, game.getPlayerAtIndex(1).getShields());
+		assertEquals(2, game.getPlayerAtIndex(2).getShields());
+		assertEquals(0, game.getPlayerAtIndex(3).getShields());
+		assertEquals(8, game.getPlayerAtIndex(0).getHand().size());
+		assertEquals(6, game.getPlayerAtIndex(1).getHand().size());
+		assertEquals(0, game.getPlayerAtIndex(2).getHand().size());
+		assertEquals(3, game.getPlayerAtIndex(3).getHand().size());
+	}
+	
+	//mordred kills iseult invalidating bid but not resetting highest bid
+	public void testMordred5() {
+		//set up story deck
+		StoryDeck storyDeck = new StoryDeck();
+		storyDeck.setTopCard("Boar Hunt");
+		
+		//set up adventure deck 
+		AdventureDeck advDeck = new AdventureDeck();
+		
+		GameModel game;
+		game = new GameModel(4, 0, advDeck, storyDeck);
+		game.initSpecialAlly();
+		GamePresenter pres = new GamePresenter(game);
+		assertEquals(125, advDeck.getDeck().size());
+		
+		//set up hands
+		game.getPlayerAtIndex(0).pickCard("Boar", advDeck); 
+		game.getPlayerAtIndex(0).pickCard("Horse", advDeck);
+		game.getPlayerAtIndex(0).pickCard("Lance", advDeck);
+		game.getPlayerAtIndex(0).pickCard("Amour", advDeck);
+		game.getPlayerAtIndex(0).pickCard("Battle-Ax", advDeck);
+		game.getPlayerAtIndex(0).pickCard("Test of Morgan Le Fey", advDeck);
+		 
+		game.getPlayerAtIndex(1).pickCard("Excalibur", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Dagger", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Queen Iseult", advDeck);	
+		
+		game.getPlayerAtIndex(2).pickCard("Dagger", advDeck);
+		game.getPlayerAtIndex(2).pickCard("Thieves", advDeck); 
+		game.getPlayerAtIndex(2).pickCard("Boar", advDeck);
+		game.getPlayerAtIndex(2).pickCard("Sword", advDeck);
+		game.getPlayerAtIndex(2).pickCard("Sir Tristan", advDeck);
+
+		game.getPlayerAtIndex(3).pickCard("Mordred", advDeck); 
+		game.getPlayerAtIndex(3).pickCard("Boar", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Sword", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Amour", advDeck);
+		game.getPlayerAtIndex(3).pickCard("King Arthur", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Lance", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Thieves", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Dagger", advDeck);
+		
+		game.getAdvDeck().shuffle();
+		pres.getModel().beginTurn();
+		
+		//sponsorship
+		pres.userInput(1);
+		
+		//set up
+		pres.playCard(675, 0);
+		pres.playCard(761, 1);
+		pres.userInput(1);
+		
+		//participation
+		pres.userInput(1);
+		pres.userInput(1);
+		pres.userInput(1);
+		
+		//stage 0
+		pres.playCard(718, -1);
+		pres.playCard(747, -1);
+		pres.playCard(721, -1);
+		pres.userInput(1);
+		pres.playCard(743, -1);
+		pres.userInput(1);
+		pres.playCard(744, -1);
+		pres.playCard(703, -1);
+		pres.playCard(722, -1);
+		pres.userInput(1);
+		
+		//stage 1
+		pres.userInput(5);
+		pres.userInput(6);
+		pres.playCard(676, -1);
+		pres.userInput(747);
+		pres.userInput(7);
+		pres.userInput(-1);
+		pres.userInput(-1);
+		
+		//player 4 discards 6 cards
+		for(int i=0; i<6; i++) {
+			pres.discardCard(game.getcurrentTurn().getHand().get(0).getID());
+		}
+		
+		assertEquals("Player 2", game.getcurrentTurn().getName());
+		assertEquals(14, game.getAdvDeck().getDiscard().size());
+		assertEquals(0, game.getPlayerAtIndex(0).getShields());
+		assertEquals(0, game.getPlayerAtIndex(1).getShields());
+		assertEquals(0, game.getPlayerAtIndex(2).getShields());
+		assertEquals(2, game.getPlayerAtIndex(3).getShields());
+		assertEquals(8, game.getPlayerAtIndex(0).getHand().size());
+		assertEquals(1, game.getPlayerAtIndex(1).getHand().size());
+		assertEquals(6, game.getPlayerAtIndex(2).getHand().size());
+		assertEquals(1, game.getPlayerAtIndex(3).getHand().size());
+	}
+}

@@ -46,6 +46,7 @@ public class Player{
 	private Event currentEvent;
 	private Tour currTour;
 	private PlayerState state_;
+	private boolean merlinUsed;
 	private boolean WonGame;
 	private boolean aiPlayer;
 	private AbstractAI ai;
@@ -62,6 +63,7 @@ public class Player{
 		this.currentEvent = null;
 		this.currTour = null;
 		this.state_ = new NormalState();
+		this.merlinUsed = true;
 		this.WonGame = false;
 	}
 	
@@ -104,6 +106,9 @@ public class Player{
 	public void setWon(boolean b) { this.WonGame = b; }
 	public boolean isAi() { return this.aiPlayer; }
 	public AbstractAI getAI() { return this.ai; }
+	public boolean getMerlinUsed() { return this.merlinUsed; }
+	public void setMerlinUsed(boolean b) { this.merlinUsed = b; }
+
 	public void setState(String s) { 
 		if(s == "normal")
 			state_ = new NormalState();
@@ -125,6 +130,10 @@ public class Player{
 			state_ = new TourPlayState();
 		else if(s == "tourcomp")
 			state_ = new TourComputerState();
+		else if(s == "merlin")
+			state_ = new MerlinState();
+		else if(s == "mordred")
+			state_ = new MordredState();
 	}
 
 	public String getState() {
@@ -137,6 +146,8 @@ public class Player{
 			state = "questParticipant";
 		else if(state_ instanceof QuestPlayState)
 			state = "playQuest";
+		else if(state_ instanceof BidState)
+			state = "bid";
 		else if(state_ instanceof TooManyCardsState)
 			state = "tooManyCards";
 		else if(state_ instanceof EventState)
@@ -147,6 +158,10 @@ public class Player{
 			state = "playtour";
 		else if(state_ instanceof TourComputerState)
 			state = "tourcomp";
+		else if(state_ instanceof MerlinState)
+			state = "merlin";
+		else if(state_ instanceof MordredState)
+			state = "mordred";
 		return state;
 	}
 	
