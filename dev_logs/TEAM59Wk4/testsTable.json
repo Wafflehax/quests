@@ -245,16 +245,16 @@
     "Date": "2018-02-24"
   },
   
-  {
+   {
     "ID": "T38",
-    "Description": "AIStrategyTest->TestThree, testing strategy 1 on tournaments, test ai player plays weapons it has two or more instances of",
+    "Description": "AIStrategyTest->testParticipation, testing when Ai strategy 1 participation Tournaments",
     "Status": "F26",
     "Date": "2018-02-24"
   },
   
    {
     "ID": "T39",
-    "Description": "AIStrategyTest->testParticipation, testing when Ai strategy 1 participates",
+    "Description": "AIStrategyTest->testFour,testThree, testing To decide what to play Strategy 1 Tournaments",
     "Status": "F26",
     "Date": "2018-02-24"
   }

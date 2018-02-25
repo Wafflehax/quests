@@ -167,7 +167,14 @@ public class AIStrategyTest extends TestCase{
 	
 	public void testThree() {
 		//testing strategy 1 on tournaments
-		//test p1 ai plays only weapons it has two or more instances of(weak play)
+		/* 
+		If another player who can win/evolve by winning this tournament does participate
+		OR If I can win/evolve myself
+		Then: I play the strongest possible hand(including amour and allies)
+		----->testting this->Else: I play only weapons I have two or more instances of
+		 */ 
+		
+		//testing I play only weapons I have two or more instances of
 		AdventureDeck ad = new AdventureDeck();
 		String scards[] = {"tintagel"};
 		StoryDeck d = new StoryDeck(scards);
@@ -213,6 +220,83 @@ public class AIStrategyTest extends TestCase{
 		p1.printHand();
 		assertEquals(true, p1.getHand().size() == 7 + 1); //plus one for Morgan de fay
 	}
+
+	public void testFour() {
+		//testing strategy 1 on tournaments
+		/*
+		If another player who can win/evolve by winning this tournament does participate
+		OR If I can win/evolve myself
+		Then: I play the strongest possible hand(including amour and allies)
+		 */
+		
+		AdventureDeck ad = new AdventureDeck();
+		String scards[] = {"tintagel"};
+		StoryDeck d = new StoryDeck(scards);
+		int ncards = 0;
+		GameModel m = new GameModel(0, ncards, ad, d); // 0 players 0 cards
+		GamePresenter pres = new GamePresenter(m);
+		
+		Player p0 = new Player("p0");
+		p0.addShields(3);
+		
+		AbstractAI ai = new Strategy1();
+		Player p1 = new Player("p1-ai", ai);
+		ai.setPlayer(p1);
+		String cards[] = {"amour","amour","amour","sword","sword","sword","dagger","dagger","lance", "horse"};
+		p1.setHand(cards);
+		
+		m.addPlayer(p0);
+		m.addPlayer(p1);
+		
+		//test If another player who can win/evolve by winning this tournament does participate
+		//Then: I play the strongest possible hand(including amour and allies)
+		
+		m.beginTurn();
+		
+		//p0 participates
+		p0.userInput(1);
+		
+		//p0 turn
+		pres.userInput(1);//done turn
+		
+		//strong play
+		assertEquals(6, p1.getHand().size()); //didn't play added card test of valor from joining tournament, deck was not shuffled
+		p1.printHand();
+		//other play would have played 3 cards. 8 left over
+		
+		
+		// test If I can win/evolve myself
+		//Then: I play the strongest possible hand(including amour and allies)
+		
+		//new game
+		ad = new AdventureDeck();
+		d = new StoryDeck(scards);
+		m = new GameModel(0, ncards, ad, d);
+		pres = new GamePresenter(m);
+		
+		p0 = new Player("p0");
+		ai = new Strategy1();
+		p1 = new Player("p1-ai", ai);
+		ai.setPlayer(p1);
+		m.addPlayer(p0);
+		m.addPlayer(p1);
+		
+		p1.setHand(cards);
+		m.beginTurn();
+		p1.addShields(3);
+		
+		//p0 participates
+		pres.userInput(1);
+		
+		//p0 turn
+		pres.userInput(1);//done turn
+		
+		//strong play
+		assertEquals(6, p1.getHand().size()); //didn't play added card test of valor from joining tournament, deck was not shuffled
+		p1.printHand();
+		
+		
+	} 
 	
 	public void testParticipation() {
 		//test Participation strat 1

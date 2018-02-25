@@ -256,7 +256,7 @@ public class Player{
 		playerHandCards.add(card);
 		card.setOwner(this);
 		card.setState(State.HAND);		
-		log.info("Forced player:" + name + " to draw card from adventure deck");
+		log.info("Forced player:" + name + " to draw card: " + card.getName() + " from adventure deck");
 	}
 	
 	public boolean tooManyHandCards() {
