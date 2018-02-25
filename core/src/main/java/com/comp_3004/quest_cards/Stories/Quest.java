@@ -2,6 +2,8 @@ package com.comp_3004.quest_cards.Stories;
 
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
@@ -33,7 +35,8 @@ public class Quest {
 	private int numDeclines;
 	private AdventureCard stageCard;
 	private int currentStage;
-	private int currentBid;
+	private LinkedHashMap<Player, Integer> currentBids;
+	private int highestBid;
 	private int minBid;
 	private boolean questComplete;
 
@@ -57,7 +60,9 @@ public class Quest {
 		this.advDeck = d;
 		this.numDeclines = 0;
 		this.currentStage = 0;
-		this.currentBid = 0;
+		this.currentBids = new LinkedHashMap<Player, Integer>();
+		this.highestBid = 0;
+		this.currentBids.put(null, 0);
 		this.minBid = 0;
 		this.questComplete = false;
 		log.info(players.current().getName() + " drew quest " + quest.getName());
@@ -474,8 +479,10 @@ public class Quest {
 			if(participants.size() == 1) {	//last man standing
 				log.info(participants.get(0).getName()+" wins the bidding war");
 				players.setCurrent(participants.get(0));
-				currentBid -= players.current().getFreeBids();
-				log.info("Cards to discard: "+currentBid);
+				//currentBids.push(currentBids.pop() - players.current().getFreeBids());
+				int curBid = currentBids.get(players.current()) - players.current().getFreeBids();
+				currentBids.put(players.current(), curBid);
+				log.info("Cards to discard: "+currentBids.get(players.current()));
 				
 			}
 			return true;
@@ -492,14 +499,17 @@ public class Quest {
 			log.info("Error "+p.getName()+": must bid at least 3 if they are the only player in the test");
 			return true;
 		}
-		else if(bid > currentBid) {
-			currentBid = bid;
+		else if(bid > highestBid) {
+			highestBid = bid;
+			currentBids.put(players.current(), bid);
 			log.info(p.getName()+" bid successful");
 			if(participants.size() == 1) {	//last man standing
 				log.info(participants.get(0).getName()+" wins the bidding war");
 				players.setCurrent(participants.get(0));
-				currentBid -= players.current().getFreeBids();
-				log.info("Cards to discard: "+currentBid);
+				//currentBids.push(currentBids.pop() - players.current().getFreeBids());
+				int curBid = currentBids.get(players.current()) - players.current().getFreeBids();
+				currentBids.put(players.current(), curBid);
+				log.info("Cards to discard: "+currentBids.get(players.current()));
 				return true;
 			}
 			if(players.peekNext() == sponsor)
@@ -514,9 +524,9 @@ public class Quest {
 	}
 	
 	public boolean discardedACard() {
-		currentBid--;
-		log.info(currentBid+" cards left to discard");
-		if(currentBid == 0) {
+		currentBids.put(players.current(), currentBids.get(players.current()) - 1);
+		log.info(currentBids.get(players.current())+" cards left to discard");
+		if(currentBids.get(players.current()) == 0) {
 			for(Player p : players.getPlayers()) {
 				if(p != sponsor)
 					p.setState("playQuest");
@@ -556,6 +566,11 @@ public class Quest {
 		for(AdventureCard a : stages[stage].getSponsorCards()) {
 			log.info(a.printCard());
 		}
+	}
+	
+	public void checkBidStack() {
+		System.out.println("Checking bids");
+		System.out.println(currentBids.get(players.current()));
 	}
 
 }

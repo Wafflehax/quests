@@ -49,6 +49,7 @@ public class MordredState extends PlayerState {
 					//reset players state
 					if(p.getQuest().getCurrentStage().getSponsorCards().get(0) instanceof TestCard) {
 						p.setState("bid");
+						p.getQuest().checkBidStack();
 					}
 					else
 						p.setState("playQuest");

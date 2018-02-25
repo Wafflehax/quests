@@ -250,9 +250,9 @@ public class MordredTest extends TestCase {
 		pres.playCard(370, -1);
 		pres.userInput(441);
 		
-		System.out.println(game.getcurrentTurn().getFreeBids());
-		System.out.println(game.getcurrentTurn().getState());
-		game.getcurrentTurn().printHand();
+		//System.out.println(game.getcurrentTurn().getFreeBids());
+		//System.out.println(game.getcurrentTurn().getState());
+		//game.getcurrentTurn().printHand();
 		
 		
 	}
