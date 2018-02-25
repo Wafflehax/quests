@@ -25,7 +25,7 @@ public class GamePresenter extends Group {
   static Logger log = Logger.getLogger(GamePresenter.class); //log4j logger
   private final GameView view;
   public Map<String, String> CardAssetMap;
-  public CardView [] cards;
+  public CardView[] cards;
   TextureAtlas sprites;
   TextureAtlas backgrounds;
   private QuestCards parent;
@@ -55,8 +55,6 @@ public class GamePresenter extends Group {
     model = new GameModel();
     view = initGameView();
     addActor(view);
-
-
 
 
   }
@@ -92,8 +90,7 @@ public class GamePresenter extends Group {
 
     LinkedList<AdventureCard> temp = model.getcurrentTurn().getHand();
 
-    //THIS PORTION WILL BE A METHOD EVENTUALLY ie. dealHand()
-    cards = new CardView[12];
+    cards = new CardView[temp.size()];
     for (int i = 0; i < temp.size(); i++) {
       String spriteGet = temp.get(i).getName();
 
@@ -103,7 +100,7 @@ public class GamePresenter extends Group {
       cards[i].setInPlayCDZ(view.InPlayCDZ.getBounds());
       cards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());
       cards[i].setGamePresenter(this);
-      cards[i].setColor(1,1,1,0);
+      cards[i].setColor(1, 1, 1, 0);
 
     }
 
@@ -133,12 +130,40 @@ public class GamePresenter extends Group {
         //Player says no
       }*/
 
-      view.displayAnnouncementDialog("Begin Turn", ""+model.getcurrentTurn().getName()+"... begin!", result_2 -> {
-        drawCards();
-      });
-   // });
+    view.displayAnnouncementDialog("Begin Turn", "" + model.getcurrentTurn().getName() + "... begin!", result_2 -> {
+      drawCards();
+    });
+    view.displayNextTurnButton(() -> {
+        model.nextPlayer();
+        assignHand();
+    }, false);
+    // });
 
     return view;
+  }
+
+  private void assignHand() {
+    LinkedList<AdventureCard> temp = model.getcurrentTurn().getHand();
+    view.playerView.wipePlayerHand(cards);
+
+    cards = new CardView[temp.size()];
+    for (int i = 0; i < temp.size(); i++) {
+      String spriteGet = temp.get(i).getName();
+
+      System.out.println("spriteGet = " + spriteGet + "\nCardAssetMap.get(spriteGet) = " + CardAssetMap.get(spriteGet));
+      cards[i] = new CardView(sprites.findRegion(CardAssetMap.get(spriteGet)), temp.get(i).getID());
+      cards[i].setDiscardCDZ(view.DiscardCDZ.getBounds());
+      cards[i].setInPlayCDZ(view.InPlayCDZ.getBounds());
+      cards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());
+      cards[i].setGamePresenter(this);
+      cards[i].setColor(1, 1, 1, 0);
+
+    }
+    view.displayPlayerHand(cards); //CHECK IT OUT
+
+    view.displayAnnouncementDialog("Begin Turn", "" + model.getcurrentTurn().getName() + "... begin!", result_2 -> {
+      drawCards();
+    });
   }
 
   @Override
@@ -205,8 +230,7 @@ public class GamePresenter extends Group {
     if (!model.getPlayers().current().userInput(input)) {
       if (model.getcurrentTurn().getState().equalsIgnoreCase("playtour")) {
         //player couldn't leave turn too many cards
-      }
-      else
+      } else
         model.beginTurn();
     }
 
@@ -293,10 +317,18 @@ public class GamePresenter extends Group {
 
   }
 
-  public void flipDown(CardView card){card.setDrawable(new TextureRegionDrawable(new TextureRegion(sprites.findRegion(Assets.Cards.CARD_BACK))));}
-  public void flipUp(CardView card){card.setDrawable(new TextureRegionDrawable(card.getPicDisplay()));}
+  public void flipDown(CardView card) {
+    card.setDrawable(new TextureRegionDrawable(new TextureRegion(sprites.findRegion(Assets.Cards.CARD_BACK))));
+  }
 
-  public void drawCards(){  for (int i = 0; i < cards.length; i++){view.displayDrawCardAnimation(cards[i]);
-  }}
+  public void flipUp(CardView card) {
+    card.setDrawable(new TextureRegionDrawable(card.getPicDisplay()));
+  }
+
+  public void drawCards() {
+    for (int i = 0; i < cards.length; i++) {
+      view.displayDrawCardAnimation(cards[i]);
+    }
+  }
 
 }
