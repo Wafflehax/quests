@@ -1,7 +1,9 @@
 package core;
 
 import com.comp_3004.quest_cards.Stories.AbstractAI;
+import com.comp_3004.quest_cards.Stories.Strategy1;
 import com.comp_3004.quest_cards.Stories.Strategy2;
+import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.cards.WeaponCard;
@@ -121,7 +123,7 @@ public class AIStrategyTest extends TestCase{
 	}
 	
 	public void testTwo() {
-		//test strategy 2 on game winning tour
+		//test strategy 2 on tour
 		//test Game winning tournament with ai players strategy 2
 		AdventureDeck ad = new AdventureDeck();
 		StoryDeck d = new StoryDeck();
@@ -163,6 +165,54 @@ public class AIStrategyTest extends TestCase{
 		assertEquals(true, m.getPlayers().getPlayerAtIndex(1).getWon());
 	}
 	
+	public void testThree() {
+		//testing strategy 1 on tournaments
+		//test p1 ai plays only weapons it has two or more instances of(weak play)
+		AdventureDeck ad = new AdventureDeck();
+		String scards[] = {"tintagel"};
+		StoryDeck d = new StoryDeck(scards);
+		int ncards = 0;
+		GameModel m = new GameModel(0, ncards, ad, d); // 0 players 0 cards
+		GamePresenter pres = new GamePresenter(m);
+		
+		
+		//p0 human
+		Player p0 = new Player("p0human");
+		//p1 ai
+		AbstractAI ai = new Strategy1();
+		Player p1 = new Player("p1-ai", ai);
+		ai.setPlayer(p1);
+		//p2 human
+		Player p2 = new Player("p2human");
+		
+		p0.addShields(4); //-> p0 is squire and sheilds = 4
+		
+		
+		String cards[] = {"amour","amour","amour","sword","sword","sword","dagger","dagger","lance", "horse"};
+		p1.setHand(cards);
+		
+		m.addPlayer(p0);
+		m.addPlayer(p1);
+		m.addPlayer(p2);
+		m.beginTurn();
+		
+		//p0 does NOT participate
+		pres.userInput(0);
+		
+		//p1 ai participates since p0 could win/evolve
+		
+		//p2 participates 
+		pres.userInput(1);
+		
+		//Player turns playing cards
+		
+		//p1 ai plays -> 1amour, 1 sword,1dagger , since adventure deck not shuffled ai got test morgan de-fay for participating which was not played
+		
+		//p2 done
+		pres.userInput(1);
+		p1.printHand();
+		assertEquals(true, p1.getHand().size() == 7 + 1); //plus one for Morgan de fay
+	}
 	
 	
 	

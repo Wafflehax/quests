@@ -47,6 +47,7 @@ public class AdventureDeck extends Deck {
 	public boolean discardEmpty() { return this.discard.empty(); }
 	public Stack<AdventureCard> getDeck() { return this.deck; }
 	public Stack<AdventureCard> getDiscard() { return this.discard; }
+	public AdventureCard peekDeck() { return this.deck.peek(); }
 	
 	//methods
 	public void shuffle() {						//shuffles the deck

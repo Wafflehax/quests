@@ -243,6 +243,13 @@
     "Description": "PlayerTest->testsheildsToRank",
     "Status": "F26,F5",
     "Date": "2018-02-24"
+  },
+  
+  {
+    "ID": "T38",
+    "Description": "testing strategy 1 on tournaments, test ai player plays weapons it has two or more instances of",
+    "Status": "F26",
+    "Date": "2018-02-24"
   }
   
   

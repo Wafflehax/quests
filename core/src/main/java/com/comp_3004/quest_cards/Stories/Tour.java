@@ -131,7 +131,7 @@ public class Tour {
 				for(Player ps: participants)
 					ps.setState("playtour");
 				if(gameWinMatch)
-					startGameWinningTour();  //:TODO Test ai players in gamewinning tour
+					startGameWinningTour();
 				else
 					startTour();
 			}
