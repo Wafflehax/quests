@@ -178,7 +178,8 @@ public class MordredTest extends TestCase {
 		
 	}
 	
-	//mordred kills ally providing free bids during test to disqualify a player
+	//p1 uses mordred to kill p2's ally providing free bids during test to invalidate players last bid
+	//p1 becomes current highest bidder and does not need to bid again
 	public void testMordred3() {
 		//set up story deck
 		StoryDeck storyDeck = new StoryDeck();
@@ -249,12 +250,24 @@ public class MordredTest extends TestCase {
 		pres.userInput(-1);	//p4 drops out
 		pres.playCard(370, -1);
 		pres.userInput(441);
+		pres.userInput(5);
+		pres.userInput(-1);
 		
-		//System.out.println(game.getcurrentTurn().getFreeBids());
-		//System.out.println(game.getcurrentTurn().getState());
-		//game.getcurrentTurn().printHand();
+		//player 2 discards 5 cards
+		for(int i=0; i<5; i++) {
+			pres.discardCard(game.getcurrentTurn().getHand().get(0).getID());
+		}
 		
-		
+		assertEquals("Player 2", game.getcurrentTurn().getName());
+		assertEquals(9, game.getAdvDeck().getDiscard().size());
+		assertEquals(0, game.getPlayerAtIndex(0).getShields());
+		assertEquals(2, game.getPlayerAtIndex(1).getShields());
+		assertEquals(0, game.getPlayerAtIndex(2).getShields());
+		assertEquals(0, game.getPlayerAtIndex(3).getShields());
+		assertEquals(4, game.getPlayerAtIndex(0).getHand().size());
+		assertEquals(0, game.getPlayerAtIndex(1).getHand().size());
+		assertEquals(8, game.getPlayerAtIndex(2).getHand().size());
+		assertEquals(8, game.getPlayerAtIndex(3).getHand().size());
 	}
 
 }

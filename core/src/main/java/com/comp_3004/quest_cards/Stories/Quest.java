@@ -512,9 +512,9 @@ public class Quest {
 				log.info("Cards to discard: "+currentBids.get(players.current()));
 				return true;
 			}
-			if(players.peekNext() == sponsor)
-				players.next();
 			players.next();
+			while(!participants.contains(players.current()))
+				players.next();
 			return true;
 		}
 		else {
@@ -569,8 +569,40 @@ public class Quest {
 	}
 	
 	public void checkBidStack() {
-		System.out.println("Checking bids");
-		System.out.println(currentBids.get(players.current()));
+		log.info("Checking participants latest bids for invalid bids");
+		Player currentTurn = players.current();
+		//iterate through players, check for invalid bids
+		for(int i=0; i<players.size(); i++) {
+			players.next();
+			if(!participants.contains(players.current())) {		//skips any players not currently participating
+				continue;
+			}
+			int lastBid = currentBids.get(players.current());
+			int highestBidAllowed = players.current().getFreeBids()+players.current().getHand().size();
+			if(lastBid > highestBidAllowed) {
+				log.info(players.current().getName()+"'s bid of "+lastBid+" is no longer valid.");
+				currentBids.put(players.current(), 0);
+				int newHighestBid = 0;
+				for(Player p : participants) {
+					if(currentBids.get(p) > newHighestBid) {
+						log.info(p.getName()+" has the new highest bid: "+currentBids.get(p));
+						newHighestBid = currentBids.get(p);
+					}
+					highestBid = newHighestBid;
+				}
+				log.info("Highest bid is now "+highestBid);
+				break;
+			}
+		}
+		if(currentBids.get(currentTurn) == highestBid) {
+			log.info("Since "+currentTurn.getName()+"'s bid is the current highest, they do not need to bid again");
+			players.setCurrent(currentTurn);
+			players.next();
+			while(!participants.contains(players.current())) {
+				players.next();
+			}
+		}
+
 	}
 
 }

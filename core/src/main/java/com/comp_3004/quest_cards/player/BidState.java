@@ -38,7 +38,6 @@ public class BidState extends PlayerState {
 					return false;
 			}
 		}
-		log.info(p.getName()+" does not have "+c.getName()+" in their hand");
 		return false;
 	}
 
