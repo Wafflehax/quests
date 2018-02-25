@@ -577,7 +577,11 @@ public class Quest {
 			if(!participants.contains(players.current())) {		//skips any players not currently participating
 				continue;
 			}
-			int lastBid = currentBids.get(players.current());
+			int lastBid;
+			if(currentBids.containsKey(players.current()))
+				lastBid = currentBids.get(players.current());
+			else
+				lastBid = 0;
 			int highestBidAllowed = players.current().getFreeBids()+players.current().getHand().size();
 			if(lastBid > highestBidAllowed) {
 				log.info(players.current().getName()+"'s bid of "+lastBid+" is no longer valid.");
@@ -594,7 +598,8 @@ public class Quest {
 				break;
 			}
 		}
-		if(currentBids.get(currentTurn) == highestBid) {
+
+		if(currentBids.containsKey(players.current()) && currentBids.get(currentTurn) == highestBid) {
 			log.info("Since "+currentTurn.getName()+"'s bid is the current highest, they do not need to bid again");
 			players.setCurrent(currentTurn);
 			players.next();

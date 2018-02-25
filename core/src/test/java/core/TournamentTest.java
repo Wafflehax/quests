@@ -1,17 +1,11 @@
 package core;
 
-import java.util.ArrayList;
-
-import com.comp_3004.quest_cards.Stories.Tour;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
-import com.comp_3004.quest_cards.cards.Card;
 import com.comp_3004.quest_cards.cards.CardSpawner;
 import com.comp_3004.quest_cards.cards.StoryDeck;
-import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.core.GameModel;
 import com.comp_3004.quest_cards.core.GamePresenter;
 import com.comp_3004.quest_cards.player.Player;
-import com.comp_3004.quest_cards.player.Players;
 import com.comp_3004.quest_cards.player.Player.Rank;
 
 import junit.framework.TestCase;
