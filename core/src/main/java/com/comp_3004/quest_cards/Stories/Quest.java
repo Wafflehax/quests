@@ -588,18 +588,18 @@ public class Quest {
 				currentBids.put(players.current(), 0);
 				int newHighestBid = 0;
 				for(Player p : participants) {
-					if(currentBids.get(p) > newHighestBid) {
+					if(currentBids.containsKey(p) && currentBids.get(p) > newHighestBid) {
 						log.info(p.getName()+" has the new highest bid: "+currentBids.get(p));
 						newHighestBid = currentBids.get(p);
 					}
-					highestBid = newHighestBid;
 				}
+				highestBid = newHighestBid;
 				log.info("Highest bid is now "+highestBid);
 				break;
 			}
 		}
 
-		if(currentBids.containsKey(players.current()) && currentBids.get(currentTurn) == highestBid) {
+		if(currentBids.containsKey(currentTurn) && currentBids.get(currentTurn) == highestBid) {
 			log.info("Since "+currentTurn.getName()+"'s bid is the current highest, they do not need to bid again");
 			players.setCurrent(currentTurn);
 			players.next();
@@ -607,7 +607,8 @@ public class Quest {
 				players.next();
 			}
 		}
-
+		else if(!currentBids.containsKey(currentTurn))
+			players.setCurrent(currentTurn);
 	}
 
 }
