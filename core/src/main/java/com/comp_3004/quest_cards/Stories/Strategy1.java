@@ -58,25 +58,25 @@ public class Strategy1 extends AbstractAI{
 	}
 
 	@Override
-	boolean DoISponsorAQuest() {
+	public boolean DoISponsorAQuest() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	boolean doIParticipateInQuest() {
+	public boolean doIParticipateInQuest() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	boolean nextBid() {
+	public boolean nextBid() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	boolean discardAfterWinningTest() {
+	public boolean discardAfterWinningTest() {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -192,6 +192,12 @@ public class Strategy1 extends AbstractAI{
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public void playInQuest(AdventureCard stageCard) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
