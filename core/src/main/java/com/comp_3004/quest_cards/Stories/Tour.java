@@ -168,7 +168,7 @@ public class Tour {
 		for(Player ps: participants)
 			ps.forceDrawAdventure(d);
 		players.setPlayers(participants);
-		players.setPos(0);
+		//players.setPos(0);
 		//start first turn of tour
 		if(players.current().isAi()) {
 			players.current().notifyTurn(); //do ai work
@@ -188,7 +188,6 @@ public class Tour {
 		//set players to participants
 		tempPl = players; //stored all players
 		players.setPlayers(participants);
-		players.setPos(0);
 		//start first turn of tour
 		if(players.current().isAi()) {
 			players.current().notifyTurn(); //do ai work

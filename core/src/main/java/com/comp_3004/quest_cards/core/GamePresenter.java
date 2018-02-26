@@ -248,24 +248,14 @@ public class GamePresenter extends Group {
         //TOURNEY HANDLING
       case "T":
         if(model.getTour().getLeftAsk()==0)
-        {break;}
-       // Gdx.app.log("displayEventAnnouncement","storyType -> TOURNEY");
+          {
+            break;}
+
         view.displayJoinEventDialog("Join Tourney?",""+model.getStory().getName(), StoryEv, joinTourney->{
 
           if(joinTourney)
-          {userInput(1); //Tells model currentPlayer wants to Tourney
-            assignHand(false);
-              if(model.getTour().doneTurn() && model.getcurrentTurn().getState().compareTo("tooManyCards")!=0)
-              {
-                nextPlayer();
-              }
-
-              else
-                {
-                  if(model.getcurrentTurn().getState().compareTo("tooManyCards")==0)
-                  {handleCardOverflow();}
-                }
-
+          { userInput(1); //Tells model currentPlayer wants to Tourney
+            nextPlayer();
           }
 
           else
