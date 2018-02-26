@@ -130,9 +130,13 @@ all players BUT p3 get 3 shields
 		assertEquals(0, game.getPlayerAtIndex(2).getActive().size());
 		assertEquals(0, game.getPlayerAtIndex(3).getActive().size());
 		
+		
 		pres.discardCard(148);
 		pres.discardCard(29);
 		
+		//player 2's turn: prosperity throughout the realms
+
+		/*
 		//player1's discards
 		pres.discardCard(111);
 		pres.discardCard(74);
@@ -155,8 +159,7 @@ all players BUT p3 get 3 shields
 		assertEquals(3, game.getPlayerAtIndex(1).getShields());
 		assertEquals(2, game.getPlayerAtIndex(2).getShields());
 		assertEquals(3, game.getPlayerAtIndex(3).getShields());
-		
-
+		*/
 	}
 
 }
