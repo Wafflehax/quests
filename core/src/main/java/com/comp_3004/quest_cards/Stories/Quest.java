@@ -736,4 +736,125 @@ public class Quest {
 		
 		return;
 	}
+	
+	public void sponsorS1() {
+		boolean hasTest = false;
+		HashMap<Integer, AdventureCard> validCards = new HashMap<Integer, AdventureCard>();
+		HashMap<Integer, AdventureCard> weapons = new HashMap<Integer, AdventureCard>();
+		for(AdventureCard c : players.current().getHand()) {
+			if(c instanceof FoeCard) {
+				if(c.getName() == quest.getNamedFoe()) {
+					if(!validCards.containsKey(((FoeCard) c).getAltBattlePts()))
+						validCards.put(((FoeCard) c).getAltBattlePts(),c);
+				}
+				else if(quest.getNamedFoe() == "all" && ((FoeCard) c).getAltBattlePts() != 0) {
+					if(!validCards.containsKey(((FoeCard) c).getAltBattlePts()))
+						validCards.put(((FoeCard) c).getAltBattlePts(),c);
+				}
+				else {
+					if(!validCards.containsKey(c.getBattlePts()))
+						validCards.put(c.getBattlePts(), c);
+				}
+			}
+			else if(c instanceof TestCard) {
+				hasTest = true;
+				validCards.put(0, c);
+			}
+			else if(c instanceof WeaponCard) {
+				if(!weapons.containsKey(c.getBattlePts()))
+					weapons.put(c.getBattlePts(), c);
+			}
+		}
+		if(validCards.size() < quest.getStages()) {
+			log.info(players.current().getName()+" does not have valid cards to sponsor quest");
+			questSponsorship(players.current(), 0);
+			return;
+		}
+		int largestFoe = 0;
+		int largestWeapon = 0;
+		for(int i : validCards.keySet()) {
+			if(i > largestFoe)
+				largestFoe = i;
+		}
+		for(int i : weapons.keySet()) {
+			if(i > largestWeapon)
+				largestWeapon = i;
+		}
+		if(largestFoe + largestWeapon < 50) {
+			log.info(players.current().getName()+" cannot set up last stage to be at least 50 BP's");
+			questSponsorship(players.current(), 0);
+			return;
+		}
+		questSponsorship(players.current(), 1);
+		
+		int previousStageBP = 0;
+		//last stage
+		int stageBP = 0;
+		addStageCard(validCards.get(largestFoe), quest.getStages()-1);
+		previousStageBP += largestFoe;
+		validCards.remove(largestFoe);
+		stageBP += largestFoe;
+		while(stageBP < 50) {
+			int weaponBP = 30;
+			if(weapons.containsKey(weaponBP)) {
+				addStageCard(weapons.get(weaponBP), quest.getStages()-1);
+				previousStageBP += weaponBP;
+				stageBP += weaponBP;
+			}
+			weaponBP -= 5;
+		}
+		int stagesDone = quest.getStages()-1;
+		
+		//second last stage
+		if(hasTest) {
+			addStageCard(validCards.get(0), quest.getStages()-2);
+			validCards.remove(0);
+			stagesDone = quest.getStages()-2;
+		}
+		
+		//check if dup weapons to add
+		//get duplicates
+		LinkedHashMap<String, Integer> dups = new LinkedHashMap<String, Integer>();
+		for(AdventureCard c : players.current().getHand()) {
+			if(c instanceof WeaponCard) {
+				if(dups.containsKey(c.getName()))
+					dups.put(c.getName(), dups.get(c.getName())+1);
+				else
+					dups.put(c.getName(), 1);
+			}
+		}
+		//add foes
+		stagesDone--;
+		while(stagesDone >= 0) {
+			int currentStageBP = 0;
+			int strongestFoe = 0;
+			for(int i : validCards.keySet()) {
+				if(i>strongestFoe)
+					strongestFoe = i;
+			}
+			addStageCard(validCards.get(strongestFoe), stagesDone);
+			currentStageBP += strongestFoe;
+			validCards.remove(strongestFoe);
+			for(String s : dups.keySet()) {
+				if(dups.get(s) > 1) {
+					for(AdventureCard c : players.current().getHand()) {
+						if(c.getName() == s) {
+							if(c.getBattlePts() + strongestFoe < previousStageBP) {
+								addStageCard(c, stagesDone);
+								currentStageBP += c.getBattlePts();
+							}
+							break;
+						}
+					}
+				}
+			}
+			stagesDone--;
+			previousStageBP = currentStageBP;
+		}
+		
+		
+		checkQuestSetup();
+		
+		return;
+	}
 }
