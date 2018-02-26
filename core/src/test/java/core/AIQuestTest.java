@@ -1,6 +1,5 @@
 package core;
 
-import com.comp_3004.quest_cards.Stories.Strategy2;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.core.GameModel;
