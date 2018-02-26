@@ -22,7 +22,7 @@ public class QuestParticipation1 extends QuestParticipation {
 			else if(c instanceof WeaponCard || c instanceof AllyCard)
 				numWeaponsAllies++;
 		}
-		if((p.getQuest().getQuest().getStages() * 2 < numWeaponsAllies) && numFoes >= 2)
+		if((p.getQuest().getQuest().getStages() * 2 <= numWeaponsAllies) && numFoes >= 2)
 			return true;
 		return false;
 	}

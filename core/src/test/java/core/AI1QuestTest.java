@@ -9,6 +9,8 @@ import com.comp_3004.quest_cards.player.Player;
 import Ai.AI;
 import Ai.AbstractAI;
 import Ai.DoSponsor1;
+import Ai.PlayInQuest1;
+import Ai.QuestParticipation1;
 import junit.framework.TestCase;
 
 public class AI1QuestTest extends TestCase {
@@ -27,18 +29,22 @@ public class AI1QuestTest extends TestCase {
 		Player aiplayer = new Player("P1-ai", ai);
 		ai.setPlayer(aiplayer);
 		ai.setSponsor(new DoSponsor1());
+		ai.setQuestParticipation(new QuestParticipation1());
+		ai.setQuestPlay(new PlayInQuest1());
 		
 		// p2 second ai player
 		AbstractAI ai2 = new AI();
 		Player aiplayer2 = new Player("P2-ai", ai2);
 		ai2.setPlayer(aiplayer2);
 		ai2.setSponsor(new DoSponsor1());
+		ai2.setQuestParticipation(new QuestParticipation1());
 		
 		// p3 second ai player
 		AbstractAI ai3 = new AI();
 		Player aiplayer3 = new Player("P3-ai", ai3);
 		ai3.setPlayer(aiplayer3);
 		ai3.setSponsor(new DoSponsor1());
+		ai3.setQuestParticipation(new QuestParticipation1());
 		
 		//p4 human
 		Player p4 = new Player("P4-human");
@@ -49,6 +55,22 @@ public class AI1QuestTest extends TestCase {
 		game.addPlayer(p4);
 		
 		//set up hands
+		game.getPlayerAtIndex(0).pickCard("Thieves", advDeck); 
+		game.getPlayerAtIndex(0).pickCard("Saxons", advDeck);
+		game.getPlayerAtIndex(0).pickCard("Sword", advDeck); 
+		game.getPlayerAtIndex(0).pickCard("Sword", advDeck);
+		game.getPlayerAtIndex(0).pickCard("Dagger", advDeck); 
+		game.getPlayerAtIndex(0).pickCard("Queen Iseult", advDeck);
+		game.getPlayerAtIndex(0).pickCard("Lance", advDeck); 
+		game.getPlayerAtIndex(0).pickCard("Battle-Ax", advDeck);
+		
+		game.getPlayerAtIndex(1).pickCard("Thieves", advDeck); 
+		game.getPlayerAtIndex(1).pickCard("Saxons", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Sword", advDeck); 
+		game.getPlayerAtIndex(1).pickCard("Horse", advDeck);
+		game.getPlayerAtIndex(1).pickCard("King Arthur", advDeck); 
+		game.getPlayerAtIndex(1).pickCard("Battle-Ax", advDeck);
+		
 		game.getPlayerAtIndex(2).pickCard("Thieves", advDeck); 
 		game.getPlayerAtIndex(2).pickCard("Test of Morgan Le Fey", advDeck);
 		game.getPlayerAtIndex(2).pickCard("Giant", advDeck);
@@ -64,8 +86,17 @@ public class AI1QuestTest extends TestCase {
 		assertEquals(5, game.getQuest().getStage(0).getBattlePts());
 		assertEquals(0, game.getQuest().getStage(1).getBattlePts());
 		assertEquals(70, game.getQuest().getStage(2).getBattlePts());
+		
+		//participation
+		pres.userInput(1);
+		assertEquals(2, game.getQuest().getParticipants().size());
+		
+		//stage 1
+		pres.userInput(1);
+		game.getcurrentTurn().printHand();
 	}
 	
+	/*
 	//test sponsorship with duplicate weapons to add
 	public void test2() {
 		StoryDeck storyDeck = new StoryDeck();		//set up story deck		
@@ -130,6 +161,6 @@ public class AI1QuestTest extends TestCase {
 		assertEquals(15, game.getQuest().getStage(0).getBattlePts());
 		assertEquals(0, game.getQuest().getStage(1).getBattlePts());
 		assertEquals(70, game.getQuest().getStage(2).getBattlePts());
-	}
+	}*/
 
 }

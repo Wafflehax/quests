@@ -354,6 +354,10 @@ public class Quest {
 		}
 		players.next();
 		while(!participants.contains(players.current())) {
+			if(sponsor == players.current()) {
+				players.next();
+				return revealStage(currentStage);
+			}
 			players.next();
 		}
 		if(players.current().isAi()) {

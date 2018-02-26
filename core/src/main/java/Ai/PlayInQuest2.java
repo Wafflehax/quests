@@ -9,70 +9,71 @@ import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.player.Player;
 
 public class PlayInQuest2 extends PlayInQuest {
+	
 	public void playInQuest(Player pl) {
 		pl.setState("playQuest");
-			//if last stage, play strongest combo
-			if(pl.getQuest().getCurrentStageNum() == pl.getQuest().getQuest().getStages() - 1) {
-				ArrayList<AdventureCard> cardsToPlay = new ArrayList<AdventureCard>();
-				for(AdventureCard c : pl.getHand()) {
-					if(c instanceof AllyCard)
-						cardsToPlay.add(c);
-					if(c instanceof WeaponCard) {
-						boolean weaponInList = false;
-						for(AdventureCard w : cardsToPlay) {
-							if(c.getName() == w.getName()) {
-								weaponInList = true;
-								break;
-							}
+		//if last stage, play strongest combo
+		if(pl.getQuest().getCurrentStageNum() == pl.getQuest().getQuest().getStages() - 1) {
+			ArrayList<AdventureCard> cardsToPlay = new ArrayList<AdventureCard>();
+			for(AdventureCard c : pl.getHand()) {
+				if(c instanceof AllyCard)
+					cardsToPlay.add(c);
+				if(c instanceof WeaponCard) {
+					boolean weaponInList = false;
+					for(AdventureCard w : cardsToPlay) {
+						if(c.getName() == w.getName()) {
+							weaponInList = true;
+							break;
 						}
-						if(!weaponInList)
-							cardsToPlay.add(c);
 					}
+					if(!weaponInList)
+						cardsToPlay.add(c);
 				}
-				for(AdventureCard c : cardsToPlay)
-					pl.playCard(c, -1);
+			}
+			for(AdventureCard c : cardsToPlay)
+				pl.playCard(c, -1);
+			pl.getQuest().doneAddingCards();
+		}
+		//play amour first, then ally, then weapon. always increase by at least 10
+		else {
+			AdventureCard targetCard = null;
+			boolean playedAmour = false;
+			for(AdventureCard c : pl.getActive()) {
+				if(c instanceof AmourCard)
+					playedAmour = true;
+			}
+			for(AdventureCard c : pl.getHand()) {
+				if(c instanceof AmourCard && !playedAmour) {
+					targetCard = c;
+					break;
+				}
+			}
+			if(targetCard != null) {
+				pl.playCard(targetCard, -1);
+				pl.getQuest().doneAddingCards();
+				return;
+			}
+			for(AdventureCard c : pl.getHand()) {
+				if(c instanceof AllyCard && c.getBattlePts() >= 10) {
+					targetCard = c;
+					break;
+				}
+			}
+			if(targetCard != null) {
+				pl.playCard(targetCard, -1);
+				pl.getQuest().doneAddingCards();
+				return;
+			}
+			for(AdventureCard c : pl.getHand()) {
+				if(c instanceof WeaponCard && c.getBattlePts() >= 10) {
+					targetCard = c;
+					break;
+				}
+			}
+			if(targetCard != null) {
+				pl.playCard(targetCard, -1);
 				pl.getQuest().doneAddingCards();
 			}
-			//play amour first, then ally, then weapon. always increase by at least 10
-			else {
-				AdventureCard targetCard = null;
-				boolean playedAmour = false;
-				for(AdventureCard c : pl.getActive()) {
-					if(c instanceof AmourCard)
-						playedAmour = true;
-				}
-				for(AdventureCard c : pl.getHand()) {
-					if(c instanceof AmourCard && !playedAmour) {
-						targetCard = c;
-						break;
-					}
-				}
-				if(targetCard != null) {
-					pl.playCard(targetCard, -1);
-					pl.getQuest().doneAddingCards();
-					return;
-				}
-				for(AdventureCard c : pl.getHand()) {
-					if(c instanceof AllyCard && c.getBattlePts() >= 10) {
-						targetCard = c;
-						break;
-					}
-				}
-				if(targetCard != null) {
-					pl.playCard(targetCard, -1);
-					pl.getQuest().doneAddingCards();
-					return;
-				}
-				for(AdventureCard c : pl.getHand()) {
-					if(c instanceof WeaponCard && c.getBattlePts() >= 10) {
-						targetCard = c;
-						break;
-					}
-				}
-				if(targetCard != null) {
-					pl.playCard(targetCard, -1);
-					pl.getQuest().doneAddingCards();
-				}
-			}
+		}
 	}
 }
