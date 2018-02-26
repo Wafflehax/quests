@@ -2,6 +2,7 @@ package com.comp_3004.quest_cards.core;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.comp_3004.quest_cards.cards.AdventureCard;
+import com.comp_3004.quest_cards.cards.Card;
+import com.comp_3004.quest_cards.cards.EventCard;
 import com.comp_3004.quest_cards.gui.Assets;
 import com.comp_3004.quest_cards.gui.CardView;
 import com.comp_3004.quest_cards.gui.Config;
@@ -25,7 +28,10 @@ public class GamePresenter extends Group {
   static Logger log = Logger.getLogger(GamePresenter.class); //log4j logger
   private final GameView view;
   public Map<String, String> CardAssetMap;
-  public CardView[] cards;
+  public CardView[] handCards;
+  public CardView[] activeCards;
+  public CardView[] stageCards;
+
   TextureAtlas sprites;
   TextureAtlas backgrounds;
   private QuestCards parent;
@@ -40,7 +46,6 @@ public class GamePresenter extends Group {
     manager = null;
     view = null;
     model = m;
-    DragAndDrop dnd = new DragAndDrop();
 
   }
 
@@ -58,6 +63,9 @@ public class GamePresenter extends Group {
 
 
   }
+
+
+
 
   public GameModel getModel() {
     return this.model;
@@ -88,19 +96,23 @@ public class GamePresenter extends Group {
     view.setBackground(backgrounds.findRegion("game_board"));
     view.setPlayerViewBackground(backgrounds.findRegion("player_area"));
 
-    LinkedList<AdventureCard> temp = model.getcurrentTurn().getHand();
+    LinkedList<AdventureCard> tempHand = model.getcurrentTurn().getHand();
 
-    cards = new CardView[temp.size()];
-    for (int i = 0; i < temp.size(); i++) {
-      String spriteGet = temp.get(i).getName();
+    activeCards = new CardView[1];
+    activeCards[0] = new CardView(sprites.findRegion("R_Champion_Knight"),0);
+    activeCards[0].setVisible(false);
 
-      System.out.println("spriteGet = " + spriteGet + "\nCardAssetMap.get(spriteGet) = " + CardAssetMap.get(spriteGet));
-      cards[i] = new CardView(sprites.findRegion(CardAssetMap.get(spriteGet)), temp.get(i).getID());
-      cards[i].setDiscardCDZ(view.DiscardCDZ.getBounds());
-      cards[i].setInPlayCDZ(view.InPlayCDZ.getBounds());
-      cards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());
-      cards[i].setGamePresenter(this);
-      cards[i].setColor(1, 1, 1, 0);
+    handCards = new CardView[tempHand.size()];
+    for (int i = 0; i < tempHand.size(); i++) {
+      String spriteGet = tempHand.get(i).getName();
+
+      //System.out.println("spriteGet = " + spriteGet + "\nCardAssetMap.get(spriteGet) = " + CardAssetMap.get(spriteGet));
+      handCards[i] = new CardView(sprites.findRegion(CardAssetMap.get(spriteGet)), tempHand.get(i).getID());
+      handCards[i].setDiscardCDZ(view.DiscardCDZ.getBounds());
+      handCards[i].setInPlayCDZ(view.InPlayCDZ.getBounds());
+      handCards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());
+      handCards[i].setGamePresenter(this);
+      handCards[i].setColor(1, 1, 1, 0);
 
     }
 
@@ -110,16 +122,23 @@ public class GamePresenter extends Group {
     //DragConfig(cards);
 
     //Hero area
-    view.displayPlayerHand(cards); //CHECK IT OUT
-    view.displayHero(sprites.findRegion("R_Champion_Knight"));
+    view.displayPlayerHand(handCards); //CHECK IT OUT
+    view.displayHero(sprites.findRegion(CardAssetMap.get(model.getcurrentTurn().getRankS())));
 
     //Drawing decks
 
     view.displayStoryDeck(sprites.findRegion(Assets.Cards.CARD_BACK));
-    view.displayStoryDiscardPile(sprites.findRegion(Assets.Cards.Story.KINGS_RECOGNITION));
+    view.displayStoryDiscardPile(new TextureRegion(new Texture("sprites/boundary.png")));
     view.displayAdventureDeck(sprites.findRegion(Assets.Cards.CARD_BACK));
-    view.displayAdventureDiscardPile(sprites.findRegion(Assets.Cards.Allies.KING_PELLINORE));
+    view.displayAdventureDiscardPile(new TextureRegion(new Texture("sprites/boundary.png"))); //TODO: initialize empty white border
 
+    view.displayAnnouncementDialog("","Let the Games BEGIN!\n\n"+model.getcurrentTurn().getName()+"...begin!",res->{
+      beginTurn();
+      drawCards();
+      storyDisplay();
+
+
+  });
 
     //Dialog example
 
@@ -130,26 +149,9 @@ public class GamePresenter extends Group {
         //Player says no
       }*/
 
-    view.displayAnnouncementDialog("Begin Turn", "" + model.getcurrentTurn().getName() + "... begin!", result_2 -> {
-      drawCards();
-    });
     view.displayNextTurnButton(() -> {
-
-      view.displayEventAnnouncement(new CardView(sprites.findRegion(Assets.Cards.Story.KINGS_RECOGNITION), 0), res_2 -> {
-      });
-
-      view.displayJoinEventDialog("Event",
-          "Event body",
-          new CardView(sprites.findRegion(Assets.Cards.Tournament.CAMELOT), 0), result -> {
-
-          });
-
-
-
-
-
-      model.nextPlayer();
-      assignHand();
+      beginTurn();
+      assignHand(true);
     }, false);
     // });
 
@@ -157,35 +159,116 @@ public class GamePresenter extends Group {
     return view;
   }
 
-  private void assignHand() {
-    LinkedList<AdventureCard> temp = model.getcurrentTurn().getHand();
-    view.playerView.wipePlayerHand(cards);
 
-    cards = new CardView[temp.size()];
-    for (int i = 0; i < temp.size(); i++) {
-      String spriteGet = temp.get(i).getName();
 
-      System.out.println("spriteGet = " + spriteGet + "\nCardAssetMap.get(spriteGet) = " + CardAssetMap.get(spriteGet));
-      cards[i] = new CardView(sprites.findRegion(CardAssetMap.get(spriteGet)), temp.get(i).getID());
-      cards[i].setDiscardCDZ(view.DiscardCDZ.getBounds());
-      cards[i].setInPlayCDZ(view.InPlayCDZ.getBounds());
-      cards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());
-      cards[i].setGamePresenter(this);
-      cards[i].setColor(1, 1, 1, 0);
+  //ASSIGN HAND
+  private void assignHand(boolean doAnnounce) {
+    LinkedList<AdventureCard> tempHand = model.getcurrentTurn().getHand();
+    LinkedList<AdventureCard> tempActive = model.getcurrentTurn().getActive();
+
+    view.playerView.wipePlayerHand(handCards);
+    view.playerView.wipePlayerHand(activeCards);
+    view.cardWipe();
+
+    handCards = new CardView[tempHand.size()];
+    activeCards = new CardView[tempActive.size()];
+    for (int i = 0; i < tempHand.size(); i++) {
+      String spriteGet = tempHand.get(i).getName();
+
+      //System.out.println("spriteGet = " + spriteGet + "\nCardAssetMap.get(spriteGet) = " + CardAssetMap.get(spriteGet));
+      handCards[i] = new CardView(sprites.findRegion(CardAssetMap.get(spriteGet)), tempHand.get(i).getID());
+      handCards[i].setDiscardCDZ(view.DiscardCDZ.getBounds());
+      handCards[i].setInPlayCDZ(view.InPlayCDZ.getBounds());
+      handCards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());
+      handCards[i].setGamePresenter(this);
+      handCards[i].setColor(1, 1, 1, 0);
 
     }
-    view.displayPlayerHand(cards); //CHECK IT OUT
 
-    view.displayAnnouncementDialog("Begin Turn", "" + model.getcurrentTurn().getName() + "... begin!", result_2 -> {
-      drawCards();
-    });
+    for(int i=0; i<tempActive.size(); i++)
+    {String spriteGet = tempActive.get(i).getName();
+      activeCards[i] = new CardView(sprites.findRegion(CardAssetMap.get(spriteGet)), tempActive.get(i).getID());
+
+    view.addToPlay(activeCards[i]);
+    activeCards[i].setGamePresenter(this);
+
+    }
+
+    view.displayPlayerHand(handCards); //CHECK IT OUT
+    view.displayHero(sprites.findRegion(CardAssetMap.get(model.getcurrentTurn().getRankS())));
+
+        if(doAnnounce) {
+          view.displayAnnouncementDialog("Begin Turn", "" + model.getcurrentTurn().getName() + "... begin!", result_2 -> {
+            drawCards();
+            storyDisplay();
+          });
+        }
+
+        else
+        {drawCards();}
+  }
+
+
+
+  //TURN METHODS
+  public void beginTurn(){model.beginTurn();
+    view.displayStoryDiscardPile(sprites.findRegion(CardAssetMap.get(model.getStory().getName())));
+  }
+
+  public void nextPlayer(){model.nextPlayer(); assignHand(true);}
+
+  public void storyDisplay(){
+
+    CardView event = new CardView(sprites.findRegion(CardAssetMap.get(model.getStory().getName())),model.getStory().getID());
+    String storyType = CardAssetMap.get(model.getStory().getName()).substring(0,1);//E,T, or Q
+    switch(storyType){
+      case "E":
+        Gdx.app.log("displayEventAnnouncement","storyType -> EVENT");
+
+        view.displayEventAnnouncement(event, res_2 -> {
+          if(model.nextPlayer().getName().compareTo(model.getEvent().getDrewEvent().getName()) == 0)
+          {}
+          else
+          {assignHand(true);}
+
+        });
+
+
+        break;
+
+      case "T":
+        Gdx.app.log("displayEventAnnouncement","storyType -> TOURNEY");
+        //model.nextPlayer();
+        break;
+
+      case "Q":
+        Gdx.app.log("displayEventAnnouncement","storyType -> QUEST");
+       // model.nextPlayer();
+        break;
+
+      default:
+        System.err.print("Invalid input when Accessing storyType");
+        break;
+
+
+
+
+
+
+
+    }
+
+  }
+
+  public void playerUpdate(){
+    //model.getcurrentTurn().getRankS();
   }
 
   @Override
   public void draw(Batch batch, float alpha) {
-    //view.AnimationManager.update(Gdx.graphics.getDeltaTime());
     drawChildren(batch, alpha);
   }
+
 
 
   @Override
@@ -255,7 +338,7 @@ public class GamePresenter extends Group {
   //takes cardID as input from view, finds corresponding card in model
   public void playCard(int cardID) {
     AdventureCard cardToPlay = null;
-    for (AdventureCard card : model.getPlayers().current().getHand())
+    for (AdventureCard card : model.getcurrentTurn().getHand())
       if (card.getID() == cardID)
         cardToPlay = card;
     if (cardToPlay == null)
@@ -303,10 +386,10 @@ public class GamePresenter extends Group {
     CardAssetMap.put("Green Knight", Assets.Cards.Foe.GREEN_KNIGHT);
     CardAssetMap.put("Dragon", Assets.Cards.Foe.DRAGON);
     //TOURNEYS
-    CardAssetMap.put("Tournament at Camelot", "");
-    CardAssetMap.put("Tournament at Orkney", "");
-    CardAssetMap.put("Tournament at Tintagel", "");
-    CardAssetMap.put("Tournament at York", "");
+    CardAssetMap.put("Tournament at Camelot", Assets.Cards.Tournament.CAMELOT);
+    CardAssetMap.put("Tournament at Orkney", Assets.Cards.Tournament.ORKNEY);
+    CardAssetMap.put("Tournament at Tintagel", Assets.Cards.Tournament.TINTAGEL);
+    CardAssetMap.put("Tournament at York", Assets.Cards.Tournament.YORK);
     //EVENTS
     CardAssetMap.put("King's Recognition", Assets.Cards.Story.KINGS_RECOGNITION);
     CardAssetMap.put("Queen's Favor", Assets.Cards.Story.QUEENS_FAVOR);
@@ -316,19 +399,23 @@ public class GamePresenter extends Group {
     CardAssetMap.put("Chivalrous Deed", Assets.Cards.Story.CHIVALROUS_DEED);
     CardAssetMap.put("Prosperity Throughout the Realms", Assets.Cards.Story.PROSPERITY_THROUGHOUT_THE_REALM);
     CardAssetMap.put("King's Call to Arms", Assets.Cards.Story.KINGS_CALL_TO_ARMS);
+    //AMOUR
     CardAssetMap.put("Amour", Assets.Cards.Allies.AMOUR);
     //QUESTS
-        /*CardAssetMap.put("Search for the Holy Grail","");
-        CardAssetMap.put("Test of the Green Knight","");
-        CardAssetMap.put("Search for the Questing Beast","");
-        CardAssetMap.put("Defend the Queen's Honor","");
-        CardAssetMap.put("Rescue the Fair Maiden","");
-        CardAssetMap.put("Journey Through the Enchanted Forest","");
-        CardAssetMap.put("Slay the Dragon","");
-        CardAssetMap.put("Vanquish King Arthur's Enemies","");
-        CardAssetMap.put("Boar Hunt","");
-        CardAssetMap.put("Repel the Saxon Invaders","");*/
-
+    CardAssetMap.put("Search for the Holy Grail",Assets.Cards.Quest.SEARCH_FOR_THE_HOLY_GRAIL);
+    CardAssetMap.put("Test of the Green Knight",Assets.Cards.Quest.TEST_OF_THE_GREEN_KNIGHT);
+    CardAssetMap.put("Search for the Questing Beast",Assets.Cards.Quest.SEARCH_FOR_THE_QUESTING_BEAST);
+    CardAssetMap.put("Defend the Queen's Honor",Assets.Cards.Quest.DEFEND_THE_QUEENS_HONOR);
+    CardAssetMap.put("Rescue the Fair Maiden",Assets.Cards.Quest.RESCUE_THE_FAIR_MAIDEN);
+    CardAssetMap.put("Journey Through the Enchanted Forest",Assets.Cards.Quest.JOURNEY_THROUGH_THE_ENCHANTED_FOREST);
+    CardAssetMap.put("Slay the Dragon",Assets.Cards.Quest.SLAY_THE_DRAGON);
+    CardAssetMap.put("Vanquish King Arthur's Enemies",Assets.Cards.Quest.VANQUISH_KING_ARTHURS_ENEMIES);
+    CardAssetMap.put("Boar Hunt",Assets.Cards.Quest.BOAR_HUNT);
+    CardAssetMap.put("Repel the Saxon Invaders",Assets.Cards.Quest.REPEL_THE_SAXON_RAIDERS);
+    //RANKS
+    CardAssetMap.put("Champion Knight","R_Champion_Knight");
+    CardAssetMap.put("Squire","R_Squire");
+    CardAssetMap.put("Knight","R_Knight");
 
   }
 
@@ -341,8 +428,8 @@ public class GamePresenter extends Group {
   }
 
   public void drawCards() {
-    for (int i = 0; i < cards.length; i++) {
-      view.displayDrawCardAnimation(cards[i]);
+    for (int i = 0; i < handCards.length; i++) {
+      view.displayDrawCardAnimation(handCards[i]);
     }
   }
 

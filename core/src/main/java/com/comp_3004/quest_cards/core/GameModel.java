@@ -53,6 +53,7 @@ public class GameModel{
 	public StoryDeck getStoryDeck() { return this.storyDeck; }
 	public Card getStory() { return StoryEv; }
 	public Quest getQuest() { return this.quest; }
+	public Event getEvent() {return this.event;}
 	public Tour getTour() { return tour; }
 	
 	
@@ -103,8 +104,8 @@ public class GameModel{
 		}
 		else if(cardDrawn instanceof EventCard) {
 			event = new Event(cardDrawn, players, advDeck, players.current());
-			if(event.runEvent())
-				players.next();
+			//if(event.runEvent())
+			//	players.next();
 			
 		}
 		else if(cardDrawn instanceof TournamentCard) {

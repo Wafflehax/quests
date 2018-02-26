@@ -20,12 +20,6 @@ public class PlayerView extends Group {
     background = new Image();
     background.setBounds(0,0,getWidth(), getHeight());
 
-    System.out.printf("Player view width: %f\n", getWidth());
-    System.out.printf("Player view height: %f\n", getHeight());
-    System.out.printf("Player view z-index: %d\n", getZIndex());
-    System.out.printf("Player view X: %f\n", getX());
-    System.out.printf("Player view y: %f\n", getY());
-
     //Init widgets
 
     //Init hero

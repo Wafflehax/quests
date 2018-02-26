@@ -147,7 +147,7 @@ public class GameView extends Group {
     DiscardCDZ.setDropZoneBounds((int) adventureDeck.getX() + Config.CardView.CARD_WIDTH + Config.GameView.PADDING_HORIZONTAL + 70,
         (int) storyDeckDiscardPile.getY() + 150,
         10,
-        50);
+        50); DiscardCDZ.setVisible(false);
 
     InPlayCDZ.setDropZoneBounds(Config.VIRTUAL_WIDTH / 2 + 40, 20, Config.CardView.CARD_WIDTH * 3 - 20, Config.CardView.CARD_HEIGHT);
 
@@ -214,8 +214,6 @@ public class GameView extends Group {
         .start(AnimationManager);
 
 
-    System.out.println(storyDeckDiscardPile);
-
     // Tween.to(card, CardViewAccessor.FLIP,0.2f).target(Config.CardView.CARD_WIDTH).start(AnimationManager);
 
     //AnimationManager.update(Gdx.graphics.getDeltaTime());
@@ -269,12 +267,20 @@ public class GameView extends Group {
       setThis.setDeckX(x0);
       x0 = (x0 + 50);
 
-      if (i == 13) {
+      if (i == 11) {
         y0 = y0 - InPlayCDZ.getHeight() / 2;
         x0 = InPlayCDZ.getX();
+        setThis.setY(y0);
+        setThis.setDeckY(y0);
+        setThis.setDeckZ(i);
+        setThis.setZIndex(i);
+        setThis.setX(x0);
+        setThis.setDeckX(x0);
       }
     }
   }
+
+  public void cardWipe(){InPlay.clear(); QuestStages.clear();}
 
   public void displayNextTurnButton(final Runnable action, boolean hideAfter) {
 
@@ -295,6 +301,8 @@ public class GameView extends Group {
 
     addActor(nextTurnButton);
   }
+
+  public void hideNextTurnButton(){nextTurnButton.remove();}
 
   public void displayCardsQuestStages(LinkedList<CardView> QuestStages) {
     float x0 = SponsorCDZ.getX();

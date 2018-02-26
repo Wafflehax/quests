@@ -38,12 +38,12 @@ public class Assets {
     public static class Story {
 
       public static final String CHIVALROUS_DEED = "E_Chivalrous_Deed";
-      public static final String COURT_CALLED_CAMELOT = "E_Court_Called_Camelot";
+      public static final String COURT_CALLED_CAMELOT = "E_Court_Called_To_Camelot";
       public static final String KINGS_CALL_TO_ARMS = "E_Kings_Call_To_Arms";
       public static final String KINGS_RECOGNITION = "E_Kings_Recognition";
       public static final String PLAGUE = "E_Plague";
       public static final String POX = "E_Pox";
-      public static final String PROSPERITY_THROUGHOUT_THE_REALM = "E_Prosperity_Throughout_the_Realm";
+      public static final String PROSPERITY_THROUGHOUT_THE_REALM = "E_Prosperity_Throughout_Realm";
       public static final String QUEENS_FAVOR = "E_Queens_Favor";
 
     }

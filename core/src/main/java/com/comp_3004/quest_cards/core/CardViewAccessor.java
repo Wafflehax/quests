@@ -42,7 +42,7 @@ public class CardViewAccessor implements TweenAccessor<CardView> {
                 break;
             case TRANSLATE:
                 target.setPosition(newValues[0], newValues[1]);
-                System.out.println("(x,y) = ("+newValues[0]+","+newValues[1]+")");
+               // System.out.println("(x,y) = ("+newValues[0]+","+newValues[1]+")");
             default:
                 assert false;
                 break;

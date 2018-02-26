@@ -134,6 +134,7 @@ public class CardView extends Image {
       {//TODO: gamePresenter.getModel().playCard(int CardID)
         gamePresenter.getView().addToPlay(card);
         Gdx.app.log("PlayCard CardID ",""+card.cardID);
+        gamePresenter.playCard(card.cardID);
       }
 
       else if(CardBounds.overlaps(SponsorCDZ))
@@ -144,6 +145,7 @@ public class CardView extends Image {
 
       else if(CardBounds.overlaps(DiscardCDZ))
       {gamePresenter.getView().discardCard(card);
+      gamePresenter.discardCard(card.cardID);
       }
 
       else
