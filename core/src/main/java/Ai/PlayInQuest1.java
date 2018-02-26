@@ -80,7 +80,6 @@ public class PlayInQuest1 extends PlayInQuest {
 				}
 			}
 			for(AdventureCard c : cardsToPlay) {
-				System.out.println(c.getName());
 				pl.playCard(c, -1);
 			}
 			pl.getQuest().doneAddingCards();
