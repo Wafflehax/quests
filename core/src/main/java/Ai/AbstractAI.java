@@ -9,9 +9,7 @@ public abstract class AbstractAI{
 	 public abstract boolean DoISponsorAQuest();
 	 public abstract boolean doIParticipateInQuest();
 	 public abstract void playInQuest(AdventureCard stageCard);
-	 public abstract boolean nextBid();
 	 public abstract boolean discardAfterWinningTest();
-	
 	 public abstract boolean TournamentPlayTurn();
 	 
 	 
@@ -20,8 +18,8 @@ public abstract class AbstractAI{
 	 public abstract void setTournamentParticipation(TourParticipation t);
 	 public abstract void setTourPlay(TourPlay p);
 	 public abstract void setSponsor(DoSponsor s);
-	 
-	 public abstract void setQuest(Quests2 q);
-	 
+	 public abstract void setQuestParticipation(QuestParticipation p);
+	 public abstract void setQuestPlay(PlayInQuest p);
+	 public abstract void setDiscardAfterTest(DiscardAfterTest d);
 	 
 }

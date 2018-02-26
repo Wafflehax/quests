@@ -8,10 +8,16 @@ import com.comp_3004.quest_cards.player.Player;
 
 import Ai.AI;
 import Ai.AbstractAI;
+import Ai.DiscardAfterTest2;
+import Ai.DoSponsor2;
+import Ai.PlayInQuest2;
+import Ai.QuestParticipation2;
 import Ai.Quests2;
+import Ai.TourParticipate2;
+import Ai.TourPlay2;
 import junit.framework.TestCase;
 
-public class AIQuestTest extends TestCase {
+public class AI2QuestTest extends TestCase {
 
 	//3 ai's 1 human
 	//ai's do not have valid sponsorship cards
@@ -24,26 +30,32 @@ public class AIQuestTest extends TestCase {
 		AdventureDeck advDeck = new AdventureDeck();
 		GameModel game = new GameModel(0, 0, advDeck, storyDeck);
 		
+		// p1 first ai player
 		AbstractAI ai = new AI();
 		Player aiplayer = new Player("P1-ai", ai);
 		ai.setPlayer(aiplayer);
-		Quests2 q2 = new Quests2();
-		ai.setQuest(q2);
+		ai.setSponsor(new DoSponsor2());
+		ai.setQuestParticipation(new QuestParticipation2());
+		ai.setQuestPlay(new PlayInQuest2());
+		ai.setDiscardAfterTest(new DiscardAfterTest2());
 		
-		
-		// p1 second ai player
+		// p2 second ai player
 		AbstractAI ai2 = new AI();
 		Player aiplayer2 = new Player("P2-ai", ai2);
 		ai2.setPlayer(aiplayer2);
-		Quests2 q2p2 = new Quests2();
-		ai2.setQuest(q2p2);
+		ai2.setSponsor(new DoSponsor2());
+		ai2.setQuestParticipation(new QuestParticipation2());
+		ai2.setQuestPlay(new PlayInQuest2());
+		ai2.setDiscardAfterTest(new DiscardAfterTest2());
 		
-		// p1 second ai player
+		// p3 second ai player
 		AbstractAI ai3 = new AI();
 		Player aiplayer3 = new Player("P3-ai", ai3);
 		ai3.setPlayer(aiplayer3);
-		Quests2 q2p3 = new Quests2();
-		ai3.setQuest(q2p3);
+		ai3.setSponsor(new DoSponsor2());
+		ai3.setQuestParticipation(new QuestParticipation2());
+		ai3.setQuestPlay(new PlayInQuest2());
+		ai3.setDiscardAfterTest(new DiscardAfterTest2());
 		
 		//p2 human
 		Player p4 = new Player("P4-human");
@@ -85,6 +97,7 @@ public class AIQuestTest extends TestCase {
 		pres.getModel().beginTurn();
 		
 		//sponsorship
+		game.getcurrentTurn().printHand();
 		pres.userInput(1);
 		
 		//set up
@@ -110,28 +123,34 @@ public class AIQuestTest extends TestCase {
 		AdventureDeck advDeck = new AdventureDeck();
 		GameModel game = new GameModel(0, 0, advDeck, storyDeck);
 		
-		//p0 ai
+		// p1 first ai player
 		AbstractAI ai = new AI();
 		Player aiplayer = new Player("P1-ai", ai);
 		ai.setPlayer(aiplayer);
-		Quests2 q2 = new Quests2();
-		ai.setQuest(q2);
+		ai.setSponsor(new DoSponsor2());
+		ai.setQuestParticipation(new QuestParticipation2());
+		ai.setQuestPlay(new PlayInQuest2());
+		ai.setDiscardAfterTest(new DiscardAfterTest2());
 		
-		// p1 second ai player
+		// p2 second ai player
 		AbstractAI ai2 = new AI();
 		Player aiplayer2 = new Player("P2-ai", ai2);
 		ai2.setPlayer(aiplayer2);
-		Quests2 q2p2 = new Quests2();
-		ai2.setQuest(q2p2);
+		ai2.setSponsor(new DoSponsor2());
+		ai2.setQuestParticipation(new QuestParticipation2());
+		ai2.setQuestPlay(new PlayInQuest2());
+		ai2.setDiscardAfterTest(new DiscardAfterTest2());
 		
-		// p1 second ai player
+		// p3 second ai player
 		AbstractAI ai3 = new AI();
 		Player aiplayer3 = new Player("P3-ai", ai3);
 		ai3.setPlayer(aiplayer3);
-		Quests2 q2p3 = new Quests2();
-		ai3.setQuest(q2p3);	
+		ai3.setSponsor(new DoSponsor2());
+		ai3.setQuestParticipation(new QuestParticipation2());
+		ai3.setQuestPlay(new PlayInQuest2());
+		ai3.setDiscardAfterTest(new DiscardAfterTest2());
 		
-		//p2 human
+		//p4 human
 		Player p4 = new Player("P4-human");
 
 		game.addPlayer(aiplayer);
@@ -186,5 +205,5 @@ public class AIQuestTest extends TestCase {
 		pres.userInput(-1);
 		game.getcurrentTurn().printHand();
 		
-	}
+	} 
 }

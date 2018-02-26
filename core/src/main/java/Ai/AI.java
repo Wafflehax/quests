@@ -9,7 +9,9 @@ public class AI  extends AbstractAI{
 	TourParticipation tourp;
 	TourPlay tourplay;
 	DoSponsor spons;
-	Quests2 quests;
+	QuestParticipation questp;
+	PlayInQuest questplay;
+	DiscardAfterTest discard;
 	
 	public AI() {}
 	
@@ -21,10 +23,9 @@ public class AI  extends AbstractAI{
 	public void setTournamentParticipation(TourParticipation t) {	this.tourp = t;	}
 	public void setTourPlay(TourPlay p) { this.tourplay = p; }
 	public void setSponsor(DoSponsor s) { this.spons = s;  }	
-	public void setQuest(Quests2 q) {
-		this.quests = q;
-		this.quests.setPlayer(pl);
-	}
+	public void setQuestParticipation(QuestParticipation p) { this.questp = p; }
+	public void setQuestPlay(PlayInQuest p) { this.questplay = p; }
+	public void setDiscardAfterTest(DiscardAfterTest d) { this.discard = d; }
 	
 	public boolean DoIParticipateInTournament() {
 		if(this.tourp == null)
@@ -39,9 +40,9 @@ public class AI  extends AbstractAI{
 	}
 	
 	public boolean DoISponsorAQuest() {
-		if(this.quests == null)
+		if(this.spons == null)
 			return false;
-		return this.quests.DoISponsorAQuest();
+		return this.spons.DoISponsorAQuest(this.pl);
 	}
 	
 	//test function might remove
@@ -53,31 +54,27 @@ public class AI  extends AbstractAI{
 	
 
 	public boolean doIParticipateInQuest() {
-		if(this.quests == null)
+		if(this.questp == null)
 			return false;
-		return this.quests.doIParticipateInQuest();
+		return this.questp.doIParticipateInQuest(this.pl);
 	}
 
-	public boolean nextBid() {
-		if(this.quests == null)
-			return false;
-		return this.quests.nextBid();
+	public void playInQuest(AdventureCard stageCard) {
+		if(this.questplay != null)
+			this.questplay.playInQuest(this.pl, stageCard);
 	}
 
 	public boolean discardAfterWinningTest() {
-		if(this.quests == null)
+		if(this.discard == null)
 			return false;
-		return this.quests.discardAfterWinningTest();
+		return this.discard.discardAfterWinningTest(this.pl);
 	}
 
 	public void setPlayer(Player p) {
 		this.pl = p;
 	}
 
-	public void playInQuest(AdventureCard stageCard) {
-		if(this.quests != null)
-			this.quests.playInQuest(stageCard);
-	}
+
 
 
 }
