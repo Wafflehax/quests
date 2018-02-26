@@ -22,11 +22,13 @@ public class CardView extends Image {
   private Rectangle DiscardCDZ;
   private Rectangle InPlayCDZ;
 
+  private GamePresenter gamePresenter;
+  private TextureRegion picDisplay;
   private float deckX, deckY;
   private int deckZ;
-  private GamePresenter gamePresenter;
   private int cardID;
-  private TextureRegion picDisplay;
+  private int cardStage;
+
 
   //ADD AN ID PARAMETER SO THE VIEW CARRIES THE ID WITH IT
   public CardView(TextureRegion sprite, int ID) {
@@ -130,11 +132,10 @@ public class CardView extends Image {
 
       setColor(1,1,1,1);
 
-      if(CardBounds.overlaps(InPlayCDZ))
+      if(CardBounds.overlaps(InPlayCDZ) && gamePresenter.playCard(card.cardID))
       {//TODO: gamePresenter.getModel().playCard(int CardID)
         gamePresenter.getView().addToPlay(card);
         Gdx.app.log("PlayCard CardID ",""+card.cardID);
-        gamePresenter.playCard(card.cardID);
       }
 
       else if(CardBounds.overlaps(SponsorCDZ))
@@ -169,6 +170,7 @@ public float getDeckX(){return deckX;}
 public float getDeckY(){return deckY;}
 public int getDeckZ(){return deckZ;}
 public int getCardID() {return cardID;}
+public int getCardStage() { return cardStage;}
 public Rectangle getCardBounds() {return CardBounds;}
 public Rectangle getSponsorCDZ() {return SponsorCDZ;}
 public TextureRegion getPicDisplay(){return picDisplay;}
@@ -182,7 +184,5 @@ public void setGamePresenter(GamePresenter gamePresenter_in){gamePresenter=gameP
 public void setSponsorCDZ(Rectangle CDZ){SponsorCDZ = CDZ;}
 public void setDiscardCDZ(Rectangle CDZ){DiscardCDZ = CDZ;}
 public void setInPlayCDZ(Rectangle CDZ){InPlayCDZ = CDZ;}
-
-
-
+public void setCardStage(int cardStage) {this.cardStage = cardStage;}
 }

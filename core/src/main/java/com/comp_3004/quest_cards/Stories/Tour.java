@@ -142,7 +142,7 @@ public class Tour {
 				log.info("Can't start Tournament Need atleast 2 players");	
 		}
 		else {
-			Player nextpl = players.next();
+			Player nextpl = players.peekNext();
 			if(nextpl.isAi() && leftAsk > 0) {
 				nextpl.notifyTurn(); //do ai work
 			}
@@ -208,10 +208,8 @@ public class Tour {
 			if(players.current().isAi()) {
 				log.info("Ai player too many cards discarding till enough");
 				while(players.current().tooManyHandCards()) {
-					String prevState = players.current().getState();
-					players.current().setState("tourcomp");
-					players.current().discardCard(players.current().getHand().getLast(), d);
-					players.current().setState(prevState);
+					players.current().setPrevState(players.current().getState());
+					players.current().setState("tooManyCards");
 				}
 			}
 			else
@@ -222,12 +220,13 @@ public class Tour {
 			log.info(players.current().getName()+" is done playing cards for round: "+ round);
 			if(leftToPlayCard == 0) {
 				log.info("No more player turns calculating outcome");
-				players.next();
+				//players.next();
 				determineRoundOutCome();			
 			}
 			else {
-				if(players.next().isAi()) {
+				if(players.peekNext().isAi()) {
 					//complete ai work
+					players.next();
 					players.current().notifyTurn(); // ai plays turn
 				}
 				else {

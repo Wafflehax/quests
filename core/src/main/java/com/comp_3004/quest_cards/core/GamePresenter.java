@@ -58,6 +58,7 @@ public class GamePresenter extends Group {
     loadAssets();
 
     model = new GameModel();
+
     view = initGameView();
     addActor(view);
 
@@ -106,7 +107,7 @@ public class GamePresenter extends Group {
     for (int i = 0; i < tempHand.size(); i++) {
       String spriteGet = tempHand.get(i).getName();
 
-      //System.out.println("spriteGet = " + spriteGet + "\nCardAssetMap.get(spriteGet) = " + CardAssetMap.get(spriteGet));
+
       handCards[i] = new CardView(sprites.findRegion(CardAssetMap.get(spriteGet)), tempHand.get(i).getID());
       handCards[i].setDiscardCDZ(view.DiscardCDZ.getBounds());
       handCards[i].setInPlayCDZ(view.InPlayCDZ.getBounds());
@@ -133,11 +134,11 @@ public class GamePresenter extends Group {
     view.displayAdventureDiscardPile(new TextureRegion(new Texture("sprites/boundary.png"))); //TODO: initialize empty white border
 
     view.displayAnnouncementDialog("","Let the Games BEGIN!\n\n"+model.getcurrentTurn().getName()+"...begin!",res->{
+      model.getStoryDeck().setTopCard("Tournament at Camelot");//RIGGING!
+
       beginTurn();
       drawCards();
       storyDisplay();
-
-
   });
 
     //Dialog example
@@ -150,8 +151,11 @@ public class GamePresenter extends Group {
       }*/
 
     view.displayNextTurnButton(() -> {
-      beginTurn();
-      assignHand(true);
+      if(model.getcurrentTurn().getState().compareTo("tooManyCards")==0)
+      {assignHand(false);
+        view.displayAnnouncementDialog("BEWARE!","YOU HAVE TOO MANY CARDS!!\nPLEASE MAKE SURE YOU HAVE LESS THAN 12 CARDS!",res->{});}
+
+      nextPlayer();
     }, false);
     // });
 
@@ -165,6 +169,7 @@ public class GamePresenter extends Group {
   private void assignHand(boolean doAnnounce) {
     LinkedList<AdventureCard> tempHand = model.getcurrentTurn().getHand();
     LinkedList<AdventureCard> tempActive = model.getcurrentTurn().getActive();
+    //System.out.println("player = "+model.getcurrentTurn().getName()+": assignHand IDS:");
 
     view.playerView.wipePlayerHand(handCards);
     view.playerView.wipePlayerHand(activeCards);
@@ -182,6 +187,7 @@ public class GamePresenter extends Group {
       handCards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());
       handCards[i].setGamePresenter(this);
       handCards[i].setColor(1, 1, 1, 0);
+      //System.out.println(handCards[i].getCardID());
 
     }
 
@@ -219,26 +225,45 @@ public class GamePresenter extends Group {
 
   public void storyDisplay(){
 
-    CardView event = new CardView(sprites.findRegion(CardAssetMap.get(model.getStory().getName())),model.getStory().getID());
+    CardView StoryEv = new CardView(sprites.findRegion(CardAssetMap.get(model.getStory().getName())),model.getStory().getID());
     String storyType = CardAssetMap.get(model.getStory().getName()).substring(0,1);//E,T, or Q
     switch(storyType){
       case "E":
         Gdx.app.log("displayEventAnnouncement","storyType -> EVENT");
 
-        view.displayEventAnnouncement(event, res_2 -> {
-          if(model.nextPlayer().getName().compareTo(model.getEvent().getDrewEvent().getName()) == 0)
-          {}
+        view.displayEventAnnouncement(StoryEv, res_2 -> {
+          if(model.getPlayers().peekNext().getName().compareTo(model.getEvent().getDrewEvent().getName()) == 0)
+          {beginTurn();
+          nextPlayer();}
           else
-          {assignHand(true);}
+          {nextPlayer();}
 
         });
-
-
+        //TODO: IMPLEMENT KING'S CALL TO ARMS
         break;
 
       case "T":
         Gdx.app.log("displayEventAnnouncement","storyType -> TOURNEY");
-        //model.nextPlayer();
+        view.displayJoinEventDialog("Join Tourney?",""+model.getStory().getName(), StoryEv, joinTourney->{
+
+          if(joinTourney)
+          {userInput(1); //Tells model currentPlayer wants to Tourney
+              if(model.getTour().doneTurn())
+              {nextPlayer();}
+
+              else
+                {
+                  if(model.getcurrentTurn().getState().compareTo("tooManyCards")==0)
+                  {handleCardOverflow();}
+                }
+
+          }
+
+          else
+          {userInput(0);
+            nextPlayer();}
+
+        });
         break;
 
       case "Q":
@@ -259,6 +284,15 @@ public class GamePresenter extends Group {
     }
 
   }
+
+  public void handleCardOverflow(){
+    while(model.getcurrentTurn().tooManyHandCards())
+    {
+    }
+
+    model.getcurrentTurn().setState(model.getcurrentTurn().getPrevState());
+
+  } //TODO: Infinite loop until state != "tooManyCards"
 
   public void playerUpdate(){
     //model.getcurrentTurn().getRankS();
@@ -336,17 +370,22 @@ public class GamePresenter extends Group {
 
   //temporary methods to use for model testing
   //takes cardID as input from view, finds corresponding card in model
-  public void playCard(int cardID) {
+  public boolean playCard(int cardID) {
     AdventureCard cardToPlay = null;
     for (AdventureCard card : model.getcurrentTurn().getHand())
-      if (card.getID() == cardID)
+    {if (card.getID() == cardID)
         cardToPlay = card;
+
     if (cardToPlay == null)
-      System.out.println("Card not found");
+    {//System.out.println("Card not found");
+      return false;}
+
     if (cardToPlay != null)
       if (model.getPlayers().current().playCard(cardToPlay)) {
-        //then update view with what changed in the model
+        System.out.println("CARD FOUND!!"); return true;
       }
+  }
+  return false;
   }
 
   private void PopulateCardAssetMap() {

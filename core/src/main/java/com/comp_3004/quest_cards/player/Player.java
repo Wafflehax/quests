@@ -14,7 +14,9 @@ import com.comp_3004.quest_cards.cards.AdventureCard.State;
 
 public class Player{
 	static Logger log = Logger.getLogger(Player.class); //log4j logger
-	public enum Rank implements Comparable<Rank>{ 
+
+
+	public enum Rank implements Comparable<Rank>{
 		SQUIRE(0), KNIGHT(1), CHAMPION_KNIGHT(2), KNIGHT_OF_THE_ROUND_TABLE(3) ;
 		private int index;
 		Rank(int i) {
@@ -50,6 +52,7 @@ public class Player{
 	private boolean WonGame;
 	private boolean aiPlayer;
 	private AbstractAI ai;
+	private String prevState;
 	
 	// constructor
 	public Player(String name) {
@@ -108,6 +111,8 @@ public class Player{
 	public AbstractAI getAI() { return this.ai; }
 	public boolean getMerlinUsed() { return this.merlinUsed; }
 	public void setMerlinUsed(boolean b) { this.merlinUsed = b; }
+	public String getPrevState() {return prevState;}
+	public void setPrevState(String prevState) {this.prevState = prevState;}
 
 	public void setState(String s) { 
 		if(s == "normal")
