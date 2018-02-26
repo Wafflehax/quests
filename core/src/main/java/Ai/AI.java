@@ -12,6 +12,7 @@ public class AI  extends AbstractAI{
 	QuestParticipation questp;
 	PlayInQuest questplay;
 	DiscardAfterTest discard;
+	NextBid nextbid;
 	
 	public AI() {}
 	
@@ -26,6 +27,7 @@ public class AI  extends AbstractAI{
 	public void setQuestParticipation(QuestParticipation p) { this.questp = p; }
 	public void setQuestPlay(PlayInQuest p) { this.questplay = p; }
 	public void setDiscardAfterTest(DiscardAfterTest d) { this.discard = d; }
+	public void setNextBid(NextBid n) { this.nextbid = n; }
 	
 	public boolean DoIParticipateInTournament() {
 		if(this.tourp == null)
@@ -59,9 +61,14 @@ public class AI  extends AbstractAI{
 		return this.questp.doIParticipateInQuest(this.pl);
 	}
 
-	public void playInQuest(AdventureCard stageCard) {
+	public void playInQuest() {
 		if(this.questplay != null)
-			this.questplay.playInQuest(this.pl, stageCard);
+			this.questplay.playInQuest(this.pl);
+	}
+	public boolean nextBid() {
+		if(this.nextbid == null)
+			return false;
+		return this.nextbid.nextBid(this.pl);
 	}
 
 	public boolean discardAfterWinningTest() {

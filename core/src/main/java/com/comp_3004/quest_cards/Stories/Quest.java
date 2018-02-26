@@ -84,6 +84,7 @@ public class Quest {
 	public ArrayList<Player> getParticipants() { return this.participants; }
 	public AdventureDeck getAdvDeck() { return this.advDeck; }
 	public int getHighestBid() { return this.highestBid; }
+	public LinkedHashMap<Player, Integer> getBids() { return this.currentBids; }
 	
 	//methods
 	public void increaseNumDeclines() {
@@ -330,11 +331,14 @@ public class Quest {
 				minBid = ((TestCard) stageCard).getMinBid();
 			for(Player p : participants)
 				p.setState("bid");
+			if(players.current().isAi())
+				players.current().getAI().nextBid();
 		}
-		else
+		else {
 			log.info("Stage " + (stageNum+1) + " contains a " + stageCard.getClass().getSimpleName());
-		if(players.current().isAi())
-			players.current().getAI().playInQuest(stageCard);
+			if(players.current().isAi())
+				players.current().getAI().playInQuest();
+		}
 	}
 	
 	public boolean doneAddingCards() {
@@ -353,7 +357,7 @@ public class Quest {
 			players.next();
 		}
 		if(players.current().isAi()) {
-			players.current().getAI().playInQuest(stageCard);
+			players.current().getAI().playInQuest();
 		}
 		return true;
 	}
@@ -549,8 +553,8 @@ public class Quest {
 			players.next();
 			while(!participants.contains(players.current()))
 				players.next();
-			if(players.current().isAi())
-				players.current().getAI().playInQuest(stageCard);
+			if(players.current().isAi()) 
+				players.current().getAI().nextBid();
 			return true;
 		}
 		else {

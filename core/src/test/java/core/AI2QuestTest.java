@@ -10,6 +10,7 @@ import Ai.AI;
 import Ai.AbstractAI;
 import Ai.DiscardAfterTest2;
 import Ai.DoSponsor2;
+import Ai.NextBid2;
 import Ai.PlayInQuest2;
 import Ai.QuestParticipation2;
 import Ai.Quests2;
@@ -131,6 +132,7 @@ public class AI2QuestTest extends TestCase {
 		ai.setQuestParticipation(new QuestParticipation2());
 		ai.setQuestPlay(new PlayInQuest2());
 		ai.setDiscardAfterTest(new DiscardAfterTest2());
+		ai.setNextBid(new NextBid2());
 		
 		// p2 second ai player
 		AbstractAI ai2 = new AI();
@@ -140,6 +142,7 @@ public class AI2QuestTest extends TestCase {
 		ai2.setQuestParticipation(new QuestParticipation2());
 		ai2.setQuestPlay(new PlayInQuest2());
 		ai2.setDiscardAfterTest(new DiscardAfterTest2());
+		ai2.setNextBid(new NextBid2());
 		
 		// p3 second ai player
 		AbstractAI ai3 = new AI();
@@ -149,6 +152,7 @@ public class AI2QuestTest extends TestCase {
 		ai3.setQuestParticipation(new QuestParticipation2());
 		ai3.setQuestPlay(new PlayInQuest2());
 		ai3.setDiscardAfterTest(new DiscardAfterTest2());
+		ai3.setNextBid(new NextBid2());
 		
 		//p4 human
 		Player p4 = new Player("P4-human");
@@ -171,6 +175,11 @@ public class AI2QuestTest extends TestCase {
 		game.getPlayerAtIndex(1).pickCard("Amour", advDeck);
 		game.getPlayerAtIndex(1).pickCard("Sir Tristan", advDeck);
 		game.getPlayerAtIndex(1).pickCard("Sword", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Lance", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Lance", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Sword", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Sword", advDeck);
+		
 
 		game.getPlayerAtIndex(2).pickCard("Thieves", advDeck); 
 		game.getPlayerAtIndex(2).pickCard("Test of Morgan Le Fey", advDeck);
@@ -185,6 +194,9 @@ public class AI2QuestTest extends TestCase {
 		game.getPlayerAtIndex(3).pickCard("Green Knight", advDeck);
 		game.getPlayerAtIndex(3).pickCard("Saxons", advDeck);
 		game.getPlayerAtIndex(3).pickCard("Evil Knight", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Sword", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Saxons", advDeck);
+		game.getPlayerAtIndex(3).pickCard("Thieves", advDeck);
 		
 		GamePresenter pres = new GamePresenter(game);
 		game.getAdvDeck().shuffle();
@@ -202,8 +214,10 @@ public class AI2QuestTest extends TestCase {
 		
 		//stage 2
 		pres.userInput(3);
+		pres.userInput(6);
 		pres.userInput(-1);
-		game.getcurrentTurn().printHand();
 		
+		assertEquals("P2-ai", game.getcurrentTurn().getName());
+		assertEquals(3, game.getPlayerAtIndex(1).getShields());
 	} 
 }

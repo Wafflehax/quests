@@ -5,16 +5,12 @@ import java.util.ArrayList;
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AllyCard;
 import com.comp_3004.quest_cards.cards.AmourCard;
-import com.comp_3004.quest_cards.cards.FoeCard;
-import com.comp_3004.quest_cards.cards.TestCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.player.Player;
 
 public class PlayInQuest2 extends PlayInQuest {
-
-	public void playInQuest(Player pl, AdventureCard stageCard) {
+	public void playInQuest(Player pl) {
 		pl.setState("playQuest");
-		if(stageCard instanceof FoeCard) {
 			//if last stage, play strongest combo
 			if(pl.getQuest().getCurrentStageNum() == pl.getQuest().getQuest().getStages() - 1) {
 				ArrayList<AdventureCard> cardsToPlay = new ArrayList<AdventureCard>();
@@ -78,28 +74,5 @@ public class PlayInQuest2 extends PlayInQuest {
 					pl.getQuest().doneAddingCards();
 				}
 			}
-		}
-		else if(stageCard instanceof TestCard) {
-			nextBid(pl);
-		}
-	}
-
-
-	public boolean nextBid(Player pl) {
-		//if(bidRound == 1) {
-			int discards = 0;
-			for(AdventureCard c : pl.getHand()) {
-				if(c instanceof FoeCard && c.getBattlePts() < 25) {
-					discards++;
-				}
-			}
-			System.out.println(discards);
-			System.out.println(pl.getFreeBids());
-			if((discards+pl.getFreeBids()) > pl.getQuest().getHighestBid())
-				pl.getQuest().placeBid(discards+pl.getFreeBids(), pl);
-			else
-				pl.getQuest().placeBid(-1, pl);
-		//}
-		return false;
 	}
 }
