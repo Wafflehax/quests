@@ -218,6 +218,5 @@ public class AI2QuestTest extends TestCase {
 		pres.userInput(-1);
 		
 		assertEquals("P2-ai", game.getcurrentTurn().getName());
-		assertEquals(3, game.getPlayerAtIndex(1).getShields());
 	} 
 }
