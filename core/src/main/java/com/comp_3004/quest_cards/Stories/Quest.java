@@ -183,8 +183,8 @@ public class Quest {
 					else if(quest.getNamedFoe() == "allSaxons") {
 						if(card.getName() == "Saxons" || card.getName() == "Saxon Knight")
 							stageBPs[i] += ((FoeCard) card).getAltBattlePts();
-						else
-							stageBPs[i] += ((WeaponCard) card).getBattlePts(); 
+						else 
+							stageBPs[i] += ((FoeCard) card).getBattlePts();
 					}
 					else if(quest.getNamedFoe() == "all") {
 						if(((FoeCard) card).getAltBattlePts() != 0)
