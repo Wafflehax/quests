@@ -33,11 +33,13 @@ public class Tour {
 	private int leftAsk;
 	private int leftToPlayCard;
 	private boolean gameWinMatch = false;
+	private boolean complete;
 	
 	public TournamentCard getCurTour() { return tour; }
 	
 	
 	//getters setters 
+	public boolean Complete() { return this.complete; }
 	public int getleftToPlayCard() { return leftToPlayCard; }
 	public Players getPlayers() { return players; }
 	public int getRound() { return round; }
@@ -54,6 +56,7 @@ public class Tour {
 	 * 	input boolean fina, if this is the game winning tournament due to multiple knights of round table
 	 */
 	public Tour(Players p, TournamentCard c, AdventureDeck d, boolean fina) {
+		this.complete = false;
 		players = p;
 		tour = c;
 		this.d = d;
@@ -266,6 +269,7 @@ public class Tour {
 					log.info(pairs.get(0).player.getName() + " is the sole winner of the Game!");
 					log.info("Game Over");
 					players = tempPl; //return to full player list
+					this.complete = true;
 				}
 				//more than one winner
 				else if(pairs.size() > 1){
@@ -276,6 +280,7 @@ public class Tour {
 					}
 					log.info("Game Over");
 					players = tempPl; //return to full player list
+					this.complete = true;
 				}
 			}
 			else
@@ -294,6 +299,7 @@ public class Tour {
 					tempPl = null;
 					//set states to normal
 					setStatePlayers("normal");
+					this.complete = true;
 				}
 				else if(pairs.size() >= 2) {
 					if(round == 1) {
@@ -336,6 +342,7 @@ public class Tour {
 						tempPl = null;
 						//set states to normal
 						setStatePlayers("normal");
+						this.complete = true;
 					}
 					else {
 						log.info("Error stage greater than 2. Can't play more than two rounds start,tie breaker");
