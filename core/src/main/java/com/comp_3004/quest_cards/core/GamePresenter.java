@@ -151,11 +151,13 @@ public class GamePresenter extends Group {
       }*/
 
     view.displayNextTurnButton(() -> {
-      if(model.getcurrentTurn().getState().compareTo("tooManyCards")==0)
+      System.out.println(model.getcurrentTurn().getState());
+      if(model.getcurrentTurn().tooManyHandCards())
       {assignHand(false);
         view.displayAnnouncementDialog("BEWARE!","YOU HAVE TOO MANY CARDS!!\nPLEASE MAKE SURE YOU HAVE LESS THAN 12 CARDS!",res->{});}
 
-      nextPlayer();
+        else
+          nextPlayer();
     }, false);
     // });
 
@@ -252,7 +254,8 @@ public class GamePresenter extends Group {
 
           if(joinTourney)
           {userInput(1); //Tells model currentPlayer wants to Tourney
-              if(model.getTour().doneTurn())
+            assignHand(false);
+              if(model.getTour().doneTurn() && model.getcurrentTurn().getState().compareTo("tooManyCards")!=0)
               {
                 nextPlayer();
               }
@@ -286,9 +289,7 @@ public class GamePresenter extends Group {
   }
 
   public void handleCardOverflow(){
-    while(model.getcurrentTurn().tooManyHandCards())
-    {
-    }
+   System.out.println("handleCardOverflow()");
 
     model.getcurrentTurn().setState(model.getcurrentTurn().getPrevState());
 
