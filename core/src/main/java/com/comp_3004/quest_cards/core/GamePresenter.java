@@ -228,8 +228,9 @@ public class GamePresenter extends Group {
     CardView StoryEv = new CardView(sprites.findRegion(CardAssetMap.get(model.getStory().getName())),model.getStory().getID());
     String storyType = CardAssetMap.get(model.getStory().getName()).substring(0,1);//E,T, or Q
     switch(storyType){
-      case "E":
-        Gdx.app.log("displayEventAnnouncement","storyType -> EVENT");
+
+      case "E": //EVENT HANDLING
+        //Gdx.app.log("displayEventAnnouncement","storyType -> EVENT");
 
         view.displayEventAnnouncement(StoryEv, res_2 -> {
           if(model.getPlayers().peekNext().getName().compareTo(model.getEvent().getDrewEvent().getName()) == 0)
@@ -242,14 +243,19 @@ public class GamePresenter extends Group {
         //TODO: IMPLEMENT KING'S CALL TO ARMS
         break;
 
+        //TOURNEY HANDLING
       case "T":
-        Gdx.app.log("displayEventAnnouncement","storyType -> TOURNEY");
+        if(model.getTour().getLeftAsk()==0)
+        {break;}
+       // Gdx.app.log("displayEventAnnouncement","storyType -> TOURNEY");
         view.displayJoinEventDialog("Join Tourney?",""+model.getStory().getName(), StoryEv, joinTourney->{
 
           if(joinTourney)
           {userInput(1); //Tells model currentPlayer wants to Tourney
               if(model.getTour().doneTurn())
-              {nextPlayer();}
+              {
+                nextPlayer();
+              }
 
               else
                 {
@@ -267,19 +273,13 @@ public class GamePresenter extends Group {
         break;
 
       case "Q":
-        Gdx.app.log("displayEventAnnouncement","storyType -> QUEST");
+       //Gdx.app.log("displayEventAnnouncement","storyType -> QUEST");
        // model.nextPlayer();
         break;
 
       default:
         System.err.print("Invalid input when Accessing storyType");
         break;
-
-
-
-
-
-
 
     }
 

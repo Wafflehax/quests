@@ -43,6 +43,7 @@ public class Tour {
 	public int getRound() { return round; }
 	public boolean isGameWinTour() { return this.gameWinMatch; }
 	public int getJoiners() { return this.joiners; }
+	public int getLeftAsk() {return this.leftAsk;}
 	public ArrayList<Player> getParticipants() { return this.participants; }
 	
 	
