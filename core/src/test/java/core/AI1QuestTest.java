@@ -9,6 +9,7 @@ import com.comp_3004.quest_cards.player.Player;
 import Ai.AI;
 import Ai.AbstractAI;
 import Ai.DoSponsor1;
+import Ai.NextBid1;
 import Ai.PlayInQuest1;
 import Ai.QuestParticipation1;
 import junit.framework.TestCase;
@@ -31,6 +32,7 @@ public class AI1QuestTest extends TestCase {
 		ai.setSponsor(new DoSponsor1());
 		ai.setQuestParticipation(new QuestParticipation1());
 		ai.setQuestPlay(new PlayInQuest1());
+		ai.setNextBid(new NextBid1());
 		
 		// p2 second ai player
 		AbstractAI ai2 = new AI();
@@ -63,6 +65,7 @@ public class AI1QuestTest extends TestCase {
 		game.getPlayerAtIndex(0).pickCard("Queen Iseult", advDeck);
 		game.getPlayerAtIndex(0).pickCard("Lance", advDeck); 
 		game.getPlayerAtIndex(0).pickCard("Battle-Ax", advDeck);
+		game.getPlayerAtIndex(1).pickCard("Thieves", advDeck); 
 		
 		game.getPlayerAtIndex(1).pickCard("Thieves", advDeck); 
 		game.getPlayerAtIndex(1).pickCard("Saxons", advDeck);
@@ -72,7 +75,7 @@ public class AI1QuestTest extends TestCase {
 		game.getPlayerAtIndex(1).pickCard("Battle-Ax", advDeck);
 		
 		game.getPlayerAtIndex(2).pickCard("Thieves", advDeck); 
-		game.getPlayerAtIndex(2).pickCard("Test of Morgan Le Fey", advDeck);
+		game.getPlayerAtIndex(2).pickCard("Test of Temptation", advDeck);
 		game.getPlayerAtIndex(2).pickCard("Giant", advDeck);
 		game.getPlayerAtIndex(2).pickCard("Excalibur", advDeck);
 		game.getPlayerAtIndex(2).pickCard("Amour", advDeck);
@@ -93,6 +96,10 @@ public class AI1QuestTest extends TestCase {
 		
 		//stage 1
 		pres.userInput(1);
+		
+		//stage 2
+		pres.userInput(1);
+		pres.userInput(-1);
 		game.getcurrentTurn().printHand();
 	}
 	

@@ -57,5 +57,4 @@ public class NextBid2 extends NextBid {
 		}
 		return false;
 	}
-
 }
