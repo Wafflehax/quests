@@ -257,6 +257,13 @@
     "Description": "AIStrategyTest->testFour,testThree, testing To decide what to play Strategy 1 Tournaments",
     "Status": "F26",
     "Date": "2018-02-24"
+  },
+  
+   {
+    "ID": "T40",
+    "Description": "AIStrategyTest->testDoSponsor, testing Sponsor conditions",
+    "Status": "F26",
+    "Date": "2018-02-25"
   }
   
   
