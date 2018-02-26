@@ -1,6 +1,5 @@
-package com.comp_3004.quest_cards.Stories;
+package Ai;
 
-import java.text.Collator;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -10,62 +9,26 @@ import org.apache.log4j.Logger;
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AllyCard;
 import com.comp_3004.quest_cards.cards.AmourCard;
+import com.comp_3004.quest_cards.cards.FoeCard;
+import com.comp_3004.quest_cards.cards.TestCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.player.Player;
+import com.comp_3004.quest_cards.player.Player.Rank;
 
-public class Strategy2 extends AbstractAI{
-	
-	private static Logger log = Logger.getLogger(Strategy2.class); //log4j logger
-	
-	private Player pl;
-	
-	public Strategy2() {}
-	
-	public void setPlayer(Player p) {
-		this.pl = p;
-	}
-	
-	@Override
-	public boolean DoIParticipateInTournament() {
-		//always participate
-		log.info("participating");
-		return true;
-	}
 
-	@Override
-	boolean DoISponsorAQuest() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+public class TourPlay2 extends TourPlay{
 
-	@Override
-	boolean doIParticipateInQuest() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	private static Logger log = Logger.getLogger(TourPlay2.class); //log4j logger
 
-	@Override
-	boolean nextBid() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
-	@Override
-	boolean discardAfterWinningTest() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean TournamentPlayTurn() {
+	public boolean TournamentPlayTurn(Player p) {
 		//I play as few cards to get 50 or my best possible Battle points
-		
-		if(this.pl != null) {
-			LinkedList<AdventureCard> active = this.pl.getActive();
-			LinkedList<AdventureCard> hand = this.pl.getHand();
-			if(active != null && hand != null && this.pl.getTour() != null) {
+		if(p != null) {
+			LinkedList<AdventureCard> active = p.getActive();
+			LinkedList<AdventureCard> hand = p.getHand();
+			if(active != null && hand != null && p.getTour() != null) {
 				//calculate current battle points from active cards
-				int bp = this.pl.getTour().calcBattlePoints(this.pl);
+				int bp = p.getTour().calcBattlePoints(p);
 				if(bp < 50) {
 					log.info("Playing card untill 50 battlepoints or out of cards");
 					Collections.sort(hand, new Comparator<AdventureCard>() {
@@ -77,7 +40,7 @@ public class Strategy2 extends AbstractAI{
 					play.addAll(hand);
 					for(AdventureCard c: play) {
 						if(bp < 50 && (c instanceof WeaponCard || c instanceof AmourCard || c instanceof AllyCard)) {
-							if(this.pl.playCard(c))
+							if(p.playCard(c))
 								bp += c.getBattlePts();	
 						}
 					}
@@ -93,5 +56,4 @@ public class Strategy2 extends AbstractAI{
 			log.info("Error strategy found no player");
 		return false;
 	}
-	
 }

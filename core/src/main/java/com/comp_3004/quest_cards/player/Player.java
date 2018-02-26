@@ -5,12 +5,14 @@ import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 
-import com.comp_3004.quest_cards.Stories.AbstractAI;
 import com.comp_3004.quest_cards.Stories.Event;
 import com.comp_3004.quest_cards.Stories.Quest;
 import com.comp_3004.quest_cards.Stories.Tour;
 import com.comp_3004.quest_cards.cards.*;
 import com.comp_3004.quest_cards.cards.AdventureCard.State;
+
+import Ai.AbstractAI;
+
 
 public class Player{
 	static Logger log = Logger.getLogger(Player.class); //log4j logger
@@ -237,6 +239,9 @@ public class Player{
 	}
 
 	public boolean drawCard(AdventureDeck d) {
+		//dont allow ai's to draw over 12
+		if(aiPlayer && playerHandCards.size() == 12)
+			return false;
 		//call drawCard from adventure deck
 		AdventureCard card = d.drawCard();
 		card.setOwner(this);

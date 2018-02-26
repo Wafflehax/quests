@@ -1,9 +1,5 @@
 package core;
 
-import com.comp_3004.quest_cards.Stories.AbstractAI;
-import com.comp_3004.quest_cards.Stories.Strategy1;
-import com.comp_3004.quest_cards.Stories.Strategy2;
-import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.cards.WeaponCard;
@@ -12,6 +8,14 @@ import com.comp_3004.quest_cards.core.GamePresenter;
 import com.comp_3004.quest_cards.player.Player;
 import com.comp_3004.quest_cards.player.Player.Rank;
 
+import Ai.AI;
+import Ai.AbstractAI;
+import Ai.DoSponsor1;
+import Ai.TourParticipate1;
+import Ai.TourParticipate2;
+import Ai.TourParticipation;
+import Ai.TourPlay1;
+import Ai.TourPlay2;
 import junit.framework.TestCase;
 
 public class AIStrategyTest extends TestCase{
@@ -29,7 +33,12 @@ public class AIStrategyTest extends TestCase{
 		game = new GameModel(0, ncards, advDeck, storyDeck); //start with 1 players, with 10 cards
 		
 		//p0 ai
-		AbstractAI ai = new Strategy2();
+		//AbstractAI ai = new Strategy2();
+		AbstractAI ai = new AI();
+		ai.setTournamentParticipation(new TourParticipate2());
+		ai.setTourPlay(new TourPlay2());
+		
+		
 		Player aiplayer = new Player("p0-ai", ai);
 		ai.setPlayer(aiplayer);
 		
@@ -38,7 +47,11 @@ public class AIStrategyTest extends TestCase{
 		}
 		
 		// p1 second ai player
-		AbstractAI ai2 = new Strategy2();
+		AbstractAI ai2 = new AI();
+		ai2.setTournamentParticipation(new TourParticipate2());
+		ai2.setTourPlay(new TourPlay2());
+		
+		
 		Player aiplayer2 = new Player("p2-ai", ai2);
 		ai2.setPlayer(aiplayer2);
 		
@@ -133,7 +146,11 @@ public class AIStrategyTest extends TestCase{
 		
 		//test player and ai player
 		//p0 ai
-		AbstractAI ai = new Strategy2();
+		AbstractAI ai = new AI();
+		ai.setTournamentParticipation(new TourParticipate2());
+		ai.setTourPlay(new TourPlay2());
+		
+		
 		Player aiplayer = new Player("p0-ai", ai);
 		ai.setPlayer(aiplayer);
 		
@@ -167,12 +184,12 @@ public class AIStrategyTest extends TestCase{
 	
 	public void testThree() {
 		//testing strategy 1 on tournaments
-		/* 
-		If another player who can win/evolve by winning this tournament does participate
-		OR If I can win/evolve myself
-		Then: I play the strongest possible hand(including amour and allies)
-		----->testting this->Else: I play only weapons I have two or more instances of
-		 */ 
+		
+		//If another player who can win/evolve by winning this tournament does participate
+		//OR If I can win/evolve myself
+		//Then: I play the strongest possible hand(including amour and allies)
+		//----->testting this->Else: I play only weapons I have two or more instances of
+		 
 		
 		//testing I play only weapons I have two or more instances of
 		AdventureDeck ad = new AdventureDeck();
@@ -186,7 +203,11 @@ public class AIStrategyTest extends TestCase{
 		//p0 human
 		Player p0 = new Player("p0human");
 		//p1 ai
-		AbstractAI ai = new Strategy1();
+		AbstractAI ai = new AI();
+		ai.setTournamentParticipation( new TourParticipate1());
+		ai.setTourPlay(new TourPlay1());
+		
+		
 		Player p1 = new Player("p1-ai", ai);
 		ai.setPlayer(p1);
 		//p2 human
@@ -223,11 +244,11 @@ public class AIStrategyTest extends TestCase{
 
 	public void testFour() {
 		//testing strategy 1 on tournaments
-		/*
-		If another player who can win/evolve by winning this tournament does participate
-		OR If I can win/evolve myself
-		Then: I play the strongest possible hand(including amour and allies)
-		 */
+		
+		//If another player who can win/evolve by winning this tournament does participate
+		//OR If I can win/evolve myself
+		//Then: I play the strongest possible hand(including amour and allies)
+		 
 		
 		AdventureDeck ad = new AdventureDeck();
 		String scards[] = {"tintagel"};
@@ -239,7 +260,12 @@ public class AIStrategyTest extends TestCase{
 		Player p0 = new Player("p0");
 		p0.addShields(3);
 		
-		AbstractAI ai = new Strategy1();
+		AbstractAI ai = new AI();
+		ai.setTournamentParticipation( new TourParticipate1());
+		ai.setTourPlay(new TourPlay1());
+		
+		
+		
 		Player p1 = new Player("p1-ai", ai);
 		ai.setPlayer(p1);
 		String cards[] = {"amour","amour","amour","sword","sword","sword","dagger","dagger","lance", "horse"};
@@ -275,7 +301,11 @@ public class AIStrategyTest extends TestCase{
 		pres = new GamePresenter(m);
 		
 		p0 = new Player("p0");
-		ai = new Strategy1();
+		ai = new AI();
+		ai.setTournamentParticipation( new TourParticipate1());
+		ai.setTourPlay(new TourPlay1());
+		
+		
 		p1 = new Player("p1-ai", ai);
 		ai.setPlayer(p1);
 		m.addPlayer(p0);
@@ -310,7 +340,10 @@ public class AIStrategyTest extends TestCase{
 		
 		Player p0 = new Player("p0");
 		
-		AbstractAI ai = new Strategy1();
+		TourParticipation t = new TourParticipate1();
+		AbstractAI ai = new AI();
+		ai.setTournamentParticipation(t);
+		
 		Player p1 = new Player("p1-ai", ai);
 		ai.setPlayer(p1);
 		
@@ -333,7 +366,11 @@ public class AIStrategyTest extends TestCase{
 		pres = new GamePresenter(m);
 		
 		p0 = new Player("p0");
-		ai = new Strategy1();
+		//ai = new Strategy1();
+		ai = new AI();
+		ai.setTournamentParticipation( new TourParticipate1());
+		ai.setTourPlay(new TourPlay1());
+		
 		p1 = new Player("p1-ai", ai);
 		ai.setPlayer(p1);
 		m.addPlayer(p0);
@@ -356,7 +393,10 @@ public class AIStrategyTest extends TestCase{
 		pres = new GamePresenter(m);
 		
 		p0 = new Player("p0");
-		ai = new Strategy1();
+		ai = new AI();
+		ai.setTournamentParticipation( new TourParticipate1());
+		ai.setTourPlay(new TourPlay1());
+		
 		p1 = new Player("p1-ai", ai);
 		ai.setPlayer(p1);
 		m.addPlayer(p0);
@@ -368,4 +408,89 @@ public class AIStrategyTest extends TestCase{
 		assertEquals(false, p1.getAI().DoIParticipateInTournament());
 	}
 	
+	public void testDoSponsor() {
+		//Do sponsor yes/no ?
+		
+		//set up story deck
+		StoryDeck storyDeck = new StoryDeck();
+		storyDeck.setTopCard("Boar Hunt");
+		
+		//set up adventure deck
+		AdventureDeck advDeck = new AdventureDeck();
+		advDeck.shuffle();
+		
+		GameModel game;
+		game = new GameModel(0, 0, advDeck, storyDeck);
+		
+		//this would be AbstractAI but two implementations until resolved
+		AI ai = new AI();
+		Player p0 = new Player("p0-ai", ai);
+		ai.setSponsor(new DoSponsor1());
+		ai.setPlayer(p0);
+		String cards[] = {"thieves", "boar", "saxonKnight", "robberKnight","blackKnight"};  //5, 15/5, 15/25, 15, 25
+		p0.setHand(cards);
+		
+		Player p1 = new Player("p1");
+		Player p2 = new Player("p2");
+		Player p3 = new Player("p3");
+		
+		GamePresenter pres = new GamePresenter(game);
+		game.addPlayer(p0);
+		game.addPlayer(p1);
+		game.addPlayer(p2);
+		game.addPlayer(p3);
+		pres.getModel().beginTurn();
+		
+		assertEquals(true, ai.doSp());
+		
+		//see setup works two foes and test
+		
+		storyDeck = new StoryDeck();
+		storyDeck.setTopCard("Boar Hunt");
+		game = new GameModel(0, 0, advDeck, storyDeck);
+		ai = new AI();
+		p0 = new Player("p0-ai", ai);
+		ai.setSponsor(new DoSponsor1());
+		ai.setPlayer(p0);
+		String cards1[] = {"thieves", "boar", "temptation"};  //5, 15/5, 
+		p0.setHand(cards1);
+		
+		p1 = new Player("p1");
+		p2 = new Player("p2");
+		p3 = new Player("p3");
+		
+		pres = new GamePresenter(game);
+		game.addPlayer(p0);
+		game.addPlayer(p1);
+		game.addPlayer(p2);
+		game.addPlayer(p3);
+		pres.getModel().beginTurn();
+		
+		assertEquals(true, ai.doSp());
+		
+		//no one can rank, and I can not setup valid cards
+		
+		storyDeck = new StoryDeck();
+		storyDeck.setTopCard("Boar Hunt");
+		game = new GameModel(0, 0, advDeck, storyDeck);
+		ai = new AI();
+		p0 = new Player("p0-ai", ai);
+		ai.setSponsor(new DoSponsor1());
+		ai.setPlayer(p0);
+		String cards11[] = {"thieves", "boar",};  //5, 15/5, 
+		p0.setHand(cards11);
+		
+		p1 = new Player("p1");
+		p2 = new Player("p2");
+		p3 = new Player("p3");
+		
+		pres = new GamePresenter(game);
+		game.addPlayer(p0);
+		game.addPlayer(p1);
+		game.addPlayer(p2);
+		game.addPlayer(p3);
+		pres.getModel().beginTurn();
+		
+		assertEquals(false, ai.doSp());
+	}	
 }
