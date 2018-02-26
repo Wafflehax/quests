@@ -184,12 +184,12 @@ public class AIStrategyTest extends TestCase{
 	
 	public void testThree() {
 		//testing strategy 1 on tournaments
-		/* 
-		If another player who can win/evolve by winning this tournament does participate
-		OR If I can win/evolve myself
-		Then: I play the strongest possible hand(including amour and allies)
-		----->testting this->Else: I play only weapons I have two or more instances of
-		 */ 
+		
+		//If another player who can win/evolve by winning this tournament does participate
+		//OR If I can win/evolve myself
+		//Then: I play the strongest possible hand(including amour and allies)
+		//----->testting this->Else: I play only weapons I have two or more instances of
+		 
 		
 		//testing I play only weapons I have two or more instances of
 		AdventureDeck ad = new AdventureDeck();
@@ -244,11 +244,11 @@ public class AIStrategyTest extends TestCase{
 
 	public void testFour() {
 		//testing strategy 1 on tournaments
-		/*
-		If another player who can win/evolve by winning this tournament does participate
-		OR If I can win/evolve myself
-		Then: I play the strongest possible hand(including amour and allies)
-		 */
+		
+		//If another player who can win/evolve by winning this tournament does participate
+		//OR If I can win/evolve myself
+		//Then: I play the strongest possible hand(including amour and allies)
+		 
 		
 		AdventureDeck ad = new AdventureDeck();
 		String scards[] = {"tintagel"};
@@ -422,7 +422,8 @@ public class AIStrategyTest extends TestCase{
 		GameModel game;
 		game = new GameModel(0, 0, advDeck, storyDeck);
 		
-		AbstractAI ai = new AI();
+		//this would be AbstractAI but two implementations until resolved
+		AI ai = new AI();
 		Player p0 = new Player("p0-ai", ai);
 		ai.setSponsor(new DoSponsor1());
 		ai.setPlayer(p0);
@@ -440,7 +441,7 @@ public class AIStrategyTest extends TestCase{
 		game.addPlayer(p3);
 		pres.getModel().beginTurn();
 		
-		assertEquals(true, ai.DoISponsorAQuest());
+		assertEquals(true, ai.doSp());
 		
 		//see setup works two foes and test
 		
@@ -465,7 +466,7 @@ public class AIStrategyTest extends TestCase{
 		game.addPlayer(p3);
 		pres.getModel().beginTurn();
 		
-		assertEquals(true, ai.DoISponsorAQuest());
+		assertEquals(true, ai.doSp());
 		
 		//no one can rank, and I can not setup valid cards
 		
@@ -490,11 +491,6 @@ public class AIStrategyTest extends TestCase{
 		game.addPlayer(p3);
 		pres.getModel().beginTurn();
 		
-		assertEquals(false, ai.DoISponsorAQuest());
-		
-		
-
-	}
-	
-	
+		assertEquals(false, ai.doSp());
+	}	
 }

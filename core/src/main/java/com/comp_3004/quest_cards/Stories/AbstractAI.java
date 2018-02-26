@@ -1,4 +1,4 @@
-package Ai;
+package com.comp_3004.quest_cards.Stories;
 
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.player.Player;
@@ -12,16 +12,8 @@ public abstract class AbstractAI{
 	 public abstract boolean nextBid();
 	 public abstract boolean discardAfterWinningTest();
 	
-	 public abstract boolean TournamentPlayTurn();
 	 
-	 
-	 //setters
 	 public abstract void setPlayer(Player p);
-	 public abstract void setTournamentParticipation(TourParticipation t);
-	 public abstract void setTourPlay(TourPlay p);
-	 public abstract void setSponsor(DoSponsor s);
-	 
-	 public abstract void setQuest(Quests2 q);
-	 
+	 public abstract boolean TournamentPlayTurn();
 	 
 }

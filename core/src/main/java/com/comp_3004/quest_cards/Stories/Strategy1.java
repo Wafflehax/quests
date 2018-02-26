@@ -1,4 +1,4 @@
-package Ai;
+package com.comp_3004.quest_cards.Stories;
 
 import java.util.LinkedList;
 
@@ -10,12 +10,79 @@ import com.comp_3004.quest_cards.cards.AmourCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.player.Player;
 
-public class TourPlay1 extends TourPlay{
+public class Strategy1 extends AbstractAI{
 
-	private static Logger log = Logger.getLogger(TourPlay1.class); //log4j logger
+	private static Logger log = Logger.getLogger(Strategy1.class); //log4j logger
 	
-	public boolean TournamentPlayTurn(Player p) {
+	private Player pl;
+	
+	public Strategy1() {}
+	
+	public void setPlayer(Player p) {
+		this.pl = p;
+	}
+	
+	@Override
+	public boolean DoIParticipateInTournament() {
+		//Can any player including myself win/evolve by winning this tournament?
+		if(this.pl != null && this.pl.getTour() != null) {
+			//if any player can rank/win then participate, not everyone could have answered yet
+			for(Player p: this.pl.getTour().getPlayers().getPlayers()) {
+				if(canIRankWin(p)) {
+					log.info(this.pl.getName() + " is Participating since " + p.getName() + " could win/evolve");
+					return true;
+				}
+			}
+		}
+		log.info("Not Participating");
+		return false;
+	}
+	
+	private boolean canIRankWin(Player p) {
+		if(p != null && p.getTour() != null) {
+			int shields = p.getShields();
+			int needed = p.sheildsToRank();
+			if(needed == 0) {
+				//highest rank Knight of round table can't rank higher but if in game winning tour participate
+				if(p.getTour().isGameWinTour())
+					return true;
+				return false;
+			}
+			else {
+				int shAvail = p.getTour().getJoiners() + p.getTour().getCurTour().getBonusSh();
+				if(shAvail >= needed)
+					return true;
+			}	
+		}
+	return false;
+	}
 
+	@Override
+	public boolean DoISponsorAQuest() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean doIParticipateInQuest() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean nextBid() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean discardAfterWinningTest() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean TournamentPlayTurn() {
 		/*
 		To decide what to play:
 		If another player who can win/evolve by winning this tournament does participate
@@ -25,29 +92,28 @@ public class TourPlay1 extends TourPlay{
 		 */
 		
 		//check if I can win/evolve
-		if(canIRankWin(p)) {
-			playStrong(p);
+		if(canIRankWin(this.pl)) {
+			playStrong(this.pl);
 		}
 		else{
 			// if any other participant can win/evolve then play strong
 			boolean play = false;
-			for(Player pl: p.getTour().getPlayers().getPlayers()) {
-				if(canIRankWin(pl)) {
+			for(Player p: this.pl.getTour().getPlayers().getPlayers()) {
+				if(canIRankWin(p)) {
 					play = true;
 					break;
 				}
 			}
 			if(play) {
-				playStrong(p);				
+				playStrong(this.pl);				
 			}
 			else {
-				playWeak(p);
+				playWeak(this.pl);
 			}
 		}
 		return false;
 	}
-	
-	
+
 	public void playStrong(Player p) {
 		//play strongest possible hand, all of the cards you own
 		log.info("Playing strongest possible hand, all cards");
@@ -127,24 +193,11 @@ public class TourPlay1 extends TourPlay{
 		}
 		return false;
 	}
-	
-	private boolean canIRankWin(Player p) {
-		if(p != null && p.getTour() != null) {
-			int shields = p.getShields();
-			int needed = p.sheildsToRank();
-			if(needed == 0) {
-				//highest rank Knight of round table can't rank higher but if in game winning tour participate
-				if(p.getTour().isGameWinTour())
-					return true;
-				return false;
-			}
-			else {
-				int shAvail = p.getTour().getJoiners() + p.getTour().getCurTour().getBonusSh();
-				if(shAvail >= needed)
-					return true;
-			}	
-		}
-	return false;
+
+	@Override
+	public void playInQuest(AdventureCard stageCard) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

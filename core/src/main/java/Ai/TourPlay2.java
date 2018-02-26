@@ -9,12 +9,17 @@ import org.apache.log4j.Logger;
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AllyCard;
 import com.comp_3004.quest_cards.cards.AmourCard;
+import com.comp_3004.quest_cards.cards.FoeCard;
+import com.comp_3004.quest_cards.cards.TestCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
 import com.comp_3004.quest_cards.player.Player;
+import com.comp_3004.quest_cards.player.Player.Rank;
+
 
 public class TourPlay2 extends TourPlay{
 
 	private static Logger log = Logger.getLogger(TourPlay2.class); //log4j logger
+
 
 	public boolean TournamentPlayTurn(Player p) {
 		//I play as few cards to get 50 or my best possible Battle points

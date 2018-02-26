@@ -13,6 +13,7 @@ import com.comp_3004.quest_cards.cards.AdventureCard.State;
 
 import Ai.AbstractAI;
 
+
 public class Player{
 	static Logger log = Logger.getLogger(Player.class); //log4j logger
 	public enum Rank implements Comparable<Rank>{ 
