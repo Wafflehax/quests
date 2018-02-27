@@ -249,13 +249,8 @@ public class GamePresenter extends Group {
 
         }
       view.displayExtraCards(stageCards);
-
-
-
+      
     }
-
-
-
   }
 
 
@@ -413,8 +408,7 @@ public class GamePresenter extends Group {
             				+ " shields available are " + avil,res->{});	
             	}
         		else if(model.getTour().getJoiners() < 2
-            			&& model.getTour().displaytourstartmessage() && model.getTour().getRound() == 1
-            			&& model.getTour().getleftToPlayCard() > 0) {
+            			&& model.getTour().displaytourstartmessage() && model.getTour().getRound() == 0) {
             		String currentP = model.getcurrentTurn().getName();
             		TournamentCard t = (TournamentCard)model.getStory();
             		int aT = 0;
@@ -428,7 +422,8 @@ public class GamePresenter extends Group {
         		//case of getting tour ouput
         		else if(model.getTour().Complete()) {
         			//display results
-        			view.displayAnnouncementDialog("Round Results",model.getTour().tourresult + model.getcurrentTurn().getName(),res->{});
+        			view.displayAnnouncementDialog("Round Results",model.getTour().tourresult + "\n" + model.getcurrentTurn().getName() +
+        					" 's turn",res->{});
         			//start next story && check win condition before
         			beginTurn();
         		}
@@ -766,9 +761,9 @@ public class GamePresenter extends Group {
 		StoryDeck storyDeck = new StoryDeck();
 		storyDeck.setTopCard("Chivalrous Deed");
 		storyDeck.setTopCard("Prosperity Throughout the Realms");
-		storyDeck.setTopCard("Boar Hunt");
+		//storyDeck.setTopCard("Boar Hunt");
 
-		//storyDeck.setTopCard("Tournament at Camelot");
+		storyDeck.setTopCard("Tournament at Camelot");
 		//storyDeck.setTopCard("Prosperity Throughout the Realms");
 		
 		//set up adventure deck 

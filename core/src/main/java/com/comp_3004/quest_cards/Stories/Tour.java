@@ -327,7 +327,7 @@ public class Tour {
 						//set players to those tied					
 						players.setArray(winners);
 						for(int i = 0; i < players.size(); i++) {
-							out += "Player : " + players.getPlayerAtIndex(i).getName() + "\n";
+							this.tourresult += "Player : " + players.getPlayerAtIndex(i).getName() + "\n";
 						}
 						log.info(this.tourresult);
 						leftToPlayCard = pairs.size();
