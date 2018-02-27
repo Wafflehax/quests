@@ -21,7 +21,7 @@ public class SponsorState extends PlayerState {
 				return true;
 			}else {
 				log.info("Failed to play  " + c.getName());
-				return true; 
+				return false; 
 			}
 		}
 		else {
