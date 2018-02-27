@@ -44,6 +44,7 @@ public class Players{
 	public void setArray(ArrayList<Player> p) {
 		this.players = p;
 		this.endIndex = p.size()-1;
+		this.position = 0;
 	}
 	public void setSize(int s) {
 		if(s > 0) {

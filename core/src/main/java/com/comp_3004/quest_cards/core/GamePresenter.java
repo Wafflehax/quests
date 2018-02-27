@@ -8,24 +8,18 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.comp_3004.quest_cards.Stories.Quest;
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
-import com.comp_3004.quest_cards.cards.Card;
-import com.comp_3004.quest_cards.cards.EventCard;
 import com.comp_3004.quest_cards.cards.TournamentCard;
-
 import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.gui.Assets;
 import com.comp_3004.quest_cards.gui.CardView;
 import com.comp_3004.quest_cards.gui.Config;
 import com.comp_3004.quest_cards.gui.GameView;
 import com.comp_3004.quest_cards.player.Player;
-
 import com.comp_3004.quest_cards.gui.*;
-import com.comp_3004.quest_cards.player.Player;
 import com.comp_3004.quest_cards.player.Players;
 
 import org.apache.log4j.Logger;
@@ -59,7 +53,7 @@ public class GamePresenter extends Group {
     manager = null;
     view = null;
     model = m;
-
+    
   }
 
   public GamePresenter(QuestCards parent) {
@@ -179,11 +173,24 @@ public class GamePresenter extends Group {
     	  assignHand(false,true);
     	  view.displayAnnouncementDialog("BEWARE!","YOU HAVE TOO MANY CARDS!!\nPLEASE MAKE SURE YOU HAVE LESS THAN 12 CARDS!",res->{});}
       else {
-        		if(model.getPlayers().peekNext() == model.getEvent().getDrewEvent()) {
+    	  		//if no event do nothing
+    	  		if(model.getStory() instanceof TournamentCard) {
+    	  			if(model.getTour().Complete()) {
+    	  				//move on to next story
+    	  				beginTurn();
+    	  			}
+    	  			model.getTour().doneTurn();
+    	  		}
+    	  		if(model.getEvent() == null) {
+    	  			log.info("there is no event");
+    	  			nextPlayer();
+    	  		}
+    	  		else if(model.getPlayers().peekNext() == model.getEvent().getDrewEvent()) {
         			model.getPlayers().setCurrent(model.getEvent().getDrewEvent());
         			nextPlayer();
         			beginTurn();
         		}
+    	  		
         		else
         			nextPlayer();
         }
@@ -308,24 +315,7 @@ public class GamePresenter extends Group {
         				}
         			});
       	  	}
-        		else if(model.getTour() != null && model.getTour().displaytourstartmessage() == true 
-					&& model.getTour().getJoiners() >= 2) {
-				view.displayAnnouncementDialog("Tournament Starting", model.getTour().getJoiners() + " have joined\n" +
-          " with shield winnings of " + (((TournamentCard)model.getStory()).getBonusSh()+model.getTour().getJoiners()),res->{});
-				drawCards();
-	            storyDisplay();
-	          
-			}
-			else if(model.getTour() != null && model.getTour().getleftToPlayCard() == 0 && model.getTour().getJoiners() < 2
-					&& model.getTour().displaytourstartmessage()) {
-				view.displayAnnouncementDialog("Tournament NOT Starting", model.getTour().getJoiners() + " have joined\n" +
-          " with shield winnings of " + (((TournamentCard)model.getStory()).getBonusSh()+model.getTour().getJoiners()) +
-          " but not enought players!",res->{});
-        	  model.getTour().displaytourstartmessage(false);
-        	  drawCards();
-	            storyDisplay();
-	          
-			}
+        	
 			else {
 				view.displayAnnouncementDialog("Begin Turn", "" + model.getcurrentTurn().getName() + "... begin!", result_2 -> {
 		            drawCards();
@@ -345,8 +335,9 @@ public class GamePresenter extends Group {
 
 
   //TURN METHODS
-  public void beginTurn(){model.beginTurn();
-    view.displayStoryDiscardPile(sprites.findRegion(CardAssetMap.get(model.getStory().getName())));
+  public void beginTurn(){
+	  model.beginTurn();
+	  view.displayStoryDiscardPile(sprites.findRegion(CardAssetMap.get(model.getStory().getName())));
   }
 
   public void nextPlayer(){
@@ -383,9 +374,52 @@ public class GamePresenter extends Group {
       case "T":
 
         if(model.getTour().getLeftAsk()<1)
-          {view.displayAnnouncementDialog("","Nobody Left to Ask",res->{System.out.println("JOES A GAY");});
-
-          break;}
+          {
+        	//view.displayAnnouncementDialog("","Nobody Left to Ask",res->{});
+        	if(model!=null && model.getTour()!=null) {
+        		if(model.getTour().displaytourstartmessage() 
+            			&& model.getTour().getJoiners() >=2 && model.getTour().getRound() == 1
+            			&& model.getTour().getleftToPlayCard() > 0) {
+            		String currentP = model.getcurrentTurn().getName();
+            		TournamentCard t = (TournamentCard)model.getStory();
+            		int aT = 0;
+            		if(t != null)
+            			aT = t.getBonusSh();
+            		int avil = model.getTour().getJoiners();
+            		avil += aT;
+            		
+            		view.displayAnnouncementDialog("Tournament Starting",currentP +"'s turn,"
+            				+ " shields available are " + avil,res->{});	
+            	}
+        		else if(model.getTour().getJoiners() < 2
+            			&& model.getTour().displaytourstartmessage() && model.getTour().getRound() == 1
+            			&& model.getTour().getleftToPlayCard() > 0) {
+            		String currentP = model.getcurrentTurn().getName();
+            		TournamentCard t = (TournamentCard)model.getStory();
+            		int aT = 0;
+            		if(t != null)
+            			aT = t.getBonusSh();
+            		int avil = model.getTour().getJoiners();
+            		avil += aT;
+            		view.displayAnnouncementDialog("Tournament Not Starting",currentP +"'s turn,"
+            				+ " shields available are " + avil,res->{});
+            	}
+        		//case of getting tour ouput
+        		else if(model.getTour().Complete()) {
+        			//display results
+        			view.displayAnnouncementDialog("Round Results",model.getTour().tourresult + model.getcurrentTurn().getName(),res->{});
+        			//start next story && check win condition before
+        			beginTurn();
+        		}
+            	else {
+            		view.displayAnnouncementDialog("","Begin Turn " + model.getcurrentTurn().getName(),res->{});
+                }
+        	}
+        	else
+        		view.displayAnnouncementDialog("","Model is null",res->{});
+        	
+          break;
+          }
 
         view.displayJoinEventDialog("Join Tourney?",""+model.getStory().getName(), StoryEv, joinTourney->{
 
@@ -666,10 +700,13 @@ public class GamePresenter extends Group {
   
   	private void setUpScen1() {
 		//set up story deck
-		StoryDeck storyDeck = new StoryDeck();
-		storyDeck.setTopCard("Chivalrous Deed");
-		storyDeck.setTopCard("Prosperity Throughout the Realms");
-		storyDeck.setTopCard("Boar Hunt");
+  		
+  		//temporary storydeck with Tournament
+  		StoryDeck storyDeck = new StoryDeck();
+  		storyDeck.setTopCard("Tournament at York");
+		//storyDeck.setTopCard("Chivalrous Deed");
+		//storyDeck.setTopCard("Prosperity Throughout the Realms");
+		//storyDeck.setTopCard("Boar Hunt");
 		
 		//set up adventure deck 
 		AdventureDeck advDeck = new AdventureDeck();
