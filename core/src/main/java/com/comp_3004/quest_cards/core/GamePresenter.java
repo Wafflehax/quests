@@ -391,27 +391,8 @@ public class GamePresenter extends Group {
 
               if(sponsorQuest)
               { userInput(1); //Tells model currentPlayer wants to sponsor quest
-                StageNum = 0;
-                cardUpdate(StageNum);
-                assignHand(false, false);
-                view.displayNextStageButton(()->{StageNum++;
-                assignHand(false,false);
-                cardUpdate(StageNum);
-                if(StageNum == model.getQuest().getQuest().getStages())
-                {view.hideNextStageButton();
-
-                clearCards(handCards); //Kills Listeners on cards so sponsor can't commit OOB error
-                view.displayFinishQuestSetupButton(()->{
-                  //TODO: Implement a check if QuestSetup is good, and resolve accordingly
-
-
-
-
-
-                },false);}
-
-                },false);
-
+                spons();
+                
               }
 
               else
@@ -435,6 +416,39 @@ public class GamePresenter extends Group {
         break;
 
     }
+
+  }
+  
+  public void spons() {
+	  StageNum = 0;
+	  cardUpdate(StageNum);
+      assignHand(false, false);
+      view.displayNextStageButton(()->{StageNum++;
+      assignHand(false,false);
+      cardUpdate(StageNum);
+      if(StageNum == (model.getQuest().getQuest().getStages()-1))
+      {view.hideNextStageButton();
+
+      //clearCards(handCards); //Kills Listeners on cards so sponsor can't commit OOB error
+      view.displayFinishQuestSetupButton(()->{
+        //TODO: Implement a check if QuestSetup is good, and resolve accordingly
+      		if(model.getQuest().checkQuestSetup()) {
+      			log.info("Quest set up correctly");
+      			nextPlayer();
+      		}
+      		else {
+      			view.displayAnnouncementDialog("Set Up Error","Battle Points do not increase for each stage",res->{log.info("Quest set up incorrectly");});
+      			assignHand(false,false);
+      			spons();
+      			
+      		}
+
+
+
+
+      },false);}
+
+      },false);
 
   }
 
