@@ -54,7 +54,7 @@ public class TourPlayState extends PlayerState{
 
 	@Override
 	public boolean userInput(int input, Player p) {
-		return p.getTour().doneTurn();
+		return p.getTour().doneTurn().bool;
 	}
 	
 	
