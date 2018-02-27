@@ -34,6 +34,7 @@ public class Tour {
 	private int leftToPlayCard;
 	private boolean gameWinMatch = false;
 	private boolean complete;
+	private boolean playerturn;
 	
 	public TournamentCard getCurTour() { return tour; }
 	
@@ -46,7 +47,7 @@ public class Tour {
 	public int getJoiners() { return this.joiners; }
 	public int getLeftAsk() {return this.leftAsk;}
 	public ArrayList<Player> getParticipants() { return this.participants; }
-	
+	public boolean playerturn() { return this.playerturn; }
 	
 	//constructor
 	/*	input players at the table
@@ -131,6 +132,7 @@ public class Tour {
 		//none left to ask
 		if(leftAsk == 0) {
 			if(joiners >= 2) {
+				this.playerturn = true;
 				for(Player ps: participants)
 					ps.setState("playtour");
 				if(gameWinMatch)

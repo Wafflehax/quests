@@ -152,12 +152,18 @@ public class GamePresenter extends Group {
 
     view.displayNextTurnButton(() -> {
       System.out.println(model.getcurrentTurn().getState());
-      if(model.getcurrentTurn().tooManyHandCards())
-      {assignHand(false);
-        view.displayAnnouncementDialog("BEWARE!","YOU HAVE TOO MANY CARDS!!\nPLEASE MAKE SURE YOU HAVE LESS THAN 12 CARDS!",res->{});}
-
-        else
-          nextPlayer();
+      //if player turn start then display start tour message
+      if(model.getTour() != null && model.getTour().playerturn() == true) {
+    	//  view.displayAnnouncementDialog("Tournament Starting", model.getTour().getJoiners() + " have joined\n" +
+    //  " with shield winnings of " + (Tournamentcard)model.getStory(),res->{});
+      }
+      if(model.getcurrentTurn().tooManyHandCards()){
+    	  assignHand(false);
+    	  view.displayAnnouncementDialog("BEWARE!","YOU HAVE TOO MANY CARDS!!\nPLEASE MAKE SURE YOU HAVE LESS THAN 12 CARDS!",res->{});}
+      else
+      {
+    	  nextPlayer();
+      }
     }, false);
     // });
 
