@@ -391,10 +391,15 @@ public class GamePresenter extends Group {
 
       case "Q":
         if(model.getQuest().getSponsor() != null){
+        		//quest participation
 	        	if(model.getcurrentTurn().getState() == "questParticipant") {
 		    		determineParticipation();
-		    		if(model.getcurrentTurn() == model.getQuest().getDrewQuest())
-		    			System.out.println("DING");
+        		}
+	        	//quest play
+	        	else if(model.getcurrentTurn().getState() == "playQuest") {
+		    		playQuest();
+		    		while(!model.getQuest().getParticipants().contains(model.getPlayers().peekNext()))
+		    			model.nextPlayer();
         		}
 	        	break;
 	    	}
@@ -434,7 +439,6 @@ public class GamePresenter extends Group {
 	  System.out.println(error);
 	  StageNum = 0;
       if(error) {
-    	  	System.out.println("DING");
     	  	view.displayAnnouncementDialog("Set Up Error","Battle Points do not increase for each stage",res->{
     	  		log.info("Quest set up incorrectly");
     	  		questSetUp();
@@ -475,15 +479,27 @@ public class GamePresenter extends Group {
   
   public void determineParticipation() {
 		view.displayParticipateQuestDialog("Participation", "Participate in quest?", participate->{
-			if(participate) {
+			if(participate)
 				userInput(1);
-				nextPlayer();
-			}
-			else  {
+			else
 				userInput(0);
+			if(model.getPlayers().peekNext() == model.getQuest().getDrewQuest()) {
+				model.nextPlayer();
+				while(!model.getQuest().getParticipants().contains(model.getPlayers().peekNext())) {
+	    				model.nextPlayer();
+				}
+				System.out.println(model.getcurrentTurn().getName());
 				nextPlayer();
 			}
+			else
+				nextPlayer();
 		});
+  }
+  
+  public void playQuest() {
+	  view.displayAnnouncementDialog("Stage "+model.getQuest().getCurrentStageNum()+1,"Stage "+model.getQuest().getCurrentStageNum()+" contains a "
+			  +model.getQuest().getCurrentStage().getSponsorCards().get(0).getClass().getSimpleName(),res->{});
+	  
   }
 
   public void clearCards(CardView [] cards){for(int i = 0; i<cards.length; i++) cards[i].clear();}
