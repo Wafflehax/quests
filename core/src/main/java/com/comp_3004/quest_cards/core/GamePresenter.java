@@ -48,6 +48,7 @@ public class GamePresenter extends Group {
   public TextureAtlas sprites;
   public TextureAtlas backgrounds;
   public int StageNum;
+  public boolean jankQuestFix = false;
   private QuestCards parent;
   private GameModel model;
   private AssetManager manager;
@@ -178,7 +179,7 @@ public class GamePresenter extends Group {
       System.out.println(model.getcurrentTurn().getState());
       if(model.getcurrentTurn().tooManyHandCards()){
     	  assignHand(false,false);
-    	  view.displayAnnouncementDialog("BEWARE!","YOU HAVE TOO MANY CARDS!!\nPLEASE MAKE SURE YOU HAVE LESS THAN 12 CARDS!",res->{});}
+    	  view.displayAnnouncementDialog("BEWARE!","You have too many cards!!\nPlease discard "+(model.getcurrentTurn().getHand().size()-12)+" more cards...",res->{});}
       else if(model.getcurrentTurn().getState().compareTo("sponsor")==0)
       {System.out.println("Sponsor isn't allowed to end turn until proper quest setup");}
       else {
@@ -206,12 +207,14 @@ public class GamePresenter extends Group {
   			nextPlayer();
   		}
   		else if(model.getPlayers().peekNext() == model.getEvent().getDrewEvent()) {
-			model.getPlayers().setCurrent(model.getEvent().getDrewEvent());
-			nextPlayer();
-			beginTurn();
-  		}
-
+            model.getPlayers().setCurrent(model.getEvent().getDrewEvent());
+            nextPlayer();
+            beginTurn();
+        }
+			else{nextPlayer();}
       }
+
+
     }, false);
     // });
 
@@ -257,7 +260,7 @@ public class GamePresenter extends Group {
 
 
     Players tempPlayers = model.getPlayers();
-    //System.out.println("player = "+model.getcurrentTurn().getName()+": assignHand IDS:");
+    System.out.println("assignHand() : "+model.getcurrentTurn().getName()+" "+model.getcurrentTurn().getState());
 
     //CLEAN CARDS FROM VIEW
     view.cardWipe();
@@ -362,9 +365,9 @@ public class GamePresenter extends Group {
 
       case "E": //EVENT HANDLING
         //Gdx.app.log("displayEventAnnouncement","storyType -> EVENT");
-        if(model.getEvent().getDrewEvent() == model.getcurrentTurn())
-        {
-          break;}
+       // if(model.getEvent().getDrewEvent() == model.getcurrentTurn())
+      //  {
+        //  break;}
 
         view.displayEventAnnouncement(StoryEv, res_2 -> {
           model.getEvent().runEvent();
@@ -448,6 +451,9 @@ public class GamePresenter extends Group {
         break;
 
       case "Q":
+          if(model.getcurrentTurn().tooManyHandCards())
+          {}
+
         if(model.getQuest().getSponsor() != null){
         		//quest participation
 	        	if(model.getcurrentTurn().getState() == "questParticipant") {
@@ -535,10 +541,12 @@ public class GamePresenter extends Group {
   
   public void determineParticipation() {
 		view.displayParticipateQuestDialog("Participation", model.getcurrentTurn().getName()+"\nParticipate in quest?", participate->{
-			if(participate)
+			System.out.println("first line: "+model.getcurrentTurn().getName());
+		    if(participate)
                 {userInput(1);}
 			else
                 {userInput(0);}
+            System.out.println("after 1st condition pair");
 
 			if(model.getPlayers().peekNext() == model.getQuest().getDrewQuest()) {
 				model.nextPlayer();
@@ -549,7 +557,7 @@ public class GamePresenter extends Group {
 				nextPlayer();
 			}
 			else
-            {nextPlayer();System.out.println(model.getcurrentTurn().getState());}
+            {System.out.println(model.getcurrentTurn().getState()); nextPlayer();}
 		});
   }
   

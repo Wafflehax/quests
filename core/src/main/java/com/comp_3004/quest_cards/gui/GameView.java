@@ -550,8 +550,8 @@ public class GameView extends Group {
 
 	      @Override
 	      public void clicked(InputEvent e, float x, float y) {
+            participationQuestDialog.remove();
 	        action.accept(true);
-	        participationQuestDialog.remove();
 	      }
 	    });
 

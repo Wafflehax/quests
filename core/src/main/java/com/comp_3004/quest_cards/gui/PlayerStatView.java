@@ -120,7 +120,7 @@ public class PlayerStatView extends Group {
         presenter.getView().displayStatViewCards(cards);
         presenter.getView().statViewBG.setVisible(true);
         float r,g,b; r = flag_arrow.getColor().r; b = flag_arrow.getColor().b; g = flag_arrow.getColor().g;
-        presenter.getView().statViewBG.setColor(r,g,b,1);
+        presenter.getView().statViewBG.setColor(r,g,b,0.4f);
         presenter.getView().displayStatViewCards(cards);
       }
 
