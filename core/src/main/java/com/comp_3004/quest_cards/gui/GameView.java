@@ -21,7 +21,6 @@ import com.comp_3004.quest_cards.core.CardViewAccessor;
 import com.comp_3004.quest_cards.core.ImageAccessor;
 
 
-import java.awt.*;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 
@@ -47,6 +46,7 @@ public class GameView extends Group {
   public Rectangle zeroBounds;
   public TextButton nextTurnButton;
   public TextButton nextStageButton;
+  public TextButton finishQuestSetupButton;
   public PlayerStatView[] players;
   public LinkedList<CardView> InPlay;
   public LinkedList<CardView> QuestStages;
@@ -78,7 +78,8 @@ public class GameView extends Group {
     joinEventDialog = new JoinEventDialog(skin);
     sponsorQuestDialog = new JoinEventDialog(skin);
     nextTurnButton = new TextButton(NEXT_TURN, skin);
-    nextStageButton = new TextButton("Next-Stage", skin);
+    nextStageButton = new TextButton("Next Stage", skin);
+    finishQuestSetupButton = new TextButton("Finish Setup", skin);
     players = new PlayerStatView[4];
 
     //Init and Orient the CDZs
@@ -165,6 +166,7 @@ public class GameView extends Group {
 
     nextTurnButton.setBounds(Config.VIRTUAL_WIDTH - 200, 360 + 10, 200, 50);
     nextStageButton.setBounds(SponsorCDZ.getWidth()-220,SponsorCDZ.getY()+SponsorCDZ.getHeight()+10,200,50);
+    finishQuestSetupButton.setBounds(SponsorCDZ.getWidth()-220,SponsorCDZ.getY()+SponsorCDZ.getHeight()+10,200,50);
 
     PlayerColor[] colors = PlayerColor.values();
     for (int i = 0; i < players.length; i++) {
@@ -294,7 +296,9 @@ public class GameView extends Group {
     }
   }
 
-  public void cardWipe(){InPlay.clear(); QuestStages.clear();}
+  public void cardWipe(){InPlay.clear(); QuestStages.clear();
+  playerView.playerAdventureCards.clear();
+  }
 
   public void displayNextTurnButton(final Runnable action, boolean hideAfter) {
 
@@ -316,6 +320,32 @@ public class GameView extends Group {
     addActor(nextTurnButton);
   }
 
+    public void displayCardsQuestStages(LinkedList<CardView> QuestStages) {
+        float x0 = SponsorCDZ.getX();
+        float y0 = SponsorCDZ.getY() + SponsorCDZ.getHeight() / 2 - 40;
+        int prevStage = 0;
+        for (int i = 0; i < QuestStages.size(); i++) {
+            CardView setThis = QuestStages.get(i);
+            if(setThis.getCardStage()>prevStage)
+            {prevStage = setThis.getCardStage();
+            x0 = x0 + setThis.getWidth()/2;
+            }
+
+            setThis.setY(y0);
+            setThis.setDeckY(y0);
+            setThis.setDeckZ(i);
+            setThis.setZIndex(i);
+            setThis.setX(x0);
+            setThis.setDeckX(x0);
+            x0 = (x0 + 100);
+
+            if (i == 10) {
+                y0 = y0 - SponsorCDZ.getHeight() / 2;
+                x0 = SponsorCDZ.getX();
+            }
+        }
+    }
+
     public void displayNextStageButton(final Runnable action, boolean hideAfter) {
 
         if (nextStageButton.getListeners().size > 1) {
@@ -336,28 +366,28 @@ public class GameView extends Group {
         addActor(nextStageButton);
     }
 
-  public void hideNextTurnButton(){nextTurnButton.remove();}
+  public void hideNextStageButton(){nextStageButton.remove();}
 
-  public void displayCardsQuestStages(LinkedList<CardView> QuestStages) {
-    float x0 = SponsorCDZ.getX();
-    float y0 = SponsorCDZ.getY() + SponsorCDZ.getHeight() / 2 - 40;
+    public void displayFinishQuestSetupButton(final Runnable action, boolean hideAfter) {
 
-    for (int i = 0; i < QuestStages.size(); i++) {
-      CardView setThis = QuestStages.get(i);
-      setThis.setY(y0);
-      setThis.setDeckY(y0);
-      setThis.setDeckZ(i);
-      setThis.setZIndex(i);
-      setThis.setX(x0);
-      setThis.setDeckX(x0);
-      x0 = (x0 + 100);
+        if (finishQuestSetupButton.getListeners().size > 1) {
+            finishQuestSetupButton.getListeners().pop();
+        }
 
-      if (i == 10) {
-        y0 = y0 - SponsorCDZ.getHeight() / 2;
-        x0 = SponsorCDZ.getX();
-      }
+        finishQuestSetupButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                action.run();
+                if (hideAfter) {
+                    finishQuestSetupButton.remove();
+                }
+            }
+        });
+
+
+        addActor(finishQuestSetupButton);
     }
-  }
+
 
   public void displayHoverDraw(CardView card) {
     hoverDraw.setDrawable(new TextureRegionDrawable(card.getPicDisplay()));
@@ -515,10 +545,6 @@ public class GameView extends Group {
 
   public void displayStatViewCards(CardView[] cards) {
     playerView.addDisplayCards(cards);
-
-
-
-
   }
 
   public void hideStatViewCards(CardView[] cards) {

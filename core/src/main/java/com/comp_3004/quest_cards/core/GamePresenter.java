@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.comp_3004.quest_cards.Stories.Quest;
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.Card;
@@ -29,6 +30,7 @@ import com.comp_3004.quest_cards.player.Players;
 
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -40,7 +42,6 @@ public class GamePresenter extends Group {
   public Map<String, String> CardAssetMap;
   public CardView[] handCards;
   public CardView[] activeCards;
-  public CardView[] stageCards;
 
   public TextureAtlas sprites;
   public TextureAtlas backgrounds;
@@ -116,9 +117,6 @@ public class GamePresenter extends Group {
     activeCards[0] = new CardView(sprites.findRegion("R_Champion_Knight"),0);
     activeCards[0].setVisible(false);
 
-    stageCards = new CardView[1];
-    stageCards[0] = new CardView(sprites.findRegion("R_Champion_Knight"),0);
-    stageCards[0].setVisible(false);
 
     handCards = new CardView[tempHand.size()];
     for (int i = 0; i < tempHand.size(); i++) {
@@ -195,27 +193,54 @@ public class GamePresenter extends Group {
     return view;
   }
 
+  private void questStageDisplay(){
+    Quest quest = model.getQuest();
+
+    for(int i = 0; i < quest.getQuest().getStages(); i++)
+    { ArrayList<AdventureCard> tStage = quest.getStage(i).getSponsorCards();
+     CardView [] stageCards = new CardView[tStage.size()];
+
+      for(int j=0; j<stageCards.length;j++)
+        {if(i <= quest.getCurrentStageNum()) stageCards[j] = new CardView(sprites.findRegion(CardAssetMap.get(tStage.get(j).getName())),i);
+        else  stageCards[j] = new CardView(sprites.findRegion(Assets.Cards.CARD_BACK),tStage.get(j).getID());
+
+        stageCards[j].setCardStage(i);
+        view.playerView.playerAdventureCards.addActor(stageCards[j]);
+        view.addToQuestStages(stageCards[j]);
+        stageCards[j].setGamePresenter(this);
+
+
+        }
+      view.displayExtraCards(stageCards);
+
+
+
+    }
+
+
+
+  }
+
 
 
   //ASSIGN HAND
   private void assignHand(boolean doAnnounce, boolean doUpdate) {
     LinkedList<AdventureCard> tempHand = model.getcurrentTurn().getHand();
     LinkedList<AdventureCard> tempActive = model.getcurrentTurn().getActive();
-    LinkedList<AdventureCard> tempStage = model.getcurrentTurn().getActive();
+
 
     Players tempPlayers = model.getPlayers();
     //System.out.println("player = "+model.getcurrentTurn().getName()+": assignHand IDS:");
 
-    view.playerView.wipePlayerHand(handCards);
-    view.playerView.wipePlayerHand(activeCards);
-    view.playerView.wipePlayerHand(stageCards);
+    //CLEAN CARDS FROM VIEW
     view.cardWipe();
+
     view.InPlayCDZ.setVisible(true);
     System.out.println("assignHand(): "+model.getcurrentTurn().getName()+": IDS");
 
     handCards = new CardView[tempHand.size()];
     activeCards = new CardView[tempActive.size()];
-    stageCards = new CardView[tempStage.size()];
+
 
     for (int i = 0; i < tempHand.size(); i++) {
       String spriteGet = tempHand.get(i).getName();
@@ -239,26 +264,20 @@ public class GamePresenter extends Group {
       activeCards[i].setGamePresenter(this);
     }
 
-    for(int i = 0; i<tempStage.size(); i++)
-    {
-      String spriteGet = tempStage.get(i).getName();
-      stageCards[i] = new CardView(sprites.findRegion(CardAssetMap.get(spriteGet)), tempActive.get(i).getID());
-      view.playerView.playerAdventureCards.addActor(activeCards[i]);
-      view.addToQuestStages(stageCards[i]);
-      stageCards[i].setGamePresenter(this);
-    }
 
     for(int i=0; i<tempPlayers.size();i++)
     {int j = 0;
       if(tempPlayers.getPlayerAtIndex(i).getName().compareTo(model.getcurrentTurn().getName()) != 0)
     {view.players[j].setPlayer(tempPlayers.getPlayerAtIndex(i));
     view.players[j].setPresenter(this);
-    view.players[j].playerConfig();}
+    view.players[j].playerConfig();
+    j++;}
     }
 
 
     view.displayPlayerHand(handCards); //CHECK IT OUT
     view.displayExtraCards(activeCards);
+    if(model.getQuest() != null) questStageDisplay();
     view.displayHero(sprites.findRegion(CardAssetMap.get(model.getcurrentTurn().getRankS())));
     view.SponsorCDZ.setVisible(false);
 
@@ -366,17 +385,32 @@ public class GamePresenter extends Group {
         break;
 
       case "Q":
+        if(model.getQuest().getSponsor() != null){break;}
 
     	  view.displaySponsorQuestDialog("Sponsor?",""+model.getStory().getName(), StoryEv, sponsorQuest->{
 
               if(sponsorQuest)
               { userInput(1); //Tells model currentPlayer wants to sponsor quest
-                StageNum = 1;
+                StageNum = 0;
                 cardUpdate(StageNum);
                 assignHand(false, false);
                 view.displayNextStageButton(()->{StageNum++;
                 assignHand(false,false);
-                cardUpdate(StageNum);},false);
+                cardUpdate(StageNum);
+                if(StageNum == model.getQuest().getQuest().getStages())
+                {view.hideNextStageButton();
+
+                clearCards(handCards); //Kills Listeners on cards so sponsor can't commit OOB error
+                view.displayFinishQuestSetupButton(()->{
+                  //TODO: Implement a check if QuestSetup is good, and resolve accordingly
+
+
+
+
+
+                },false);}
+
+                },false);
 
               }
 
@@ -404,8 +438,10 @@ public class GamePresenter extends Group {
 
   }
 
+  public void clearCards(CardView [] cards){for(int i = 0; i<cards.length; i++) cards[i].clear();}
+
   public void cardUpdate(int stage){
-    for(int i=0; i<handCards.length;i++)
+    for(int i = 0; i<handCards.length;i++)
     {handCards[i].setCardStage(stage);}
 
   }
