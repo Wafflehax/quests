@@ -15,6 +15,7 @@ import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.Card;
 import com.comp_3004.quest_cards.cards.EventCard;
+import com.comp_3004.quest_cards.cards.QuestCard;
 import com.comp_3004.quest_cards.cards.TournamentCard;
 
 import com.comp_3004.quest_cards.cards.StoryDeck;
@@ -179,7 +180,7 @@ public class GamePresenter extends Group {
     	  assignHand(false,false);
     	  view.displayAnnouncementDialog("BEWARE!","YOU HAVE TOO MANY CARDS!!\nPLEASE MAKE SURE YOU HAVE LESS THAN 12 CARDS!",res->{});}
       else {
-    	  if(model.getPlayers().peekNext() == model.getQuest().getSponsor()) {
+    	 if(model.getStory() instanceof QuestCard && model.getPlayers().peekNext() == model.getQuest().getSponsor()) {
     		  	//model.getQuest().revealStage();
 			model.nextPlayer();
 			while(!model.getQuest().getParticipants().contains(model.getPlayers().peekNext())) {
@@ -187,11 +188,28 @@ public class GamePresenter extends Group {
 			}
 			System.out.println(model.getcurrentTurn().getName());
 			nextPlayer();
+			
 		}
-		else
-			nextPlayer();
-      }
+    	//if no event do nothing
+    	else if(model.getStory() instanceof TournamentCard) {
+		if(model.getTour().Complete()) {
+			//move on to next story
+			beginTurn();
+		}
+		model.getTour().doneTurn();
+  		}
+    	  
+  		if(model.getEvent() == null) {
+  			log.info("there is no event");
+  			nextPlayer();
+  		}
+  		else if(model.getPlayers().peekNext() == model.getEvent().getDrewEvent()) {
+		model.getPlayers().setCurrent(model.getEvent().getDrewEvent());
+		nextPlayer();
+		beginTurn();
+  		}
 
+      }
     }, false);
     // });
 
@@ -383,9 +401,53 @@ public class GamePresenter extends Group {
       case "T":
 
         if(model.getTour().getLeftAsk()<1)
-          {view.displayAnnouncementDialog("","Nobody Left to Ask",res->{System.out.println("JOES A GAY");});
-
-          break;}
+          {
+        	//view.displayAnnouncementDialog("","Nobody Left to Ask",res->{});
+        	if(model!=null && model.getTour()!=null) {
+        		if(model.getTour().displaytourstartmessage() 
+            			&& model.getTour().getJoiners() >=2 && model.getTour().getRound() == 1
+            			&& model.getTour().getleftToPlayCard() > 0) {
+            		String currentP = model.getcurrentTurn().getName();
+            		TournamentCard t = (TournamentCard)model.getStory();
+            		int aT = 0;
+            		if(t != null)
+            			aT = t.getBonusSh();
+            		int avil = model.getTour().getJoiners();
+            		avil += aT;
+            		
+            		view.displayAnnouncementDialog("Tournament Starting",currentP +"'s turn,"
+            				+ " shields available are " + avil,res->{});	
+            	}
+        		else if(model.getTour().getJoiners() < 2
+            			&& model.getTour().displaytourstartmessage() && model.getTour().getRound() == 1
+            			&& model.getTour().getleftToPlayCard() > 0) {
+            		String currentP = model.getcurrentTurn().getName();
+            		TournamentCard t = (TournamentCard)model.getStory();
+            		int aT = 0;
+            		if(t != null)
+            			aT = t.getBonusSh();
+            		int avil = model.getTour().getJoiners();
+            		avil += aT;
+            		view.displayAnnouncementDialog("Tournament Not Starting",currentP +"'s turn,"
+            				+ " shields available are " + avil,res->{});
+            	}
+        		//case of getting tour ouput
+        		else if(model.getTour().Complete()) {
+        			//display results
+        			view.displayAnnouncementDialog("Round Results",model.getTour().tourresult + model.getcurrentTurn().getName(),res->{});
+        			//start next story && check win condition before
+        			beginTurn();
+        		}
+            	else {
+            		view.displayAnnouncementDialog("","Begin Turn " + model.getcurrentTurn().getName(),res->{});
+                }
+        	}
+        	else
+        		view.displayAnnouncementDialog("","Model is null",res->{});
+        	
+          break;
+        	
+          }
 
         view.displayJoinEventDialog("Join Tourney?",""+model.getStory().getName(), StoryEv, joinTourney->{
 
@@ -701,7 +763,8 @@ public class GamePresenter extends Group {
 		storyDeck.setTopCard("Chivalrous Deed");
 		storyDeck.setTopCard("Prosperity Throughout the Realms");
 		storyDeck.setTopCard("Boar Hunt");
-        //storyDeck.setTopCard("Prosperity Throughout the Realms");
+		//storyDeck.setTopCard("Tournament at Camelot");
+		//storyDeck.setTopCard("Prosperity Throughout the Realms");
 		
 		//set up adventure deck 
 		AdventureDeck advDeck = new AdventureDeck();
