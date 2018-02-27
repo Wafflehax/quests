@@ -159,7 +159,7 @@ public class GamePresenter extends Group {
     }
 
     view.displayAnnouncementDialog("","Let the Games BEGIN!\n\n"+model.getcurrentTurn().getName()+"...begin!",res->{
-      //model.getStoryDeck().setTopCard("Tournament at Camelot");
+      model.getStoryDeck().setTopCard("Prosperity Throughout the Realms");
       beginTurn();
       drawCards();
       storyDisplay();
@@ -176,17 +176,11 @@ public class GamePresenter extends Group {
     view.displayNextTurnButton(() -> {
       System.out.println(model.getcurrentTurn().getState());
       if(model.getcurrentTurn().tooManyHandCards()){
-    	  assignHand(false,true);
+    	  assignHand(false,false);
     	  view.displayAnnouncementDialog("BEWARE!","YOU HAVE TOO MANY CARDS!!\nPLEASE MAKE SURE YOU HAVE LESS THAN 12 CARDS!",res->{});}
-      else {
-        		if(model.getPlayers().peekNext() == model.getEvent().getDrewEvent()) {
-        			model.getPlayers().setCurrent(model.getEvent().getDrewEvent());
-        			nextPlayer();
-        			beginTurn();
-        		}
-        		else
-        			nextPlayer();
-        }
+      else
+        nextPlayer();
+
     }, false);
     // });
 
