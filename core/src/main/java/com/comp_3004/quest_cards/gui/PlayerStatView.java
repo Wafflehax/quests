@@ -114,6 +114,9 @@ public class PlayerStatView extends Group {
     this.addListener(new ClickListener(){
       @Override
       public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+       if(player.getState().compareTo("sponsor") == 0)
+       {return;}
+
         presenter.getView().displayStatViewCards(cards);
         presenter.getView().statViewBG.setVisible(true);
         float r,g,b; r = flag_arrow.getColor().r; b = flag_arrow.getColor().b; g = flag_arrow.getColor().g;
@@ -123,6 +126,9 @@ public class PlayerStatView extends Group {
 
       @Override
       public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+        if(player.getState().compareTo("sponsor") == 0)
+        {return;}
+
         presenter.getView().hideStatViewCards(cards);
         presenter.getView().statViewBG.setVisible(false);
 
