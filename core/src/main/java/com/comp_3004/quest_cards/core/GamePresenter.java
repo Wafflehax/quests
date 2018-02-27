@@ -153,7 +153,7 @@ public class GamePresenter extends Group {
     }
 
     view.displayAnnouncementDialog("","Let the Games BEGIN!\n\n"+model.getcurrentTurn().getName()+"...begin!",res->{
-      //model.getStoryDeck().setTopCard("Tournament at Camelot");
+
       beginTurn();
       drawCards();
       storyDisplay();
@@ -170,7 +170,7 @@ public class GamePresenter extends Group {
     view.displayNextTurnButton(() -> {
       System.out.println(model.getcurrentTurn().getState());
       if(model.getcurrentTurn().tooManyHandCards()){
-    	  assignHand(false,true);
+    	  assignHand(false,false);
     	  view.displayAnnouncementDialog("BEWARE!","YOU HAVE TOO MANY CARDS!!\nPLEASE MAKE SURE YOU HAVE LESS THAN 12 CARDS!",res->{});}
       else {
     	  		//if no event do nothing
@@ -194,6 +194,7 @@ public class GamePresenter extends Group {
         		else
         			nextPlayer();
         }
+
     }, false);
     // });
 
@@ -209,7 +210,8 @@ public class GamePresenter extends Group {
      CardView [] stageCards = new CardView[tStage.size()];
 
       for(int j=0; j<stageCards.length;j++)
-        {if(i <= quest.getCurrentStageNum()) stageCards[j] = new CardView(sprites.findRegion(CardAssetMap.get(tStage.get(j).getName())),i);
+        {if(model.getcurrentTurn().getState().compareTo("sponsor") == 0) stageCards[j] = new CardView(sprites.findRegion(CardAssetMap.get(tStage.get(j).getName())),i);
+          else if(i < quest.getCurrentStageNum()) stageCards[j] = new CardView(sprites.findRegion(CardAssetMap.get(tStage.get(j).getName())),i);
         else  stageCards[j] = new CardView(sprites.findRegion(Assets.Cards.CARD_BACK),tStage.get(j).getID());
 
         stageCards[j].setCardStage(i);
@@ -277,7 +279,7 @@ public class GamePresenter extends Group {
     for(int i=0; i<tempPlayers.size();i++)
     {int j = 0;
       if(tempPlayers.getPlayerAtIndex(i).getName().compareTo(model.getcurrentTurn().getName()) != 0)
-    {view.players[j].setPlayer(tempPlayers.getPlayerAtIndex(i));
+    {view.players[j].setPlayer(tempPlayers.getPlayerAtIndex(j));
     view.players[j].setPresenter(this);
     view.players[j].playerConfig();
     j++;}
@@ -301,8 +303,8 @@ public class GamePresenter extends Group {
            handCards[i].setInPlayCDZ(view.zeroBounds);}
         }
     }
-
         if(doAnnounce) {
+
         		if(model.getcurrentTurn().getState() == "questParticipant") {
         			view.displayParticipateQuestDialog("Participation", "Participate in quest?", participate->{
         				if(participate) {
@@ -347,17 +349,20 @@ public class GamePresenter extends Group {
 	  }
 
   public void storyDisplay(){
-
+	  
     CardView StoryEv = new CardView(sprites.findRegion(CardAssetMap.get(model.getStory().getName())),model.getStory().getID());
     String storyType = CardAssetMap.get(model.getStory().getName()).substring(0,1);//E,T, or Q
     switch(storyType){
 
       case "E": //EVENT HANDLING
         //Gdx.app.log("displayEventAnnouncement","storyType -> EVENT");
+        if(model.getEvent().getDrewEvent() == model.getcurrentTurn())
+        {
+          break;}
 
         view.displayEventAnnouncement(StoryEv, res_2 -> {
           model.getEvent().runEvent();
-          assignHand(false,true);
+          assignHand(false,false);
           if(model.getcurrentTurn().getState()!="tooManyCards") 
 	        if(model.getPlayers().peekNext() == model.getEvent().getDrewEvent()) {
 	  			model.getPlayers().setCurrent(model.getEvent().getDrewEvent());
@@ -436,8 +441,14 @@ public class GamePresenter extends Group {
         break;
 
       case "Q":
-        if(model.getQuest().getSponsor() != null){break;}
-
+        if(model.getQuest().getSponsor() != null){
+	        	if(model.getcurrentTurn().getState() == "questParticipant") {
+		    		determineParticipation();
+		    		if(model.getcurrentTurn() == model.getQuest().getDrewQuest())
+		    			System.out.println("DING");
+        		}
+	        	break;
+	    	}
     	  view.displaySponsorQuestDialog("Sponsor?",""+model.getStory().getName(), StoryEv, sponsorQuest->{
 
               if(sponsorQuest)
@@ -511,6 +522,19 @@ public class GamePresenter extends Group {
     	      		}
     	      },false);}
       },false);
+  }
+  
+  public void determineParticipation() {
+		view.displayParticipateQuestDialog("Participation", "Participate in quest?", participate->{
+			if(participate) {
+				userInput(1);
+				nextPlayer();
+			}
+			else  {
+				userInput(0);
+				nextPlayer();
+			}
+		});
   }
 
   public void clearCards(CardView [] cards){for(int i = 0; i<cards.length; i++) cards[i].clear();}
@@ -700,13 +724,13 @@ public class GamePresenter extends Group {
   
   	private void setUpScen1() {
 		//set up story deck
-  		
-  		//temporary storydeck with Tournament
-  		StoryDeck storyDeck = new StoryDeck();
-  		storyDeck.setTopCard("Tournament at York");
-		//storyDeck.setTopCard("Chivalrous Deed");
-		//storyDeck.setTopCard("Prosperity Throughout the Realms");
-		//storyDeck.setTopCard("Boar Hunt");
+
+		StoryDeck storyDeck = new StoryDeck();
+		storyDeck.setTopCard("Tournament at York");
+		storyDeck.setTopCard("Chivalrous Deed");
+		storyDeck.setTopCard("Prosperity Throughout the Realms");
+		storyDeck.setTopCard("Boar Hunt");
+        //storyDeck.setTopCard("Prosperity Throughout the Realms");
 		
 		//set up adventure deck 
 		AdventureDeck advDeck = new AdventureDeck();

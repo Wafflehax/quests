@@ -34,8 +34,8 @@ public class PlayerView extends Group {
     //Init player hand
 
     DeckView.DisplayStrategy deckDisplay = new SpillingDeckStrategy(
-        Config.PlayerView.ADVENTURE_CARDS_MIN_OVERLAP,
-        Config.PlayerView.ADVENTURE_CARDS_MAX_OVERLAP);
+        0.80f,
+        0.80f);
 
     playerAdventureCards = new DeckView(deckDisplay);
     playerAdventureCards.setBounds(
