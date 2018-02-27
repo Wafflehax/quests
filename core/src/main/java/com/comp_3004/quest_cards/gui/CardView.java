@@ -79,15 +79,10 @@ public class CardView extends Image {
                       @Override
                       public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                         //RESETS THE CARD'S POSITIONING
-                        if(CardBounds.overlaps(SponsorCDZ))
-                        {
-                          //DO NOTHING
-                        }
-                        else{
                           card.setX(card.getDeckX());
                           card.setY(card.getDeckY());
                           card.setZIndex(card.getDeckZ());
-                        }
+
 
                       }
 
@@ -138,10 +133,10 @@ public class CardView extends Image {
 
       }
 
-      else if(CardBounds.overlaps(SponsorCDZ)&& gamePresenter.getModel().getcurrentTurn().getState().compareTo("sponsor") == 0 && gamePresenter.playCard(card.cardID))
+      else if(CardBounds.overlaps(SponsorCDZ) && gamePresenter.playCard(card.cardID, card.cardStage))
       {//TODO: Also Implement Bounds Based on Conditions... Omit SponsorCDZ if model.getcurrentTurn() != Sponsor
         gamePresenter.getView().addToQuestStages(card);
-       System.out.println("CardID = "+card.cardID);
+       System.out.println("CardID = "+card.cardID+": CardStage = "+card.cardStage);
       }
 
       else if(CardBounds.overlaps(DiscardCDZ))

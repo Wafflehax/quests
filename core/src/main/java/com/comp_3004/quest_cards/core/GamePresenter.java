@@ -44,6 +44,7 @@ public class GamePresenter extends Group {
 
   public TextureAtlas sprites;
   public TextureAtlas backgrounds;
+  public int StageNum;
   private QuestCards parent;
   private GameModel model;
   private AssetManager manager;
@@ -115,6 +116,10 @@ public class GamePresenter extends Group {
     activeCards[0] = new CardView(sprites.findRegion("R_Champion_Knight"),0);
     activeCards[0].setVisible(false);
 
+    stageCards = new CardView[1];
+    stageCards[0] = new CardView(sprites.findRegion("R_Champion_Knight"),0);
+    stageCards[0].setVisible(false);
+
     handCards = new CardView[tempHand.size()];
     for (int i = 0; i < tempHand.size(); i++) {
       String spriteGet = tempHand.get(i).getName();
@@ -172,7 +177,7 @@ public class GamePresenter extends Group {
     view.displayNextTurnButton(() -> {
       System.out.println(model.getcurrentTurn().getState());
       if(model.getcurrentTurn().tooManyHandCards()){
-    	  assignHand(false);
+    	  assignHand(false,true);
     	  view.displayAnnouncementDialog("BEWARE!","YOU HAVE TOO MANY CARDS!!\nPLEASE MAKE SURE YOU HAVE LESS THAN 12 CARDS!",res->{});}
       else {
         		if(model.getPlayers().peekNext() == model.getEvent().getDrewEvent()) {
@@ -193,19 +198,25 @@ public class GamePresenter extends Group {
 
 
   //ASSIGN HAND
-  private void assignHand(boolean doAnnounce) {
+  private void assignHand(boolean doAnnounce, boolean doUpdate) {
     LinkedList<AdventureCard> tempHand = model.getcurrentTurn().getHand();
     LinkedList<AdventureCard> tempActive = model.getcurrentTurn().getActive();
+    LinkedList<AdventureCard> tempStage = model.getcurrentTurn().getActive();
+
     Players tempPlayers = model.getPlayers();
     //System.out.println("player = "+model.getcurrentTurn().getName()+": assignHand IDS:");
 
     view.playerView.wipePlayerHand(handCards);
     view.playerView.wipePlayerHand(activeCards);
+    view.playerView.wipePlayerHand(stageCards);
     view.cardWipe();
+    view.InPlayCDZ.setVisible(true);
     System.out.println("assignHand(): "+model.getcurrentTurn().getName()+": IDS");
 
     handCards = new CardView[tempHand.size()];
     activeCards = new CardView[tempActive.size()];
+    stageCards = new CardView[tempStage.size()];
+
     for (int i = 0; i < tempHand.size(); i++) {
       String spriteGet = tempHand.get(i).getName();
 
@@ -228,6 +239,15 @@ public class GamePresenter extends Group {
       activeCards[i].setGamePresenter(this);
     }
 
+    for(int i = 0; i<tempStage.size(); i++)
+    {
+      String spriteGet = tempStage.get(i).getName();
+      stageCards[i] = new CardView(sprites.findRegion(CardAssetMap.get(spriteGet)), tempActive.get(i).getID());
+      view.playerView.playerAdventureCards.addActor(activeCards[i]);
+      view.addToQuestStages(stageCards[i]);
+      stageCards[i].setGamePresenter(this);
+    }
+
     for(int i=0; i<tempPlayers.size();i++)
     {int j = 0;
       if(tempPlayers.getPlayerAtIndex(i).getName().compareTo(model.getcurrentTurn().getName()) != 0)
@@ -244,9 +264,14 @@ public class GamePresenter extends Group {
 
 
     if(model.getQuest() != null && model.getQuest().getSponsor() != null)
-    {if(model.getcurrentTurn().getName().compareTo(model.getQuest().getSponsor().getName())==0)
-    {view.SponsorCDZ.setVisible(true);
-    for(int i=0; i<handCards.length;i++)handCards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());}
+    {
+      if(model.getcurrentTurn().getName().compareTo(model.getQuest().getSponsor().getName())==0)
+        {view.SponsorCDZ.setVisible(true);
+        view.InPlayCDZ.setVisible(false);
+          for(int i=0; i<handCards.length;i++)
+          {handCards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());
+           handCards[i].setInPlayCDZ(view.zeroBounds);}
+        }
     }
 
         if(doAnnounce) {
@@ -278,8 +303,11 @@ public class GamePresenter extends Group {
           
         }
 
+        else if(doUpdate)
+        {drawCards(); storyDisplay();}
+
         else
-        {drawCards();storyDisplay();}
+          {drawCards();}
   }
 
 
@@ -289,7 +317,7 @@ public class GamePresenter extends Group {
     view.displayStoryDiscardPile(sprites.findRegion(CardAssetMap.get(model.getStory().getName())));
   }
 
-  public void nextPlayer(){model.nextPlayer(); assignHand(true);}
+  public void nextPlayer(){model.nextPlayer(); assignHand(true,false);}
 
   public void storyDisplay(){
 
@@ -302,7 +330,7 @@ public class GamePresenter extends Group {
 
         view.displayEventAnnouncement(StoryEv, res_2 -> {
           model.getEvent().runEvent();
-          assignHand(false);
+          assignHand(false,true);
           if(model.getcurrentTurn().getState()!="tooManyCards") 
 	        if(model.getPlayers().peekNext() == model.getEvent().getDrewEvent()) {
 	  			model.getPlayers().setCurrent(model.getEvent().getDrewEvent());
@@ -339,10 +367,17 @@ public class GamePresenter extends Group {
 
       case "Q":
 
-    	  view.displayJoinEventDialog("Sponsor?",""+model.getStory().getName(), StoryEv, sponsorQuest->{
+    	  view.displaySponsorQuestDialog("Sponsor?",""+model.getStory().getName(), StoryEv, sponsorQuest->{
 
               if(sponsorQuest)
               { userInput(1); //Tells model currentPlayer wants to sponsor quest
+                StageNum = 1;
+                cardUpdate(StageNum);
+                assignHand(false, false);
+                view.displayNextStageButton(()->{StageNum++;
+                assignHand(false,false);
+                cardUpdate(StageNum);},false);
+
               }
 
               else
@@ -369,6 +404,11 @@ public class GamePresenter extends Group {
 
   }
 
+  public void cardUpdate(int stage){
+    for(int i=0; i<handCards.length;i++)
+    {handCards[i].setCardStage(stage);}
+
+  }
 
   public void playerUpdate(){
     //model.getcurrentTurn().getRankS();
@@ -393,7 +433,7 @@ public class GamePresenter extends Group {
    * based on player state. IF the player is a sponsor, pass in the stage number they are playing
    * the card to.
    */
-  public void playCard(int cardID, int stageNum) {
+  public boolean playCard(int cardID, int stageNum) {
     AdventureCard cardToPlay = null;
     for (AdventureCard card : model.getPlayers().current().getHand())
       if (card.getID() == cardID)
@@ -401,12 +441,10 @@ public class GamePresenter extends Group {
     if (cardToPlay == null)
       System.out.println("Card ID not found");
     if (cardToPlay != null)
-      if (model.getPlayers().current().playCard(cardToPlay, stageNum)) {
-        //then update view with what changed in the model
-      } else {
-        log.info(model.getcurrentTurn().getName() + "'s turn begins.");
-        model.beginTurn();
-      }
+      return model.getPlayers().current().playCard(cardToPlay, stageNum);
+
+
+      return false;
   }
 
   //takes cardID as input from view, finds corresponding card in model
@@ -454,13 +492,14 @@ public class GamePresenter extends Group {
         cardToPlay = card;
 
     if (cardToPlay == null)
-    {System.out.println("Card not found");}
+    {}
 
     if (cardToPlay != null)
       if (model.getPlayers().current().playCard(cardToPlay)) {
         System.out.println("CARD FOUND!!"); return true;
       }
   }
+  System.out.println("Card not played");
   return false;
   }
 

@@ -46,6 +46,7 @@ public class GameView extends Group {
   public CardDropZone InPlayCDZ;
   public Rectangle zeroBounds;
   public TextButton nextTurnButton;
+  public TextButton nextStageButton;
   public PlayerStatView[] players;
   public LinkedList<CardView> InPlay;
   public LinkedList<CardView> QuestStages;
@@ -77,6 +78,7 @@ public class GameView extends Group {
     joinEventDialog = new JoinEventDialog(skin);
     sponsorQuestDialog = new JoinEventDialog(skin);
     nextTurnButton = new TextButton(NEXT_TURN, skin);
+    nextStageButton = new TextButton("Next-Stage", skin);
     players = new PlayerStatView[4];
 
     //Init and Orient the CDZs
@@ -162,6 +164,7 @@ public class GameView extends Group {
     InPlayCDZ.setDropZoneBounds(Config.VIRTUAL_WIDTH / 2 + 40, 20, Config.CardView.CARD_WIDTH * 3 - 20, Config.CardView.CARD_HEIGHT);
 
     nextTurnButton.setBounds(Config.VIRTUAL_WIDTH - 200, 360 + 10, 200, 50);
+    nextStageButton.setBounds(SponsorCDZ.getWidth()-220,SponsorCDZ.getY()+SponsorCDZ.getHeight()+10,200,50);
 
     PlayerColor[] colors = PlayerColor.values();
     for (int i = 0; i < players.length; i++) {
@@ -312,6 +315,26 @@ public class GameView extends Group {
 
     addActor(nextTurnButton);
   }
+
+    public void displayNextStageButton(final Runnable action, boolean hideAfter) {
+
+        if (nextStageButton.getListeners().size > 1) {
+            nextStageButton.getListeners().pop();
+        }
+
+        nextStageButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                action.run();
+                if (hideAfter) {
+                    nextStageButton.remove();
+                }
+            }
+        });
+
+
+        addActor(nextStageButton);
+    }
 
   public void hideNextTurnButton(){nextTurnButton.remove();}
 
