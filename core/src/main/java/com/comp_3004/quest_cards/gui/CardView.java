@@ -126,7 +126,7 @@ public class CardView extends Image {
       //Gdx.app.log("DiscardCDZ? ",""+CardBounds.overlaps(DiscardCDZ));
 
       setColor(1,1,1,1);
-      Gdx.app.log("PlayCard CardID ",""+card.cardID);
+      //Gdx.app.log("PlayCard CardID ",""+card.cardID);
       if(CardBounds.overlaps(InPlayCDZ) && gamePresenter.playCard(card.cardID))
       {//TODO: gamePresenter.getModel().playCard(int CardID)
         gamePresenter.getView().addToPlay(card);

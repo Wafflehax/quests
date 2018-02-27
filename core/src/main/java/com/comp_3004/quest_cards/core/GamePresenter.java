@@ -179,8 +179,10 @@ public class GamePresenter extends Group {
       if(model.getcurrentTurn().tooManyHandCards()){
     	  assignHand(false,false);
     	  view.displayAnnouncementDialog("BEWARE!","YOU HAVE TOO MANY CARDS!!\nPLEASE MAKE SURE YOU HAVE LESS THAN 12 CARDS!",res->{});}
+      else if(model.getcurrentTurn().getState().compareTo("sponsor")==0)
+      {System.out.println("Sponsor isn't allowed to end turn until proper quest setup");}
       else {
-    	 if(model.getStory() instanceof QuestCard && model.getPlayers().peekNext() == model.getQuest().getSponsor()) {
+    	 if(model.getQuest() != null && model.getPlayers().peekNext() == model.getQuest().getSponsor()) {
     		  	//model.getQuest().revealStage();
 			model.nextPlayer();
 			while(!model.getQuest().getParticipants().contains(model.getPlayers().peekNext())) {
@@ -261,7 +263,7 @@ public class GamePresenter extends Group {
     view.cardWipe();
 
     view.InPlayCDZ.setVisible(true);
-    System.out.println("assignHand(): "+model.getcurrentTurn().getName()+": IDS");
+
     
 
     handCards = new CardView[tempHand.size()];
@@ -350,7 +352,6 @@ public class GamePresenter extends Group {
   public void nextPlayer(){
 	  model.nextPlayer(); 
 	  assignHand(true,false);
-	  
 	  }
 
   public void storyDisplay(){
@@ -533,11 +534,12 @@ public class GamePresenter extends Group {
   }
   
   public void determineParticipation() {
-		view.displayParticipateQuestDialog("Participation", "Participate in quest?", participate->{
+		view.displayParticipateQuestDialog("Participation", model.getcurrentTurn().getName()+"\nParticipate in quest?", participate->{
 			if(participate)
-				userInput(1);
+                {userInput(1);}
 			else
-				userInput(0);
+                {userInput(0);}
+
 			if(model.getPlayers().peekNext() == model.getQuest().getDrewQuest()) {
 				model.nextPlayer();
 				while(!model.getQuest().getParticipants().contains(model.getPlayers().peekNext())) {
@@ -547,7 +549,7 @@ public class GamePresenter extends Group {
 				nextPlayer();
 			}
 			else
-				nextPlayer();
+            {nextPlayer();System.out.println(model.getcurrentTurn().getState());}
 		});
   }
   
@@ -633,6 +635,7 @@ public class GamePresenter extends Group {
         //player couldn't leave turn too many cards
       } //else
         //model.beginTurn();
+
     }
 
   }
@@ -746,7 +749,8 @@ public class GamePresenter extends Group {
 		storyDeck.setTopCard("Chivalrous Deed");
 		storyDeck.setTopCard("Prosperity Throughout the Realms");
 		storyDeck.setTopCard("Boar Hunt");
-//		storyDeck.setTopCard("Tournament at Camelot");
+
+		//storyDeck.setTopCard("Tournament at Camelot");
 		//storyDeck.setTopCard("Prosperity Throughout the Realms");
 		
 		//set up adventure deck 
