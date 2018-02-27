@@ -188,6 +188,23 @@ public class GamePresenter extends Group {
 			System.out.println(model.getcurrentTurn().getName());
 			nextPlayer();
 		}
+    	  		//if no event do nothing
+    	  else if(model.getStory() instanceof TournamentCard) {
+		if(model.getTour().Complete()) {
+			//move on to next story
+			beginTurn();
+		}
+		model.getTour().doneTurn();
+  		}
+  		if(model.getEvent() == null) {
+  			log.info("there is no event");
+  			nextPlayer();
+  		}
+  		else if(model.getPlayers().peekNext() == model.getEvent().getDrewEvent()) {
+		model.getPlayers().setCurrent(model.getEvent().getDrewEvent());
+		nextPlayer();
+		beginTurn();
+  		}
 		else
 			nextPlayer();
       }
