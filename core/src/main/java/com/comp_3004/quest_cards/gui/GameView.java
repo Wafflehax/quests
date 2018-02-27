@@ -35,6 +35,7 @@ public class GameView extends Group {
   //Widgets
   public TweenManager AnimationManager;
   public Image background;
+  public Image statViewBG;
   public Image storyDeck;
   public Image storyDeckDiscardPile;
   public Image adventureDeckDiscardPile;
@@ -79,6 +80,7 @@ public class GameView extends Group {
     players = new PlayerStatView[4];
 
     //Init and Orient the CDZs
+    statViewBG = new Image(new Sprite(new Texture("DropZones/StatView.png")));
     SponsorCDZ = new CardDropZone(new Sprite(new Texture("DropZones/SponsorCDZ.png")));
     DiscardCDZ = new CardDropZone(new Sprite(new Texture("DropZones/SponsorCDZ.png")));
     InPlayCDZ = new CardDropZone(new Sprite(new Texture("DropZones/InPlayCDZ.png")));
@@ -92,6 +94,7 @@ public class GameView extends Group {
     addActor(background);
     addActor(SponsorCDZ);
     addActor(DiscardCDZ);
+    addActor(statViewBG);
     addActor(storyDeck);
     addActor(storyDeckDiscardPile);
     addActor(adventureDeck);
@@ -485,6 +488,18 @@ public class GameView extends Group {
 
   public void setPlayerCards(int playerNumber, int cards) {
     players[playerNumber].setCards(cards);
+  }
+
+  public void displayStatViewCards(CardView[] cards) {
+    playerView.addDisplayCards(cards);
+
+
+
+
+  }
+
+  public void hideStatViewCards(CardView[] cards) {
+    playerView.wipePlayerHand(cards);
   }
 
   public enum PlayerColor {

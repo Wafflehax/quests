@@ -138,7 +138,7 @@ public class CardView extends Image {
 
       }
 
-      else if(CardBounds.overlaps(SponsorCDZ))
+      else if(CardBounds.overlaps(SponsorCDZ)&& gamePresenter.getModel().getcurrentTurn().getState().compareTo("sponsor") == 0 && gamePresenter.playCard(card.cardID))
       {//TODO: Also Implement Bounds Based on Conditions... Omit SponsorCDZ if model.getcurrentTurn() != Sponsor
         gamePresenter.getView().addToQuestStages(card);
        System.out.println("CardID = "+card.cardID);

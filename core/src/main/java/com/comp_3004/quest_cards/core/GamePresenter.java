@@ -15,12 +15,17 @@ import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.Card;
 import com.comp_3004.quest_cards.cards.EventCard;
 import com.comp_3004.quest_cards.cards.TournamentCard;
+
 import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.gui.Assets;
 import com.comp_3004.quest_cards.gui.CardView;
 import com.comp_3004.quest_cards.gui.Config;
 import com.comp_3004.quest_cards.gui.GameView;
 import com.comp_3004.quest_cards.player.Player;
+
+import com.comp_3004.quest_cards.gui.*;
+import com.comp_3004.quest_cards.player.Player;
+import com.comp_3004.quest_cards.player.Players;
 
 import org.apache.log4j.Logger;
 
@@ -37,8 +42,8 @@ public class GamePresenter extends Group {
   public CardView[] activeCards;
   public CardView[] stageCards;
 
-  TextureAtlas sprites;
-  TextureAtlas backgrounds;
+  public TextureAtlas sprites;
+  public TextureAtlas backgrounds;
   private QuestCards parent;
   private GameModel model;
   private AssetManager manager;
@@ -102,6 +107,7 @@ public class GamePresenter extends Group {
     final GameView view = new GameView(manager);
     view.setBackground(backgrounds.findRegion("game_board"));
     view.setPlayerViewBackground(backgrounds.findRegion("player_area"));
+    view.players = new PlayerStatView[model.getPlayers().size()-1];
 
     LinkedList<AdventureCard> tempHand = model.getcurrentTurn().getHand();
 
@@ -142,7 +148,7 @@ public class GamePresenter extends Group {
     view.SponsorCDZ.setVisible(false);
 
     //SPONSOR CHECK
-    if(model.getQuest() != null)
+    if(model.getQuest() != null && model.getQuest().getSponsor() != null)
     {if(model.getcurrentTurn().getName().compareTo(model.getQuest().getSponsor().getName())==0)
     {view.SponsorCDZ.setVisible(true);
       for(int i=0; i<handCards.length;i++)handCards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());}
@@ -190,6 +196,7 @@ public class GamePresenter extends Group {
   private void assignHand(boolean doAnnounce) {
     LinkedList<AdventureCard> tempHand = model.getcurrentTurn().getHand();
     LinkedList<AdventureCard> tempActive = model.getcurrentTurn().getActive();
+    Players tempPlayers = model.getPlayers();
     //System.out.println("player = "+model.getcurrentTurn().getName()+": assignHand IDS:");
 
     view.playerView.wipePlayerHand(handCards);
@@ -219,6 +226,14 @@ public class GamePresenter extends Group {
       view.playerView.playerAdventureCards.addActor(activeCards[i]);
       view.addToPlay(activeCards[i]);
       activeCards[i].setGamePresenter(this);
+    }
+
+    for(int i=0; i<tempPlayers.size();i++)
+    {int j = 0;
+      if(tempPlayers.getPlayerAtIndex(i).getName().compareTo(model.getcurrentTurn().getName()) != 0)
+    {view.players[j].setPlayer(tempPlayers.getPlayerAtIndex(i));
+    view.players[j].setPresenter(this);
+    view.players[j].playerConfig();}
     }
 
 
