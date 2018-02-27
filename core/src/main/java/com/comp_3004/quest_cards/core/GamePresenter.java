@@ -135,7 +135,6 @@ public class GamePresenter extends Group {
 
     view.displayAnnouncementDialog("","Let the Games BEGIN!\n\n"+model.getcurrentTurn().getName()+"...begin!",res->{
       model.getStoryDeck().setTopCard("Tournament at Camelot");//RIGGING!
-
       beginTurn();
       drawCards();
       storyDisplay();
@@ -157,6 +156,7 @@ public class GamePresenter extends Group {
         view.displayAnnouncementDialog("BEWARE!","YOU HAVE TOO MANY CARDS!!\nPLEASE MAKE SURE YOU HAVE LESS THAN 12 CARDS!",res->{});}
 
         else
+          beginTurn();
           nextPlayer();
     }, false);
     // });
@@ -249,6 +249,10 @@ public class GamePresenter extends Group {
       case "T":
         if(model.getTour().getLeftAsk()==0)
           {
+           // if(model.getTour().isOver())
+           // {}
+
+
             break;}
 
         view.displayJoinEventDialog("Join Tourney?",""+model.getStory().getName(), StoryEv, joinTourney->{

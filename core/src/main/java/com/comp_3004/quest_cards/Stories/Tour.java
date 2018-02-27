@@ -188,6 +188,7 @@ public class Tour {
 		//set players to participants
 		tempPl = players; //stored all players
 		players.setPlayers(participants);
+		players.setPos(players.size()-1); //HOPEFULLY CONSISTENT SETUP
 		//start first turn of tour
 		if(players.current().isAi()) {
 			players.current().notifyTurn(); //do ai work
