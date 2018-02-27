@@ -66,7 +66,6 @@ public class Quest {
 		this.minBid = 0;
 		this.questComplete = false;
 		log.info(players.current().getName() + " drew quest " + quest.getName());
-		
 		if(players.current().isAi()) {
 			players.current().getAI().DoISponsorAQuest();
 		}
@@ -77,6 +76,7 @@ public class Quest {
 	public QuestStage getCurrentStage() { return this.stages[currentStage]; }
 	public int getCurrentStageNum() { return this.currentStage; }
 	public QuestCard getQuest() { return this.quest; }
+	public Player getDrewQuest() { return this.drewQuest; }
 	public void setSponsor(Player p) { this.sponsor = p; }
 	public Player getSponsor() { return this.sponsor; }
 	public int getNumDeclines() { return this.numDeclines; }
@@ -96,9 +96,9 @@ public class Quest {
 		//player declines sponsoring the quest
 		if(input == 0) {
 			log.info(p.getName()+" declined sponsoring the quest");
-			if(p == sponsor)
-				sponsor = null;
-			players.next();
+			//if(p == sponsor)
+				//sponsor = null;
+			//players.next();
 			numDeclines++;
 			return checkNoSponsor();
 		}
@@ -136,10 +136,10 @@ public class Quest {
 	private boolean checkNoSponsor() {
 		if(numDeclines == players.getNumPlayers()) {
 			log.info("No one wanted to sponsor the quest");
-			log.info(players.current().getName()+"'s turn is over");
-			players.next();
+			log.info(drewQuest.getName()+"'s turn is over");
+			//players.next();
 			//this return value is passed back to the presenter 
-			return false;	//presenter begins next turn
+			return true;	//presenter begins next turn
 		}
 		if(players.current().isAi())
 			players.current().getAI().DoISponsorAQuest();

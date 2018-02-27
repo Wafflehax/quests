@@ -35,6 +35,7 @@ public class Event {
 		this.drewEvent = p;
 		for(Player pl : players.getPlayers())
 			pl.setEvent(this);
+		log.info(players.current().getName() + " drew event " + evnt.getName());
 	}
 	
 	//getters/setters
@@ -72,8 +73,8 @@ public class Event {
 					lowestShields.add(lowestShields.size(), lowestRank.get(i));
 				}
 			}
-			for(Player p : lowestShields)
-				p.addShields(3);
+			if(lowestShields.contains(players.current()))
+				players.current().addShields(3);
 		}
 		
 		else if(evnt.getName() ==  "Pox") {
@@ -165,13 +166,13 @@ public class Event {
 			return false;
 		}
 		else if(evnt.getName() ==  "Prosperity Throughout the Realms") {
-			for(int i=0; i<players.getNumPlayers(); i++) {
+			//for(int i=0; i<players.getNumPlayers(); i++) {
 				players.current().drawCard(advDeck);
 				players.current().drawCard(advDeck);
-				players.next();
-			}
+				//players.next();
+			//}
 		}
-		log.info("Event Finished");
+		//log.info("Event Finished");
 		boolean tooManyCards = false;
 		for(int i=0; i<players.getNumPlayers(); i++) {
 			if(players.getPlayerAtIndex(i).getHand().size() > 12) {
@@ -196,10 +197,10 @@ public class Event {
 			if(players.current().getState() == "tooManyCards") {
 				return true;
 			}
-			players.next();
+			//players.next();
 		}
 		players.setCurrent(drewEvent);
-		players.next();
+		//players.next();
 		return false;
 	}
 	
