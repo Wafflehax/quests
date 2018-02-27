@@ -13,12 +13,15 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.comp_3004.quest_cards.core.CardViewAccessor;
 import com.comp_3004.quest_cards.core.ImageAccessor;
 
+
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 
@@ -40,6 +43,7 @@ public class GameView extends Group {
   public CardDropZone SponsorCDZ;
   public CardDropZone DiscardCDZ;
   public CardDropZone InPlayCDZ;
+  public Rectangle zeroBounds;
   public TextButton nextTurnButton;
   public PlayerStatView[] players;
   public LinkedList<CardView> InPlay;
@@ -78,6 +82,7 @@ public class GameView extends Group {
     SponsorCDZ = new CardDropZone(new Sprite(new Texture("DropZones/SponsorCDZ.png")));
     DiscardCDZ = new CardDropZone(new Sprite(new Texture("DropZones/SponsorCDZ.png")));
     InPlayCDZ = new CardDropZone(new Sprite(new Texture("DropZones/InPlayCDZ.png")));
+    zeroBounds = new Rectangle(0,0,0,0);
 
     InPlay = new LinkedList<>();
     QuestStages = new LinkedList<>();

@@ -112,7 +112,7 @@ public class GamePresenter extends Group {
       handCards[i] = new CardView(sprites.findRegion(CardAssetMap.get(spriteGet)), tempHand.get(i).getID());
       handCards[i].setDiscardCDZ(view.DiscardCDZ.getBounds());
       handCards[i].setInPlayCDZ(view.InPlayCDZ.getBounds());
-      handCards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());
+      handCards[i].setSponsorCDZ(view.zeroBounds);
       handCards[i].setGamePresenter(this);
       handCards[i].setColor(1, 1, 1, 0);
 
@@ -134,6 +134,14 @@ public class GamePresenter extends Group {
     view.displayStoryDiscardPile(new TextureRegion(new Texture("sprites/boundary.png")));
     view.displayAdventureDeck(sprites.findRegion(Assets.Cards.CARD_BACK));
     view.displayAdventureDiscardPile(new TextureRegion(new Texture("sprites/boundary.png"))); //TODO: initialize empty white border
+    view.SponsorCDZ.setVisible(false);
+
+    //SPONSOR CHECK
+    if(model.getQuest() != null)
+    {if(model.getcurrentTurn().getName().compareTo(model.getQuest().getSponsor().getName())==0)
+    {view.SponsorCDZ.setVisible(true);
+      for(int i=0; i<handCards.length;i++)handCards[i].setSponsorCDZ(view.zeroBounds);}
+    }
 
     view.displayAnnouncementDialog("","Let the Games BEGIN!\n\n"+model.getcurrentTurn().getName()+"...begin!",res->{
       model.getStoryDeck().setTopCard("Tournament at Camelot");//RIGGING!
@@ -150,7 +158,6 @@ public class GamePresenter extends Group {
       } else {
         //Player says no
       }*/
-
     view.displayNextTurnButton(() -> {
       System.out.println(model.getcurrentTurn().getState());
       if(model.getcurrentTurn().tooManyHandCards()){
@@ -190,7 +197,7 @@ public class GamePresenter extends Group {
       handCards[i] = new CardView(sprites.findRegion(CardAssetMap.get(spriteGet)), tempHand.get(i).getID());
       handCards[i].setDiscardCDZ(view.DiscardCDZ.getBounds());
       handCards[i].setInPlayCDZ(view.InPlayCDZ.getBounds());
-      handCards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());
+      handCards[i].setSponsorCDZ(view.zeroBounds);
       handCards[i].setGamePresenter(this);
       handCards[i].setColor(1, 1, 1, 0);
       //System.out.println(handCards[i].getCardID());
@@ -209,7 +216,14 @@ public class GamePresenter extends Group {
     view.displayPlayerHand(handCards); //CHECK IT OUT
     view.displayExtraCards(activeCards);
     view.displayHero(sprites.findRegion(CardAssetMap.get(model.getcurrentTurn().getRankS())));
+    view.SponsorCDZ.setVisible(false);
 
+
+    if(model.getQuest() != null)
+    {if(model.getcurrentTurn().getName().compareTo(model.getQuest().getSponsor().getName())==0)
+    {view.SponsorCDZ.setVisible(true);
+    for(int i=0; i<handCards.length;i++)handCards[i].setSponsorCDZ(view.zeroBounds);}
+    }
 
         if(doAnnounce) {
           		
@@ -309,12 +323,6 @@ public class GamePresenter extends Group {
 
   }
 
-  public void handleCardOverflow(){
-   System.out.println("handleCardOverflow()");
-
-    model.getcurrentTurn().setState(model.getcurrentTurn().getPrevState());
-
-  } //TODO: Infinite loop until state != "tooManyCards"
 
   public void playerUpdate(){
     //model.getcurrentTurn().getRankS();
