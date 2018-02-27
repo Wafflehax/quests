@@ -13,6 +13,7 @@ import com.comp_3004.quest_cards.cards.AmourCard;
 import com.comp_3004.quest_cards.cards.QuestCard;
 import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.cards.WeaponCard;
+import com.comp_3004.quest_cards.core.GameModel;
 import com.comp_3004.quest_cards.player.Player;
 import com.comp_3004.quest_cards.player.Player.Rank;
 import com.comp_3004.quest_cards.player.Players;
@@ -36,7 +37,10 @@ public class Tour {
 	private boolean complete;
 	private boolean displaytourstartmessage;
 	
+	public String tourresult = "";
 	public TournamentCard getCurTour() { return tour; }
+	
+	GameModel m;
 	
 	//getters setters 
 	public boolean Complete() { return this.complete; }
@@ -54,7 +58,8 @@ public class Tour {
 	 * 	input Tournament Card that was drawn from storydeck
 	 * 	input AdventureDeck 
 	 * 	input boolean fina, if this is the game winning tournament due to multiple knights of round table
-	 */
+	 */	
+	
 	public Tour(Players p, TournamentCard c, AdventureDeck d, boolean fina) {
 		this.complete = false;
 		players = p;
@@ -62,7 +67,6 @@ public class Tour {
 		this.d = d;
 		this.gameWinMatch = fina;
 		if(fina) { //assuming called with more than one champion
-			
 			//make deep copy of players and store in tempPl if need to return to old turns
 			ArrayList<Player> old = new ArrayList<Player>();
 			for(Player pl: players.getPlayers()) {
@@ -70,9 +74,6 @@ public class Tour {
 			}
 			Players te = new Players(players.getPos(), old.size(), old);
 			tempPl = te;
-			
-			
-			
 			participants = new ArrayList<Player>();
 			for(Player pl: players.getPlayers()) { //reduce players to only knight of table	
 				if(pl.getRank() != Rank.KNIGHT_OF_THE_ROUND_TABLE) {
@@ -259,8 +260,7 @@ public class Tour {
 	}
 	
 	public ArrayList<Player> determineRoundOutCome() {
-		String msg = "Calculating Player battle points and outcome of round " + round;
-		log.info(msg);
+		log.info("Calculating Player battle points and outcome of round " + round);
 		ArrayList<Player> winners  = new ArrayList<Player>();
 		//calculate battle points
 		int pl = players.getNumPlayers();
@@ -282,19 +282,20 @@ public class Tour {
 			if(gameWinMatch == true) {
 				if(pairs.size() == 1) {
 					pairs.get(0).player.setWon(true);
-					log.info(pairs.get(0).player.getName() + " is the sole winner of the Game!");
-					log.info("Game Over");
+					this.tourresult = pairs.get(0).player.getName() +
+							" is the sole winner of the Game!\nGame Over!";
+					log.info(this.tourresult);
 					players = tempPl; //return to full player list
 					this.complete = true;
 				}
 				//more than one winner
 				else if(pairs.size() > 1){
-					log.info("Here are the final winners of the Game!");
+					this.tourresult = "Here are the final winners of the Game!\nGame Over!";
 					for(IntPlayerPair p: pairs) {
 						p.player.setWon(true);
 						log.info(p.player.getName());
 					}
-					log.info("Game Over");
+					log.info(this.tourresult);
 					players = tempPl; //return to full player list
 					this.complete = true;
 				}
@@ -303,13 +304,13 @@ public class Tour {
 			{
 				if(pairs.size() == 1) {
 					// one winner display and tour ends, resets turns to regular sequence before Tour
-					out += pairs.get(0).player.getName() + " won the tournament! Gained Sheilds: " + joiners + " + bonus(" + bonus + ") = " + (joiners+bonus);
+					this.tourresult = pairs.get(0).player.getName() + " won the tournament!\n Gained Sheilds: " + joiners + " + bonus(" + bonus + ") = " + (joiners+bonus);
 					log.info(out);
 					pairs.get(0).player.addShields(joiners + bonus);
 					// discard amours, weapons
 					discardAmours();
 					discardWeapons();
-					log.info("Tournament is OVER.");
+					this.tourresult += "Tournament is OVER.";
 					//set turn to regular before tour
 					players = tempPl;
 					tempPl = null;
@@ -320,7 +321,7 @@ public class Tour {
 				else if(pairs.size() >= 2) {
 					if(round == 1) {
 						round++;
-						out += "Tied. Here are the tied players going to the Tie Breaker(Round " + round +  ") :\n";
+						this.tourresult = "Tied. Here are the tied players going to \nthe Tie Breaker(Round " + round +  ") :\n";
 						//discard of everyone's weapons
 						discardWeapons();
 						//set players to those tied					
@@ -328,28 +329,32 @@ public class Tour {
 						for(int i = 0; i < players.size(); i++) {
 							out += "Player : " + players.getPlayerAtIndex(i).getName() + "\n";
 						}
-						log.info(out);
+						log.info(this.tourresult);
 						leftToPlayCard = pairs.size();
 						
+						//disabled ai
 						//notify of next turn
-						if(players.current().isAi()) {
+						/*if(players.current().isAi()) {
 							players.current().notifyTurn();
 						}
 						else {
 							log.info(players.current().getName() + " Its your turn press done when finished");	
 						}
+						*/
 					}
 					else if(round == 2) { //over Tied players win
 						round++;
-						log.info("Tied again. Tied players win " + (bonus+joiners) + " shields:\n");
+						this.tourresult = "Tied again. Tied players win\n " + (bonus+joiners) + " shields:\n";
 						players.setArray(winners);
 						for(int i = 0; i < players.size(); i++) {
 							String o = players.getPlayerAtIndex(i).getName() + " With Rank ";
 							players.getPlayerAtIndex(i).addShields(bonus+joiners);
 							o += players.getPlayerAtIndex(i).getRankS();
 							o += " and shields " + players.getPlayerAtIndex(i).getShields() + "\n";
-							log.info(o);
+							//log.info(o);
+							this.tourresult += o;
 						}
+						log.info(this.tourresult);
 						//tied but this was the last round discard weapons,amours
 						discardAmours();
 						discardWeapons();
@@ -361,11 +366,13 @@ public class Tour {
 						this.complete = true;
 					}
 					else {
-						log.info("Error stage greater than 2. Can't play more than two rounds start,tie breaker");
+						this.tourresult ="Error stage greater than 2. Can't play more than two rounds start,tie breaker";
+						log.info(this.tourresult);
 					}
 				}
 				else {
-					log.info("Error calc winners");
+					this.tourresult = "Error calc winners";
+					log.info(this.tourresult);
 				}
 			}
 		}
