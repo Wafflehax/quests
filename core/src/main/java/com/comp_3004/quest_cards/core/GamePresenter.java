@@ -124,6 +124,7 @@ public class GamePresenter extends Group {
 
     //Hero area
     view.displayPlayerHand(handCards); //CHECK IT OUT
+    view.displayPlayerHand(activeCards);
     view.displayHero(sprites.findRegion(CardAssetMap.get(model.getcurrentTurn().getRankS())));
 
     //Drawing decks
@@ -153,10 +154,10 @@ public class GamePresenter extends Group {
       System.out.println(model.getcurrentTurn().getState());
       if(model.getcurrentTurn().tooManyHandCards())
       {assignHand(false);
-        view.displayAnnouncementDialog("BEWARE!","YOU HAVE TOO MANY CARDS!!\nPLEASE MAKE SURE YOU HAVE LESS THAN 12 CARDS!",res->{});}
+      int tempDiscard = model.getcurrentTurn().getHand().size();
+        view.displayAnnouncementDialog("BEWARE!","You have too many cards!!!\nYou need to play or discard "+(tempDiscard - 12)+" more cards!",res->{});}
 
         else
-          beginTurn();
           nextPlayer();
     }, false);
     // });
@@ -176,6 +177,7 @@ public class GamePresenter extends Group {
     view.playerView.wipePlayerHand(handCards);
     view.playerView.wipePlayerHand(activeCards);
     view.cardWipe();
+    System.out.println("assignHand(): "+model.getcurrentTurn().getName()+": IDS");
 
     handCards = new CardView[tempHand.size()];
     activeCards = new CardView[tempActive.size()];
@@ -193,17 +195,18 @@ public class GamePresenter extends Group {
 
     }
 
-    for(int i=0; i<tempActive.size(); i++)
-    {String spriteGet = tempActive.get(i).getName();
+    for(int i=0; i<tempActive.size(); i++) {
+      String spriteGet = tempActive.get(i).getName();
       activeCards[i] = new CardView(sprites.findRegion(CardAssetMap.get(spriteGet)), tempActive.get(i).getID());
-
-    view.addToPlay(activeCards[i]);
-    activeCards[i].setGamePresenter(this);
-
+      view.playerView.playerAdventureCards.addActor(activeCards[i]);
+      view.addToPlay(activeCards[i]);
+      activeCards[i].setGamePresenter(this);
     }
+
 
     view.displayPlayerHand(handCards); //CHECK IT OUT
     view.displayHero(sprites.findRegion(CardAssetMap.get(model.getcurrentTurn().getRankS())));
+
 
         if(doAnnounce) {
           view.displayAnnouncementDialog("Begin Turn", "" + model.getcurrentTurn().getName() + "... begin!", result_2 -> {
@@ -270,6 +273,7 @@ public class GamePresenter extends Group {
         break;
 
       case "Q":
+        view.displaySponsorQuestDialog("I'm Gay","whatever",StoryEv,res->{});
        //Gdx.app.log("displayEventAnnouncement","storyType -> QUEST");
        // model.nextPlayer();
         break;
@@ -366,14 +370,14 @@ public class GamePresenter extends Group {
   //temporary methods to use for model testing
   //takes cardID as input from view, finds corresponding card in model
   public boolean playCard(int cardID) {
+    System.out.println("playCard() "+model.getcurrentTurn().getName());
     AdventureCard cardToPlay = null;
     for (AdventureCard card : model.getcurrentTurn().getHand())
     {if (card.getID() == cardID)
         cardToPlay = card;
 
     if (cardToPlay == null)
-    {//System.out.println("Card not found");
-      return false;}
+    {System.out.println("Card not found");}
 
     if (cardToPlay != null)
       if (model.getPlayers().current().playCard(cardToPlay)) {
