@@ -178,6 +178,7 @@ public class GameView extends Group {
   public void displayPlayerHand(CardView[] cards) {
     playerView.displayPlayerHand(cards);
   }
+  public void displayExtraCards(CardView[] cards) {playerView.addDisplayCards(cards);}
 
   public void displayShieldNumber(int n) {
 
@@ -371,8 +372,8 @@ public class GameView extends Group {
 
       @Override
       public void clicked(InputEvent event, float x, float y) {
-        action.accept(true);
         announcementDialog.remove();
+        action.accept(true);//WARNING, THIS LINE CAME BEFORE THE .remove() LINE
       }
     });
 
@@ -450,7 +451,6 @@ public class GameView extends Group {
   public void displaySponsorQuestDialog(String title, String message, CardView cardView, Consumer<Boolean> action) {
     sponsorQuestDialog.button_false.setText("Pass");
     sponsorQuestDialog.button_true.setText("Sponsor");
-
     sponsorQuestDialog.setTitle(title);
     sponsorQuestDialog.setMessage(message);
     sponsorQuestDialog.setCardView(cardView);

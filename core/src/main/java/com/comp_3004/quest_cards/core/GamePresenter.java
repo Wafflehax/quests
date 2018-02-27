@@ -205,6 +205,7 @@ public class GamePresenter extends Group {
 
 
     view.displayPlayerHand(handCards); //CHECK IT OUT
+    view.displayExtraCards(activeCards);
     view.displayHero(sprites.findRegion(CardAssetMap.get(model.getcurrentTurn().getRankS())));
 
 
@@ -216,7 +217,7 @@ public class GamePresenter extends Group {
         }
 
         else
-        {drawCards();}
+        {drawCards();storyDisplay();}
   }
 
 
@@ -250,13 +251,10 @@ public class GamePresenter extends Group {
 
         //TOURNEY HANDLING
       case "T":
-        if(model.getTour().getLeftAsk()==0)
-          {
-           // if(model.getTour().isOver())
-           // {}
+        if(model.getTour().getLeftAsk()<1)
+          {view.displayAnnouncementDialog("","Nobody Left to Ask",res->{System.out.println("JOES A GAY");});
 
-
-            break;}
+          break;}
 
         view.displayJoinEventDialog("Join Tourney?",""+model.getStory().getName(), StoryEv, joinTourney->{
 

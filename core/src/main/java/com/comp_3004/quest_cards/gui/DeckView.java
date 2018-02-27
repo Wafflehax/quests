@@ -21,8 +21,13 @@ public class DeckView extends Table {
     displayStrategy.setCards(this, cards);
   }
 
+  public void addCards(CardView[] cards){displayStrategy.addCards(this, cards);
+  }
+
+
   public interface DisplayStrategy {
 
     void setCards(DeckView client, CardView[] cards);
+    void addCards(DeckView client, CardView[] cards);
   }
 }

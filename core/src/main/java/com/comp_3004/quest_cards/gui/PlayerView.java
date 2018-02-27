@@ -83,6 +83,9 @@ public class PlayerView extends Group {
     return this;
   }
 
+  public PlayerView addDisplayCards(CardView[] cards){playerAdventureCards.addCards(cards);
+  return this;}
+
   public PlayerView wipePlayerHand(CardView[] cards){
     for(int i=0; i<cards.length;i++)
       cards[i].remove();

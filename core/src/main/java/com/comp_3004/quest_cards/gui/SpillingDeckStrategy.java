@@ -51,6 +51,11 @@ public class SpillingDeckStrategy implements DeckView.DisplayStrategy {
     }
   }
 
+  public void addCards(DeckView client, CardView[] cards){
+    for (int i = 0; i < cards.length; i++)
+    {client.addActor(cards[i]);}
+  }
+
   private float computeOverlap(float cardWidth, int n, float maxWidth) {
 
 
