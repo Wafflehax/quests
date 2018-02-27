@@ -391,7 +391,7 @@ public class GamePresenter extends Group {
 
               if(sponsorQuest)
               { userInput(1); //Tells model currentPlayer wants to sponsor quest
-                spons();
+                sponsor(false);
                 
               }
 
@@ -419,37 +419,47 @@ public class GamePresenter extends Group {
 
   }
   
-  public void spons() {
+  public void sponsor(boolean error) {
+	  System.out.println(error);
+	  StageNum = 0;
+      if(error) {
+    	  	System.out.println("DING");
+    	  	view.displayAnnouncementDialog("Set Up Error","Battle Points do not increase for each stage",res->{
+    	  		log.info("Quest set up incorrectly");
+    	  		questSetUp();
+    	  		});
+      }
+      else {
+    	  	questSetUp();
+      }
+  }
+  
+  public void questSetUp() {
 	  StageNum = 0;
 	  cardUpdate(StageNum);
       assignHand(false, false);
-      view.displayNextStageButton(()->{StageNum++;
-      assignHand(false,false);
-      cardUpdate(StageNum);
-      if(StageNum == (model.getQuest().getQuest().getStages()-1))
-      {view.hideNextStageButton();
+      view.displayNextStageButton(()->{
+    	  	StageNum++;
+    	  	assignHand(false,false);
+    	      cardUpdate(StageNum);
+    	      if(StageNum == (model.getQuest().getQuest().getStages()-1))
+    	      {view.hideNextStageButton();
 
-      //clearCards(handCards); //Kills Listeners on cards so sponsor can't commit OOB error
-      view.displayFinishQuestSetupButton(()->{
-        //TODO: Implement a check if QuestSetup is good, and resolve accordingly
-      		if(model.getQuest().checkQuestSetup()) {
-      			log.info("Quest set up correctly");
-      			nextPlayer();
-      		}
-      		else {
-      			view.displayAnnouncementDialog("Set Up Error","Battle Points do not increase for each stage",res->{log.info("Quest set up incorrectly");});
-      			assignHand(false,false);
-      			spons();
-      			
-      		}
-
-
-
-
-      },false);}
-
+    	      //clearCards(handCards); //Kills Listeners on cards so sponsor can't commit OOB error
+    	      view.displayFinishQuestSetupButton(()->{
+    	        //TODO: Implement a check if QuestSetup is good, and resolve accordingly
+    	      		if(model.getQuest().checkQuestSetup()) {
+    	      			log.info("Quest set up correctly");
+    	      			view.hideFinishSetupButton();
+    	      			nextPlayer();
+    	      		}
+    	      		else {
+    	      			assignHand(false,false);
+    	      			sponsor(true);
+    	      			
+    	      		}
+    	      },false);}
       },false);
-
   }
 
   public void clearCards(CardView [] cards){for(int i = 0; i<cards.length; i++) cards[i].clear();}

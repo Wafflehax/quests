@@ -367,6 +367,7 @@ public class GameView extends Group {
     }
 
   public void hideNextStageButton(){nextStageButton.remove();}
+  public void hideFinishSetupButton() {finishQuestSetupButton.remove();}
 
     public void displayFinishQuestSetupButton(final Runnable action, boolean hideAfter) {
 
