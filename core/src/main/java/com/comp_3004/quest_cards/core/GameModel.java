@@ -99,6 +99,7 @@ public class GameModel{
 		}
 		StoryCard cardDrawn = storyDeck.drawCard();
 		StoryEv = cardDrawn;
+		log.info(players.current().getName()+"'s turn is starting");
 		if(cardDrawn instanceof QuestCard) {
 			quest = new Quest((QuestCard)cardDrawn, players, advDeck);
 		}
@@ -217,5 +218,5 @@ public class GameModel{
 			plyrs.add(newPlayer);
 		}
 		players = new Players(0, numPlayers, plyrs);
-	}	
+	}
 }

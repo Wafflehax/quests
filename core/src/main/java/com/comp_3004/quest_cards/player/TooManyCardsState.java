@@ -67,8 +67,8 @@ public class TooManyCardsState extends PlayerState {
 				p.setState("normal");
 				log.info(p.getName()+" is no longer above the hand limit");
 			}
-			if(p.checkForTooManyCards()) 
-				return true;
+			//if(p.checkForTooManyCards()) 
+			//	return true;
 			return false;
 		}
 		log.info(p.getName()+" does not have "+c.getName()+" in their hand");

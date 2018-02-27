@@ -11,12 +11,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.comp_3004.quest_cards.cards.AdventureCard;
+import com.comp_3004.quest_cards.cards.AdventureDeck;
 import com.comp_3004.quest_cards.cards.Card;
 import com.comp_3004.quest_cards.cards.EventCard;
+import com.comp_3004.quest_cards.cards.StoryDeck;
 import com.comp_3004.quest_cards.gui.Assets;
 import com.comp_3004.quest_cards.gui.CardView;
 import com.comp_3004.quest_cards.gui.Config;
 import com.comp_3004.quest_cards.gui.GameView;
+import com.comp_3004.quest_cards.player.Player;
+
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
@@ -57,7 +61,8 @@ public class GamePresenter extends Group {
     PopulateCardAssetMap();
     loadAssets();
 
-    model = new GameModel();
+    //model = new GameModel();
+    setUpScen1();
 
     view = initGameView();
     addActor(view);
@@ -134,7 +139,7 @@ public class GamePresenter extends Group {
     view.displayAdventureDiscardPile(new TextureRegion(new Texture("sprites/boundary.png"))); //TODO: initialize empty white border
 
     view.displayAnnouncementDialog("","Let the Games BEGIN!\n\n"+model.getcurrentTurn().getName()+"...begin!",res->{
-      model.getStoryDeck().setTopCard("Tournament at Camelot");//RIGGING!
+      //model.getStoryDeck().setTopCard("Tournament at Camelot");
 
       beginTurn();
       drawCards();
@@ -156,8 +161,15 @@ public class GamePresenter extends Group {
       {assignHand(false);
         view.displayAnnouncementDialog("BEWARE!","YOU HAVE TOO MANY CARDS!!\nPLEASE MAKE SURE YOU HAVE LESS THAN 12 CARDS!",res->{});}
 
-        else
-          nextPlayer();
+        else {
+        		if(model.getPlayers().peekNext() == model.getEvent().getDrewEvent()) {
+        			model.getPlayers().setCurrent(model.getEvent().getDrewEvent());
+        			nextPlayer();
+        			beginTurn();
+        		}
+        		else
+        			nextPlayer();
+        }
     }, false);
     // });
 
@@ -235,12 +247,16 @@ public class GamePresenter extends Group {
         //Gdx.app.log("displayEventAnnouncement","storyType -> EVENT");
 
         view.displayEventAnnouncement(StoryEv, res_2 -> {
-          if(model.getPlayers().peekNext().getName().compareTo(model.getEvent().getDrewEvent().getName()) == 0)
-          {beginTurn();
-          nextPlayer();}
-          else
-          {nextPlayer();}
-
+          model.getEvent().runEvent();
+          assignHand(false);
+          if(model.getcurrentTurn().getState()!="tooManyCards") 
+	        if(model.getPlayers().peekNext() == model.getEvent().getDrewEvent()) {
+	  			model.getPlayers().setCurrent(model.getEvent().getDrewEvent());
+	  			nextPlayer();
+	  			beginTurn();
+	  		}
+	  		else
+	  			nextPlayer();
         });
         //TODO: IMPLEMENT KING'S CALL TO ARMS
         break;
@@ -266,8 +282,25 @@ public class GamePresenter extends Group {
         break;
 
       case "Q":
-       //Gdx.app.log("displayEventAnnouncement","storyType -> QUEST");
-       // model.nextPlayer();
+    	  view.displayJoinEventDialog("Sponsor?",""+model.getStory().getName(), StoryEv, sponsorQuest->{
+
+              if(sponsorQuest)
+              { userInput(1); //Tells model currentPlayer wants to sponsor quest
+              }
+
+              else
+              {userInput(0);
+              if(model.getPlayers().peekNext() == model.getQuest().getDrewQuest()) {
+          		model.nextPlayer();
+          		nextPlayer();
+          		beginTurn();
+              }
+              else {
+            	  	nextPlayer();
+            	  	System.out.println(model.getcurrentTurn().getName());
+              }
+                }
+            });
         break;
 
       default:
@@ -335,8 +368,8 @@ public class GamePresenter extends Group {
         int temp;
         //then update view with what changed in the model
       } else {
-        log.info(model.getcurrentTurn().getName() + "'s turn begins.");
-        model.beginTurn();
+        //log.info(model.getcurrentTurn().getName() + "'s turn begins.");
+        //model.beginTurn();
       }
     } else
       log.info(cardID + "  not found in " + model.getPlayers().current().getName() + "'s hand");
@@ -462,5 +495,55 @@ public class GamePresenter extends Group {
       view.displayDrawCardAnimation(handCards[i]);
     }
   }
+  
+  	private void setUpScen1() {
+		//set up story deck
+		StoryDeck storyDeck = new StoryDeck();
+		storyDeck.setTopCard("Chivalrous Deed");
+		storyDeck.setTopCard("Prosperity Throughout the Realms");
+		storyDeck.setTopCard("Boar Hunt");
+		
+		//set up adventure deck 
+		AdventureDeck advDeck = new AdventureDeck();
+		
+		model = new GameModel(4, 0, advDeck, storyDeck);
+		
+		//set up hands
+		//player1 hand: saxons, boar, sword, test of valor, dagger, thieves + 6
+		model.getPlayerAtIndex(0).pickCard("Saxons", advDeck); 
+		model.getPlayerAtIndex(0).pickCard("Boar", advDeck);
+		model.getPlayerAtIndex(0).pickCard("Sword", advDeck);
+		model.getPlayerAtIndex(0).pickCard("Test of Valor", advDeck);
+		model.getPlayerAtIndex(0).pickCard("Dagger", advDeck);	
+		model.getPlayerAtIndex(0).pickCard("Thieves", advDeck);	
+		//player2 hand: thieves, dagger, giant, king arthur, lance, sir tristan + 6
+		model.getPlayerAtIndex(1).pickCard("Thieves", advDeck); 
+		model.getPlayerAtIndex(1).pickCard("Dagger", advDeck);
+		model.getPlayerAtIndex(1).pickCard("Giant", advDeck);
+		model.getPlayerAtIndex(1).pickCard("King Arthur", advDeck);
+		model.getPlayerAtIndex(1).pickCard("Lance", advDeck);	
+		model.getPlayerAtIndex(1).pickCard("Sir Tristan", advDeck);	
+		//player3 hand: thieves, horse, excalibur, amour, battle-ax, green knight + 6
+		model.getPlayerAtIndex(2).pickCard("Thieves", advDeck); 
+		model.getPlayerAtIndex(2).pickCard("Horse", advDeck);
+		model.getPlayerAtIndex(2).pickCard("Excalibur", advDeck);
+		model.getPlayerAtIndex(2).pickCard("Amour", advDeck);
+		model.getPlayerAtIndex(2).pickCard("Battle-Ax", advDeck);
+		model.getPlayerAtIndex(2).pickCard("Green Knight", advDeck);	
+		//player4 hand: thieves, battle-ax, lance, thieves, horse, dagger + 6
+		model.getPlayerAtIndex(3).pickCard("Thieves", advDeck); 
+		model.getPlayerAtIndex(3).pickCard("Battle-Ax", advDeck);
+		model.getPlayerAtIndex(3).pickCard("Lance", advDeck);
+		model.getPlayerAtIndex(3).pickCard("Thieves", advDeck);
+		model.getPlayerAtIndex(3).pickCard("Horse", advDeck);
+		model.getPlayerAtIndex(3).pickCard("Dagger", advDeck);
+		
+
+		model.getAdvDeck().shuffle();
+		for(Player p : model.getPlayers().getPlayers()) {
+			for(int i=0; i<6; i++)
+				p.drawCard(advDeck);
+		}
+	}
 
 }
