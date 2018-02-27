@@ -47,6 +47,7 @@ public class GameView extends Group {
   private AnnouncementDialog announcementDialog;
   private BooleanDialog questionDialog;
   private JoinEventDialog joinEventDialog;
+  private JoinEventDialog sponsorQuestDialog;
   private EventAnnouncementDialog eventAnnouncementDialog;
   private Skin skin;
   private TextureAtlas sprites;
@@ -69,6 +70,7 @@ public class GameView extends Group {
     questionDialog = new BooleanDialog(skin);
     eventAnnouncementDialog = new EventAnnouncementDialog(skin);
     joinEventDialog = new JoinEventDialog(skin);
+    sponsorQuestDialog = new JoinEventDialog(skin);
     nextTurnButton = new TextButton(NEXT_TURN, skin);
     players = new PlayerStatView[4];
 
@@ -443,6 +445,33 @@ public class GameView extends Group {
     });
 
     addActor(joinEventDialog);
+  }
+
+  public void displaySponsorQuestDialog(String title, String message, CardView cardView, Consumer<Boolean> action) {
+    sponsorQuestDialog.button_false.setText("Pass");
+    sponsorQuestDialog.button_true.setText("Sponsor");
+
+    sponsorQuestDialog.setTitle(title);
+    sponsorQuestDialog.setMessage(message);
+    sponsorQuestDialog.setCardView(cardView);
+    sponsorQuestDialog.setActionTrue(new ClickListener() {
+
+      @Override
+      public void clicked(InputEvent e, float x, float y) {
+        action.accept(true);
+        sponsorQuestDialog.remove();
+      }
+    });
+
+    sponsorQuestDialog.setActionFalse(new ClickListener() {
+      @Override
+      public void clicked(InputEvent e, float x, float y) {
+        action.accept(false);
+        sponsorQuestDialog.remove();
+      }
+    });
+
+    addActor(sponsorQuestDialog);
   }
 
   public void setPlayerShields(int playerNumber, int shields) {
