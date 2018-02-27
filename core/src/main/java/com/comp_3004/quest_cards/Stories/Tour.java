@@ -34,6 +34,7 @@ public class Tour {
 	private int leftToPlayCard;
 	private boolean gameWinMatch = false;
 	private boolean complete;
+	private boolean displaytourstartmessage;
 	
 	public TournamentCard getCurTour() { return tour; }
 	
@@ -46,8 +47,8 @@ public class Tour {
 	public int getJoiners() { return this.joiners; }
 	public int getLeftAsk() {return this.leftAsk;}
 	public ArrayList<Player> getParticipants() { return this.participants; }
-	
-	
+	public boolean displaytourstartmessage() { return this.displaytourstartmessage; }
+	public void displaytourstartmessage(boolean b) { this.displaytourstartmessage = b; }
 	//constructor
 	/*	input players at the table
 	 * 	input Tournament Card that was drawn from storydeck
@@ -130,6 +131,7 @@ public class Tour {
 		
 		//none left to ask
 		if(leftAsk == 0) {
+			this.displaytourstartmessage = true;
 			if(joiners >= 2) {
 				for(Player ps: participants)
 					ps.setState("playtour");
