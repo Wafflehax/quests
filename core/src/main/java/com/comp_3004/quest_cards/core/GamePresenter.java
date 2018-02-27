@@ -178,8 +178,19 @@ public class GamePresenter extends Group {
       if(model.getcurrentTurn().tooManyHandCards()){
     	  assignHand(false,false);
     	  view.displayAnnouncementDialog("BEWARE!","YOU HAVE TOO MANY CARDS!!\nPLEASE MAKE SURE YOU HAVE LESS THAN 12 CARDS!",res->{});}
-      else
-        nextPlayer();
+      else {
+    	  if(model.getPlayers().peekNext() == model.getQuest().getSponsor()) {
+    		  	//model.getQuest().revealStage();
+			model.nextPlayer();
+			while(!model.getQuest().getParticipants().contains(model.getPlayers().peekNext())) {
+					model.nextPlayer();
+			}
+			System.out.println(model.getcurrentTurn().getName());
+			nextPlayer();
+		}
+		else
+			nextPlayer();
+      }
 
     }, false);
     // });
@@ -398,8 +409,6 @@ public class GamePresenter extends Group {
 	        	//quest play
 	        	else if(model.getcurrentTurn().getState() == "playQuest") {
 		    		playQuest();
-		    		while(!model.getQuest().getParticipants().contains(model.getPlayers().peekNext()))
-		    			model.nextPlayer();
         		}
 	        	break;
 	    	}
@@ -587,18 +596,16 @@ public class GamePresenter extends Group {
   public boolean playCard(int cardID) {
     System.out.println("playCard() "+model.getcurrentTurn().getName());
     AdventureCard cardToPlay = null;
-    for (AdventureCard card : model.getcurrentTurn().getHand())
-    {if (card.getID() == cardID)
-        cardToPlay = card;
-
-    if (cardToPlay == null)
-    {}
-
-    if (cardToPlay != null)
-      if (model.getPlayers().current().playCard(cardToPlay)) {
-        System.out.println("CARD FOUND!!"); return true;
-      }
-  }
+    for (AdventureCard card : model.getcurrentTurn().getHand()) {
+    		if (card.getID() == cardID)
+    			cardToPlay = card;
+    }
+    if (cardToPlay != null) {
+        if (model.getPlayers().current().playCard(cardToPlay)) {
+          System.out.println("CARD FOUND!!"); 
+          return true;
+        }
+    }
   System.out.println("Card not played");
   return false;
   }

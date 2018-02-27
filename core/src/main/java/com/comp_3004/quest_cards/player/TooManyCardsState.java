@@ -14,34 +14,26 @@ public class TooManyCardsState extends PlayerState {
 	
 	static Logger log = Logger.getLogger(TooManyCardsState.class); //log4j logger
 
-	public TooManyCardsState() {
-		// TODO Auto-generated constructor stub
-	}
-
 	public boolean playCard(AdventureCard c, Player p) {
 		// can only add cards to table from your hand
 		if((c instanceof FoeCard)) {
 			log.info("Can't play foe cards at this time");
-			return true;
+			return false;
 		}
 		else if((c instanceof TestCard)) {
 			log.info("Can't play test cards at this time");
-			return true;
+			return false;
 		}
 		if(p.getHand().contains(c)) {
 			p.getActive().add(c);
 			p.getHand().remove(c);
 			c.setState(State.PLAY);
 			log.info(p.getName() + " played card " + c.getName());
-			if(p.getHand().size() > 12)
-				return true;
-			else if(p.getHand().size() <= 12) {
+			if(p.getHand().size() <= 12) {
 				p.setState("normal");
 				log.info(p.getName()+" is no longer above the hand limit");
 			}
-			if(p.checkForTooManyCards()) 
-				return true;
-			return false;
+			return true;
 		}else {
 			log.info("Error: " + p.getName() + " does not have the card " + c.getName() + " in hand");
 			return false; 
@@ -67,8 +59,6 @@ public class TooManyCardsState extends PlayerState {
 				p.setState("normal");
 				log.info(p.getName()+" is no longer above the hand limit");
 			}
-			//if(p.checkForTooManyCards()) 
-			//	return true;
 			return false;
 		}
 		log.info(p.getName()+" does not have "+c.getName()+" in their hand");

@@ -345,18 +345,18 @@ public class Quest {
 		log.info(players.current().getName()+" is done playing cards for stage "+(currentStage+1));
 		if(participants.size() == 1) {
 			players.next();
-			return revealStage(currentStage);
+			return revealStage();
 		}
 		else if(sponsor == players.peekNext()) {
 			players.next();	//move current player forward twice to skip sponsor
 			players.next();
-			return revealStage(currentStage);
+			return revealStage();
 		}
 		players.next();
 		while(!participants.contains(players.current())) {
 			if(sponsor == players.current()) {
 				players.next();
-				return revealStage(currentStage);
+				return revealStage();
 			}
 			players.next();
 		}
@@ -367,10 +367,10 @@ public class Quest {
 	}
 	
 	//reveals to the participants what cards are in the stage and resolves stage
-	public boolean revealStage(int stageNum) {
+	public boolean revealStage() {
 		//reveal foe+weapons for stage
-		log.info(sponsor.getName() + " reveals stage " + (stageNum+1));
-		printStage(stageNum);
+		log.info(sponsor.getName() + " reveals stage " + (currentStage+1));
+		printStage(currentStage);
 		
 		//players reveal cards played for stage (cards go from hidden to players active)
 		for(Player p : participants) {
@@ -391,14 +391,14 @@ public class Quest {
 				else if(activeCard instanceof WeaponCard)
 					battlePoints += ((WeaponCard)activeCard).getBattlePts();
 			}
-			if(stages[stageNum].getBattlePts() > battlePoints) {
+			if(stages[currentStage].getBattlePts() > battlePoints) {
 				log.info(p.getName() +" did not have enough battle points to pass stage");
-				log.info("Stage BPs: "+stages[stageNum].getBattlePts()+"  Player BPs: "+battlePoints);
+				log.info("Stage BPs: "+stages[currentStage].getBattlePts()+"  Player BPs: "+battlePoints);
 				failedStage.add(p);
 			}
 			else {
 				log.info(p.getName()+" passed the stage");
-				log.info("Stage BPs: "+stages[stageNum].getBattlePts()+"  Player BPs: "+battlePoints);
+				log.info("Stage BPs: "+stages[currentStage].getBattlePts()+"  Player BPs: "+battlePoints);
 			}
 		}
 		for(Player p : failedStage) {

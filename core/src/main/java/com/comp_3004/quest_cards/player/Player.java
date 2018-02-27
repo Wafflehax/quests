@@ -240,8 +240,8 @@ public class Player{
 
 	public boolean drawCard(AdventureDeck d) {
 		//dont allow ai's to draw over 12
-		//if(aiPlayer && playerHandCards.size() == 12)
-		if(playerHandCards.size() == 12)
+		if(aiPlayer && playerHandCards.size() == 12)
+		//if(playerHandCards.size() == 12)
 			return false;
 		//call drawCard from adventure deck
 		AdventureCard card = d.drawCard();
