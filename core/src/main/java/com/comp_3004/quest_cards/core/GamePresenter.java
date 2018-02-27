@@ -196,7 +196,8 @@ public class GamePresenter extends Group {
      CardView [] stageCards = new CardView[tStage.size()];
 
       for(int j=0; j<stageCards.length;j++)
-        {if(i < quest.getCurrentStageNum() && model.getcurrentTurn().getState().compareTo("sponsor") != 0) stageCards[j] = new CardView(sprites.findRegion(CardAssetMap.get(tStage.get(j).getName())),i);
+        {if(model.getcurrentTurn().getState().compareTo("sponsor") == 0) stageCards[j] = new CardView(sprites.findRegion(CardAssetMap.get(tStage.get(j).getName())),i);
+          else if(i < quest.getCurrentStageNum()) stageCards[j] = new CardView(sprites.findRegion(CardAssetMap.get(tStage.get(j).getName())),i);
         else  stageCards[j] = new CardView(sprites.findRegion(Assets.Cards.CARD_BACK),tStage.get(j).getID());
 
         stageCards[j].setCardStage(i);
@@ -348,7 +349,8 @@ public class GamePresenter extends Group {
       case "E": //EVENT HANDLING
         //Gdx.app.log("displayEventAnnouncement","storyType -> EVENT");
         if(model.getEvent().getDrewEvent() == model.getcurrentTurn())
-        {break;}
+        {
+          break;}
 
         view.displayEventAnnouncement(StoryEv, res_2 -> {
           model.getEvent().runEvent();
@@ -675,7 +677,7 @@ public class GamePresenter extends Group {
 		storyDeck.setTopCard("Chivalrous Deed");
 		storyDeck.setTopCard("Prosperity Throughout the Realms");
 		storyDeck.setTopCard("Boar Hunt");
-        storyDeck.setTopCard("Prosperity Throughout the Realms");
+        //storyDeck.setTopCard("Prosperity Throughout the Realms");
 		
 		//set up adventure deck 
 		AdventureDeck advDeck = new AdventureDeck();
