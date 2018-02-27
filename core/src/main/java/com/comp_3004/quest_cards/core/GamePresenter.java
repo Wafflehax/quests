@@ -208,10 +208,8 @@ public class GamePresenter extends Group {
 		nextPlayer();
 		beginTurn();
   		}
-		else
-			nextPlayer();
-      }
 
+      }
     }, false);
     // });
 
