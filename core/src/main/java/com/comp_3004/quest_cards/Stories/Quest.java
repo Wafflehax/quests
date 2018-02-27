@@ -221,7 +221,7 @@ public class Quest {
 			for(int i=0; i<quest.getStages(); i++) {
 				log.info("Stage "+(i+1)+": "+stageBPs[i]+" battlepoints");
 			}
-			players.next();
+			//players.next();
 			for(Player p : players.getPlayers()) {
 				if(p != sponsor) {
 					p.setState("questParticipant");
@@ -232,8 +232,8 @@ public class Quest {
 					questParticipation(1, players.current());
 				else
 					questParticipation(0, players.current());
-			return true;
 			}
+			return true;
 		}
 		else {
 			log.info("Resetting quest set up...");
@@ -242,7 +242,7 @@ public class Quest {
 				cardsUsedToSponsor = 0;
 			}
 		}
-		return true;
+		return false;
 	}
 	
 	//determines if the player wants to participate in the quest
@@ -258,14 +258,14 @@ public class Quest {
 				questCleanup();
 				return true;
 			}
-			players.next();	//move current player forward twice to skip sponsor
-			players.next();
+			//players.next();	//move current player forward twice to skip sponsor
+			//players.next();
 			for(Player pl : participants)
 				pl.setState("playQuest");
 			startStage(currentStage);
 			return true;
 		}
-		players.next();
+		//players.next();
 		if(players.current().isAi()) {
 			if(players.current().getAI().doIParticipateInQuest())
 				questParticipation(1, players.current());

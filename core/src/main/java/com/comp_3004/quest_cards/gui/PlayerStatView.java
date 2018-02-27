@@ -108,7 +108,7 @@ public class PlayerStatView extends Group {
     cards[i].HoverDrawConfig(cards[i]);
     }
 
-    flag_arrow.addListener(new ClickListener(){
+    this.addListener(new ClickListener(){
       @Override
       public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
         presenter.getView().displayStatViewCards(cards);

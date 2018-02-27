@@ -54,6 +54,7 @@ public class GameView extends Group {
   private BooleanDialog questionDialog;
   private JoinEventDialog joinEventDialog;
   private JoinEventDialog sponsorQuestDialog;
+  private JoinEventDialog participationQuestDialog;
   private EventAnnouncementDialog eventAnnouncementDialog;
   private Skin skin;
   private TextureAtlas sprites;
@@ -77,6 +78,7 @@ public class GameView extends Group {
     eventAnnouncementDialog = new EventAnnouncementDialog(skin);
     joinEventDialog = new JoinEventDialog(skin);
     sponsorQuestDialog = new JoinEventDialog(skin);
+    participationQuestDialog = new JoinEventDialog(skin);
     nextTurnButton = new TextButton(NEXT_TURN, skin);
     nextStageButton = new TextButton("Next Stage", skin);
     finishQuestSetupButton = new TextButton("Finish Setup", skin);
@@ -367,6 +369,7 @@ public class GameView extends Group {
     }
 
   public void hideNextStageButton(){nextStageButton.remove();}
+  public void hideFinishSetupButton() {finishQuestSetupButton.remove();}
 
     public void displayFinishQuestSetupButton(final Runnable action, boolean hideAfter) {
 
@@ -510,7 +513,7 @@ public class GameView extends Group {
   }
 
   public void displaySponsorQuestDialog(String title, String message, CardView cardView, Consumer<Boolean> action) {
-    sponsorQuestDialog.button_false.setText("Pass");
+	sponsorQuestDialog.button_false.setText("Pass");
     sponsorQuestDialog.button_true.setText("Sponsor");
     sponsorQuestDialog.setTitle(title);
     sponsorQuestDialog.setMessage(message);
@@ -534,6 +537,31 @@ public class GameView extends Group {
 
     addActor(sponsorQuestDialog);
   }
+  
+  public void displayParticipateQuestDialog(String title, String message, Consumer<Boolean> action) {
+	  	participationQuestDialog.button_false.setText("Decline");
+	  	participationQuestDialog.button_true.setText("Participate");
+	  	participationQuestDialog.setTitle(title);
+	  	participationQuestDialog.setMessage(message);
+	    participationQuestDialog.setActionTrue(new ClickListener() {
+
+	      @Override
+	      public void clicked(InputEvent e, float x, float y) {
+	        action.accept(true);
+	        participationQuestDialog.remove();
+	      }
+	    });
+
+	    participationQuestDialog.setActionFalse(new ClickListener() {
+	      @Override
+	      public void clicked(InputEvent e, float x, float y) {
+	        action.accept(false);
+	        participationQuestDialog.remove();
+	      }
+	    });
+
+	    addActor(participationQuestDialog);
+	  }
 
   public void setPlayerShields(int playerNumber, int shields) {
     players[playerNumber].setShields(shields);

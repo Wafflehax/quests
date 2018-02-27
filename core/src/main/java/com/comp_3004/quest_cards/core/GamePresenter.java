@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class GamePresenter extends Group {
 
@@ -158,7 +159,7 @@ public class GamePresenter extends Group {
     }
 
     view.displayAnnouncementDialog("","Let the Games BEGIN!\n\n"+model.getcurrentTurn().getName()+"...begin!",res->{
-      //model.getStoryDeck().setTopCard("Tournament at Camelot");
+
       beginTurn();
       drawCards();
       storyDisplay();
@@ -175,17 +176,11 @@ public class GamePresenter extends Group {
     view.displayNextTurnButton(() -> {
       System.out.println(model.getcurrentTurn().getState());
       if(model.getcurrentTurn().tooManyHandCards()){
-    	  assignHand(false,true);
+    	  assignHand(false,false);
     	  view.displayAnnouncementDialog("BEWARE!","YOU HAVE TOO MANY CARDS!!\nPLEASE MAKE SURE YOU HAVE LESS THAN 12 CARDS!",res->{});}
-      else {
-        		if(model.getPlayers().peekNext() == model.getEvent().getDrewEvent()) {
-        			model.getPlayers().setCurrent(model.getEvent().getDrewEvent());
-        			nextPlayer();
-        			beginTurn();
-        		}
-        		else
-        			nextPlayer();
-        }
+      else
+        nextPlayer();
+
     }, false);
     // });
 
@@ -201,7 +196,8 @@ public class GamePresenter extends Group {
      CardView [] stageCards = new CardView[tStage.size()];
 
       for(int j=0; j<stageCards.length;j++)
-        {if(i <= quest.getCurrentStageNum()) stageCards[j] = new CardView(sprites.findRegion(CardAssetMap.get(tStage.get(j).getName())),i);
+        {if(model.getcurrentTurn().getState().compareTo("sponsor") == 0) stageCards[j] = new CardView(sprites.findRegion(CardAssetMap.get(tStage.get(j).getName())),i);
+          else if(i < quest.getCurrentStageNum()) stageCards[j] = new CardView(sprites.findRegion(CardAssetMap.get(tStage.get(j).getName())),i);
         else  stageCards[j] = new CardView(sprites.findRegion(Assets.Cards.CARD_BACK),tStage.get(j).getID());
 
         stageCards[j].setCardStage(i);
@@ -237,6 +233,7 @@ public class GamePresenter extends Group {
 
     view.InPlayCDZ.setVisible(true);
     System.out.println("assignHand(): "+model.getcurrentTurn().getName()+": IDS");
+    
 
     handCards = new CardView[tempHand.size()];
     activeCards = new CardView[tempActive.size()];
@@ -268,7 +265,7 @@ public class GamePresenter extends Group {
     for(int i=0; i<tempPlayers.size();i++)
     {int j = 0;
       if(tempPlayers.getPlayerAtIndex(i).getName().compareTo(model.getcurrentTurn().getName()) != 0)
-    {view.players[j].setPlayer(tempPlayers.getPlayerAtIndex(i));
+    {view.players[j].setPlayer(tempPlayers.getPlayerAtIndex(j));
     view.players[j].setPresenter(this);
     view.players[j].playerConfig();
     j++;}
@@ -292,10 +289,11 @@ public class GamePresenter extends Group {
            handCards[i].setInPlayCDZ(view.zeroBounds);}
         }
     }
-
         if(doAnnounce) {
-          		
-			if(model.getTour() != null && model.getTour().displaytourstartmessage() == true 
+	        	if(model.getcurrentTurn().getState() == "questParticipant") {
+	        		storyDisplay();
+	        	}
+        		if(model.getTour() != null && model.getTour().displaytourstartmessage() == true 
 					&& model.getTour().getJoiners() >= 2) {
 				view.displayAnnouncementDialog("Tournament Starting", model.getTour().getJoiners() + " have joined\n" +
           " with shield winnings of " + (((TournamentCard)model.getStory()).getBonusSh()+model.getTour().getJoiners()),res->{});
@@ -336,20 +334,27 @@ public class GamePresenter extends Group {
     view.displayStoryDiscardPile(sprites.findRegion(CardAssetMap.get(model.getStory().getName())));
   }
 
-  public void nextPlayer(){model.nextPlayer(); assignHand(true,false);}
+  public void nextPlayer(){
+	  model.nextPlayer(); 
+	  assignHand(true,false);
+	  
+	  }
 
   public void storyDisplay(){
-
+	  
     CardView StoryEv = new CardView(sprites.findRegion(CardAssetMap.get(model.getStory().getName())),model.getStory().getID());
     String storyType = CardAssetMap.get(model.getStory().getName()).substring(0,1);//E,T, or Q
     switch(storyType){
 
       case "E": //EVENT HANDLING
         //Gdx.app.log("displayEventAnnouncement","storyType -> EVENT");
+        if(model.getEvent().getDrewEvent() == model.getcurrentTurn())
+        {
+          break;}
 
         view.displayEventAnnouncement(StoryEv, res_2 -> {
           model.getEvent().runEvent();
-          assignHand(false,true);
+          assignHand(false,false);
           if(model.getcurrentTurn().getState()!="tooManyCards") 
 	        if(model.getPlayers().peekNext() == model.getEvent().getDrewEvent()) {
 	  			model.getPlayers().setCurrent(model.getEvent().getDrewEvent());
@@ -385,33 +390,20 @@ public class GamePresenter extends Group {
         break;
 
       case "Q":
-        if(model.getQuest().getSponsor() != null){break;}
-
+        if(model.getQuest().getSponsor() != null){
+	        	if(model.getcurrentTurn().getState() == "questParticipant") {
+		    		determineParticipation();
+		    		if(model.getcurrentTurn() == model.getQuest().getDrewQuest())
+		    			System.out.println("DING");
+        		}
+	        	break;
+	    	}
     	  view.displaySponsorQuestDialog("Sponsor?",""+model.getStory().getName(), StoryEv, sponsorQuest->{
 
               if(sponsorQuest)
               { userInput(1); //Tells model currentPlayer wants to sponsor quest
-                StageNum = 0;
-                cardUpdate(StageNum);
-                assignHand(false, false);
-                view.displayNextStageButton(()->{StageNum++;
-                assignHand(false,false);
-                cardUpdate(StageNum);
-                if(StageNum == model.getQuest().getQuest().getStages())
-                {view.hideNextStageButton();
-
-                clearCards(handCards); //Kills Listeners on cards so sponsor can't commit OOB error
-                view.displayFinishQuestSetupButton(()->{
-                  //TODO: Implement a check if QuestSetup is good, and resolve accordingly
-
-
-
-
-
-                },false);}
-
-                },false);
-
+                sponsor(false);
+                
               }
 
               else
@@ -436,6 +428,62 @@ public class GamePresenter extends Group {
 
     }
 
+  }
+  
+  public void sponsor(boolean error) {
+	  System.out.println(error);
+	  StageNum = 0;
+      if(error) {
+    	  	System.out.println("DING");
+    	  	view.displayAnnouncementDialog("Set Up Error","Battle Points do not increase for each stage",res->{
+    	  		log.info("Quest set up incorrectly");
+    	  		questSetUp();
+    	  		});
+      }
+      else {
+    	  	questSetUp();
+      }
+  }
+  
+  public void questSetUp() {
+	  StageNum = 0;
+	  cardUpdate(StageNum);
+      assignHand(false, false);
+      view.displayNextStageButton(()->{
+    	  	StageNum++;
+    	  	assignHand(false,false);
+    	      cardUpdate(StageNum);
+    	      if(StageNum == (model.getQuest().getQuest().getStages()-1))
+    	      {view.hideNextStageButton();
+
+    	      //clearCards(handCards); //Kills Listeners on cards so sponsor can't commit OOB error
+    	      view.displayFinishQuestSetupButton(()->{
+    	        //TODO: Implement a check if QuestSetup is good, and resolve accordingly
+    	      		if(model.getQuest().checkQuestSetup()) {
+    	      			log.info("Quest set up correctly");
+    	      			view.hideFinishSetupButton();
+    	      			nextPlayer();
+    	      		}
+    	      		else {
+    	      			assignHand(false,false);
+    	      			sponsor(true);
+    	      			
+    	      		}
+    	      },false);}
+      },false);
+  }
+  
+  public void determineParticipation() {
+		view.displayParticipateQuestDialog("Participation", "Participate in quest?", participate->{
+			if(participate) {
+				userInput(1);
+				nextPlayer();
+			}
+			else  {
+				userInput(0);
+				nextPlayer();
+			}
+		});
   }
 
   public void clearCards(CardView [] cards){for(int i = 0; i<cards.length; i++) cards[i].clear();}
@@ -512,8 +560,8 @@ public class GamePresenter extends Group {
     if (!model.getPlayers().current().userInput(input)) {
       if (model.getcurrentTurn().getState().equalsIgnoreCase("playtour")) {
         //player couldn't leave turn too many cards
-      } else
-        model.beginTurn();
+      } //else
+        //model.beginTurn();
     }
 
   }
@@ -629,6 +677,7 @@ public class GamePresenter extends Group {
 		storyDeck.setTopCard("Chivalrous Deed");
 		storyDeck.setTopCard("Prosperity Throughout the Realms");
 		storyDeck.setTopCard("Boar Hunt");
+        //storyDeck.setTopCard("Prosperity Throughout the Realms");
 		
 		//set up adventure deck 
 		AdventureDeck advDeck = new AdventureDeck();
