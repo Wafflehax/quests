@@ -61,9 +61,7 @@ public class PlayerStatView extends Group {
   }
 
   @Override
-  public void setPosition(float x, float y) {
-    super.setPosition(x, y);
-  }
+  public void setPosition(float x, float y) {super.setPosition(x, y);}
 
   private void pack() {
 
@@ -103,9 +101,14 @@ public class PlayerStatView extends Group {
   public void playerConfig(){
     cards = new CardView[player.getActive().size()];
 
+    setShields(this.player.getShields());
+    setCards(cards.length);
+
+
     for(int i=0;i<cards.length;i++)
     {cards[i] = new CardView(presenter.sprites.findRegion(presenter.CardAssetMap.get(player.getActive().get(i).getName())),0);
     cards[i].HoverDrawConfig(cards[i]);
+    cards[i].scaleBy(-0.5f);
     }
 
     this.addListener(new ClickListener(){
@@ -113,6 +116,9 @@ public class PlayerStatView extends Group {
       public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
         presenter.getView().displayStatViewCards(cards);
         presenter.getView().statViewBG.setVisible(true);
+        float r,g,b; r = flag_arrow.getColor().r; b = flag_arrow.getColor().b; g = flag_arrow.getColor().g;
+        presenter.getView().statViewBG.setColor(r,g,b,1);
+        presenter.getView().displayStatViewCards(cards);
       }
 
       @Override
@@ -121,6 +127,8 @@ public class PlayerStatView extends Group {
         presenter.getView().statViewBG.setVisible(false);
 
       }
+
+
     });
 
 

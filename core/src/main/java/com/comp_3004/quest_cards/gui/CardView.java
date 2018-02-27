@@ -71,7 +71,7 @@ public class CardView extends Image {
                         //if(active)
                         if (y > card.getY() + (card.getHeight() / 3)) {
                           card.moveBy(0, card.getHeight() / 3);
-                          card.setZIndex(12);
+                          card.setZIndex(20);
 
                         }
                       }

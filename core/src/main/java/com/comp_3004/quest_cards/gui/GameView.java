@@ -170,6 +170,9 @@ public class GameView extends Group {
     nextStageButton.setBounds(SponsorCDZ.getWidth()-220,SponsorCDZ.getY()+SponsorCDZ.getHeight()+10,200,50);
     finishQuestSetupButton.setBounds(SponsorCDZ.getWidth()-220,SponsorCDZ.getY()+SponsorCDZ.getHeight()+10,200,50);
 
+    statViewBG.setBounds(1150,SponsorCDZ.getY(),500,SponsorCDZ.getHeight());
+    statViewBG.setVisible(false);
+
     PlayerColor[] colors = PlayerColor.values();
     for (int i = 0; i < players.length; i++) {
 
@@ -268,7 +271,7 @@ public class GameView extends Group {
     QuestStages.add(card);
     card.HoverDrawConfig(card);
     displayCardsQuestStages(QuestStages);
-    //
+
   }
 
   public void displayCardsInPlay(LinkedList<CardView> InPlay) {
@@ -573,7 +576,33 @@ public class GameView extends Group {
 
   public void displayStatViewCards(CardView[] cards) {
     playerView.addDisplayCards(cards);
-  }
+
+      float x0 = statViewBG.getX();
+      float y0 = statViewBG.getY() + statViewBG.getHeight() / 2 - 30;
+
+      for (int i = 0; i < cards.length; i++) {
+        CardView setThis = cards[i];
+        setThis.setY(y0);
+        setThis.setDeckY(y0);
+        setThis.setDeckZ(i);
+        setThis.setZIndex(i);
+        setThis.setX(x0);
+        setThis.setDeckX(x0);
+        x0 = (x0 + 80);
+
+        if (i == 8) {
+          y0 = y0 - statViewBG.getHeight() / 2;
+          x0 = statViewBG.getX();
+          setThis.setY(y0);
+          setThis.setDeckY(y0);
+          setThis.setDeckZ(i);
+          setThis.setZIndex(i);
+          setThis.setX(x0);
+          setThis.setDeckX(x0);
+        }
+      }
+    }
+
 
   public void hideStatViewCards(CardView[] cards) {
     playerView.wipePlayerHand(cards);

@@ -177,7 +177,7 @@ public class GamePresenter extends Group {
       System.out.println(model.getcurrentTurn().getState());
       if(model.getcurrentTurn().tooManyHandCards()){
     	  assignHand(false,false);
-    	  view.displayAnnouncementDialog("BEWARE!","YOU HAVE TOO MANY CARDS!!\nPLEASE MAKE SURE YOU HAVE LESS THAN 12 CARDS!",res->{});}
+    	  view.displayAnnouncementDialog("BEWARE!","You have too many cards!\nYou still need to discard "+(model.getcurrentTurn().getHand().size()-12)+" cards...",res->{});}
       else
         nextPlayer();
 
@@ -262,10 +262,10 @@ public class GamePresenter extends Group {
     }
 
 
-    for(int i=0; i<tempPlayers.size();i++)
-    {int j = 0;
+    for(int i=0,j=0; i<tempPlayers.size();i++)
+    {
       if(tempPlayers.getPlayerAtIndex(i).getName().compareTo(model.getcurrentTurn().getName()) != 0)
-    {view.players[j].setPlayer(tempPlayers.getPlayerAtIndex(j));
+    {view.players[j].setPlayer(tempPlayers.getPlayerAtIndex(i));
     view.players[j].setPresenter(this);
     view.players[j].playerConfig();
     j++;}
@@ -293,13 +293,13 @@ public class GamePresenter extends Group {
 	        	if(model.getcurrentTurn().getState() == "questParticipant") {
 	        		storyDisplay();
 	        	}
-        		if(model.getTour() != null && model.getTour().displaytourstartmessage() == true 
+        		if(model.getTour() != null && model.getTour().displaytourstartmessage() == true
 					&& model.getTour().getJoiners() >= 2) {
 				view.displayAnnouncementDialog("Tournament Starting", model.getTour().getJoiners() + " have joined\n" +
           " with shield winnings of " + (((TournamentCard)model.getStory()).getBonusSh()+model.getTour().getJoiners()),res->{});
 				drawCards();
 	            storyDisplay();
-	          
+
 			}
 			else if(model.getTour() != null && model.getTour().getleftToPlayCard() == 0 && model.getTour().getJoiners() < 2
 					&& model.getTour().displaytourstartmessage()) {
@@ -309,7 +309,7 @@ public class GamePresenter extends Group {
         	  model.getTour().displaytourstartmessage(false);
         	  drawCards();
 	            storyDisplay();
-	          
+
 			}
 			else {
 				view.displayAnnouncementDialog("Begin Turn", "" + model.getcurrentTurn().getName() + "... begin!", result_2 -> {
@@ -317,7 +317,7 @@ public class GamePresenter extends Group {
 		            storyDisplay();
 		          });
 			}
-          
+
         }
 
         else if(doUpdate)
@@ -335,34 +335,36 @@ public class GamePresenter extends Group {
   }
 
   public void nextPlayer(){
-	  model.nextPlayer(); 
+	  model.nextPlayer();
 	  assignHand(true,false);
-	  
+
 	  }
 
   public void storyDisplay(){
-	  
+
     CardView StoryEv = new CardView(sprites.findRegion(CardAssetMap.get(model.getStory().getName())),model.getStory().getID());
     String storyType = CardAssetMap.get(model.getStory().getName()).substring(0,1);//E,T, or Q
     switch(storyType){
 
       case "E": //EVENT HANDLING
         //Gdx.app.log("displayEventAnnouncement","storyType -> EVENT");
-        if(model.getEvent().getDrewEvent() == model.getcurrentTurn())
+        StageNum = model.getNumPlayers();
+        StageNum--;
+       if(model.getEvent().getDrewEvent() == model.getcurrentTurn() && StageNum == 0)
         {
           break;}
 
         view.displayEventAnnouncement(StoryEv, res_2 -> {
           model.getEvent().runEvent();
           assignHand(false,false);
-          if(model.getcurrentTurn().getState()!="tooManyCards") 
-	        if(model.getPlayers().peekNext() == model.getEvent().getDrewEvent()) {
+          if(!model.getcurrentTurn().tooManyHandCards())
+          {if(model.getPlayers().peekNext() == model.getEvent().getDrewEvent()) {
 	  			model.getPlayers().setCurrent(model.getEvent().getDrewEvent());
 	  			nextPlayer();
 	  			beginTurn();
-	  		}
+	  		}}
 	  		else
-	  			nextPlayer();
+          {view.displayAnnouncementDialog("You drew too many cards!","Play or discard at least "+(model.getcurrentTurn().getHand().size()-12)+" cards before you end your turn.",res->{});}
         });
         //TODO: IMPLEMENT KING'S CALL TO ARMS
         break;
@@ -403,7 +405,7 @@ public class GamePresenter extends Group {
               if(sponsorQuest)
               { userInput(1); //Tells model currentPlayer wants to sponsor quest
                 sponsor(false);
-                
+
               }
 
               else
@@ -429,7 +431,7 @@ public class GamePresenter extends Group {
     }
 
   }
-  
+
   public void sponsor(boolean error) {
 	  System.out.println(error);
 	  StageNum = 0;
@@ -444,7 +446,7 @@ public class GamePresenter extends Group {
     	  	questSetUp();
       }
   }
-  
+
   public void questSetUp() {
 	  StageNum = 0;
 	  cardUpdate(StageNum);
@@ -467,12 +469,12 @@ public class GamePresenter extends Group {
     	      		else {
     	      			assignHand(false,false);
     	      			sponsor(true);
-    	      			
+
     	      		}
     	      },false);}
       },false);
   }
-  
+
   public void determineParticipation() {
 		view.displayParticipateQuestDialog("Participation", "Participate in quest?", participate->{
 			if(participate) {
