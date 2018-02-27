@@ -177,7 +177,14 @@ public class GamePresenter extends Group {
       }*/
     view.displayNextTurnButton(() -> {
       System.out.println(model.getcurrentTurn().getState());
-      if(model.getcurrentTurn().tooManyHandCards()){
+
+      if(jankQuestFix)
+          { if(!model.getcurrentTurn().tooManyHandCards())
+                {jankQuestFix = false; model.getcurrentTurn().setState(model.getcurrentTurn().getPrevState());  assignHand(true,false);}
+            else
+              view.displayAnnouncementDialog("BEWARE!","You have too many cards!!\nPlease discard "+(model.getcurrentTurn().getHand().size()-12)+" more cards...",res->{});
+          }
+      else if(model.getcurrentTurn().tooManyHandCards()){
     	  assignHand(false,false);
     	  view.displayAnnouncementDialog("BEWARE!","You have too many cards!!\nPlease discard "+(model.getcurrentTurn().getHand().size()-12)+" more cards...",res->{});}
       else if(model.getcurrentTurn().getState().compareTo("sponsor")==0)
@@ -231,7 +238,7 @@ public class GamePresenter extends Group {
 
       for(int j=0; j<stageCards.length;j++)
         {if(model.getcurrentTurn().getState().compareTo("sponsor") == 0) stageCards[j] = new CardView(sprites.findRegion(CardAssetMap.get(tStage.get(j).getName())),i);
-          else if(i < quest.getCurrentStageNum()) stageCards[j] = new CardView(sprites.findRegion(CardAssetMap.get(tStage.get(j).getName())),i);
+          else if(i < quest.getCurrentStageNum() && model.getcurrentTurn().getState().compareTo("playQuest") == 0) stageCards[j] = new CardView(sprites.findRegion(CardAssetMap.get(tStage.get(j).getName())),i);
         else  stageCards[j] = new CardView(sprites.findRegion(Assets.Cards.CARD_BACK),tStage.get(j).getID());
 
         stageCards[j].setCardStage(i);
@@ -451,8 +458,11 @@ public class GamePresenter extends Group {
         break;
 
       case "Q":
-          if(model.getcurrentTurn().tooManyHandCards())
-          {}
+          if(model.getcurrentTurn().tooManyHandCards() && model.getcurrentTurn().getPrevState().compareTo("playQuest")==0)
+          {jankQuestFix = true;
+              view.displayAnnouncementDialog("BEWARE!","You have too many cards!!\nPlease discard "+(model.getcurrentTurn().getHand().size()-12)+" more cards...",res->{});
+            break;
+          }
 
         if(model.getQuest().getSponsor() != null){
         		//quest participation
@@ -543,7 +553,7 @@ public class GamePresenter extends Group {
 		view.displayParticipateQuestDialog("Participation", model.getcurrentTurn().getName()+"\nParticipate in quest?", participate->{
 			System.out.println("first line: "+model.getcurrentTurn().getName());
 		    if(participate)
-                {userInput(1);}
+                {userInput(1); model.getcurrentTurn().setPrevState("playQuest");}
 			else
                 {userInput(0);}
             System.out.println("after 1st condition pair");
@@ -562,7 +572,7 @@ public class GamePresenter extends Group {
   }
   
   public void playQuest() {
-	  view.displayAnnouncementDialog("Stage "+model.getQuest().getCurrentStageNum()+1,"Stage "+model.getQuest().getCurrentStageNum()+" contains a "
+	  view.displayAnnouncementDialog("Stage "+model.getQuest().getCurrentStageNum()+1,"Stage "+(model.getQuest().getCurrentStageNum()+1)+" contains a "
 			  +model.getQuest().getCurrentStage().getSponsorCards().get(0).getClass().getSimpleName(),res->{});
 	  
   }
