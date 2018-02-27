@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.Card;
 import com.comp_3004.quest_cards.cards.EventCard;
+import com.comp_3004.quest_cards.cards.TournamentCard;
 import com.comp_3004.quest_cards.gui.Assets;
 import com.comp_3004.quest_cards.gui.CardView;
 import com.comp_3004.quest_cards.gui.Config;
@@ -152,11 +153,6 @@ public class GamePresenter extends Group {
 
     view.displayNextTurnButton(() -> {
       System.out.println(model.getcurrentTurn().getState());
-      //if player turn start then display start tour message
-      if(model.getTour() != null && model.getTour().playerturn() == true) {
-    	//  view.displayAnnouncementDialog("Tournament Starting", model.getTour().getJoiners() + " have joined\n" +
-    //  " with shield winnings of " + (Tournamentcard)model.getStory(),res->{});
-      }
       if(model.getcurrentTurn().tooManyHandCards()){
     	  assignHand(false);
     	  view.displayAnnouncementDialog("BEWARE!","YOU HAVE TOO MANY CARDS!!\nPLEASE MAKE SURE YOU HAVE LESS THAN 12 CARDS!",res->{});}
@@ -219,6 +215,28 @@ public class GamePresenter extends Group {
             drawCards();
             storyDisplay();
           });
+          try {
+			
+			if(model.getTour() != null && model.getTour().displaytourstartmessage() == true 
+					&& model.getTour().getJoiners() >= 2) {
+				Thread.sleep(1000);
+				view.displayAnnouncementDialog("Tournament Starting", model.getTour().getJoiners() + " have joined\n" +
+          " with shield winnings of " + (((TournamentCard)model.getStory()).getBonusSh()+model.getTour().getJoiners()),res->{});
+        	  
+			}
+			else if(model.getTour().getleftToPlayCard() == 0 && model.getTour().getJoiners() < 2
+					&& model.getTour().displaytourstartmessage()) {
+				Thread.sleep(1000);
+				view.displayAnnouncementDialog("Tournament NOT Starting", model.getTour().getJoiners() + " have joined\n" +
+          " with shield winnings of " + (((TournamentCard)model.getStory()).getBonusSh()+model.getTour().getJoiners()) +
+          " but not enought players!",res->{});
+        	  model.getTour().displaytourstartmessage(false);;
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+          
         }
 
         else
@@ -260,7 +278,10 @@ public class GamePresenter extends Group {
           {
            // if(model.getTour().isOver())
            // {}
-
+        	//if player turn start then display start tour message
+        
+        	
+        	
 
             break;}
 
