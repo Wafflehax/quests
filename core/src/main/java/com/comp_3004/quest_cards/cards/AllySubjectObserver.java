@@ -14,10 +14,16 @@ public class AllySubjectObserver extends AllyCard {
 	LinkedList<AllySubjectObserver> obs;
 	private AllySubjectObserver subject;
 	private int abp, abids;
-	private boolean activated;
+	private boolean activated = false;
 	private String[] activators;
 	
-	public boolean isActivated() { return activated; }
+	//temporary fix activated boolean reversed
+	public boolean isActivated() { 
+		if(activated)
+			return false;
+		else
+			return true;
+	}
 	
 	public AllySubjectObserver(String n, int bp, int bd) {
 		super(n, bp, bd);
@@ -139,6 +145,14 @@ public class AllySubjectObserver extends AllyCard {
 		
 		this.abids = tempBids;
 		this.abp = tempB;
+		String out = "";
+		out += this.name; 
+		if(this.isActivated())
+			out += " activated ";
+		else
+			out += " deactivated ";
+		out += " has current bp: "+ this.battlePts + "  bids: "+ this.bids;
+		log.info(out);
 	}
 	
 	

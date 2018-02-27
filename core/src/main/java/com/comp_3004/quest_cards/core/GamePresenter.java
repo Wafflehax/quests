@@ -192,11 +192,11 @@ public class GamePresenter extends Group {
 		}
     	//if no event do nothing
     	else if(model.getStory() instanceof TournamentCard) {
-		if(model.getTour().Complete()) {
-			//move on to next story
-			beginTurn();
-		}
-		model.getTour().doneTurn();
+			if(model.getTour().Complete()) {
+				//move on to next story
+				beginTurn();
+			}
+			model.getTour().doneTurn();
   		}
     	  
   		if(model.getEvent() == null) {
@@ -204,9 +204,9 @@ public class GamePresenter extends Group {
   			nextPlayer();
   		}
   		else if(model.getPlayers().peekNext() == model.getEvent().getDrewEvent()) {
-		model.getPlayers().setCurrent(model.getEvent().getDrewEvent());
-		nextPlayer();
-		beginTurn();
+			model.getPlayers().setCurrent(model.getEvent().getDrewEvent());
+			nextPlayer();
+			beginTurn();
   		}
 
       }
@@ -746,7 +746,7 @@ public class GamePresenter extends Group {
 		storyDeck.setTopCard("Chivalrous Deed");
 		storyDeck.setTopCard("Prosperity Throughout the Realms");
 		storyDeck.setTopCard("Boar Hunt");
-		storyDeck.setTopCard("Tournament at Camelot");
+//		storyDeck.setTopCard("Tournament at Camelot");
 		//storyDeck.setTopCard("Prosperity Throughout the Realms");
 		
 		//set up adventure deck 

@@ -131,6 +131,7 @@ public class AllyConditionsTest extends TestCase {
 		
 		qu.setState(State.PLAY);
 		tris.setState(State.PLAY);
+		
 		//Check activated battle points, bids
 		assertEquals(true, (qu.getBattlePts() == 0 && qu.getBids() == 4));
 		assertEquals(true, (tris.getBattlePts() == 20 && tris.getBids() == 0));
