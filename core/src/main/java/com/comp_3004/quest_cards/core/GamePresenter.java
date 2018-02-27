@@ -288,21 +288,11 @@ public class GamePresenter extends Group {
            handCards[i].setInPlayCDZ(view.zeroBounds);}
         }
     }
-
         if(doAnnounce) {
-        		if(model.getcurrentTurn().getState() == "questParticipant") {
-        			view.displayParticipateQuestDialog("Participation", "Participate in quest?", participate->{
-        				if(participate) {
-        					userInput(1);
-        					nextPlayer();
-        				}
-        				else {
-        					userInput(1);
-        					nextPlayer();
-        				}
-        			});
-      	  	}
-        		else if(model.getTour() != null && model.getTour().displaytourstartmessage() == true 
+	        	if(model.getcurrentTurn().getState() == "questParticipant") {
+	        		storyDisplay();
+	        	}
+        		if(model.getTour() != null && model.getTour().displaytourstartmessage() == true 
 					&& model.getTour().getJoiners() >= 2) {
 				view.displayAnnouncementDialog("Tournament Starting", model.getTour().getJoiners() + " have joined\n" +
           " with shield winnings of " + (((TournamentCard)model.getStory()).getBonusSh()+model.getTour().getJoiners()),res->{});
@@ -350,7 +340,7 @@ public class GamePresenter extends Group {
 	  }
 
   public void storyDisplay(){
-
+	  
     CardView StoryEv = new CardView(sprites.findRegion(CardAssetMap.get(model.getStory().getName())),model.getStory().getID());
     String storyType = CardAssetMap.get(model.getStory().getName()).substring(0,1);//E,T, or Q
     switch(storyType){
@@ -398,8 +388,14 @@ public class GamePresenter extends Group {
         break;
 
       case "Q":
-        if(model.getQuest().getSponsor() != null){break;}
-
+        if(model.getQuest().getSponsor() != null){
+	        	if(model.getcurrentTurn().getState() == "questParticipant") {
+		    		determineParticipation();
+		    		if(model.getcurrentTurn() == model.getQuest().getDrewQuest())
+		    			System.out.println("DING");
+        		}
+	        	break;
+	    	}
     	  view.displaySponsorQuestDialog("Sponsor?",""+model.getStory().getName(), StoryEv, sponsorQuest->{
 
               if(sponsorQuest)
@@ -473,6 +469,19 @@ public class GamePresenter extends Group {
     	      		}
     	      },false);}
       },false);
+  }
+  
+  public void determineParticipation() {
+		view.displayParticipateQuestDialog("Participation", "Participate in quest?", participate->{
+			if(participate) {
+				userInput(1);
+				nextPlayer();
+			}
+			else  {
+				userInput(0);
+				nextPlayer();
+			}
+		});
   }
 
   public void clearCards(CardView [] cards){for(int i = 0; i<cards.length; i++) cards[i].clear();}
