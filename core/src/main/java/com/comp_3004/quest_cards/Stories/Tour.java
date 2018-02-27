@@ -310,7 +310,7 @@ public class Tour {
 					// discard amours, weapons
 					discardAmours();
 					discardWeapons();
-					this.tourresult += "Tournament is OVER.";
+					this.tourresult += "\nTournament is OVER.";
 					//set turn to regular before tour
 					players = tempPl;
 					tempPl = null;
@@ -334,13 +334,13 @@ public class Tour {
 						
 						//disabled ai
 						//notify of next turn
-						/*if(players.current().isAi()) {
+						if(players.current().isAi()) {
 							players.current().notifyTurn();
 						}
 						else {
 							log.info(players.current().getName() + " Its your turn press done when finished");	
 						}
-						*/
+						
 					}
 					else if(round == 2) { //over Tied players win
 						round++;

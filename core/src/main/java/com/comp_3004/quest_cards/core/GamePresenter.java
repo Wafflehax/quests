@@ -323,29 +323,12 @@ public class GamePresenter extends Group {
 	        	if(model.getcurrentTurn().getState() == "questParticipant") {
 	        		storyDisplay();
 	        	}
-        		if(model.getTour() != null && model.getTour().displaytourstartmessage() == true 
-					&& model.getTour().getJoiners() >= 2) {
-				view.displayAnnouncementDialog("Tournament Starting", model.getTour().getJoiners() + " have joined\n" +
-          " with shield winnings of " + (((TournamentCard)model.getStory()).getBonusSh()+model.getTour().getJoiners()),res->{});
-				drawCards();
-	            storyDisplay();
-	          
-			}
-			else if(model.getTour() != null && model.getTour().getleftToPlayCard() == 0 && model.getTour().getJoiners() < 2
-					&& model.getTour().displaytourstartmessage()) {
-				view.displayAnnouncementDialog("Tournament NOT Starting", model.getTour().getJoiners() + " have joined\n" +
-          " with shield winnings of " + (((TournamentCard)model.getStory()).getBonusSh()+model.getTour().getJoiners()) +
-          " but not enought players!",res->{});
-        	  model.getTour().displaytourstartmessage(false);
-        	  drawCards();
-	            storyDisplay();
-	          
-			}
-			else {
+        
+	        	else {
 				view.displayAnnouncementDialog("Begin Turn", "" + model.getcurrentTurn().getName() + "... begin!", result_2 -> {
 		            drawCards();
 		            storyDisplay();
-		          });
+		        });
 			}
           
         }
@@ -763,7 +746,7 @@ public class GamePresenter extends Group {
 		storyDeck.setTopCard("Chivalrous Deed");
 		storyDeck.setTopCard("Prosperity Throughout the Realms");
 		storyDeck.setTopCard("Boar Hunt");
-		//storyDeck.setTopCard("Tournament at Camelot");
+		storyDeck.setTopCard("Tournament at Camelot");
 		//storyDeck.setTopCard("Prosperity Throughout the Realms");
 		
 		//set up adventure deck 
