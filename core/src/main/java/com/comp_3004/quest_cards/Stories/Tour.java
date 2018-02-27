@@ -37,7 +37,6 @@ public class Tour {
 	
 	public TournamentCard getCurTour() { return tour; }
 	
-	
 	//getters setters 
 	public boolean Complete() { return this.complete; }
 	public int getleftToPlayCard() { return leftToPlayCard; }
@@ -202,11 +201,23 @@ public class Tour {
 		
 	}
 	
+	public class boolPlayers{
+		public ArrayList<Player> p;
+		public boolean bool;
+		private boolPlayers(boolean bool, ArrayList<Player> pl) {
+			this.p = pl;
+		}
+	}
+	
 	/*
 	 * returns true when turn is done
+	 * returns players tied, won, check Tour isComplete() whether they are the final winners
 	 * not used for participation, only player turns that involve playing cards
 	 */
-	public boolean doneTurn() {
+	public boolPlayers doneTurn() {
+		boolean done = false;
+		ArrayList<Player> res = new ArrayList<Player>();
+		boolPlayers re = new boolPlayers(done, res);
 		if(players.current().tooManyHandCards()) {
 			//if ai player discard until enough
 			if(players.current().isAi()) {
@@ -225,7 +236,7 @@ public class Tour {
 			if(leftToPlayCard == 0) {
 				log.info("No more player turns calculating outcome");
 				//players.next();
-				determineRoundOutCome();			
+				res = determineRoundOutCome();			
 			}
 			else {
 				if(players.peekNext().isAi()) {
@@ -238,14 +249,17 @@ public class Tour {
 				}
 					
 			}
-			return true;	
+			re.bool = true;
+			return re;	
 		}
-		return false;
+		re.bool = false;
+		return re;
 	}
 	
-	public void determineRoundOutCome() {
+	public ArrayList<Player> determineRoundOutCome() {
 		String msg = "Calculating Player battle points and outcome of round " + round;
 		log.info(msg);
+		ArrayList<Player> winners  = new ArrayList<Player>();
 		//calculate battle points
 		int pl = players.getNumPlayers();
 		if(pl > 0) {
@@ -257,7 +271,6 @@ public class Tour {
 				pairs.add(calcedPoints);
 			}
 			pairs = utils.getMaxIntPairs(pairs);
-			ArrayList<Player> winners = new ArrayList<Player>();
 			if(pairs.size() > 0) {
 				for(int i = 0; i < pairs.size(); i++) {
 					winners.add(pairs.get(i).player);
@@ -356,6 +369,7 @@ public class Tour {
 		}
 		else
 			log.info("Error no players to calc points but tour started with players");
+		return winners;
 	}
 	
 	public int calcBattlePoints(Player p) {
