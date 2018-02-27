@@ -6,10 +6,15 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.comp_3004.quest_cards.core.GamePresenter;
+import com.comp_3004.quest_cards.player.Player;
 
 import static com.comp_3004.quest_cards.gui.Config.PlayerStatView.FLAG_ARROW_WIDTH;
 
@@ -21,11 +26,14 @@ public class PlayerStatView extends Group {
   private Image shield;
   private Label shield_label;
   private Label deck_label;
+  private CardView [] cards;
 
   private static final int IMG_WIDTH = 50;
   private static final int IMG_HEIGHT = 50;
   private static final int LABEL_WIDTH = 40;
   private static final int BODY_WIDTH = 2*IMG_WIDTH + 2*IMG_HEIGHT;
+  private Player player;
+  private GamePresenter presenter;
 
   PlayerStatView(TextureAtlas atlas, Skin skin) {
 
@@ -86,8 +94,42 @@ public class PlayerStatView extends Group {
   public void setShields(int shields) {
     shield_label.setText(" x " + shields);
   }
-
+  public void setPlayer(Player player_in){this.player = player_in;}
+  public void setPresenter(GamePresenter pres_in){this.presenter = pres_in;}
   public void setCards(int cards) {
     deck_label.setText(" x " + cards);
   }
+
+  public void playerConfig(){
+    cards = new CardView[player.getActive().size()];
+
+    for(int i=0;i<cards.length;i++)
+    {cards[i] = new CardView(presenter.sprites.findRegion(presenter.CardAssetMap.get(player.getActive().get(i).getName())),0);
+    cards[i].HoverDrawConfig(cards[i]);
+    }
+
+    flag_arrow.addListener(new ClickListener(){
+      @Override
+      public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+        presenter.getView().displayStatViewCards(cards);
+        presenter.getView().statViewBG.setVisible(true);
+      }
+
+      @Override
+      public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+        presenter.getView().hideStatViewCards(cards);
+        presenter.getView().statViewBG.setVisible(false);
+
+      }
+    });
+
+
+
+
+
+
+
+
+  }
 }
+

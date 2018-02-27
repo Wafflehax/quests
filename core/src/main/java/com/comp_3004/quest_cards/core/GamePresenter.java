@@ -14,10 +14,9 @@ import com.comp_3004.quest_cards.cards.AdventureCard;
 import com.comp_3004.quest_cards.cards.Card;
 import com.comp_3004.quest_cards.cards.EventCard;
 import com.comp_3004.quest_cards.cards.TournamentCard;
-import com.comp_3004.quest_cards.gui.Assets;
-import com.comp_3004.quest_cards.gui.CardView;
-import com.comp_3004.quest_cards.gui.Config;
-import com.comp_3004.quest_cards.gui.GameView;
+import com.comp_3004.quest_cards.gui.*;
+import com.comp_3004.quest_cards.player.Player;
+import com.comp_3004.quest_cards.player.Players;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
@@ -33,8 +32,8 @@ public class GamePresenter extends Group {
   public CardView[] activeCards;
   public CardView[] stageCards;
 
-  TextureAtlas sprites;
-  TextureAtlas backgrounds;
+  public TextureAtlas sprites;
+  public TextureAtlas backgrounds;
   private QuestCards parent;
   private GameModel model;
   private AssetManager manager;
@@ -97,6 +96,7 @@ public class GamePresenter extends Group {
     final GameView view = new GameView(manager);
     view.setBackground(backgrounds.findRegion("game_board"));
     view.setPlayerViewBackground(backgrounds.findRegion("player_area"));
+    view.players = new PlayerStatView[model.getPlayers().size()-1];
 
     LinkedList<AdventureCard> tempHand = model.getcurrentTurn().getHand();
 
@@ -137,7 +137,7 @@ public class GamePresenter extends Group {
     view.SponsorCDZ.setVisible(false);
 
     //SPONSOR CHECK
-    if(model.getQuest() != null)
+    if(model.getQuest() != null && model.getQuest().getSponsor() != null)
     {if(model.getcurrentTurn().getName().compareTo(model.getQuest().getSponsor().getName())==0)
     {view.SponsorCDZ.setVisible(true);
       for(int i=0; i<handCards.length;i++)handCards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());}
@@ -181,6 +181,7 @@ public class GamePresenter extends Group {
   private void assignHand(boolean doAnnounce) {
     LinkedList<AdventureCard> tempHand = model.getcurrentTurn().getHand();
     LinkedList<AdventureCard> tempActive = model.getcurrentTurn().getActive();
+    Players tempPlayers = model.getPlayers();
     //System.out.println("player = "+model.getcurrentTurn().getName()+": assignHand IDS:");
 
     view.playerView.wipePlayerHand(handCards);
@@ -212,6 +213,14 @@ public class GamePresenter extends Group {
       activeCards[i].setGamePresenter(this);
     }
 
+    for(int i=0; i<tempPlayers.size();i++)
+    {int j = 0;
+      if(tempPlayers.getPlayerAtIndex(i).getName().compareTo(model.getcurrentTurn().getName()) != 0)
+    {view.players[j].setPlayer(tempPlayers.getPlayerAtIndex(i));
+    view.players[j].setPresenter(this);
+    view.players[j].playerConfig();}
+    }
+
 
     view.displayPlayerHand(handCards); //CHECK IT OUT
     view.displayExtraCards(activeCards);
@@ -235,7 +244,7 @@ public class GamePresenter extends Group {
 	            storyDisplay();
 	          
 			}
-			else if(model.getTour().getleftToPlayCard() == 0 && model.getTour().getJoiners() < 2
+			else if(model.getTour() != null && model.getTour().getleftToPlayCard() == 0 && model.getTour().getJoiners() < 2
 					&& model.getTour().displaytourstartmessage()) {
 				view.displayAnnouncementDialog("Tournament NOT Starting", model.getTour().getJoiners() + " have joined\n" +
           " with shield winnings of " + (((TournamentCard)model.getStory()).getBonusSh()+model.getTour().getJoiners()) +
