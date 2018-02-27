@@ -140,7 +140,7 @@ public class GamePresenter extends Group {
     if(model.getQuest() != null)
     {if(model.getcurrentTurn().getName().compareTo(model.getQuest().getSponsor().getName())==0)
     {view.SponsorCDZ.setVisible(true);
-      for(int i=0; i<handCards.length;i++)handCards[i].setSponsorCDZ(view.zeroBounds);}
+      for(int i=0; i<handCards.length;i++)handCards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());}
     }
 
     view.displayAnnouncementDialog("","Let the Games BEGIN!\n\n"+model.getcurrentTurn().getName()+"...begin!",res->{
@@ -222,7 +222,7 @@ public class GamePresenter extends Group {
     if(model.getQuest() != null)
     {if(model.getcurrentTurn().getName().compareTo(model.getQuest().getSponsor().getName())==0)
     {view.SponsorCDZ.setVisible(true);
-    for(int i=0; i<handCards.length;i++)handCards[i].setSponsorCDZ(view.zeroBounds);}
+    for(int i=0; i<handCards.length;i++)handCards[i].setSponsorCDZ(view.SponsorCDZ.getBounds());}
     }
 
         if(doAnnounce) {
