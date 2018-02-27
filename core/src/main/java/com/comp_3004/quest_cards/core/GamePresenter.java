@@ -159,7 +159,7 @@ public class GamePresenter extends Group {
     }
 
     view.displayAnnouncementDialog("","Let the Games BEGIN!\n\n"+model.getcurrentTurn().getName()+"...begin!",res->{
-      model.getStoryDeck().setTopCard("Prosperity Throughout the Realms");
+
       beginTurn();
       drawCards();
       storyDisplay();
@@ -196,7 +196,7 @@ public class GamePresenter extends Group {
      CardView [] stageCards = new CardView[tStage.size()];
 
       for(int j=0; j<stageCards.length;j++)
-        {if(i <= quest.getCurrentStageNum()) stageCards[j] = new CardView(sprites.findRegion(CardAssetMap.get(tStage.get(j).getName())),i);
+        {if(i < quest.getCurrentStageNum() && model.getcurrentTurn().getState().compareTo("sponsor") != 0) stageCards[j] = new CardView(sprites.findRegion(CardAssetMap.get(tStage.get(j).getName())),i);
         else  stageCards[j] = new CardView(sprites.findRegion(Assets.Cards.CARD_BACK),tStage.get(j).getID());
 
         stageCards[j].setCardStage(i);
@@ -264,7 +264,7 @@ public class GamePresenter extends Group {
     for(int i=0; i<tempPlayers.size();i++)
     {int j = 0;
       if(tempPlayers.getPlayerAtIndex(i).getName().compareTo(model.getcurrentTurn().getName()) != 0)
-    {view.players[j].setPlayer(tempPlayers.getPlayerAtIndex(i));
+    {view.players[j].setPlayer(tempPlayers.getPlayerAtIndex(j));
     view.players[j].setPresenter(this);
     view.players[j].playerConfig();
     j++;}
@@ -357,10 +357,12 @@ public class GamePresenter extends Group {
 
       case "E": //EVENT HANDLING
         //Gdx.app.log("displayEventAnnouncement","storyType -> EVENT");
+        if(model.getEvent().getDrewEvent() == model.getcurrentTurn())
+        {break;}
 
         view.displayEventAnnouncement(StoryEv, res_2 -> {
           model.getEvent().runEvent();
-          assignHand(false,true);
+          assignHand(false,false);
           if(model.getcurrentTurn().getState()!="tooManyCards") 
 	        if(model.getPlayers().peekNext() == model.getEvent().getDrewEvent()) {
 	  			model.getPlayers().setCurrent(model.getEvent().getDrewEvent());
@@ -664,6 +666,7 @@ public class GamePresenter extends Group {
 		storyDeck.setTopCard("Chivalrous Deed");
 		storyDeck.setTopCard("Prosperity Throughout the Realms");
 		storyDeck.setTopCard("Boar Hunt");
+        storyDeck.setTopCard("Prosperity Throughout the Realms");
 		
 		//set up adventure deck 
 		AdventureDeck advDeck = new AdventureDeck();
