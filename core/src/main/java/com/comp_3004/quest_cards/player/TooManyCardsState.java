@@ -25,12 +25,21 @@ public class TooManyCardsState extends PlayerState {
 			return false;
 		}
 		if(p.getHand().contains(c)) {
-			p.getActive().add(c);
-			p.getHand().remove(c);
-			c.setState(State.PLAY);
+			if(p.getQuest() != null) {
+				p.getStage().add(c);
+				p.getHand().remove(c);
+				c.setState(State.STAGE);
+			}
+			else {
+				p.getActive().add(c);
+				p.getHand().remove(c);
+				c.setState(State.PLAY);
+			}
 			log.info(p.getName() + " played card " + c.getName());
 			if(p.getHand().size() <= 12) {
-				p.setState("normal");
+				if(p.getQuest() != null)
+					p.setState("playQuest");
+				//else if(p.get)
 				log.info(p.getName()+" is no longer above the hand limit");
 			}
 			return true;
