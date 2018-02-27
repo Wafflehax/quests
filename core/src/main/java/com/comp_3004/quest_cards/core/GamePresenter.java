@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class GamePresenter extends Group {
 
@@ -237,6 +238,7 @@ public class GamePresenter extends Group {
 
     view.InPlayCDZ.setVisible(true);
     System.out.println("assignHand(): "+model.getcurrentTurn().getName()+": IDS");
+    
 
     handCards = new CardView[tempHand.size()];
     activeCards = new CardView[tempActive.size()];
@@ -294,8 +296,19 @@ public class GamePresenter extends Group {
     }
 
         if(doAnnounce) {
-          		
-			if(model.getTour() != null && model.getTour().displaytourstartmessage() == true 
+        		if(model.getcurrentTurn().getState() == "questParticipant") {
+        			view.displayParticipateQuestDialog("Participation", "Participate in quest?", participate->{
+        				if(participate) {
+        					userInput(1);
+        					nextPlayer();
+        				}
+        				else {
+        					userInput(1);
+        					nextPlayer();
+        				}
+        			});
+      	  	}
+        		else if(model.getTour() != null && model.getTour().displaytourstartmessage() == true 
 					&& model.getTour().getJoiners() >= 2) {
 				view.displayAnnouncementDialog("Tournament Starting", model.getTour().getJoiners() + " have joined\n" +
           " with shield winnings of " + (((TournamentCard)model.getStory()).getBonusSh()+model.getTour().getJoiners()),res->{});
@@ -336,7 +349,11 @@ public class GamePresenter extends Group {
     view.displayStoryDiscardPile(sprites.findRegion(CardAssetMap.get(model.getStory().getName())));
   }
 
-  public void nextPlayer(){model.nextPlayer(); assignHand(true,false);}
+  public void nextPlayer(){
+	  model.nextPlayer(); 
+	  assignHand(true,false);
+	  
+	  }
 
   public void storyDisplay(){
 
@@ -536,8 +553,8 @@ public class GamePresenter extends Group {
     if (!model.getPlayers().current().userInput(input)) {
       if (model.getcurrentTurn().getState().equalsIgnoreCase("playtour")) {
         //player couldn't leave turn too many cards
-      } else
-        model.beginTurn();
+      } //else
+        //model.beginTurn();
     }
 
   }

@@ -258,14 +258,14 @@ public class Quest {
 				questCleanup();
 				return true;
 			}
-			players.next();	//move current player forward twice to skip sponsor
-			players.next();
+			//players.next();	//move current player forward twice to skip sponsor
+			//players.next();
 			for(Player pl : participants)
 				pl.setState("playQuest");
 			startStage(currentStage);
 			return true;
 		}
-		players.next();
+		//players.next();
 		if(players.current().isAi()) {
 			if(players.current().getAI().doIParticipateInQuest())
 				questParticipation(1, players.current());
